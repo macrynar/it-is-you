@@ -13,25 +13,21 @@ import { createClient } from '@supabase/supabase-js'
  *    VITE_SUPABASE_ANON_KEY=your-key
  */
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+// Hardcoded fallback values (safe to commit - anon key is public)
+const FALLBACK_URL = 'https://uvzilorpyuqicuwkufky.supabase.co'
+const FALLBACK_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA'
 
-// Debug log for production (will be removed after verification)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || FALLBACK_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || FALLBACK_KEY
+
+// Debug log for production
 console.log('🔧 Supabase Config Check:', {
   hasUrl: !!supabaseUrl,
   hasKey: !!supabaseAnonKey,
   urlPrefix: supabaseUrl?.slice(0, 30) + '...',
-  env: import.meta.env.MODE
+  env: import.meta.env.MODE,
+  usingFallback: !import.meta.env.VITE_SUPABASE_URL
 })
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error(
-    '❌ Supabase configuration missing!',
-    'VITE_SUPABASE_URL:', supabaseUrl,
-    'VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? '[EXISTS]' : '[MISSING]'
-  )
-  throw new Error('Missing Supabase environment variables. Check Vercel Settings → Environment Variables')
-}
 
 /**
  * Initialize Supabase client
