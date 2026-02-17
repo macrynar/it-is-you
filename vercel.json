@@ -1,7 +1,19 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/",
+      "destination": "/index2.html"
+    },
+    {
+      "source": "/auth",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/test",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/test/(.*)",
       "destination": "/index.html"
     }
   ],
