@@ -16,19 +16,27 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
+// Debug log for production (will be removed after verification)
+console.log('🔧 Supabase Config Check:', {
+  hasUrl: !!supabaseUrl,
+  hasKey: !!supabaseAnonKey,
+  urlPrefix: supabaseUrl?.slice(0, 30) + '...',
+  env: import.meta.env.MODE
+})
+
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn(
-    'Supabase configuration missing. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env.local file'
+  console.error(
+    '❌ Supabase configuration missing!',
+    'VITE_SUPABASE_URL:', supabaseUrl,
+    'VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? '[EXISTS]' : '[MISSING]'
   )
+  throw new Error('Missing Supabase environment variables. Check Vercel Settings → Environment Variables')
 }
 
 /**
  * Initialize Supabase client
  */
-export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder-key'
-)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 /**
  * Helper function to sign in with Google
