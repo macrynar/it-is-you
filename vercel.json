@@ -1,21 +1,7 @@
 {
   "rewrites": [
-    {
-      "source": "/",
-      "destination": "/index2.html"
-    },
-    {
-      "source": "/auth",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/test",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/test/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/auth/:path*", "destination": "/app.html" },
+    { "source": "/test/:path*", "destination": "/app.html" }
   ],
   "headers": [
     {
