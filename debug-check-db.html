@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Debug - Check Database</title>
+</head>
+<body>
+    <h1>Debug Database Check</h1>
+    <div id="results"></div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        const supabaseUrl = 'https://uvzilorpyuqicuwkufky.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const resultsDiv = document.getElementById('results');
+
+        async function debug() {
+            resultsDiv.innerHTML += '<h2>1. Check Session</h2>';
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            
+            if (sessionError) {
+                resultsDiv.innerHTML += `<p style="color: red">Session Error: ${JSON.stringify(sessionError)}</p>`;
+                return;
+            }
+            
+            if (!session) {
+                resultsDiv.innerHTML += '<p style="color: red">No session found</p>';
+                return;
+            }
+            
+            resultsDiv.innerHTML += `<p style="color: green">✓ Session found for user: ${session.user.id}</p>`;
+            resultsDiv.innerHTML += `<pre>${JSON.stringify(session.user, null, 2)}</pre>`;
+            
+            resultsDiv.innerHTML += '<h2>2. Query user_psychometrics table</h2>';
+            
+            const { data, error, count } = await supabase
+                .from('user_psychometrics')
+                .select('*', { count: 'exact' })
+                .eq('user_id', session.user.id)
+                .eq('test_type', 'HEXACO');
+            
+            if (error) {
+                resultsDiv.innerHTML += `<p style="color: red">Query Error: ${JSON.stringify(error, null, 2)}</p>`;
+                resultsDiv.innerHTML += `<pre>${error.message}</pre>`;
+                resultsDiv.innerHTML += `<pre>${error.details}</pre>`;
+                resultsDiv.innerHTML += `<pre>${error.hint}</pre>`;
+            } else {
+                resultsDiv.innerHTML += `<p style="color: green">✓ Query successful</p>`;
+                resultsDiv.innerHTML += `<p>Count: ${count}</p>`;
+                resultsDiv.innerHTML += `<p>Data length: ${data?.length || 0}</p>`;
+                if (data && data.length > 0) {
+                    resultsDiv.innerHTML += '<h3>Records found:</h3>';
+                    data.forEach((record, i) => {
+                        resultsDiv.innerHTML += `<h4>Record ${i + 1}:</h4>`;
+                        resultsDiv.innerHTML += `<pre>${JSON.stringify(record, null, 2)}</pre>`;
+                    });
+                } else {
+                    resultsDiv.innerHTML += '<p style="color: orange">⚠ No records found in database</p>';
+                }
+            }
+            
+            resultsDiv.innerHTML += '<h2>3. Try without filters</h2>';
+            const { data: allData, error: allError } = await supabase
+                .from('user_psychometrics')
+                .select('user_id, test_type, completed_at')
+                .limit(5);
+            
+            if (allError) {
+                resultsDiv.innerHTML += `<p style="color: red">Error: ${JSON.stringify(allError)}</p>`;
+            } else {
+                resultsDiv.innerHTML += `<p>Found ${allData?.length || 0} total records (limited to 5)</p>`;
+                resultsDiv.innerHTML += `<pre>${JSON.stringify(allData, null, 2)}</pre>`;
+            }
+        }
+
+        debug();
+    </script>
+</body>
+</html>

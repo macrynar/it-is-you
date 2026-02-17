@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mój Profil - Psychologiczna Karta Postaci</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+        }
+
+        .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+        }
+
+        .stat-bar-container {
+            width: 100%;
+            height: 10px;
+            background: rgba(51, 65, 85, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+        }
+
+        .bipolar-slider {
+            position: relative;
+            width: 100%;
+            height: 6px;
+            background: rgba(51, 65, 85, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bipolar-thumb {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: #cbd5e1;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link.active {
+            color: #6366f1;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #6366f1;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .locked-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(16px);
+            border-radius: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .locked-overlay:hover {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(14px);
+        }
+
+        .locked-card {
+            color: #475569 !important;
+        }
+
+        .locked-card .stat-bar-fill {
+            background: #334155 !important;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(99, 102, 241, 0.8);
+            }
+        }
+
+        .pulse-cta {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes blink {
+            0%, 90%, 100% { opacity: 1; transform: scale(1); }
+            95% { opacity: 0.3; transform: scale(0.5); }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION BAR -->
+    <nav class="bg-slate-950/80 backdrop-blur-md sticky top-0 z-50 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <!-- Animated Logo Icon -->
+                    <div class="relative w-10 h-10 flex items-center justify-center flex-shrink-0" style="animation: fadeUp 1s cubic-bezier(.22,1,.36,1) both;">
+                        <!-- Background Glow -->
+                        <div class="absolute inset-0 border-radius-circle bg-gradient-to-br from-purple-600/20 to-blue-600/10 rounded-full" style="animation: pulse 3s ease-in-out infinite;"></div>
+
+                        <!-- Rotating Ring -->
+                        <svg class="absolute inset-0 w-full h-full" style="animation: spin 18s linear infinite;" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="20" cy="20" r="16" fill="none" stroke="rgba(123,97,255,0.35)" stroke-width="1"/>
+                            <circle cx="20" cy="4" r="2" fill="#38B9FF" filter="drop-shadow(0 0 4px #38B9FF)"/>
+                        </svg>
+
+                        <!-- Core Gradient Orb -->
+                        <div class="absolute w-5 h-5 rounded-full bg-gradient-to-br from-purple-500 to-blue-500" style="box-shadow: 0 0 16px rgba(123,97,255,0.6), 0 0 4px rgba(56,185,255,0.4);"></div>
+
+                        <!-- Center Dot -->
+                        <div class="absolute w-2 h-2 rounded-full bg-white" style="box-shadow: 0 0 8px rgba(255,255,255,0.9); animation: blink 2.8s ease-in-out infinite;"></div>
+                    </div>
+
+                    <!-- Wordmark - Inline Compact -->
+                    <span class="hidden sm:inline font-bold text-base brand-font bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent" style="letter-spacing: 0.2px;">It·is·YOU</span>
+                </div>
+
+                <div class="flex items-center gap-1">
+                    <a href="#overview" class="nav-link active">Przegląd</a>
+                    <a href="#card" class="nav-link">Karta Postaci</a>
+                    <a href="#analytics" class="nav-link">Analityka</a>
+                    <a href="#settings" class="nav-link">Ustawienia</a>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button class="w-8 h-8 rounded-lg bg-slate-900/50 hover:bg-slate-800 flex items-center justify-center border border-white/10 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    </button>
+                    <button class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold hover:shadow-lg transition">
+                        M
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-header">
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <div class="flex items-start justify-between">
+                <div class="flex items-start gap-6">
+                    <!-- Avatar -->
+                    <div class="relative">
+                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center overflow-hidden border-2 border-white/10">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop" alt="Profil" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute bottom-0 right-0 w-5 h-5 bg-emerald-500 rounded-full border-2 border-slate-950 shadow-lg"></div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div>
+                        <h1 id="userName" class="text-3xl font-bold text-white brand-font mb-2">Maciej Rynar</h1>
+                        <p id="userTitle" class="text-slate-400 mb-3">Founder & Creative Visionary</p>
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-1">
+                                <span class="text-xs font-bold text-indigo-400 uppercase">Status:</span>
+                                <span class="text-sm text-slate-300">Online</span>
+                            </div>
+                            <div class="w-px h-4 bg-white/10"></div>
+                            <div class="flex items-center gap-1">
+                                <span class="text-xs font-bold text-indigo-400 uppercase">Profil Ukończony:</span>
+                                <span id="profileCompletion" class="text-sm text-emerald-400">100%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition">
+                        Edytuj Profil
+                    </button>
+                    <button class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-lg font-semibold border border-white/10 transition">
+                        Udostępnij
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW USER HERO (hidden by default) -->
+    <section id="newUserHero" style="display: none;" class="py-16 px-6 bg-gradient-to-b from-indigo-950/20 to-transparent border-b border-slate-800/50">
+        <div class="max-w-4xl mx-auto text-center">
+            <!-- Alert Icon -->
+            <div class="flex justify-center mb-6">
+                <div class="p-4 bg-amber-500/10 border border-amber-500/30 rounded-full">
+                    <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Heading -->
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 brand-font">
+                System niezkalibrowany
+            </h2>
+
+            <!-- Subtext -->
+            <p class="text-lg text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Twój profil psychometryczny jest pusty. Wykonaj test bazowy, aby wygenerować <span class="text-indigo-400 font-semibold">Kartę Postaci</span> i odkryć swoją psychiczną charakterystykę.
+            </p>
+
+            <!-- CTA Button -->
+            <button onclick="startTest()" class="inline-block px-8 py-4 mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-lg rounded-xl transition-all duration-300 transform hover:scale-105 pulse-cta">
+                🚀 ROZPOCZNIJ TEST OSOBOWOŚCI (15 min)
+            </button>
+
+            <!-- Progress Bar -->
+            <div class="w-full max-w-md mx-auto">
+                <div class="flex items-center justify-between mb-2">
+                    <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        Postęp Kalibracji
+                    </label>
+                    <span class="text-sm font-bold text-indigo-400">5%</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
+                    <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-1000" style="width: 5%"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <!-- CHARACTER CARD SECTION - MAIN CARD -->
+        <section id="card" class="mb-12">
+            <div class="max-w-6xl mx-auto glass-panel rounded-3xl overflow-hidden border border-indigo-500/20 shadow-[0_0_50px_rgba(79,70,229,0.15)] rpg-card-hover transition-all duration-500 mb-12">
+
+                <div class="grid md:grid-cols-12 gap-0">
+
+                    <!-- COLUMN 1: IDENTITY & CLASS (30%) -->
+                    <div class="md:col-span-4 bg-slate-900/90 p-6 border-r border-white/5 flex flex-col relative">
+
+                        <!-- Header with Avatar -->
+                        <div class="flex items-center gap-4 mb-8">
+                             <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-br from-indigo-500 via-purple-500 to-rose-500 shadow-lg flex-shrink-0 relative group overflow-hidden">
+                                <div class="w-full h-full bg-slate-950 rounded-full overflow-hidden flex items-center justify-center">
+                                    <img src="https://images.unsplash.com/photo-1506459225024-1428097a7e18?q=80&w=400&auto=format&fit=crop" 
+                                         alt="Archetyp Maga" 
+                                         class="w-full h-full object-cover opacity-90 group-hover:scale-110 transition duration-700">
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white brand-font mb-1">Maciej Rynar</h3>
+                                <div class="text-indigo-400 font-bold text-xs uppercase tracking-wider mb-2">Arcymag Inicjatywy</div>
+                                <div class="inline-block bg-slate-800 text-white text-[10px] font-bold px-2 py-0.5 rounded border border-white/10">Level 42</div>
+                            </div>
+                        </div>
+
+                        <!-- TRAIT TAGS (From PDF) -->
+                        <div class="mb-8">
+                            <h5 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Cechy Dominujące</h5>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-indigo-500/10 text-indigo-300 rounded text-[10px] font-bold border border-indigo-500/20">Wizjonerski</span>
+                                <span class="px-2 py-1 bg-indigo-500/10 text-indigo-300 rounded text-[10px] font-bold border border-indigo-500/20">Dynamiczny</span>
+                                <span class="px-2 py-1 bg-indigo-500/10 text-indigo-300 rounded text-[10px] font-bold border border-indigo-500/20">Charyzmatyczny</span>
+                                <span class="px-2 py-1 bg-slate-800 text-slate-300 rounded text-[10px] border border-white/10">Spontaniczny</span>
+                                <span class="px-2 py-1 bg-slate-800 text-slate-300 rounded text-[10px] border border-white/10">Ambitny</span>
+                                <span class="px-2 py-1 bg-slate-800 text-slate-300 rounded text-[10px] border border-white/10">Bezpośredni</span>
+                            </div>
+                        </div>
+
+                        <!-- CORE STATS (Badges) -->
+                        <div class="w-full space-y-3 mb-8">
+                            <div class="flex justify-between items-center bg-slate-950/60 px-3 py-2.5 rounded border border-white/5 hover:border-indigo-500/50 transition cursor-help group">
+                                <span class="text-[10px] text-slate-400 uppercase font-bold group-hover:text-indigo-400">Klasa (DISC)</span>
+                                <span class="text-sm font-bold text-white">Inicjator (DI)</span>
+                            </div>
+                            <div class="flex justify-between items-center bg-slate-950/60 px-3 py-2.5 rounded border border-white/5 hover:border-indigo-500/50 transition cursor-help group">
+                                <span class="text-[10px] text-slate-400 uppercase font-bold group-hover:text-indigo-400">Typ (MBTI)</span>
+                                <span class="text-sm font-bold text-white">INFJ</span>
+                            </div>
+                            <div class="flex justify-between items-center bg-slate-950/60 px-3 py-2.5 rounded border border-white/5 hover:border-indigo-500/50 transition cursor-help group">
+                                <span class="text-[10px] text-slate-400 uppercase font-bold group-hover:text-indigo-400">Enneagram</span>
+                                <span class="text-sm font-bold text-white">Typ 8 (Protector)</span>
+                            </div>
+                        </div>
+
+                        <!-- RPG CLASS BADGE -->
+                        <div class="bg-indigo-950/50 border border-indigo-500/30 rounded-xl p-4 w-full mb-6 relative group cursor-help">
+                            <div class="text-[10px] text-indigo-300 uppercase tracking-wider mb-2 font-bold flex justify-between">
+                                <span>Archetyp Operacyjny</span>
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <div class="flex items-center justify-center gap-2 text-white font-bold text-lg mb-1">
+                                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                                Arcymag Inicjatywy
+                            </div>
+                            <p class="text-[10px] text-slate-400 mt-1 leading-tight text-center">
+                                 Twoją najsilniejszą bronią jest wyraźna i przemyślana wizja przyszłości. Potrafisz dostrzegać innowacyjne i praktyczne rozwiązania w sytuacjach, w których inni ludzie widzą jedynie nieporządek, zamieszanie i chaos. Twoja wyjątkowa aura oraz charyzma naturalnie inspirują i motywują sojuszników oraz współpracowników do podejmowania aktywnych działań i angażowania się w realizację wspólnych celów.
+                            </p>
+                        </div>
+
+                         <!-- Values / Tags -->
+                         <div class="w-full text-left mt-auto">
+                            <h5 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Kompas Wartości</h5>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded text-[10px] text-amber-300 font-medium">Kreatywność</span>
+                                <span class="px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded text-[10px] text-amber-300 font-medium">Niezależność</span>
+                                <span class="px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded text-[10px] text-amber-300 font-medium">Osiągnięcia</span>
+                                <span class="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded text-[10px] text-emerald-300 font-medium">Ekologia</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUMN 2: STATS & BEHAVIOR (35%) -->
+                    <div class="md:col-span-4 p-8 border-r border-white/5 bg-slate-900/50">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            Statystyki Główne (Big Five)
+                        </h4>
+
+                        <!-- Big 5 Stats -->
+                        <div class="space-y-5 mb-10">
+                            <!-- Openness -->
+                            <div class="group">
+                                <div class="flex justify-between text-xs font-bold text-white mb-1">
+                                    <span class="text-blue-300">Otwartość (Intelekt)</span>
+                                    <span class="text-blue-400">95%</span>
+                                </div>
+                                <div class="stat-bar-container"><div class="stat-bar-fill bg-blue-500" style="width: 95%"></div></div>
+                            </div>
+                            <!-- Stability -->
+                            <div class="group">
+                                <div class="flex justify-between text-xs font-bold text-white mb-1">
+                                    <span class="text-emerald-300">Stabilność</span>
+                                    <span class="text-emerald-400">97%</span>
+                                </div>
+                                <div class="stat-bar-container"><div class="stat-bar-fill bg-emerald-500" style="width: 97%"></div></div>
+                            </div>
+                            <!-- Extraversion -->
+                            <div class="group">
+                                <div class="flex justify-between text-xs font-bold text-white mb-1">
+                                    <span class="text-amber-300">Ekstrawersja</span>
+                                    <span class="text-amber-400">60%</span>
+                                </div>
+                                <div class="stat-bar-container"><div class="stat-bar-fill bg-amber-500" style="width: 60%"></div></div>
+                            </div>
+                            <!-- Agreeableness -->
+                            <div class="group">
+                                <div class="flex justify-between text-xs font-bold text-white mb-1">
+                                    <span class="text-rose-300">Ugodowość</span>
+                                    <span class="text-rose-400">34%</span>
+                                </div>
+                                <div class="stat-bar-container"><div class="stat-bar-fill bg-rose-500" style="width: 34%"></div></div>
+                            </div>
+                            <!-- Conscientiousness -->
+                            <div class="group">
+                                <div class="flex justify-between text-xs font-bold text-white mb-1">
+                                    <span class="text-purple-300">Sumienność</span>
+                                    <span class="text-purple-400">29%</span>
+                                </div>
+                                <div class="stat-bar-container"><div class="stat-bar-fill bg-purple-500" style="width: 29%"></div></div>
+                            </div>
+                        </div>
+
+                        <!-- Personality Spectrum in Column 2 -->
+                        <div class="mt-8 pt-8 border-t border-indigo-500/20">
+                            <h4 class="text-lg font-bold text-white brand-font mb-6 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                                Spektrum Osobowości
+                            </h4>
+
+                            <div class="space-y-4">
+                                <!-- Risk Tolerance -->
+                                <div>
+                                    <div class="flex justify-between text-[11px] font-bold text-slate-300 mb-2">
+                                        <span>Ostrożny</span>
+                                        <span class="text-indigo-400">Tolerancja Ryzyka</span>
+                                        <span>Ryzykant</span>
+                                    </div>
+                                    <div class="bipolar-slider">
+                                        <div class="bipolar-thumb bg-amber-500" style="left: 80%"></div>
+                                    </div>
+                                    <p class="text-[9px] text-slate-500 mt-1">Śmiało podejmuje ryzyko i stwierdza</p>
+                                </div>
+
+                                <!-- Trust vs Skepticism -->
+                                <div>
+                                    <div class="flex justify-between text-[11px] font-bold text-slate-300 mb-2">
+                                        <span>Ufny</span>
+                                        <span class="text-indigo-400">Zaufanie vs Sceptycyzm</span>
+                                        <span>Sceptyczny</span>
+                                    </div>
+                                    <div class="bipolar-slider">
+                                        <div class="bipolar-thumb bg-cyan-500" style="left: 45%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Optimism vs Pragmatism -->
+                                <div>
+                                    <div class="flex justify-between text-[11px] font-bold text-slate-300 mb-2">
+                                        <span>Optymista</span>
+                                        <span class="text-indigo-400">Wizja</span>
+                                        <span>Pragmatyk</span>
+                                    </div>
+                                    <div class="bipolar-slider">
+                                        <div class="bipolar-thumb bg-lime-500" style="left: 70%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Deliberate vs Fast-paced -->
+                                <div>
+                                    <div class="flex justify-between text-[11px] font-bold text-slate-300 mb-2">
+                                        <span>Rozważny</span>
+                                        <span class="text-indigo-400">Tempo Decyzji</span>
+                                        <span>Szybki</span>
+                                    </div>
+                                    <div class="bipolar-slider">
+                                        <div class="bipolar-thumb bg-pink-500" style="left: 85%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Matter-of-fact vs Expressive -->
+                                <div>
+                                    <div class="flex justify-between text-[11px] font-bold text-slate-300 mb-2">
+                                        <span>Powściągliwy</span>
+                                        <span class="text-indigo-400">Ekspresja</span>
+                                        <span>Ekspresyjny</span>
+                                    </div>
+                                    <div class="bipolar-slider">
+                                        <div class="bipolar-thumb bg-orange-500" style="left: 75%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Autonomous vs Collaborative -->
+                                <div>
+                                    <div class="flex justify-between text-[11px] font-bold text-slate-300 mb-2">
+                                        <span>Niezależny</span>
+                                        <span class="text-indigo-400">Styl Pracy</span>
+                                        <span>Kooperatywny</span>
+                                    </div>
+                                    <div class="bipolar-slider">
+                                        <div class="bipolar-thumb bg-purple-500" style="left: 35%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Supporting vs Dominant -->
+                                <div>
+                                    <div class="flex justify-between text-[11px] font-bold text-slate-300 mb-2">
+                                        <span>Wspierający</span>
+                                        <span class="text-indigo-400">Wpływ</span>
+                                        <span>Dominujący</span>
+                                    </div>
+                                    <div class="bipolar-slider">
+                                        <div class="bipolar-thumb bg-red-500" style="left: 80%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUMN 3: TALENTS & ENERGY & POP CULTURE (25%) -->
+                    <div class="md:col-span-4 p-8 bg-slate-900/30 flex flex-col gap-6">
+
+                        <!-- High5 Talents -->
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Ekwipunek (Talenty)</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-amber-400 border border-white/5 shadow-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-bold text-white">Wizjonerstwo</div>
+                                        <div class="text-[11px] text-slate-400 leading-tight">Elevating new ideas, thinking on feet.</div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-indigo-400 border border-white/5 shadow-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-bold text-white">Aura Dowodzenia</div>
+                                        <div class="text-[11px] text-slate-400 leading-tight">Speaking persuasively, taking charge.</div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-teal-400 border border-white/5 shadow-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-bold text-white">Głód Wiedzy</div>
+                                        <div class="text-[11px] text-slate-400 leading-tight">Love of learning, experiencing novelty.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Energy Management -->
+                        <div class="grid grid-cols-1 gap-4 mt-2">
+                            <div class="bg-emerald-900/20 border border-emerald-500/20 rounded-lg p-3">
+                                <h5 class="text-[10px] font-bold text-emerald-400 uppercase mb-2 flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    Co Cię Ładuje
+                                </h5>
+                                <ul class="text-[11px] text-slate-300 space-y-1 list-disc list-inside">
+                                    <li>Improwizacja & Wystąpienia</li>
+                                    <li>Omijanie sztywnych zasad</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-rose-900/20 border border-rose-500/20 rounded-lg p-3">
+                                <h5 class="text-[10px] font-bold text-rose-400 uppercase mb-2 flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                    Co Cię Drenuje
+                                </h5>
+                                <ul class="text-[11px] text-slate-300 space-y-1 list-disc list-inside">
+                                    <li>Sztywne procedury i rutyna</li>
+                                    <li>Analiza suchych danych</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- POP CULTURE -->
+                        <div class="mt-4 pt-4 border-t border-white/5 relative overflow-hidden group min-h-80">
+                            <h5 class="text-[10px] font-bold text-indigo-400 uppercase mb-3 flex items-center gap-1">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Kompatybilne Jednostki (Neural Match)
+                            </h5>
+
+                            <div class="space-y-3 group-hover:blur-sm transition duration-300">
+                                <!-- Character 1: Tony Stark -->
+                                <div class="flex items-center gap-3 group cursor-pointer">
+                                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-white/10 group-hover:border-indigo-500 transition shadow-lg overflow-hidden flex-shrink-0">
+                                        <img src="https://images.unsplash.com/photo-1540932400963-b8987fac0a86?w=32&h=32&fit=crop" alt="Tony Stark" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <div class="text-white font-bold text-xs group-hover:text-indigo-400 transition">Tony Stark</div>
+                                        <div class="text-[10px] text-slate-500">Marvel (Wizjoner)</div>
+                                    </div>
+                                </div>
+
+                                <!-- Character 2: Gandalf -->
+                                <div class="flex items-center gap-3 group cursor-pointer">
+                                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-white/10 group-hover:border-indigo-500 transition shadow-lg overflow-hidden flex-shrink-0">
+                                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=32&h=32&fit=crop" alt="Gandalf" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <div class="text-white font-bold text-xs group-hover:text-indigo-400 transition">Gandalf</div>
+                                        <div class="text-[10px] text-slate-500">LOTR (Inicjator)</div>
+                                    </div>
+                                </div>
+
+                                <!-- Character 3: Dr Strange -->
+                                <div class="flex items-center gap-3 group cursor-pointer">
+                                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-white/10 group-hover:border-indigo-500 transition shadow-lg overflow-hidden flex-shrink-0">
+                                        <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=32&h=32&fit=crop" alt="Dr Strange" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <div class="text-white font-bold text-xs group-hover:text-indigo-400 transition">Dr Strange</div>
+                                        <div class="text-[10px] text-slate-500">Marvel (Strateg)</div>
+                                    </div>
+                                </div>
+
+                                <!-- Character 4: Stephen Hawking -->
+                                <div class="flex items-center gap-3 group cursor-pointer">
+                                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-white/10 group-hover:border-indigo-500 transition shadow-lg overflow-hidden flex-shrink-0">
+                                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop" alt="Stephen Hawking" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <div class="text-white font-bold text-xs group-hover:text-indigo-400 transition">Stephen Hawking</div>
+                                        <div class="text-[10px] text-slate-500">Fizyk (Wizjoner)</div>
+                                    </div>
+                                </div>
+
+                                <!-- Character 5: Keanu Reeves -->
+                                <div class="flex items-center gap-3 group cursor-pointer">
+                                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-white/10 group-hover:border-indigo-500 transition shadow-lg overflow-hidden flex-shrink-0">
+                                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=32&h=32&fit=crop" alt="Keanu Reeves" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <div class="text-white font-bold text-xs group-hover:text-indigo-400 transition">Keanu Reeves</div>
+                                        <div class="text-[10px] text-slate-500">Aktor (Charyzmaty)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Blur Overlay with Call-to-Action -->
+                            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/70 to-slate-900/80 backdrop-blur-md flex items-center justify-center group-hover:backdrop-blur-sm transition duration-300">
+                                <div class="text-center px-6">
+                                    <div class="text-4xl mb-3">🌟</div>
+                                    <h3 class="text-2xl font-bold text-white brand-font mb-2">Odkryj Bliźniacze Dusze</h3>
+                                    <p class="text-slate-300 mb-4 text-sm">Poznaj archetypy osobowości<br>podobne do twojej całkowicie</p>
+                                    
+                                    <div class="inline-block bg-indigo-950/80 border border-indigo-500/50 rounded-lg px-3 py-1.5 mb-6">
+                                        <span class="text-sm text-indigo-300 font-semibold">📝 30 pytań &nbsp;·&nbsp; ⏱️ 15 minut</span>
+                                    </div>
+
+                                    <button class="px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-lg transition shadow-lg hover:shadow-indigo-500/50 block mx-auto text-sm">
+                                        Odblokuj Test
+                                    </button>
+                                    
+                                    <p class="text-xs text-slate-500 mt-3">Wyniki natychmiast po ukończeniu</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ROW 2: CAREER & DARK TRIAD (Full Width) -->
+                    <div class="md:col-span-12 grid md:grid-cols-2 border-t border-white/5">
+
+                        <!-- CAREER GUILDS -->
+                        <div class="p-8 bg-indigo-900/10 border-r border-white/5">
+                            <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                Optymalne Ścieżki Kariery
+                            </h4>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="p-3 bg-slate-800 rounded border border-white/5 hover:border-indigo-500 transition">
+                                    <div class="text-sm font-bold text-white">Founder / CEO</div>
+                                    <div class="text-[10px] text-slate-400">Wizja, ryzyko, szybkie decyzje.</div>
+                                </div>
+
+                                <div class="p-3 bg-slate-800 rounded border border-white/5 hover:border-indigo-500 transition">
+                                    <div class="text-sm font-bold text-white">Dyrektor Kreatywny</div>
+                                    <div class="text-[10px] text-slate-400">Innowacja bez rutyny.</div>
+                                </div>
+
+                                <div class="p-3 bg-slate-800 rounded border border-white/5 hover:border-indigo-500 transition">
+                                    <div class="text-sm font-bold text-white">Inwestor VC</div>
+                                    <div class="text-[10px] text-slate-400">Ocena potencjału i ryzyka.</div>
+                                </div>
+
+                                <div class="p-3 bg-slate-800 rounded border border-white/5 hover:border-indigo-500 transition">
+                                    <div class="text-sm font-bold text-white">Mówca / Polityk</div>
+                                    <div class="text-[10px] text-slate-400">Wpływ i wystąpienia publiczne.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DARK TRIAD / RISKS -->
+                        <div class="p-8 bg-rose-900/5">
+                            <h4 class="text-xs font-bold text-rose-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                Cień (Ryzyka Dark Triad)
+                            </h4>
+
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-slate-300">Impulsywność / Narcyzm</span>
+                                    <div class="w-32 bg-slate-900 h-2 border border-slate-700 flex gap-0.5 p-0.5 rounded"><div class="flex-1 bg-gradient-to-r from-rose-600 to-rose-500 rounded-sm" style="width: 75%"></div></div>
+                                </div>
+                                <p class="text-[10px] text-slate-500 mb-2">Ryzyko podejmowania decyzji bez wystarczających danych (zbyt duża pewność siebie).</p>
+
+                                <div class="flex items-center justify-between mt-3">
+                                    <span class="text-xs text-slate-300">Dominacja / Makiawelizm</span>
+                                    <div class="w-32 bg-slate-900 h-2 border border-slate-700 flex gap-0.5 p-0.5 rounded"><div class="flex-1 bg-gradient-to-r from-rose-600 to-rose-500 rounded-sm" style="width: 60%"></div></div>
+                                </div>
+                                <p class="text-[10px] text-slate-500 mb-2">Tendencja do forsowania własnego zdania i "naginania reguł" dla osiągnięcia celu.</p>
+
+                                <div class="flex items-center justify-between mt-3">
+                                    <span class="text-xs text-slate-300">Chaotyczność (Brak Sumienności)</span>
+                                    <div class="w-32 bg-slate-900 h-2 border border-slate-700 flex gap-0.5 p-0.5 rounded"><div class="flex-1 bg-gradient-to-r from-rose-600 to-rose-500 rounded-sm" style="width: 85%"></div></div>
+                                </div>
+                                <p class="text-[10px] text-slate-500">Trudność w kończeniu projektów ("Słomiany zapał").</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXTENDED SECTIONS: Strengths & Blind Spots -->
+            <div class="max-w-6xl mx-auto mb-8">
+                <h2 class="text-2xl font-bold text-white brand-font mb-6">Rozszerzona Analiza</h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                <!-- Strengths -->
+                <div class="glass-panel rounded-2xl border border-emerald-500/20 p-6">
+                    <h3 class="text-lg font-bold text-white brand-font mb-6 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Zdolności 💪
+                    </h3>
+
+                    <div class="space-y-3">
+                        <div class="p-3 bg-emerald-900/20 rounded-lg border border-emerald-500/30">
+                            <div class="text-sm font-bold text-emerald-300 mb-1">Ciekawość</div>
+                            <p class="text-[11px] text-slate-300">Odkrywczyści, szukający nowości i nowych doświadczeń.</p>
+                        </div>
+
+                        <div class="p-3 bg-emerald-900/20 rounded-lg border border-emerald-500/30">
+                            <div class="text-sm font-bold text-emerald-300 mb-1">Kreatywność</div>
+                            <p class="text-[11px] text-slate-300">Unikalny problem-solving, twórcze rozwiązania.</p>
+                        </div>
+
+                        <div class="p-3 bg-emerald-900/20 rounded-lg border border-emerald-500/30">
+                            <div class="text-sm font-bold text-emerald-300 mb-1">Przywództwo</div>
+                            <p class="text-[11px] text-slate-300">Pozytywny wpływ, inspirowanie zespołu.</p>
+                        </div>
+
+                        <div class="p-3 bg-emerald-900/20 rounded-lg border border-emerald-500/30">
+                            <div class="text-sm font-bold text-emerald-300 mb-1">Charisma</div>
+                            <p class="text-[11px] text-slate-300">Perswazja, przyciąganie uwagi, wpływ społeczny.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blind Spots -->
+                <div class="glass-panel rounded-2xl border border-amber-500/20 p-6">
+                    <h3 class="text-lg font-bold text-white brand-font mb-6 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Obszary do poprawy 🎯
+                    </h3>
+
+                    <div class="space-y-3">
+                        <div class="p-3 bg-amber-900/20 rounded-lg border border-amber-500/30">
+                            <div class="text-sm font-bold text-amber-300 mb-1">Trudność z Fokusem</div>
+                            <p class="text-[11px] text-slate-300">Rozproszona uwaga, problemy z utrzymaniem skupienia.</p>
+                        </div>
+
+                        <div class="p-3 bg-amber-900/20 rounded-lg border border-amber-500/30">
+                            <div class="text-sm font-bold text-amber-300 mb-1">Opór wobec Struktur</div>
+                            <p class="text-[11px] text-slate-300">Trudność z formalnościami i sztywnymi procedurami.</p>
+                        </div>
+
+                        <div class="p-3 bg-amber-900/20 rounded-lg border border-amber-500/30">
+                            <div class="text-sm font-bold text-amber-300 mb-1">Brak Konsekwencji w Rutynie</div>
+                            <p class="text-[11px] text-slate-300">Ryzyko niespełniania obietnic nieinteresujących go zadań.</p>
+                        </div>
+
+                        <div class="p-3 bg-amber-900/20 rounded-lg border border-amber-500/30">
+                            <div class="text-sm font-bold text-amber-300 mb-1">Tendencja do Dominacji</div>
+                            <p class="text-[11px] text-slate-300">Potrzeba kontroli może utrudniać pracę zespołową.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- Values -->
+            <div class="max-w-6xl mx-auto mb-8">
+                <div class="glass-panel rounded-2xl border border-purple-500/20 p-6">
+                <h3 class="text-lg font-bold text-white brand-font mb-6 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Kompas Wartości
+                </h3>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-indigo-900/20 rounded-lg border border-indigo-500/30">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-3 h-3 rounded-full bg-indigo-500"></div>
+                            <span class="font-bold text-indigo-300">Kreatywność</span>
+                        </div>
+                        <p class="text-[11px] text-slate-300">Innowacja, wyrażanie się, twórcze rozwiązania.</p>
+                    </div>
+
+                    <div class="p-4 bg-amber-900/20 rounded-lg border border-amber-500/30">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                            <span class="font-bold text-amber-300">Osiągnięcia</span>
+                        </div>
+                        <p class="text-[11px] text-slate-300">Sukces, Recognition, wpływ na świat.</p>
+                    </div>
+
+                    <div class="p-4 bg-rose-900/20 rounded-lg border border-rose-500/30">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                            <span class="font-bold text-rose-300">Niezależność</span>
+                        </div>
+                        <p class="text-[11px] text-slate-300">Autonomia, wolność, własne decyzje.</p>
+                    </div>
+
+                    <div class="p-4 bg-cyan-900/20 rounded-lg border border-cyan-500/30">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-3 h-3 rounded-full bg-cyan-500"></div>
+                            <span class="font-bold text-cyan-300">Odpowiedzialność</span>
+                        </div>
+                        <p class="text-[11px] text-slate-300">Rzetelność, dotrzymywanie zobowiązań.</p>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- PERSONALITY TYPES SUMMARY -->
+            <div class="max-w-6xl mx-auto mb-8">
+                <div class="glass-panel rounded-3xl overflow-hidden border border-purple-500/20 p-8">
+
+                        <h3 class="text-2xl font-bold text-white brand-font mb-8 flex items-center gap-2">
+
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+
+                            Archetypy (Extended)
+
+                        </h3>
+
+                        <div class="space-y-4">
+
+                            <div class="p-4 bg-indigo-900/20 rounded-xl border border-indigo-500/30">
+
+                                <div class="flex items-center justify-between mb-2">
+
+                                    <span class="text-xs font-bold text-indigo-300 uppercase tracking-wider">MBTI</span>
+
+                                    <span class="text-2xl font-bold text-indigo-400">INFJ</span>
+
+                                </div>
+
+                                <p class="text-[11px] text-slate-300 leading-relaxed">Zdeterminowany idealista, pasjonuje się ulepszaniem świata. Introweryk z intuicją skupioną na przyszłości. Decyzje oparte na wartościach, preferuje strukturę.</p>
+
+                            </div>
+
+                            <div class="p-4 bg-rose-900/20 rounded-xl border border-rose-500/30">
+
+                                <div class="flex items-center justify-between mb-2">
+
+                                    <span class="text-xs font-bold text-rose-300 uppercase tracking-wider">Enneagram</span>
+
+                                    <span class="text-2xl font-bold text-rose-400">8</span>
+
+                                </div>
+
+                                <p class="text-[11px] text-slate-300 leading-relaxed">Protector - Samodzielny, pewny siebie, asertywny. Lubi debaty i trudne decyzje. Przywódca stojący mocno za swoimi ideałami.</p>
+
+                            </div>
+
+                            <div class="p-4 bg-amber-900/20 rounded-xl border border-amber-500/30">
+
+                                <div class="text-xs font-bold text-amber-300 uppercase tracking-wider mb-2">DISC Profile</div>
+
+                                <p class="text-[11px] text-slate-300 leading-relaxed"><strong class="text-amber-400">DI - Inicjator:</strong> Pewny siebie, śmiały wizjoner. Szybkie decyzje, wielowątkowe myślenie. Najlepiej zaczyna projekty, wymaga wsparcia do finiszu.</p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROW 2: STRENGTHS & BLIND SPOTS -->
+            <div class="max-w-6xl mx-auto mb-8">
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+
+                    
+
+                    <!-- TOP STRENGTHS -->
+
+                    <div class="glass-panel rounded-3xl overflow-hidden border border-emerald-500/20 p-8">
+
+                        <h3 class="text-2xl font-bold text-white brand-font mb-8 flex items-center gap-2">
+
+                            <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+
+                            Zdolności (Strengths)
+
+                        </h3>
+
+
+
+                        <div class="space-y-4">
+
+                            <!-- Strength 1 -->
+
+                            <div class="p-4 bg-emerald-900/20 rounded-xl border border-emerald-500/30">
+
+                                <div class="text-sm font-bold text-emerald-300 mb-1">Ciekawość</div>
+
+                                <p class="text-[11px] text-slate-300">Maciej jest odkrywcą; poszukuje nowości; interesuje go nowe działania, idee i ludzie; jest otwarty na nowe doświadczenia.</p>
+
+                            </div>
+
+
+
+                            <!-- Strength 2 -->
+
+                            <div class="p-4 bg-emerald-900/20 rounded-xl border border-emerald-500/30">
+
+                                <div class="text-sm font-bold text-emerald-300 mb-1">Miłość do Nauki</div>
+
+                                <p class="text-[11px] text-slate-300">Znajduje sposoby na pogłębianie wiedzy i doświadczeń; regularnie szuka nowych okazji do nauki; jest namiętny w budowaniu wiedzy.</p>
+
+                            </div>
+
+
+
+                            <!-- Strength 3 -->
+
+                            <div class="p-4 bg-emerald-900/20 rounded-xl border border-emerald-500/30">
+
+                                <div class="text-sm font-bold text-emerald-300 mb-1">Kreatywność</div>
+
+                                <p class="text-[11px] text-slate-300">Jest postrzegany jako kreatywny; widzi, robi i/lub tworzy rzeczy, które są przydatne; myśli o unikalnych sposobach rozwiązywania problemów.</p>
+
+                            </div>
+
+
+
+                            <!-- Strength 4 -->
+
+                            <div class="p-4 bg-emerald-900/20 rounded-xl border border-emerald-500/30">
+
+                                <div class="text-sm font-bold text-emerald-300 mb-1">Przywództwo</div>
+
+                                <p class="text-[11px] text-slate-300">Pozytywnie wpływa na tych, którymi kieruje; woli prowadzić niż podążać; jest bardzo dobry w organizowaniu i przejmowaniu kontroli dla dobra grupy.</p>
+
+                            </div>
+
+
+
+                            <!-- Strength 5 -->
+
+                            <div class="p-4 bg-emerald-900/20 rounded-xl border border-emerald-500/30">
+
+                                <div class="text-sm font-bold text-emerald-300 mb-1">Użycie Charyzmy do Perswazji</div>
+
+                                <p class="text-[11px] text-slate-300">Oparty na intuicji i zdolności do improwizacji; szuka okazji do wzrostu i rozwoju; naturalnie przekonuje innych do swoich idei.</p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- BLIND SPOTS (WYZWANIA) -->
+
+                    <div class="glass-panel rounded-3xl overflow-hidden border border-amber-500/20 p-8">
+
+                        <h3 class="text-2xl font-bold text-white brand-font mb-8 flex items-center gap-2">
+
+                            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+
+                            Punkty Ślepe (Areas of Development)
+
+                        </h3>
+
+
+
+                        <div class="space-y-4">
+
+                            <!-- Blind Spot 1 -->
+
+                            <div class="p-4 bg-amber-900/20 rounded-xl border border-amber-500/30">
+
+                                <div class="text-sm font-bold text-amber-300 mb-1">Trudność z Fokusem</div>
+
+                                <p class="text-[11px] text-slate-300">Może mieć trudności ze skupieniem się na jednym zadaniu; ma tendencję do rozproszenia uwagi między wiele projektów jednocześnie.</p>
+
+                            </div>
+
+
+
+                            <!-- Blind Spot 2 -->
+
+                            <div class="p-4 bg-amber-900/20 rounded-xl border border-amber-500/30">
+
+                                <div class="text-sm font-bold text-amber-300 mb-1">Opór wobec Struktur</div>
+
+                                <p class="text-[11px] text-slate-300">Może opierać się formalnym strukturom i regułom; preferuje elastyczność zamiast sztywnych procedur.</p>
+
+                            </div>
+
+
+
+                            <!-- Blind Spot 3 -->
+
+                            <div class="p-4 bg-amber-900/20 rounded-xl border border-amber-500/30">
+
+                                <div class="text-sm font-bold text-amber-300 mb-1">Trudność z Rutywną Konsekwencją</div>
+
+                                <p class="text-[11px] text-slate-300">Może mieć kłopoty ze śledzeniem spójnych, przewidywalnych rutyn; ryzyko "słomianych zap pał".</p>
+
+                            </div>
+
+
+
+                            <!-- Blind Spot 4 -->
+
+                            <div class="p-4 bg-amber-900/20 rounded-xl border border-amber-500/30">
+
+                                <div class="text-sm font-bold text-amber-300 mb-1">Impulsywne Wnioskowanie</div>
+
+                                <p class="text-[11px] text-slate-300">Może dojść do wniosków zbyt rychło, z zbyt małą ilością danych; zbyt wysoka pewność siebie w decyzjach.</p>
+
+                            </div>
+
+
+
+                            <!-- Blind Spot 5 -->
+
+                            <div class="p-4 bg-amber-900/20 rounded-xl border border-amber-500/30">
+
+                                <div class="text-sm font-bold text-amber-300 mb-1">Tendencja do Dominacji</div>
+
+                                <p class="text-[11px] text-slate-300">Może forsować własne zdanie; "naginanie reguł" dla osiągnięcia celu; czasem brak uwzględniania perspektywy innych.</p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ROW 3: VALUES & MOTIVATIONS -->
+            <div class="max-w-6xl mx-auto mb-8">
+                <div class="grid md:grid-cols-2 gap-8">
+
+                    
+
+                    <!-- CORE VALUES -->
+
+                    <div class="glass-panel rounded-3xl overflow-hidden border border-indigo-500/20 p-8">
+
+                        <h3 class="text-2xl font-bold text-white brand-font mb-8 flex items-center gap-2">
+
+                            <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+
+                            Kompas Wartości (Extended)
+
+                        </h3>
+
+
+
+                        <div class="space-y-3">
+
+                            <div class="flex items-start gap-3 p-3 bg-slate-800/40 rounded-lg border border-indigo-500/20">
+
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-indigo-400 flex-shrink-0"></div>
+
+                                <div>
+
+                                    <div class="text-sm font-bold text-indigo-300">Kreatywność</div>
+
+                                    <p class="text-[10px] text-slate-400">Ważne jest posiadanie nowych idei lub tworzenie nowych rzeczy.</p>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="flex items-start gap-3 p-3 bg-slate-800/40 rounded-lg border border-indigo-500/20">
+
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-amber-400 flex-shrink-0"></div>
+
+                                <div>
+
+                                    <div class="text-sm font-bold text-amber-300">Osiągnięcia</div>
+
+                                    <p class="text-[10px] text-slate-400">Ważne jest dla nich wyzwanie siebie i ciężka praca dla poprawy.</p>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="flex items-start gap-3 p-3 bg-slate-800/40 rounded-lg border border-indigo-500/20">
+
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-rose-400 flex-shrink-0"></div>
+
+                                <div>
+
+                                    <div class="text-sm font-bold text-rose-300">Niezależność</div>
+
+                                    <p class="text-[10px] text-slate-400">Ważne jest podejmowanie własnych decyzji i robienie rzeczy na własny sposób.</p>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="flex items-start gap-3 p-3 bg-slate-800/40 rounded-lg border border-indigo-500/20">
+
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-cyan-400 flex-shrink-0"></div>
+
+                                <div>
+
+                                    <div class="text-sm font-bold text-cyan-300">Odpowiedzialność</div>
+
+                                    <p class="text-[10px] text-slate-400">Ważne jest bycie godnym zaufania i wiarygodnym.</p>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="flex items-start gap-3 p-3 bg-slate-800/40 rounded-lg border border-indigo-500/20">
+
+                                <div class="w-2 h-2 mt-1.5 rounded-full bg-emerald-400 flex-shrink-0"></div>
+
+                                <div>
+
+                                    <div class="text-sm font-bold text-emerald-300">Dbałość o Klimat</div>
+
+                                    <p class="text-[10px] text-slate-400">Ważne jest ochrona i pielęgnacja środowiska naturalnego.</p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ENERGIZERS & DRAINERS -->
+
+                    <div class="glass-panel rounded-3xl overflow-hidden border border-yellow-500/20 p-8">
+
+                        <h3 class="text-2xl font-bold text-white brand-font mb-8 flex items-center gap-2">
+
+                            <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+
+                            Energia & Motywacja
+
+                        </h3>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+
+                            <!-- ENERGIZERS -->
+
+                            <div>
+
+                                <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+
+                                    Ładuje Energię
+
+                                </h4>
+
+                                <ul class="space-y-2 text-[11px] text-slate-300">
+
+                                    <li class="flex gap-2">
+
+                                        <span class="text-emerald-400 font-bold">•</span>
+
+                                        <span>Myślenie na nogach</span>
+
+                                    </li>
+
+                                    <li class="flex gap-2">
+
+                                        <span class="text-emerald-400 font-bold">•</span>
+
+                                        <span>Public speaking</span>
+
+                                    </li>
+
+                                    <li class="flex gap-2">
+
+                                        <span class="text-emerald-400 font-bold">•</span>
+
+                                        <span>Nowe doświadczenia</span>
+
+                                    </li>
+
+                                    <li class="flex gap-2">
+
+                                        <span class="text-emerald-400 font-bold">•</span>
+
+                                        <span>Improwizacja</span>
+
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                            <!-- DRAINERS -->
+
+                            <div>
+
+                                <h4 class="text-xs font-bold text-rose-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+
+                                    Drenaży Energię
+
+                                </h4>
+
+                                <ul class="space-y-2 text-[11px] text-slate-300">
+
+                                    <li class="flex gap-2">
+
+                                        <span class="text-rose-400 font-bold">•</span>
+
+                                        <span>Sztywne procedury</span>
+
+                                    </li>
+
+                                    <li class="flex gap-2">
+
+                                        <span class="text-rose-400 font-bold">•</span>
+
+                                        <span>Routine work</span>
+
+                                    </li>
+
+                                    <li class="flex gap-2">
+
+                                        <span class="text-rose-400 font-bold">•</span>
+
+                                        <span>Analiza danych</span>
+
+                                    </li>
+
+                                    <li class="flex gap-2">
+
+                                        <span class="text-rose-400 font-bold">•</span>
+
+                                        <span>Sztywne harmonogramy</span>
+
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ROW 4: HOW TO WORK WITH MACIEJ -->
+            <div class="max-w-6xl mx-auto mb-8">
+                <div class="glass-panel rounded-3xl overflow-hidden border border-purple-500/20 p-8">
+
+                    <h3 class="text-2xl font-bold text-white brand-font mb-8 flex items-center gap-2">
+
+                        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+
+                        Jak Skutecznie Pracować z Maciejem
+
+                    </h3>
+
+
+
+                    <div class="grid md:grid-cols-2 gap-8">
+
+                        <!-- COMMUNICATION TIPS -->
+
+                        <div>
+
+                            <h4 class="text-sm font-bold text-indigo-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+
+                                Strategy Komunikacyjna
+
+                            </h4>
+
+                            <ul class="space-y-2 text-[11px] text-slate-300">
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-indigo-400 font-bold">▶</span>
+
+                                    <span><strong>Dyskutuj następne kroki</strong> zamiast szczegółów przeszłości</span>
+
+                                </li>
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-indigo-400 font-bold">▶</span>
+
+                                    <span><strong>Utrzymuj wysoką energię i entuzjazm</strong> w interakcjach</span>
+
+                                </li>
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-indigo-400 font-bold">▶</span>
+
+                                    <span><strong>Pytaj o wizję na przyszłość</strong> - to go inspiruje</span>
+
+                                </li>
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-indigo-400 font-bold">▶</span>
+
+                                    <span><strong>Bądź mniej formalny, bardziej dynamiczny</strong> w podejściu</span>
+
+                                </li>
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-indigo-400 font-bold">▶</span>
+
+                                    <span><strong>Zawsze mów o przyszłości</strong> zamiast przeszłości</span>
+
+                                </li>
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-indigo-400 font-bold">▶</span>
+
+                                    <span><strong>Powiedz sobie żarty</strong> - humor buduje zaufanie</span>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+
+
+                        <!-- DECISION & NEGOTIATION -->
+
+                        <div>
+
+                            <h4 class="text-sm font-bold text-amber-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+
+                                Decyzje & Negocjacje
+
+                            </h4>
+
+                            <ul class="space-y-2 text-[11px] text-slate-300">
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-amber-400 font-bold">▶</span>
+
+                                    <span><strong>Pozwól na szybkie decyzje</strong> - nie wlecz negocjacji</span>
+
+                                </li>
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-amber-400 font-bold">▶</span>
+
+                                    <span><strong>Przyciągnij uwagę do zgody</strong> między stronami</span>
+
+                                </li>
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-amber-400 font-bold">▶</span>
+
+                                    <span><strong>Połącz ofertę ze społecznym trendem</strong> - pokaż innowacyjność</span>
+
+                                </li>
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-amber-400 font-bold">▶</span>
+
+                                    <span><strong>Daj mu podsumowanie (bottom-line)</strong> bez zbędnych szczegółów</span>
+
+                                </li>
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-amber-400 font-bold">▶</span>
+
+                                    <span><strong>Wykaż swoją elastyczność</strong> w warunkach</span>
+
+                                </li>
+
+                                <li class="flex gap-2 p-2 bg-slate-800/30 rounded">
+
+                                    <span class="text-amber-400 font-bold">▶</span>
+
+                                    <span><strong>Poproś o natychmiastową opinię</strong> na temat propozycji</span>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ACTION-DRIVING TACTICS -->
+
+                    <div class="mt-8 pt-8 border-t border-slate-700">
+
+                        <h4 class="text-sm font-bold text-rose-300 uppercase tracking-wider mb-4 flex items-center gap-2">
+
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+
+                            Jak Zaangażować Maciej (Action Drivers)
+
+                        </h4>
+
+                        <div class="grid md:grid-cols-3 gap-4">
+
+                            <div class="p-4 bg-rose-900/20 rounded-xl border border-rose-500/30">
+
+                                <p class="text-[10px] text-rose-300 font-bold mb-1">SPONTANICZNOŚĆ</p>
+
+                                <p class="text-[11px] text-slate-300">Zaproponuj spotkanie <strong>od razu</strong> zamiast planowania na przyszłość</p>
+
+                            </div>
+
+                            <div class="p-4 bg-rose-900/20 rounded-xl border border-rose-500/30">
+
+                                <p class="text-[10px] text-rose-300 font-bold mb-1">ENTUZJAZM</p>
+
+                                <p class="text-[11px] text-slate-300">Powiedz dlaczego <strong>Ty jesteś podekscytowany</strong> spotkaniem</p>
+
+                            </div>
+
+                            <div class="p-4 bg-rose-900/20 rounded-xl border border-rose-500/30">
+
+                                <p class="text-[10px] text-rose-300 font-bold mb-1">CEL</p>
+
+                                <p class="text-[11px] text-slate-300">Wyraźnie wyjaśnij <strong>cel spotkania</strong></p>
+
+                            </div>
+
+                            <div class="p-4 bg-rose-900/20 rounded-xl border border-rose-500/30">
+
+                                <p class="text-[10px] text-rose-300 font-bold mb-1">AGENDA</p>
+
+                                <p class="text-[11px] text-slate-300">Zachowaj agendę <strong>wystarczająco otwartą</strong> dla dyskusji</p>
+
+                            </div>
+
+                            <div class="p-4 bg-rose-900/20 rounded-xl border border-rose-500/30">
+
+                                <p class="text-[10px] text-rose-300 font-bold mb-1">FOLLOW-UP</p>
+
+                                <p class="text-[11px] text-slate-300">Pytaj <strong>aż dostaniesz jasną odpowiedź</strong> i follow-upuj wielokrotnie</p>
+
+                            </div>
+
+                            <div class="p-4 bg-rose-900/20 rounded-xl border border-rose-500/30">
+
+                                <p class="text-[10px] text-rose-300 font-bold mb-1">KANAŁY</p>
+
+                                <p class="text-[11px] text-slate-300">Kontaktuj się z <strong>wielu kanałów</strong> jeśli potrzebny jest szybki response</p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- FLOATING AI ASSISTANT BUTTON -->
+    <div id="aiAssistant" class="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center cursor-pointer shadow-[0_0_30px_rgba(168,85,247,0.6)] border border-purple-400/50 hover:shadow-[0_0_50px_rgba(168,85,247,0.8)] transition-all duration-300 group animate-pulse z-40"
+         title="AI Assistant - Coming Soon">
+        <svg class="w-8 h-8 text-white group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+    </div>
+
+    <style>
+        #aiAssistant:hover {
+            animation: none;
+        }
+    </style>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950/80 border-t border-white/5 mt-20">
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <div class="text-center text-slate-500 text-sm">
+                <p>© 2026 Psycher - Psychologiczna Analiza Osobowości | Wszystkie dane są szyfrowane i poufne</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Check if user is logged in and has profile
+        window.addEventListener('load', function() {
+            const userSession = localStorage.getItem('user_session');
+            const authToken = localStorage.getItem('auth_token');
+            const hasProfile = localStorage.getItem('has_profile');
+            const userEmail = localStorage.getItem('user_email');
+            
+            if (!userSession || !authToken) {
+                // User not logged in, redirect to main page
+                console.warn('No active session found. Redirecting to home...');
+                setTimeout(() => {
+                    window.location.href = '/index2.html';
+                }, 500);
+                return;
+            }
+
+            // Check if user is new (no profile)
+            if (hasProfile !== 'true') {
+                showNewUserView(userEmail);
+            } else {
+                showExistingUserView();
+            }
+        });
+
+        function showNewUserView(email) {
+            // Show Hero CTA
+            document.getElementById('newUserHero').style.display = 'block';
+            
+            // Update user info
+            const username = email ? email.split('@')[0] : 'Użytkownik';
+            document.getElementById('userName').textContent = username;
+            document.getElementById('userTitle').textContent = 'Nowy użytkownik - Rozpocznij test';
+            document.getElementById('profileCompletion').textContent = '5%';
+            document.getElementById('profileCompletion').className = 'text-sm text-amber-400';
+
+            // Add lock overlays to all cards
+            addLockOverlays();
+            
+            // Make content look disabled
+            makeContentLocked();
+        }
+
+        function showExistingUserView() {
+            // Hide Hero CTA (already hidden by default)
+            document.getElementById('newUserHero').style.display = 'none';
+            // Normal view - no changes needed
+        }
+
+        function addLockOverlays() {
+            // Add lock overlay to main character card
+            const characterCard = document.querySelector('#card .glass-panel');
+            if (characterCard) {
+                characterCard.style.position = 'relative';
+                const overlay = document.createElement('div');
+                overlay.className = 'locked-overlay';
+                overlay.innerHTML = `
+                    <svg class="w-12 h-12 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                `;
+                characterCard.appendChild(overlay);
+            }
+
+            // Add locks to extended sections
+            const extendedSections = document.querySelectorAll('.glass-panel');
+            extendedSections.forEach((section, index) => {
+                if (index > 0) { // Skip first one (main card)
+                    section.style.position = 'relative';
+                    const overlay = document.createElement('div');
+                    overlay.className = 'locked-overlay';
+                    overlay.innerHTML = `
+                        <svg class="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    `;
+                    section.appendChild(overlay);
+                }
+            });
+        }
+
+        function makeContentLocked() {
+            // Replace values with placeholders
+            const statsElements = document.querySelectorAll('.stat-bar-fill');
+            statsElements.forEach(el => {
+                el.style.width = '0%';
+                el.style.background = '#334155';
+            });
+
+            // Add locked class to content areas
+            const contentAreas = document.querySelectorAll('.glass-panel');
+            contentAreas.forEach(area => {
+                area.classList.add('locked-card');
+            });
+        }
+
+        function startTest() {
+            // Redirect to tests dashboard
+            window.location.href = '/user-profile-tests.html';
+        }
+
+        // Simple navigation highlighting
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Logout function
+        function handleLogout() {
+            // Clear auth data
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_session');
+            localStorage.removeItem('user_email');
+            
+            // Redirect to home page
+            window.location.href = '/index2.html';
+        }
+
+        // Add logout functionality to buttons if they exist
+        document.addEventListener('DOMContentLoaded', function() {
+            // Find logout buttons and add click handlers
+            const logoutButtons = document.querySelectorAll('[data-logout], .logout-btn, button:contains("Wyloguj")');
+            logoutButtons.forEach(btn => {
+                btn.addEventListener('click', handleLogout);
+            });
+        });
+    </script>
+</body>
+</html>

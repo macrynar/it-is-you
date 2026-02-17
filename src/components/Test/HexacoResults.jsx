@@ -1,0 +1,369 @@
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, RefreshCw, Share2, Download } from 'lucide-react';
+import { supabase } from '../../lib/supabaseClient.js';
+import { HEXACO_TEST } from '../../data/tests/hexaco.js';
+
+export default function HexacoResults() {
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    loadResults();
+  }, []);
+
+  const loadResults = async () => {
+    try {
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError || !user) {
+        throw new Error('Nie jesteś zalogowany');
+      }
+
+      // Get latest HEXACO test result
+      const { data, error: fetchError } = await supabase
+        .from('user_psychometrics')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('test_type', 'HEXACO')
+        .order('completed_at', { ascending: false })
+        .limit(1);
+
+      if (fetchError) throw fetchError;
+
+      if (!data || data.length === 0) {
+        setError('Nie znaleziono wyników testu. Wykonaj test ponownie.');
+        setLoading(false);
+        return;
+      }
+
+      setResults(data[0]);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error loading results:', err);
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  const handleRetakeTest = () => {
+    if (confirm('Czy na pewno chcesz wykonać test ponownie? Obecne wyniki zostaną zastąpione.')) {
+      window.location.href = '/test';
+    }
+  };
+
+  // Get progress bar color based on percentile
+  const getProgressBarColor = (percentile) => {
+    if (percentile >= 80) {
+      return 'from-emerald-500 to-cyan-500'; // High - Neon Green/Cyan
+    } else if (percentile >= 50) {
+      return 'from-blue-500 to-purple-500'; // Medium - Blue/Purple
+    } else if (percentile >= 30) {
+      return 'from-yellow-500 to-orange-500'; // Below average - Yellow/Orange
+    } else {
+      return 'from-orange-500 to-red-500'; // Low - Orange/Red
+    }
+  };
+
+  // Get glow color for high scores
+  const getGlowColor = (percentile) => {
+    if (percentile >= 80) {
+      return 'shadow-[0_0_20px_rgba(16,185,129,0.4)]';
+    }
+    return '';
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-slate-400 text-lg">Ładowanie wyników...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
+        <div className="bg-black/40 backdrop-blur-xl p-8 rounded-2xl border border-red-500/30 text-center max-w-md">
+          <div className="text-red-400 text-5xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-white mb-4">Błąd</h2>
+          <p className="text-slate-300 mb-6">{error}</p>
+          <button
+            onClick={() => window.location.href = '/user-profile-tests.html'}
+            className="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition"
+          >
+            Wróć do Dashboardu
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const dimensionIcons = {
+    honesty_humility: '🎭',
+    emotionality: '💭',
+    extraversion: '⚡',
+    agreeableness: '🤝',
+    conscientiousness: '📋',
+    openness: '🌟'
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-white">
+      {/* Header */}
+      <div className="border-b border-white/5 bg-black/40 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => window.location.href = '/user-profile-tests.html'}
+              className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+            >
+              <ArrowLeft size={20} />
+              <span>Dashboard</span>
+            </button>
+            
+            <button
+              onClick={handleRetakeTest}
+              className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/70 text-white rounded-lg border border-slate-700 hover:border-cyan-500/50 transition-all"
+            >
+              <RefreshCw size={18} />
+              <span>Powtórz Test</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        
+        {/* Hero Section - Mission Report Style */}
+        <div className="text-center mb-16 relative">
+          {/* Glow effect */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
+          
+          <div className="relative">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-bold uppercase tracking-wider mb-6">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+              Status: Ukończono
+            </div>
+            
+            <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-cyan-200 to-white bg-clip-text text-transparent tracking-tight">
+              ANALIZA UKOŃCZONA
+            </h1>
+            
+            <div className="flex items-center justify-center gap-4 text-slate-500 text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-1 h-1 rounded-full bg-cyan-500"></div>
+                <span>HEXACO-60 Test Osobowości</span>
+              </div>
+              <div className="w-1 h-1 rounded-full bg-slate-700"></div>
+              <div className="flex items-center gap-2">
+                <span>{new Date(results.completed_at).toLocaleDateString('pl-PL', { 
+                  day: '2-digit', 
+                  month: '2-digit', 
+                  year: 'numeric'
+                })}</span>
+                <span className="text-slate-700">•</span>
+                <span>{new Date(results.completed_at).toLocaleTimeString('pl-PL', { 
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Dimensions Grid - HUD Cards */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {HEXACO_TEST.dimensions.map((dimension) => {
+            const score = results.raw_scores[dimension.id];
+            const percentile = results.percentile_scores[dimension.id];
+            const report = results.report?.dimensions?.find(d => d.id === dimension.id);
+            
+            return (
+              <div
+                key={dimension.id}
+                className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-slate-800 hover:border-slate-700 transition-all duration-300 group"
+              >
+                {/* Header */}
+                <div className="flex items-start justify-between mb-6">
+                  <div className="text-4xl opacity-80 group-hover:scale-110 transition-transform duration-300">
+                    {dimensionIcons[dimension.id]}
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-3xl font-bold text-white mb-1 ${getGlowColor(percentile)}`}>
+                      {Math.round(percentile)}<span className="text-xl text-slate-500">%</span>
+                    </div>
+                    <div className="text-xs text-slate-600 font-mono">
+                      {score?.toFixed(2)}/5.00
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dimension Name */}
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  {dimension.name}
+                </h3>
+                <p className="text-xs text-slate-500 mb-5 leading-relaxed">
+                  {dimension.description}
+                </p>
+
+                {/* Progress Bar - Thin & Elegant */}
+                <div className="mb-5">
+                  <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                    <div 
+                      className={`h-full bg-gradient-to-r ${getProgressBarColor(percentile)} transition-all duration-1000 relative ${getGlowColor(percentile)}`}
+                      style={{ width: `${percentile}%` }}
+                    >
+                      {/* Inner glow */}
+                      <div className={`absolute inset-0 bg-gradient-to-r ${getProgressBarColor(percentile)} blur-sm opacity-50`}></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Interpretation */}
+                {report?.interpretation && (
+                  <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-800">
+                    <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">
+                      {report.interpretation.level}
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      {report.interpretation.description}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Visualization Section */}
+        <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-800 mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+            <span className="text-cyan-400">■</span>
+            Profil Osbowości
+          </h2>
+          
+          {/* Bar Chart */}
+          <div className="space-y-6">
+            {HEXACO_TEST.dimensions.map((dimension) => {
+              const percentile = results.percentile_scores[dimension.id];
+              
+              return (
+                <div key={dimension.id} className="group">
+                  <div className="flex items-center justify-between text-sm mb-3">
+                    <span className="text-slate-400 font-medium flex items-center gap-2">
+                      <span className="text-xl">{dimensionIcons[dimension.id]}</span>
+                      {dimension.name}
+                    </span>
+                    <span className="text-white font-bold text-lg">{Math.round(percentile)}<span className="text-slate-600 text-sm">%</span></span>
+                  </div>
+                  <div className="relative">
+                    <div className="w-full h-3 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                      <div 
+                        className={`h-full bg-gradient-to-r ${getProgressBarColor(percentile)} transition-all duration-1000 relative group-hover:opacity-90`}
+                        style={{ width: `${percentile}%` }}
+                      >
+                        {/* Glow effect */}
+                        {percentile >= 80 && (
+                          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-cyan-500 blur-md opacity-40"></div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Summary Section - Mission Stats */}
+        <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-800 mb-12">
+          <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+            <span className="text-cyan-400">■</span>
+            Kluczowe Statystyki
+          </h2>
+          
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Highest Dimension */}
+            <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-xl p-6 hover:border-emerald-500/50 transition-all">
+              <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-4">
+                Dominujący Wymiar
+              </div>
+              {(() => {
+                const highest = Object.entries(results.percentile_scores)
+                  .sort((a, b) => b[1] - a[1])[0];
+                const dim = HEXACO_TEST.dimensions.find(d => d.id === highest[0]);
+                return (
+                  <div>
+                    <div className="text-3xl mb-2">{dimensionIcons[highest[0]]}</div>
+                    <div className="text-xl font-bold text-white mb-1">{dim?.name}</div>
+                    <div className="text-2xl font-bold text-emerald-400">{Math.round(highest[1])}<span className="text-sm text-emerald-600">%</span></div>
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* Lowest Dimension */}
+            <div className="bg-orange-900/20 border border-orange-500/30 rounded-xl p-6 hover:border-orange-500/50 transition-all">
+              <div className="text-xs font-bold text-orange-400 uppercase tracking-wider mb-4">
+                Obszar Rozwoju
+              </div>
+              {(() => {
+                const lowest = Object.entries(results.percentile_scores)
+                  .sort((a, b) => a[1] - b[1])[0];
+                const dim = HEXACO_TEST.dimensions.find(d => d.id === lowest[0]);
+                return (
+                  <div>
+                    <div className="text-3xl mb-2">{dimensionIcons[lowest[0]]}</div>
+                    <div className="text-xl font-bold text-white mb-1">{dim?.name}</div>
+                    <div className="text-2xl font-bold text-orange-400">{Math.round(lowest[1])}<span className="text-sm text-orange-600">%</span></div>
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* Average Score */}
+            <div className="bg-cyan-900/20 border border-cyan-500/30 rounded-xl p-6 hover:border-cyan-500/50 transition-all">
+              <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-4">
+                Średni Wynik
+              </div>
+              {(() => {
+                const avg = Object.values(results.percentile_scores)
+                  .reduce((sum, val) => sum + val, 0) / 6;
+                return (
+                  <div>
+                    <div className="text-3xl mb-2">📈</div>
+                    <div className="text-xl font-bold text-white mb-1">Ogólny Profil</div>
+                    <div className="text-2xl font-bold text-cyan-400">{Math.round(avg)}<span className="text-sm text-cyan-600">%</span></div>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={() => window.location.href = '/user-profile-tests.html'}
+            className="px-8 py-3.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50"
+          >
+            Wróć do Dashboardu
+          </button>
+          <button
+            onClick={handleRetakeTest}
+            className="px-8 py-3.5 bg-slate-800/50 hover:bg-slate-700/70 text-white font-semibold rounded-xl border border-slate-700 hover:border-slate-600 transition-all duration-300 flex items-center gap-2"
+          >
+            <RefreshCw size={18} />
+            Wykonaj Test Ponownie
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
