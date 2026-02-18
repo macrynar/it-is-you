@@ -72,6 +72,28 @@ const CSS = `
     #0d0a1a;
 }
 
+/* ── PAGE HEADER OVERRIDE (defeats Tailwind preflight) ── */
+.dt-root .dt-page-title {
+  font-size: 42px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -1px !important;
+  margin-bottom: 10px !important;
+  color: #fff !important;
+  display: block !important;
+}
+.dt-root .dt-page-title .dt-title-accent {
+  color: #ff2d55 !important;
+  text-shadow: 0 0 30px rgba(255,45,85,.5), 0 0 60px rgba(255,45,85,.2) !important;
+}
+.dt-root .dt-page-sub {
+  font-size: 14px !important;
+  color: rgba(255,255,255,.3) !important;
+  font-weight: 400 !important;
+  display: block !important;
+  margin: 0 !important;
+}
+
 /* glass base */
 .dt-glass {
   background: rgba(28,10,18,.65);
@@ -337,11 +359,11 @@ function DarkTriadResults() {
         }}>
           ⚠ System Alert: Personality Analysis
         </div>
-        <h1 style={{ fontSize: 42, fontWeight: 800, letterSpacing: -1, marginBottom: 10, lineHeight: 1.1, display: 'block' }}>
-          <span style={{ color: '#fff' }}>Analiza </span>
-          <span style={{ color: '#ff2d55', textShadow: '0 0 30px rgba(255,45,85,.5), 0 0 60px rgba(255,45,85,.2)' }}>Cienia</span>
+        <h1 className="dt-page-title">
+          <span>Analiza </span>
+          <span className="dt-title-accent">Cienia</span>
         </h1>
-        <p style={{ fontSize: 14, color: 'rgba(255,255,255,.3)', fontWeight: 400, display: 'block', marginTop: 8 }}>Dark Triad Assessment (SD3)</p>
+        <p className="dt-page-sub">Dark Triad Assessment (SD3)</p>
       </header>
 
       {/* ── ALERT BANNER ── */}
@@ -475,8 +497,9 @@ function DarkTriadResults() {
           })}
         </div>
 
-        {/* RIGHT — summary panel */}
-        <div className="dt-glass" style={{ padding: '26px 22px', display: 'flex', flexDirection: 'column', gap: 18, alignSelf: 'start', position: 'sticky', top: 32 }}>
+        {/* RIGHT — summary panel (wrapper stretches to full grid height for sticky to work) */}
+        <div style={{ position: 'relative' }}>
+        <div className="dt-glass" style={{ padding: '26px 22px', display: 'flex', flexDirection: 'column', gap: 18, position: 'sticky', top: 32 }}>
           <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: 'rgba(255,255,255,.25)' }}>Podsumowanie</div>
 
           {/* overall score */}
@@ -540,6 +563,7 @@ function DarkTriadResults() {
           <div style={{ background: 'rgba(255,170,0,.05)', border: '1px solid rgba(255,170,0,.15)', borderRadius: 10, padding: '12px 14px', fontSize: 11, color: 'rgba(255,200,100,.5)', lineHeight: 1.55, textAlign: 'center' }}>
             ⚠️ Wyniki mają charakter informacyjny. Nie stanowią diagnozy klinicznej. W razie wątpliwości skonsultuj się ze specjalistą.
           </div>
+        </div>
         </div>
 
       </div>
