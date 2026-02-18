@@ -55,7 +55,12 @@ export default function HexacoResults() {
     setInterpretationLoading(true);
     setInterpretationError(null);
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error('Brak sesji użytkownika');
+
       const { data, error: fnError } = await supabase.functions.invoke('interpret-test', {
+        headers: { Authorization: `Bearer ${token}` },
         body: {
           test_type: 'HEXACO',
           percentile_scores: testResult.percentile_scores,
@@ -74,6 +79,9 @@ export default function HexacoResults() {
 
   const regenerateInterpretation = async () => {
     if (!results) return;
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) return;
     // Delete cache first so edge function regenerates
     await supabase
       .from('ai_interpretations')
