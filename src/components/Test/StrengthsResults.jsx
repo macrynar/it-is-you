@@ -81,19 +81,43 @@ export default function StrengthsResults() {
     window.location.href = '/user-profile-tests.html';
   };
 
-  // Get category color classes
-  const getCategoryColor = (categoryId) => {
+  // Get category color classes (Tailwind requires full class names, no interpolation)
+  const getCategoryColorClasses = (categoryId) => {
     const category = STRENGTHS_TEST.categories.find(c => c.id === categoryId);
-    if (!category) return 'emerald';
     
-    const colorMap = {
-      'emerald-500': 'emerald',
-      'purple-500': 'purple',
-      'amber-500': 'amber',
-      'blue-500': 'blue'
+    // Map category colors to Tailwind class sets
+    const colorClassMap = {
+      'emerald-500': {
+        badge: 'bg-gradient-to-br from-emerald-500 to-emerald-600',
+        text: 'text-emerald-400',
+        bg: 'bg-emerald-950/50 border-emerald-500/30 text-emerald-400',
+        bar: 'bg-gradient-to-r from-emerald-500 to-emerald-400',
+        glow: 'shadow-emerald-500/20'
+      },
+      'purple-500': {
+        badge: 'bg-gradient-to-br from-purple-500 to-purple-600',
+        text: 'text-purple-400',
+        bg: 'bg-purple-950/50 border-purple-500/30 text-purple-400',
+        bar: 'bg-gradient-to-r from-purple-500 to-purple-400',
+        glow: 'shadow-purple-500/20'
+      },
+      'amber-500': {
+        badge: 'bg-gradient-to-br from-amber-500 to-amber-600',
+        text: 'text-amber-400',
+        bg: 'bg-amber-950/50 border-amber-500/30 text-amber-400',
+        bar: 'bg-gradient-to-r from-amber-500 to-amber-400',
+        glow: 'shadow-amber-500/20'
+      },
+      'blue-500': {
+        badge: 'bg-gradient-to-br from-blue-500 to-blue-600',
+        text: 'text-blue-400',
+        bg: 'bg-blue-950/50 border-blue-500/30 text-blue-400',
+        bar: 'bg-gradient-to-r from-blue-500 to-blue-400',
+        glow: 'shadow-blue-500/20'
+      }
     };
     
-    return colorMap[category.color] || 'emerald';
+    return colorClassMap[category?.color] || colorClassMap['emerald-500'];
   };
 
   const getCategoryInfo = (categoryId) => {
@@ -190,7 +214,7 @@ export default function StrengthsResults() {
         <div className="space-y-6 mb-8">
           {report.top_5.map((talent, index) => {
             const categoryInfo = getCategoryInfo(talent.category);
-            const colorName = getCategoryColor(talent.category);
+            const colorClasses = getCategoryColorClasses(talent.category);
             
             return (
               <div
@@ -198,7 +222,7 @@ export default function StrengthsResults() {
                 className="glass-card-active p-6 relative overflow-hidden hover:shadow-xl transition-shadow"
               >
                 {/* Rank Badge */}
-                <div className={`absolute top-4 right-4 w-10 h-10 rounded-full bg-gradient-to-br from-${colorName}-500 to-${colorName}-600 flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
+                <div className={`absolute top-4 right-4 w-10 h-10 rounded-full ${colorClasses.badge} flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
                   #{talent.rank}
                 </div>
 
@@ -210,10 +234,10 @@ export default function StrengthsResults() {
                       {talent.name}
                     </h3>
                   </div>
-                  <p className={`text-${colorName}-400 text-sm mb-2`}>
+                  <p className={`${colorClasses.text} text-sm mb-2`}>
                     {talent.name_en}
                   </p>
-                  <div className={`inline-block px-3 py-1 rounded-full bg-${colorName}-950/50 border border-${colorName}-500/30 text-${colorName}-400 text-xs`}>
+                  <div className={`inline-block px-3 py-1 rounded-full ${colorClasses.bg} text-xs`}>
                     {categoryInfo?.name || talent.category}
                   </div>
                 </div>
@@ -226,7 +250,7 @@ export default function StrengthsResults() {
                   </div>
                   <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
                     <div
-                      className={`h-full bg-gradient-to-r from-${colorName}-500 to-${colorName}-400 transition-all duration-1000`}
+                      className={`h-full ${colorClasses.bar} transition-all duration-1000`}
                       style={{ width: `${(talent.score / 5) * 100}%` }}
                     ></div>
                   </div>
@@ -267,7 +291,7 @@ export default function StrengthsResults() {
                     {/* How to Use */}
                     {talent.interpretation.how_to_use && talent.interpretation.how_to_use.length > 0 && (
                       <div>
-                        <h4 className={`text-${colorName}-400 font-bold text-sm mb-2 flex items-center gap-2`}>
+                        <h4 className={`${colorClasses.text} font-bold text-sm mb-2 flex items-center gap-2`}>
                           <Sparkles size={16} />
                           Jak wykorzystać ten talent:
                         </h4>
@@ -312,7 +336,7 @@ export default function StrengthsResults() {
             <div className="grid md:grid-cols-2 gap-4">
               {Object.entries(report.category_scores).map(([catId, catData]) => {
                 const categoryInfo = getCategoryInfo(catId);
-                const colorName = getCategoryColor(catId);
+                const colorClasses = getCategoryColorClasses(catId);
                 
                 return (
                   <div
@@ -321,7 +345,7 @@ export default function StrengthsResults() {
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-xl">{categoryInfo?.icon || '⭐'}</span>
-                      <h3 className={`font-bold text-${colorName}-400`}>
+                      <h3 className={`font-bold ${colorClasses.text}`}>
                         {categoryInfo?.name || catId}
                       </h3>
                     </div>
@@ -336,7 +360,7 @@ export default function StrengthsResults() {
                       </div>
                       <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden mt-2">
                         <div
-                          className={`h-full bg-gradient-to-r from-${colorName}-500 to-${colorName}-400`}
+                          className={`h-full ${colorClasses.bar}`}
                           style={{ width: `${(catData.average_score / 5) * 100}%` }}
                         ></div>
                       </div>
