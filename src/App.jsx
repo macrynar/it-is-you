@@ -252,8 +252,23 @@ function App() {
     )
   }
 
-  // User is logged in - show dashboard
+  // User is logged in - redirect immediately to tests dashboard
   if (user) {
+    const intendedDestination = sessionStorage.getItem('redirect_after_auth')
+    const redirectUrl = intendedDestination || '/user-profile-tests.html'
+    if (intendedDestination) sessionStorage.removeItem('redirect_after_auth')
+    window.location.href = redirectUrl
+    return (
+      <div className="min-h-screen bg-bg-main flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-text-muted">Przekierowanie...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (false && user) {
     return (
       <div className="min-h-screen p-8">
         <div className="max-w-2xl mx-auto">
