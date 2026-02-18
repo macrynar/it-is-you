@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import AuthModal from './components/Auth/AuthModal'
 import TestWizard from './components/Test/TestWizard'
 import HexacoResults from './components/Test/HexacoResults'
+import EnneagramResults from './components/Test/EnneagramResults'
 import { supabase, onAuthStateChange } from './lib/supabaseClient'
 
 /**
@@ -85,7 +86,6 @@ function App() {
 
   // Handle /test/hexaco/results route - show test results
   if (currentRoute === '/test/hexaco/results' || currentRoute === '/test/hexaco/results/') {
-    // Show loading while checking auth
     if (loading) {
       return (
         <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
@@ -97,19 +97,37 @@ function App() {
       )
     }
     
-    // After loading, check if user is authenticated
     if (!user) {
       window.location.href = '/auth'
       return null
     }
     
-    // User is authenticated, show results
     return <HexacoResults />
   }
 
-  // Handle /test route - require authentication (check BEFORE loading screen)
+  // Handle /test/enneagram/results route - show enneagram results
+  if (currentRoute === '/test/enneagram/results' || currentRoute === '/test/enneagram/results/') {
+    if (loading) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-slate-400">Ładowanie...</p>
+          </div>
+        </div>
+      )
+    }
+    
+    if (!user) {
+      window.location.href = '/auth'
+      return null
+    }
+    
+    return <EnneagramResults />
+  }
+
+  // Handle /test route - require authentication & check for test type
   if (currentRoute === '/test' || currentRoute === '/test/') {
-    // Show loading while checking auth
     if (loading) {
       return (
         <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
@@ -121,16 +139,17 @@ function App() {
       )
     }
     
-    // After loading, check if user is authenticated
     if (!user) {
-      // Store intended destination
       sessionStorage.setItem('redirect_after_auth', '/test')
       window.location.href = '/auth'
       return null
     }
     
-    // User is authenticated, show test
-    return <TestWizard />
+    // Check for test type in URL params
+    const urlParams = new URLSearchParams(window.location.search)
+    const testType = urlParams.get('type') || 'hexaco' // default to hexaco
+    
+    return <TestWizard testType={testType} />
   }
 
   // Loading state or OAuth callback processing
