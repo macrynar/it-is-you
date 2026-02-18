@@ -351,6 +351,182 @@
         }
         .btn-neural:active { transform: translateY(0); }
 
+        /* ════════════════════════════════════
+           IIY MODULE CARDS
+        ════════════════════════════════════ */
+        .iiy-modules {
+          padding: 0 0 60px;
+          font-family: 'Space Grotesk', sans-serif;
+        }
+        .iiy-modules-header {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          margin-bottom: 28px;
+        }
+        .iiy-modules-title {
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.4);
+          white-space: nowrap;
+        }
+        .iiy-modules-header::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: linear-gradient(90deg, rgba(56,182,255,0.25), transparent);
+        }
+        .iiy-modules-count {
+          font-size: 11px;
+          letter-spacing: 2px;
+          color: rgba(56,182,255,0.5);
+          white-space: nowrap;
+        }
+        .iiy-cards-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+        @media (max-width: 1024px) { .iiy-cards-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px)  { .iiy-cards-grid { grid-template-columns: 1fr; } }
+
+        /* CARD BASE */
+        .iiy-card {
+          position: relative;
+          border-radius: 16px;
+          padding: 24px;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          isolation: isolate;
+          cursor: pointer;
+          transition: transform 0.3s cubic-bezier(.22,.68,0,1.15), box-shadow 0.3s ease;
+          background: rgba(16, 20, 56, 0.6);
+          backdrop-filter: blur(24px) saturate(180%);
+          -webkit-backdrop-filter: blur(24px) saturate(180%);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.1),
+            inset 0 -1px 0 rgba(255,255,255,0.04),
+            0 0 0 1px rgba(255,255,255,0.07),
+            0 8px 32px -4px rgba(0,0,0,0.6),
+            0 2px 8px -2px rgba(0,0,0,0.4);
+        }
+        .iiy-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 16px;
+          padding: 1px;
+          background: linear-gradient(145deg, rgba(255,255,255,0.18) 0%, rgba(56,182,255,0.2) 30%, rgba(123,94,167,0.15) 65%, rgba(255,255,255,0.04) 100%);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
+          transition: opacity 0.3s ease;
+        }
+        .iiy-card::after {
+          content: '';
+          position: absolute;
+          width: 200px; height: 200px;
+          border-radius: 50%;
+          filter: blur(60px);
+          pointer-events: none;
+          z-index: -1;
+          transition: opacity 0.4s ease, transform 0.4s ease;
+          opacity: 0.18;
+          bottom: -60px; right: -40px;
+        }
+        .iiy-card:hover { transform: translateY(-6px) scale(1.01); }
+        .iiy-card:hover::after { opacity: 0.35; transform: scale(1.15); }
+        .iiy-card:hover .iiy-card-glow { opacity: 1; }
+
+        /* ACCENT COLORS */
+        .iiy-card.cyan::after { background: #38b6ff; }
+        .iiy-card.cyan:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 0 0 1px rgba(56,182,255,0.35), 0 0 30px -4px rgba(56,182,255,0.3), 0 0 60px -8px rgba(56,182,255,0.15), 0 16px 48px -6px rgba(0,0,0,0.7); }
+        .iiy-card.cyan .iiy-card-icon-wrap  { background: rgba(56,182,255,0.15); border-color: rgba(56,182,255,0.3); }
+        .iiy-card.cyan .iiy-card-icon       { color: #38b6ff; }
+        .iiy-card.cyan .iiy-card-tag        { color: #38b6ff; border-color: rgba(56,182,255,0.35); background: rgba(56,182,255,0.1); }
+        .iiy-card.cyan .iiy-card-meta       { color: rgba(56,182,255,0.6); }
+
+        .iiy-card.violet::after { background: #7b5ea7; }
+        .iiy-card.violet:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 0 0 1px rgba(123,94,167,0.4), 0 0 30px -4px rgba(123,94,167,0.3), 0 0 60px -8px rgba(123,94,167,0.18), 0 16px 48px -6px rgba(0,0,0,0.7); }
+        .iiy-card.violet .iiy-card-icon-wrap { background: rgba(123,94,167,0.18); border-color: rgba(123,94,167,0.35); }
+        .iiy-card.violet .iiy-card-icon      { color: #b08fff; }
+        .iiy-card.violet .iiy-card-tag       { color: #b08fff; border-color: rgba(123,94,167,0.4); background: rgba(123,94,167,0.12); }
+        .iiy-card.violet .iiy-card-meta      { color: rgba(160,120,255,0.6); }
+
+        .iiy-card.pink::after { background: #c850c0; }
+        .iiy-card.pink:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 0 0 1px rgba(200,80,192,0.4), 0 0 30px -4px rgba(200,80,192,0.3), 0 0 60px -8px rgba(200,80,192,0.18), 0 16px 48px -6px rgba(0,0,0,0.7); }
+        .iiy-card.pink .iiy-card-icon-wrap { background: rgba(200,80,192,0.15); border-color: rgba(200,80,192,0.3); }
+        .iiy-card.pink .iiy-card-icon      { color: #e878e0; }
+        .iiy-card.pink .iiy-card-tag       { color: #e878e0; border-color: rgba(200,80,192,0.35); background: rgba(200,80,192,0.1); }
+        .iiy-card.pink .iiy-card-meta      { color: rgba(220,100,210,0.6); }
+
+        /* GLOW LINE */
+        .iiy-card-glow {
+          position: absolute; bottom: 0; left: 20%; right: 20%; height: 1px;
+          border-radius: 100px; pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .cyan  .iiy-card-glow { background: #38b6ff; box-shadow: 0 0 12px 3px rgba(56,182,255,0.6); }
+        .violet .iiy-card-glow { background: #b08fff; box-shadow: 0 0 12px 3px rgba(123,94,167,0.7); }
+        .pink  .iiy-card-glow { background: #e878e0; box-shadow: 0 0 12px 3px rgba(200,80,192,0.7); }
+
+        /* TOP ROW */
+        .iiy-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .iiy-card-icon-wrap {
+          width: 44px; height: 44px; border-radius: 12px; border: 1px solid;
+          display: flex; align-items: center; justify-content: center;
+          transition: transform 0.3s ease; flex-shrink: 0;
+        }
+        .iiy-card:hover .iiy-card-icon-wrap { transform: scale(1.08) rotate(-3deg); }
+        .iiy-card-icon { font-size: 18px; line-height: 1; display: flex; }
+        .iiy-card-tag {
+          font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+          text-transform: uppercase; padding: 5px 11px; border-radius: 100px; border: 1px solid;
+        }
+
+        /* BODY */
+        .iiy-card-title { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -0.3px; margin-bottom: 6px; transition: text-shadow 0.3s ease; }
+        .iiy-card:hover .iiy-card-title { text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+        .iiy-card-desc { font-size: 13px; color: rgba(255,255,255,0.45); margin-bottom: 20px; line-height: 1.5; }
+
+        /* META */
+        .iiy-card-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; margin-bottom: 20px; }
+        .iiy-card-meta-dot { width: 3px; height: 3px; border-radius: 50%; background: currentColor; opacity: 0.5; }
+
+        /* PROGRESS */
+        .iiy-card-progress { margin-bottom: 20px; }
+        .iiy-card-progress-track { height: 3px; border-radius: 100px; background: rgba(255,255,255,0.08); overflow: hidden; margin-bottom: 6px; }
+        .iiy-card-progress-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #38b6ff, #7b5ea7); box-shadow: 0 0 8px rgba(56,182,255,0.5); position: relative; transition: width 0.8s ease; }
+        .iiy-card-progress-fill::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: #fff; box-shadow: 0 0 6px rgba(56,182,255,0.8); }
+        .iiy-card-progress-fill.zero::after { display: none; }
+        .iiy-card-progress-label { font-size: 10px; color: rgba(255,255,255,0.3); text-align: right; }
+
+        /* DIVIDER */
+        .iiy-card-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 0 -24px 20px; }
+
+        /* CTA BUTTON */
+        .iiy-card-btn {
+          margin-top: auto; width: 100%; padding: 13px 24px; border-radius: 10px; border: none;
+          cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600;
+          letter-spacing: 0.5px; text-transform: uppercase;
+          display: flex; align-items: center; justify-content: center; gap: 8px;
+          transition: transform 0.2s cubic-bezier(.22,.68,0,1.2), box-shadow 0.25s ease, background 0.25s ease;
+          position: relative; overflow: hidden;
+        }
+        .iiy-card-btn::after { content: ''; position: absolute; top: 0; left: -80%; width: 45%; height: 100%; background: linear-gradient(115deg, transparent, rgba(255,255,255,0.12), transparent); transition: left 0.5s ease; }
+        .iiy-card-btn:hover::after { left: 140%; }
+        .iiy-card-btn.ghost { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.55); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); }
+        .iiy-card-btn.ghost:hover { background: rgba(255,255,255,0.09); color: rgba(255,255,255,0.8); transform: translateY(-1px); }
+        .iiy-card-btn.primary { background: linear-gradient(110deg, #3d2a9e 0%, #6a3fd4 50%, #38b6ff 100%); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(56,182,255,0.2), 0 0 20px -2px rgba(56,182,255,0.25), 0 4px 16px -2px rgba(0,0,0,0.5); }
+        .iiy-card-btn.primary:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 1px rgba(56,182,255,0.5), 0 0 24px -2px rgba(56,182,255,0.4), 0 8px 24px -4px rgba(0,0,0,0.6); }
+        .iiy-card-btn.primary-pink { background: linear-gradient(110deg, #7b1fa2 0%, #c850c0 50%, #ff6b9d 100%); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(200,80,192,0.25), 0 0 20px -2px rgba(200,80,192,0.3), 0 4px 16px -2px rgba(0,0,0,0.5); }
+        .iiy-card-btn.primary-pink:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 1px rgba(200,80,192,0.6), 0 0 28px -2px rgba(200,80,192,0.5), 0 8px 24px -4px rgba(0,0,0,0.6); }
+        .iiy-card-btn-arrow { font-size: 16px; transition: transform 0.2s ease; }
+        .iiy-card-btn:hover .iiy-card-btn-arrow { transform: translateX(4px); }
+
         /* ── iiy-logo ── */
         .iiy-logo, .iiy-logo * { box-sizing: border-box; margin: 0; padding: 0; }
         .iiy-logo { display: inline-flex; align-items: center; gap: 20px; text-decoration: none; user-select: none; }
@@ -578,185 +754,227 @@
             </div>
         </div>
 
-        <!-- Module Section Header - Sci-Fi Separator -->
-        <div class="flex items-center gap-4 mb-8" style="animation: fadeUp 1s ease-out;">
-            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-widest whitespace-nowrap">Dostępne Moduły (7)</h2>
-            <div class="h-px bg-gradient-to-r from-slate-800 via-slate-700 to-transparent flex-grow"></div>
-            <div class="flex gap-1">
-                <div class="w-1 h-1 rounded-full bg-violet-500 animate-pulse"></div>
-                <div class="w-1 h-1 rounded-full bg-purple-500 animate-pulse" style="animation-delay: 0.2s;"></div>
-                <div class="w-1 h-1 rounded-full bg-cyan-500 animate-pulse" style="animation-delay: 0.4s;"></div>
-            </div>
-        </div>
+        <!-- Module Cards -->
+        <section class="iiy-modules" style="position:relative;">
+          <!-- ambient background blobs -->
+          <div style="position:absolute;inset:0;pointer-events:none;z-index:-1;overflow:hidden;border-radius:24px;">
+            <div style="position:absolute;width:600px;height:400px;top:-80px;left:-100px;background:radial-gradient(ellipse,rgba(56,182,255,0.07) 0%,transparent 70%);"></div>
+            <div style="position:absolute;width:500px;height:400px;bottom:-80px;right:-80px;background:radial-gradient(ellipse,rgba(123,94,167,0.1) 0%,transparent 70%);"></div>
+          </div>
 
-        <!-- Test Cards Grid -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            
-            <!-- TEST 1: HEXACO-60 -->
-            <div class="glass-card glass-card-active test-hexaco rounded-2xl p-6 cursor-pointer group" onclick="startHexacoTest()">
-                <div class="flex items-center justify-between mb-5">
-                    <div class="card-icon-wrapper">
-                        <svg class="w-5 h-5 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                    </div>
-                    <span id="hexaco-status" class="neon-badge">
-                        Do wykonania
-                    </span>
-                </div>
-                
-                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-primary transition-colors">HEXACO-60</h3>
-                <p class="text-sm text-slate-400 mb-6">6 wymiarów osobowości</p>
-                
-                <div class="flex items-center gap-2 text-xs text-slate-500 mb-6">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span>15 min · 60 pytań</span>
-                </div>
-                
-                <button id="hexaco-button" class="btn-neural w-full">
-                    Rozpocznij Test
-                </button>
-            </div>
+          <div class="iiy-modules-header">
+            <span class="iiy-modules-title">Dostępne Moduły</span>
+            <span class="iiy-modules-count">(7)</span>
+          </div>
 
-            <!-- TEST 2: Enneagram -->
-            <div class="glass-card glass-card-active test-enneagram rounded-2xl p-6 cursor-pointer group" onclick="startEnneagramTest()">
-                <div class="flex items-center justify-between mb-5">
-                    <div class="card-icon-wrapper">
-                        <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <span id="enneagram-status" class="neon-badge">
-                        Do wykonania
-                    </span>
+          <div class="iiy-cards-grid">
+
+            <!-- CARD 1: HEXACO-60 — cyan -->
+            <div class="iiy-card cyan" onclick="startHexacoTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                  </span>
                 </div>
-                
-                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">Enneagram</h3>
-                <p class="text-sm text-slate-400 mb-6">Motywacja - Typy 1-9</p>
-                
-                <div class="flex items-center gap-2 text-xs text-slate-500 mb-6">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span>10 min · 36 pytań</span>
+                <span id="hexaco-status" class="iiy-card-tag">Do Wykonania</span>
+              </div>
+              <div class="iiy-card-title">HEXACO-60</div>
+              <div class="iiy-card-desc">6 wymiarów osobowości</div>
+              <div class="iiy-card-progress">
+                <div class="iiy-card-progress-track">
+                  <div id="hexaco-progress-fill" class="iiy-card-progress-fill zero" style="width:0%"></div>
                 </div>
-                
-                <button id="enneagram-button" class="btn-neural w-full">
-                    Rozpocznij Test
-                </button>
+                <div id="hexaco-progress-label" class="iiy-card-progress-label">Nie rozpoczęto</div>
+              </div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>15 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>60 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="hexaco-button" class="iiy-card-btn primary">
+                Rozpocznij Test <span class="iiy-card-btn-arrow">›</span>
+              </button>
             </div>
 
-            <!-- TEST 3: Dark Triad -->
-            <div class="glass-card glass-card-active test-dark-triad rounded-2xl p-6 cursor-pointer group" onclick="startDarkTriadTest()">
-                <div class="flex items-center justify-between mb-5">
-                    <div class="card-icon-wrapper">
-                        <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                    </div>
-                    <span id="dark-triad-status" class="neon-badge">
-                        Do wykonania
-                    </span>
+            <!-- CARD 2: Enneagram — violet -->
+            <div class="iiy-card violet" onclick="startEnneagramTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </span>
                 </div>
-                
-                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-rose-400 transition-colors">Dark Triad SD3</h3>
-                <p class="text-sm text-slate-400 mb-6">Cień / Ryzyka</p>
-                
-                <div class="flex items-center gap-2 text-xs text-slate-500 mb-6">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span>8 min · 27 pytań</span>
+                <span id="enneagram-status" class="iiy-card-tag">Do Wykonania</span>
+              </div>
+              <div class="iiy-card-title">Enneagram</div>
+              <div class="iiy-card-desc">Motywacja — Typy 1–9</div>
+              <div class="iiy-card-progress">
+                <div class="iiy-card-progress-track">
+                  <div id="enneagram-progress-fill" class="iiy-card-progress-fill zero" style="width:0%"></div>
                 </div>
-                
-                <button id="dark-triad-button" class="btn-neural w-full">
-                    Zbadaj Cień
-                </button>
+                <div id="enneagram-progress-label" class="iiy-card-progress-label">Nie rozpoczęto</div>
+              </div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>10 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>36 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="enneagram-button" class="iiy-card-btn primary">
+                Rozpocznij Test <span class="iiy-card-btn-arrow">›</span>
+              </button>
             </div>
 
-            <!-- TEST 4: Strengths -->
-            <div class="glass-card glass-card-active test-strengths rounded-2xl p-6" onclick="startStrengthsTest()" style="cursor: pointer;">
-                <div class="flex items-center justify-between mb-5 relative z-10">
-                    <div class="card-icon-wrapper">
-                        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                    </div>
-                    <span id="strengths-status" class="neon-badge neon-badge-available">Dostępny</span>
+            <!-- CARD 3: Dark Triad — pink -->
+            <div class="iiy-card pink" onclick="startDarkTriadTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                  </span>
                 </div>
-                
-                <h3 class="text-xl font-bold text-white mb-2 relative z-10">Strengths Assessment</h3>
-                <p class="text-sm text-slate-400 mb-6 relative z-10">Talenty - Top 5</p>
-                
-                <div class="flex items-center gap-2 text-xs text-slate-500 mb-6 relative z-10">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span>12 min · 48 pytań</span>
+                <span id="dark-triad-status" class="iiy-card-tag">Do Wykonania</span>
+              </div>
+              <div class="iiy-card-title">Dark Triad SD3</div>
+              <div class="iiy-card-desc">Cień / Ryzyka</div>
+              <div class="iiy-card-progress">
+                <div class="iiy-card-progress-track">
+                  <div id="dark-triad-progress-fill" class="iiy-card-progress-fill zero" style="width:0%; background: linear-gradient(90deg, #c850c0, #ff6b9d); box-shadow: 0 0 8px rgba(200,80,192,0.5)"></div>
                 </div>
-                
-                <button id="strengths-button" class="btn-neural w-full relative z-10">
-                    Odkryj Talenty
-                </button>
+                <div id="dark-triad-progress-label" class="iiy-card-progress-label">Nie rozpoczęto</div>
+              </div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>8 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>27 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="dark-triad-button" class="iiy-card-btn primary-pink">
+                Zbadaj Cień <span class="iiy-card-btn-arrow">›</span>
+              </button>
             </div>
 
-            <!-- TEST 5: Career Interests -->
-            <div class="glass-card glass-card-active test-career rounded-2xl p-6" onclick="startCareerTest()" style="cursor: pointer;">
-                <div class="flex items-center justify-between mb-5 relative z-10">
-                    <div class="card-icon-wrapper">
-                        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                       </svg>
-                    </div>
-                    <span id="career-status" class="neon-badge neon-badge-available">Dostępny</span>
+            <!-- CARD 4: Strengths — cyan -->
+            <div class="iiy-card cyan" onclick="startStrengthsTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                  </span>
                 </div>
-                
-                <h3 class="text-xl font-bold text-white mb-2 relative z-10">Career Interests RIASEC</h3>
-                <p class="text-sm text-slate-400 mb-6 relative z-10">Holland Code</p>
-                
-                <div class="flex items-center gap-2 text-xs text-slate-500 mb-6 relative z-10">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span>12 min · 48 pytań</span>
+                <span id="strengths-status" class="iiy-card-tag">Do Wykonania</span>
+              </div>
+              <div class="iiy-card-title">Strengths Assessment</div>
+              <div class="iiy-card-desc">Talenty — Top 5</div>
+              <div class="iiy-card-progress">
+                <div class="iiy-card-progress-track">
+                  <div id="strengths-progress-fill" class="iiy-card-progress-fill zero" style="width:0%"></div>
                 </div>
-                
-                <button id="career-button" class="btn-neural w-full relative z-10">
-                    Odkryj Kod Hollanda
-                </button>
+                <div id="strengths-progress-label" class="iiy-card-progress-label">Nie rozpoczęto</div>
+              </div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>12 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>48 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="strengths-button" class="iiy-card-btn primary">
+                Odkryj Talenty <span class="iiy-card-btn-arrow">›</span>
+              </button>
             </div>
 
-            <!-- TEST 6: Values Schwartz -->
-            <div class="glass-card glass-card-active test-values rounded-2xl p-6 cursor-pointer group" onclick="startValuesTest()">
-                <div class="flex items-center justify-between mb-5 relative z-10">
-                    <div class="card-icon-wrapper">
-                        <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
-                        </svg>
-                    </div>
-                    <span id="values-status" class="neon-badge">Dostępny</span>
+            <!-- CARD 5: Career RIASEC — violet -->
+            <div class="iiy-card violet" onclick="startCareerTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  </span>
                 </div>
-                
-                <h3 class="text-xl font-bold text-white mb-2 relative z-10">Wartości Osobiste</h3>
-                <p class="text-sm text-slate-400 mb-6 relative z-10">Schwartz PVQ - Co jest dla Ciebie ważne</p>
-                
-                <div class="flex items-center gap-2 text-xs text-slate-500 mb-6 relative z-10">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span>10 min · 40 pytań</span>
+                <span id="career-status" class="iiy-card-tag">Do Wykonania</span>
+              </div>
+              <div class="iiy-card-title">Career Interests</div>
+              <div class="iiy-card-desc">Holland Code RIASEC</div>
+              <div class="iiy-card-progress">
+                <div class="iiy-card-progress-track">
+                  <div id="career-progress-fill" class="iiy-card-progress-fill zero" style="width:0%"></div>
                 </div>
-                
-                <button id="values-button" class="btn-neural w-full relative z-10">
-                    Rozpocznij Test
-                </button>
+                <div id="career-progress-label" class="iiy-card-progress-label">Nie rozpoczęto</div>
+              </div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>12 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>48 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="career-button" class="iiy-card-btn primary">
+                Odkryj Kod Hollanda <span class="iiy-card-btn-arrow">›</span>
+              </button>
             </div>
 
+            <!-- CARD 6: Values Schwartz — violet -->
+            <div class="iiy-card violet" onclick="startValuesTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+                  </span>
+                </div>
+                <span id="values-status" class="iiy-card-tag">Do Wykonania</span>
+              </div>
+              <div class="iiy-card-title">Wartości Osobiste</div>
+              <div class="iiy-card-desc">Schwartz PVQ — Co jest dla Ciebie ważne</div>
+              <div class="iiy-card-progress">
+                <div class="iiy-card-progress-track">
+                  <div id="values-progress-fill" class="iiy-card-progress-fill zero" style="width:0%"></div>
+                </div>
+                <div id="values-progress-label" class="iiy-card-progress-label">Nie rozpoczęto</div>
+              </div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>10 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>40 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="values-button" class="iiy-card-btn primary">
+                Rozpocznij Test <span class="iiy-card-btn-arrow">›</span>
+              </button>
+            </div>
 
+            <!-- CARD 7: Coming Soon — locked -->
+            <div class="iiy-card pink" style="opacity:0.5;cursor:default;" onclick="">
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                  </span>
+                </div>
+                <span class="iiy-card-tag">Wkrótce</span>
+              </div>
+              <div class="iiy-card-title">Big Five NEO</div>
+              <div class="iiy-card-desc">Pełna wersja modelu osobowości</div>
+              <div class="iiy-card-meta" style="margin-top:auto;margin-bottom:0;padding-top:20px;">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span>Niedostępny</span>
+              </div>
+            </div>
 
-        </div>
+          </div>
+        </section>
 
         <!-- Info Section -->
         <div class="mt-20 glass-card rounded-3xl p-10 border border-violet-500/20 relative overflow-hidden">
@@ -1157,12 +1375,16 @@
             if (completed) {
                 if (statusEl) {
                     statusEl.textContent = 'Ukończony';
-                    statusEl.className = 'neon-badge neon-badge-success';
+                    statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)';
                 }
                 if (buttonEl) {
-                    buttonEl.innerHTML = '<svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>Zobacz Wynik';
-                    buttonEl.className = 'w-full px-4 py-3 bg-transparent border border-white/10 text-slate-400 hover:bg-white/5 hover:text-white font-semibold rounded-xl transition-all relative z-10';
+                    buttonEl.innerHTML = '👁 Zobacz Wynik';
+                    buttonEl.className = 'iiy-card-btn ghost';
                 }
+                const sFill = document.getElementById('strengths-progress-fill');
+                const sLabel = document.getElementById('strengths-progress-label');
+                if (sFill) { sFill.style.width = '100%'; sFill.classList.remove('zero'); }
+                if (sLabel) { sLabel.textContent = '100% ukończono'; }
             }
         }
 
@@ -1176,12 +1398,16 @@
             if (completed) {
                 if (statusEl) {
                     statusEl.textContent = 'Ukończony';
-                    statusEl.className = 'neon-badge neon-badge-success';
+                    statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)';
                 }
                 if (buttonEl) {
-                    buttonEl.innerHTML = '<svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>Zobacz Wynik';
-                    buttonEl.className = 'w-full px-4 py-3 bg-transparent border border-white/10 text-slate-400 hover:bg-white/5 hover:text-white font-semibold rounded-xl transition-all relative z-10';
+                    buttonEl.innerHTML = '👁 Zobacz Wynik';
+                    buttonEl.className = 'iiy-card-btn ghost';
                 }
+                const cFill = document.getElementById('career-progress-fill');
+                const cLabel = document.getElementById('career-progress-label');
+                if (cFill) { cFill.style.width = '100%'; cFill.classList.remove('zero'); }
+                if (cLabel) { cLabel.textContent = '100% ukończono'; }
             }
         }
 
@@ -1195,12 +1421,16 @@
             if (completed) {
                 if (statusEl) {
                     statusEl.textContent = 'Ukończony';
-                    statusEl.className = 'neon-badge neon-badge-success';
+                    statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)';
                 }
                 if (buttonEl) {
-                    buttonEl.innerHTML = '<svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>Zobacz Wynik';
-                    buttonEl.className = 'w-full px-4 py-3 bg-transparent border border-white/10 text-slate-400 hover:bg-white/5 hover:text-white font-semibold rounded-xl transition-all relative z-10';
+                    buttonEl.innerHTML = '👁 Zobacz Wynik';
+                    buttonEl.className = 'iiy-card-btn ghost';
                 }
+                const vFill = document.getElementById('values-progress-fill');
+                const vLabel = document.getElementById('values-progress-label');
+                if (vFill) { vFill.style.width = '100%'; vFill.classList.remove('zero'); }
+                if (vLabel) { vLabel.textContent = '100% ukończono'; }
             }
         }
 
@@ -1214,12 +1444,16 @@
             if (completed) {
                 if (statusEl) {
                     statusEl.textContent = 'Ukończony';
-                    statusEl.className = 'neon-badge neon-badge-success';
+                    statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)';
                 }
                 if (buttonEl) {
-                    buttonEl.innerHTML = '<svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>Zobacz Wynik';
-                    buttonEl.className = 'w-full px-4 py-3 bg-transparent border border-white/10 text-slate-400 hover:bg-white/5 hover:text-white font-semibold rounded-xl transition-all';
+                    buttonEl.innerHTML = '👁 Zobacz Wynik';
+                    buttonEl.className = 'iiy-card-btn ghost';
                 }
+                const dtFill = document.getElementById('dark-triad-progress-fill');
+                const dtLabel = document.getElementById('dark-triad-progress-label');
+                if (dtFill) { dtFill.style.width = '100%'; dtFill.classList.remove('zero'); }
+                if (dtLabel) { dtLabel.textContent = '100% ukończono'; }
             }
         }
 
@@ -1233,12 +1467,16 @@
             if (completed) {
                 if (statusEl) {
                     statusEl.textContent = 'Ukończony';
-                    statusEl.className = 'neon-badge neon-badge-success';
+                    statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)';
                 }
                 if (buttonEl) {
-                    buttonEl.innerHTML = '<svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>Zobacz Wynik';
-                    buttonEl.className = 'w-full px-4 py-3 bg-transparent border border-white/10 text-slate-400 hover:bg-white/5 hover:text-white font-semibold rounded-xl transition-all';
+                    buttonEl.innerHTML = '👁 Zobacz Wynik';
+                    buttonEl.className = 'iiy-card-btn ghost';
                 }
+                const enFill = document.getElementById('enneagram-progress-fill');
+                const enLabel = document.getElementById('enneagram-progress-label');
+                if (enFill) { enFill.style.width = '100%'; enFill.classList.remove('zero'); }
+                if (enLabel) { enLabel.textContent = '100% ukończono'; }
             }
         }
 
@@ -1256,12 +1494,16 @@
             if (completed) {
                 if (statusEl) {
                     statusEl.textContent = 'Ukończony';
-                    statusEl.className = 'neon-badge neon-badge-success';
+                    statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)';
                 }
                 if (buttonEl) {
-                    buttonEl.innerHTML = '<svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>Zobacz Wynik';
-                    buttonEl.className = 'w-full px-4 py-3 bg-transparent border border-white/10 text-slate-400 hover:bg-white/5 hover:text-white font-semibold rounded-xl transition-all';
+                    buttonEl.innerHTML = '👁 Zobacz Wynik';
+                    buttonEl.className = 'iiy-card-btn ghost';
                 }
+                const hFill = document.getElementById('hexaco-progress-fill');
+                const hLabel = document.getElementById('hexaco-progress-label');
+                if (hFill) { hFill.style.width = '100%'; hFill.classList.remove('zero'); }
+                if (hLabel) { hLabel.textContent = '100% ukończono'; }
                 console.log('UI updated to show completed state');
             } else {
                 console.log('Test not completed, keeping default UI');
