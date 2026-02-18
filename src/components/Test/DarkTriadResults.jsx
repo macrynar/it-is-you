@@ -325,7 +325,7 @@ function DarkTriadResults() {
       <style>{CSS}</style>
 
       {/* ── PAGE HEADER ── */}
-      <header style={{ textAlign: 'center', marginBottom: 44 }}>
+      <header style={{ textAlign: 'center', marginBottom: 44, display: 'block' }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           padding: '7px 18px', borderRadius: 100,
@@ -337,11 +337,11 @@ function DarkTriadResults() {
         }}>
           ⚠ System Alert: Personality Analysis
         </div>
-        <h1 style={{ fontSize: 42, fontWeight: 800, letterSpacing: -1, marginBottom: 10, lineHeight: 1.1 }}>
+        <h1 style={{ fontSize: 42, fontWeight: 800, letterSpacing: -1, marginBottom: 10, lineHeight: 1.1, display: 'block' }}>
           <span style={{ color: '#fff' }}>Analiza </span>
           <span style={{ color: '#ff2d55', textShadow: '0 0 30px rgba(255,45,85,.5), 0 0 60px rgba(255,45,85,.2)' }}>Cienia</span>
         </h1>
-        <p style={{ fontSize: 14, color: 'rgba(255,255,255,.3)', fontWeight: 400 }}>Dark Triad Assessment (SD3)</p>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,.3)', fontWeight: 400, display: 'block', marginTop: 8 }}>Dark Triad Assessment (SD3)</p>
       </header>
 
       {/* ── ALERT BANNER ── */}
