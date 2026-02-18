@@ -6,6 +6,7 @@
 import { HEXACO_TEST } from '../data/tests/hexaco.js';
 import { ENNEAGRAM_TEST } from '../data/tests/enneagram.js';
 import { DARK_TRIAD_TEST } from '../data/tests/darkTriad.js';
+import { STRENGTHS_TEST } from '../data/tests/strengths.js';
 
 /**
  * Calculate HEXACO-60 scores from user responses
@@ -760,5 +761,367 @@ export function generateDarkTriadReport(scores) {
       : scores.overall_risk === 'average'
         ? "✓ Twoje wyniki mieszczą się w normie populacyjnej."
         : "✓ Wszystkie wymiary w zakresie niskiego ryzyka."
+  };
+}
+
+/**
+ * ============================================
+ * STRENGTHS ASSESSMENT SCORING
+ * ============================================
+ */
+
+/**
+ * Calculate Strengths Assessment scores - Top 5 Talents
+ * @param {Object} responses - Object mapping question IDs to answers (1-5)
+ * @returns {Object} Top 5 strengths and all scores
+ */
+export function calculateStrengthsScore(responses) {
+  // Validate all 48 questions are answered
+  if (Object.keys(responses).length !== 48) {
+    throw new Error(`Expected 48 responses, got ${Object.keys(responses).length}`);
+  }
+
+  const strengthScores = {};
+  
+  // Calculate average for each of 16 strengths
+  STRENGTHS_TEST.strengths.forEach(strength => {
+    const questions = STRENGTHS_TEST.questions.filter(q => q.strength === strength.id);
+    const sum = questions.reduce((acc, q) => acc + (responses[q.id] || 0), 0);
+    const average = sum / questions.length;
+    
+    strengthScores[strength.id] = {
+      raw_score: parseFloat(average.toFixed(2)),
+      name: strength.name,
+      name_en: strength.name_en,
+      category: strength.category,
+      description: strength.description,
+      keywords: strength.keywords
+    };
+  });
+  
+  // Sort strengths by score (descending)
+  const sortedStrengths = Object.entries(strengthScores)
+    .sort((a, b) => b[1].raw_score - a[1].raw_score);
+  
+  // Get Top 5
+  const top5 = sortedStrengths.slice(0, 5).map(([id, data], index) => ({
+    rank: index + 1,
+    id: id,
+    name: data.name,
+    name_en: data.name_en,
+    category: data.category,
+    score: data.raw_score,
+    description: data.description,
+    keywords: data.keywords
+  }));
+  
+  // Group by category for visualization
+  const categoryScores = {};
+  STRENGTHS_TEST.categories.forEach(cat => {
+    const categoryStrengths = Object.entries(strengthScores)
+      .filter(([id, data]) => data.category === cat.id);
+    
+    const avgScore = categoryStrengths.length > 0
+      ? categoryStrengths.reduce((sum, [id, data]) => sum + data.raw_score, 0) / categoryStrengths.length
+      : 0;
+    
+    categoryScores[cat.id] = {
+      name: cat.name,
+      name_en: cat.name_en,
+      average_score: parseFloat(avgScore.toFixed(2)),
+      color: cat.color,
+      icon: cat.icon,
+      count_in_top5: top5.filter(s => s.category === cat.id).length
+    };
+  });
+
+  return {
+    test_id: 'strengths_assessment',
+    test_name: 'Test Talentów',
+    completed_at: new Date().toISOString(),
+    top_5: top5,
+    all_scores: strengthScores,
+    category_scores: categoryScores,
+    dominant_category: Object.entries(categoryScores)
+      .sort((a, b) => b[1].count_in_top5 - a[1].count_in_top5)[0]
+  };
+}
+
+/**
+ * Generate interpretation for a single strength
+ * @param {string} strengthId - ID of the strength
+ * @param {number} rank - Rank in top 5 (1-5)
+ * @returns {Object} Interpretation with strategies and tips
+ */
+export function getStrengthInterpretation(strengthId, rank) {
+  const interpretations = {
+    analytical: {
+      overview: "Twój talent analityczny sprawia, że naturalnie dociekasz przyczyn i szukasz dowodów. Potrzebujesz logiki i danych, aby czuć się pewnie w decyzjach.",
+      how_to_use: [
+        "Zbieraj dane przed podjęciem ważnych decyzji",
+        "Kwestionuj założenia i badaj głębsze przyczyny problemów",
+        "Używaj swojej logiki do identyfikowania wzorców i trendów",
+        "Pomagaj innym zrozumieć złożone sytuacje poprzez analizę"
+      ],
+      watch_out: [
+        "Nie analizuj nadmiernie - czasem trzeba działać bez pełnych danych",
+        "Uważaj, by nie wydawać się zbyt krytycznym wobec pomysłów innych",
+        "Pamiętaj, że nie wszystko da się zmierzyć lub udowodnić"
+      ]
+    },
+    strategic: {
+      overview: "Widzisz wzorce tam, gdzie inni widzą złożoność. Naturalnie oceniasz alternatywne ścieżki i wybierasz najbardziej skuteczną.",
+      how_to_use: [
+        "Przewiduj przeszkody i planuj alternatywne scenariusze",
+        "Pomagaj zespołom określać priorytety i cele długoterminowe",
+        "Używaj wizualizacji (mapy, diagramy) do pokazywania możliwych ścieżek",
+        "Zadawaj pytanie: 'Co jeśli...?' aby eksplorować opcje"
+      ],
+      watch_out: [
+        "Nie wszyscy widzą wzorce tak szybko jak Ty - wyjaśniaj swoje myślenie",
+        "Uważaj, by strategia nie przerodziła się w paraliż planowania",
+        "Czasem trzeba zacząć działać, nawet bez doskonałego planu"
+      ]
+    },
+    learner: {
+      overview: "Sam proces uczenia się Cię ekscytuje. Ciągły rozwój i zdobywanie wiedzy dają Ci energię i satysfakcję.",
+      how_to_use: [
+        "Poszukuj projektów wymagających nauki nowych umiejętności",
+        "Śledź najnowsze trendy i badania w swojej dziedzinie",
+        "Dziel się tym, czego się uczysz, aby zarazić innych entuzjazmem",
+        "Wykorzystuj kursy online, podcasty i książki do ciągłego rozwoju"
+      ],
+      watch_out: [
+        "Nie pozwól, by ciągła nauka powstrzymywała Cię od działania",
+        "Pamiętaj, że nie musisz być ekspertem przed startem",
+        "Uważaj na 'błyszczący nowy obiekt' - dokończ to, co zacząłeś"
+      ]
+    },
+    ideation: {
+      overview: "Fascynują Cię idee i możliwości. Widzisz połączenia między pozornie niezwiązanymi koncepcjami i generujesz innowacyjne rozwiązania.",
+      how_to_use: [
+        "Prowadź sesje burzy mózgów dla zespołu",
+        "Notuj pomysły natychmiast - nie ufaj pamięci",
+        "Łącz różne perspektywy i dziedziny wiedzy",
+        "Używaj narzędzi wizualnych (mind maps, szkice) do eksploracji pomysłów"
+      ],
+      watch_out: [
+        "Nie każdy pomysł musi być realizowany - wybieraj mądrze",
+        "Pomóż innym zrozumieć logikę swoich skojarzeń",
+        "Pamiętaj o realizacji - pomysły potrzebują egzekucji"
+      ]
+    },
+    achiever: {
+      overview: "Masz wewnętrzny napęd do pracy i osiągania. Satysfakcję daje Ci produktywność i konkretne rezultaty każdego dnia.",
+      how_to_use: [
+        "Ustal jasne cele codzienne/tygodniowe dla poczucia postępu",
+        "Dziel duże projekty na mniejsze, osiągalne zadania",
+        "Używaj list zadań i celebruj każde 'odhaczenie'",
+        "Twoja energia motywuje innych - bądź przykładem"
+      ],
+      watch_out: [
+        "Nie pozwól, by praca stała się samocelemwatch_out",
+        "Pauzuj regularnie - chroniczny wysiłek prowadzi do wypalenia",
+        "Nie każdy ma Twoje tempo - szanuj różne rytmy pracy"
+      ]
+    },
+    disciplined: {
+      overview: "Potrzebujesz struktury i porządku. Tworzysz systemy, rutyny i procedury, które pomagają panować nad chaosem.",
+      how_to_use: [
+        "Projektuj procesy i harmonogramy dla projektów",
+        "Używaj narzędzi organizacyjnych (kalendarze, checklisty, szablony)",
+        "Pomagaj innym tworzyć strukturę w ich pracy",
+        "Doceniaj przewidywalność - to Twoja siła, nie słabość"
+      ],
+      watch_out: [
+        "Czasem trzeba być elastycznym - nie każda sytuacja potrzebuje sztywnej struktury",
+        "Nie wszyscy czują się komfortowo z wysokim poziomem organizacji",
+        "Uważaj na nadmierny perfekcjonizm w rutynie"
+      ]
+    },
+    focus: {
+      overview: "Potrzebujesz jasnego kierunku i priorytetów. Potrafisz eliminować rozproszenia i trzymać się kursu do celu.",
+      how_to_use: [
+        "Pytaj: 'Jaki jest priorytet?' gdy pojawia się chaos",
+        "Blokuj czas w kalendarzu na głęboką pracę bez przerw",
+        "Pomagaj zespołom określać i trzymać się kierunku",
+        "Używaj technik typu Pomodoro dla maksymalnej koncentracji"
+      ],
+      watch_out: [
+        "Nie bądź tak skoncentrowany, że przeoczysz nowe możliwości",
+        "Czasem warto zboczćz kursu, jeśli pojawia się lepsza ścieżka",
+        "Pamiętaj o potrzebie przerw - koncentracja wymaga regeneracji"
+      ]
+    },
+    responsibility: {
+      overview: "Bierzesz psychiczne zobowiązanie wobec tego, co obiecałeś. Twoje poczucie odpowiedzialności jest głębokie i osobiste.",
+      how_to_use: [
+        "Bądź osobą, na której zespół może polegać w kryzysie",
+        "Ustal jasne zobowiązania i dotrzymuj ich",
+        "Pomagaj innym zrozumieć konsekwencje ich wyborów",
+        "Twoja rzetelność buduje zaufanie - używaj tego świadomie"
+      ],
+      watch_out: [
+        "Nie bierz na siebie zbyt wiele - naucz się mówić 'nie'",
+        "Nie wszyscy czują tak głębokie zobowiązanie jak Ty",
+        "Nie obwiniaj się nadmiernie za rzeczy poza Twoją kontrolą"
+      ]
+    },
+    communication: {
+      overview: "Łatwo znajdujesz słowa. Potrafisz wyjaśniać, opisywać, przekonywać i angażować innych poprzez język.",
+      how_to_use: [
+        "Bądź rzecznikiem zespołu - przedstawiaj pomysły i wyniki",
+        "Używaj opowieści i metafor do wyjaśniania złożonych koncepcji",
+        "Prowadź prezentacje, szkolenia, spotkania",
+        "Pisz - blogi, raporty, dokumentacja - aby dzielić się wiedzą"
+      ],
+      watch_out: [
+        "Upewnij się, że słuchasz równie dobrze, jak mówisz",
+        "Nie dominuj rozmów - daj przestrzeń innym",
+        "Czasem prostota jest lepsza niż elokwencja"
+      ]
+    },
+    competition: {
+      overview: "Mierzysz swoje wyniki z innymi. Konkurencja Cię motywuje i pcham do wyższych osiągnięć.",
+      how_to_use: [
+        "Ustal mierzalne cele i śledź postępy",
+        "Porównuj się z najlepszymi w swojej dziedzinie",
+        "Używaj konkurencji jako źródła motywacji, nie zagrożenia",
+        "Celebruj zwycięstwa - Twoje i innych"
+      ],
+      watch_out: [
+        "Nie każdy lubi rywalizację - dostosuj styl do odbiorcy",
+        "Uważaj, by konkurencja nie zniszczyła współpracy",
+        "Przegrywanie jest częścią gry - ucz się z porażek"
+      ]
+    
+},
+    maximizer: {
+      overview: "Koncentrujesz się na mocnych stronach jako drodze do doskonałości. Wierzysz w rozwój tego, co już działa dobrze.",
+      how_to_use: [
+        "Identyfikuj i rozwijaj mocne strony swoje i innych",
+        "Zamiast naprawiać słabości, znajdź partnerów uzupełniających",
+        "Dawaj konkretny, rozwijający feedback skupiony na mocnych stronach",
+        "Celebruj postępy w kierunku doskonałości"
+      ],
+      watch_out: [
+        "Niektóre słabości wymagają uwagi - nie ignoruj ich całkowicie",
+        "Nie wszyscy są gotowi na Twoje wysokie standardy",
+        "Uważaj, by dążenie do perfekcji nie paraliżowało działania"
+      ]
+    },
+    self_assurance: {
+      overview: "Ufasz swojemu osądowi i wewnętrznemu kompasowi. Masz głęboką pewność w swoje zdolności i decyzje.",
+      how_to_use: [
+        "Podejmuj trudne decyzje, gdy inni się wahają",
+        "Używaj swojej pewności do uspokajania innych w niepewnych czasach",
+        "Bądź głosem, który kwestionuje status quo",
+        "Podejmuj odważne ryzyko oparte na swoim osądzie"
+      ],
+      watch_out: [
+        "Słuchaj innych - Twoja pewność nie oznacza, że zawsze masz rację",
+        "Bądź otwarty na zmianę zdania, gdy pojawią się nowe informacje",
+        "Nie każdy interpretuje pewność siebie jako pozytywną cechę"
+      ]
+    },
+    adaptability: {
+      overview: "Żyjesz chwilą i dobrze radzisz sobie ze zmiennością. Elastyczność i spontaniczność są Twoimi mocnymi stronami.",
+      how_to_use: [
+        "Bądź osobą 'na już' gdy pojawią się nagłe potrzeby",
+        "Pomagaj innym zobaczyć możliwości w zmianach",
+        "Reaguj szybko na nowe informacje bez nadmiernego planowania",
+        "Twoja elastyczność równoważy sztywność innych"
+      ],
+      watch_out: [
+        "Niektóre sytuacje wymagają planowania - nie wszystko może być spontaniczne",
+        "Ustal przynajmniej kilka priorytetów długoterminowych",
+        "Nie pozwól, by ciągłe reagowanie przeszkadzało w głębokiej pracy"
+      ]
+    },
+    developer: {
+      overview: "Widzisz potencjał w innych i czerpiesz satysfakcję z pomagania im się rozwijać. Małe postępy innych sprawiają Ci radość.",
+      how_to_use: [
+        "Bądź mentorem dla młodszych członków zespołu",
+        "Dawaj feedback skupiony na postępach, nie tylko wynikach",
+        "Twórz możliwości rozwoju dla innych",
+        "Celebruj małe zwycięstwa w rozwoju innych"
+      ],
+      watch_out: [
+        "Nie wszyscy chcą być 'rozwijani' - pytaj o pozwolenie",
+        "Czasem ludzie muszą popełnić błąd, aby się nauczyć",
+        "Nie zaniedbuj własnego rozwoju, skupiając się tylko na innych"
+      ]
+    },
+    empathy: {
+      overview: "Wyczuwasz emocje innych ludzi. Potrafisz się w nich wczuć i zrozumieć ich perspektywę.",
+      how_to_use: [
+        "Bądź osobą, do której ludzie przychodzą z problemami",
+        "Pomóż innym zrozumieć niewypowiedziane emocje w zespole",
+        "Używaj empatii w rozwiązywaniu konfliktów",
+        "Twórz bezpieczną przestrzeń dla wyrażania emocji"
+      ],
+      watch_out: [
+        "Chroń swoje granice emocjonalne - nie absorbuj zbyt wiele cudzych emocji",
+        "Czasem ludzie potrzebują rozwiązań, nie tylko zrozumienia",
+        "Nie wszyscy są gotowi na głębokie połączenia emocjonalne"
+      ]
+    },
+    harmony: {
+      overview: "Szukasz obszarów zgody i konsensusu. Unikasz konfrontacji i pomagasz innym znaleźć wspólny grunt.",
+      how_to_use: [
+        "Mediuj w konfliktach i szukaj punktów wspólnych",
+        "Pomagaj zespołom znaleźć kompromisy",
+        "Twórz środowisko współpracy zamiast konkurencji",
+        "Buduj mosty między różnymi perspektywami"
+      ],
+      watch_out: [
+        "Czasem konflikt jest potrzebny dla postępu - nie unikaj go zawsze",
+        "Nie zgadzaj się na wszystko tylko dla zachowania harmonii",
+        "Twoje preferencje mogą być interpretowane jako unikanie trudnych decyzji"
+      ]
+    }
+  };
+
+  return interpretations[strengthId] || {
+    overview: "Interpretacja w przygotowaniu.",
+    how_to_use: [],
+    watch_out: []
+  };
+}
+
+/**
+ * Generate full strengths report
+ * @param {Object} scores - Scores object from calculateStrengthsScore
+ * @returns {Object} Complete report with interpretations
+ */
+export function generateStrengthsReport(scores) {
+  const top5WithInterpretations = scores.top_5.map(strength => ({
+    ...strength,
+    interpretation: getStrengthInterpretation(strength.id, strength.rank)
+  }));
+
+  // Find category with most strengths in top 5
+  const dominantCategory = scores.dominant_category;
+  const categoryInfo = STRENGTHS_TEST.categories.find(c => c.id === dominantCategory[0]);
+
+  return {
+    test_id: scores.test_id,
+    test_name: scores.test_name,
+    completed_at: scores.completed_at,
+    top_5: top5WithInterpretations,
+    category_scores: scores.category_scores,
+    dominant_category: {
+      ...dominantCategory[1],
+      id: dominantCategory[0],
+      description: categoryInfo?.description || '',
+      icon: categoryInfo?.icon || '⭐'
+    },
+    summary: {
+      primary_strength: top5WithInterpretations[0],
+      category_distribution: Object.entries(scores.category_scores).map(([id, data]) => ({
+        id,
+        ...data
+      }))
+    }
   };
 }
