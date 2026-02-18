@@ -519,18 +519,7 @@
                     return false;
                 }
 
-                cDark Triad test or view results
-        window.startDarkTriadTest = async function() {
-            const completed = await checkDarkTriadCompleted();
-            
-            if (completed) {
-                window.location.href = '/test/dark-triad/results';
-            } else {
-                window.location.href = '/test?type=dark_triad';
-            }
-        }
-
-        // Start onsole.log('Checking test completion for user:', session.user.id);
+                console.log('Checking test completion for user:', session.user.id);
 
                 const { data, error } = await supabase
                     .from('user_psychometrics')
@@ -559,6 +548,17 @@
             }
         }
 
+        // Start Dark Triad test or view results
+        window.startDarkTriadTest = async function() {
+            const completed = await checkDarkTriadCompleted();
+            
+            if (completed) {
+                window.location.href = '/test/dark-triad/results';
+            } else {
+                window.location.href = '/test?type=dark_triad';
+            }
+        }
+
         // Start Enneagram test or view results
         window.startEnneagramTest = async function() {
             const completed = await checkEnneagramCompleted();
@@ -574,7 +574,18 @@
         window.startHexacoTest = async function() {
             console.log('HEXACO tile clicked, checking completion status...');
             const completed = await checkHexacoCompleted();
-            console.log('Dark Triad test
+            console.log('Completion check result:', completed);
+            
+            if (completed) {
+                console.log('Test completed, redirecting to results');
+                window.location.href = '/test/hexaco/results';
+            } else {
+                console.log('Test not completed, redirecting to test');
+                window.location.href = '/test';
+            }
+        }
+
+        // Update UI for Dark Triad test
         async function updateDarkTriadUI() {
             const completed = await checkDarkTriadCompleted();
             
@@ -590,17 +601,6 @@
                     buttonEl.textContent = 'Analiza Cienia';
                     buttonEl.className = 'w-full px-4 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40';
                 }
-            }
-        }
-
-        // Update UI for Completion check result:', completed);
-            
-            if (completed) {
-                console.log('Test completed, redirecting to results');
-                window.location.href = '/test/hexaco/results';
-            } else {
-                console.log('Test not completed, redirecting to test');
-                window.location.href = '/test';
             }
         }
 
@@ -641,7 +641,6 @@
                 }
                 if (buttonEl) {
                     buttonEl.textContent = 'Zobacz Wyniki';
-            await updateDarkTriadUI();
                     buttonEl.className = 'w-full px-4 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40';
                 }
                 console.log('UI updated to show completed state');
@@ -661,6 +660,7 @@
             console.log('Auth successful, updating UI...');
             await updateHexacoUI();
             await updateEnneagramUI();
+            await updateDarkTriadUI();
             console.log('Dashboard initialized successfully');
         }
 
