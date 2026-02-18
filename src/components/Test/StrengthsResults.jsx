@@ -55,6 +55,16 @@ export default function StrengthsResults() {
       // Extract scores from raw_scores JSONB
       const scoresData = testResult.raw_scores || {};
       
+      // Fix legacy data: convert keywords from string to array if needed
+      if (scoresData.top_5) {
+        scoresData.top_5 = scoresData.top_5.map(talent => ({
+          ...talent,
+          keywords: typeof talent.keywords === 'string' 
+            ? talent.keywords.split(',').map(k => k.trim())
+            : (talent.keywords || [])
+        }));
+      }
+      
       // Generate full report with interpretations
       const fullReport = generateStrengthsReport(scoresData);
       
