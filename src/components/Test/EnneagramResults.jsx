@@ -90,6 +90,22 @@ const CSS = `
   animation: shimmer 1.8s ease-in-out infinite;
 }
 .en-fade-up { animation: fadeUp .5s ease both; }
+.en-card {
+  transition: transform .28s cubic-bezier(.22,.68,0,1.15), box-shadow .28s ease;
+}
+.en-glow-line {
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  border-radius: 100px;
+  opacity: 0;
+  transition: opacity .3s;
+  pointer-events: none;
+  z-index: 2;
+}
+.en-card:hover .en-glow-line { opacity: 1; }
 `;
 
 const G = {
@@ -302,6 +318,15 @@ export default function EnneagramResults() {
     .map(([k, v]) => ({ type: parseInt(k), score: v }))
     .sort((a, b) => b.score - a.score);
 
+  const hoverOn = (color, glow) => e => {
+    e.currentTarget.style.transform = 'translateY(-5px) scale(1.01)';
+    e.currentTarget.style.boxShadow = `inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px ${color}55,0 0 30px -4px ${glow},0 16px 48px -6px rgba(0,0,0,.7)`;
+  };
+  const hoverOff = e => {
+    e.currentTarget.style.transform = '';
+    e.currentTarget.style.boxShadow = G.boxShadow;
+  };
+
   return (
     <><style>{CSS}</style>
     <div className="en-root">
@@ -341,17 +366,22 @@ export default function EnneagramResults() {
         <div style={{ display:'grid', gridTemplateColumns:'1fr 380px', gap:24, marginBottom:24 }}>
 
           {/* Enneagram circle diagram */}
-          <div className="en-glass" style={{ ...G, padding:36 }}>
+          <div className="en-glass en-card" style={{ ...G, padding:36, overflow:'hidden' }}
+            onMouseEnter={hoverOn(ac.color, ac.glow)}
+            onMouseLeave={hoverOff}>
             <div style={{ fontSize:11, fontWeight:600, letterSpacing:'3px', textTransform:'uppercase', color:'rgba(255,255,255,.3)', marginBottom:28, display:'flex', alignItems:'center', gap:12 }}>
               Mapa Osobowości <span style={{ flex:1, height:1, background:`linear-gradient(90deg,${ac.color}44,transparent)` }}/>
             </div>
             <div style={{ display:'flex', justifyContent:'center' }}>
               <EnneagramDiagram primaryType={primaryType.type} allScores={allScores}/>
             </div>
+            <div className="en-glow-line" style={{ background:ac.color, boxShadow:`0 0 10px 2px ${ac.glow}` }}/>
           </div>
 
           {/* Type Card */}
-          <div className="en-glass" style={{ ...G, padding:'28px 24px', display:'flex', flexDirection:'column', gap:18 }}>
+          <div className="en-glass en-card" style={{ ...G, padding:'28px 24px', display:'flex', flexDirection:'column', gap:18, overflow:'hidden' }}
+            onMouseEnter={hoverOn(ac.color, ac.glow)}
+            onMouseLeave={hoverOff}>
             <div style={{ fontSize:11, fontWeight:600, letterSpacing:'3px', textTransform:'uppercase', color:'rgba(255,255,255,.3)' }}>Twój Typ</div>
 
             {/* Big type number */}
@@ -400,25 +430,34 @@ export default function EnneagramResults() {
             <div style={{ fontSize:11, color:'rgba(255,255,255,.25)' }}>
               Ukończono {new Date(results.completed_at).toLocaleDateString('pl-PL')}
             </div>
+            <div className="en-glow-line" style={{ background:ac.color, boxShadow:`0 0 10px 2px ${ac.glow}` }}/>
           </div>
         </div>
 
         {/* ── Core Motivation + Basic Fear ── */}
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom:24 }}>
-          <div className="en-glass" style={{ ...G, padding:28 }}>
+          <div className="en-glass en-card" style={{ ...G, padding:28, overflow:'hidden' }}
+            onMouseEnter={hoverOn('#55efc4','rgba(85,239,196,.4)')}
+            onMouseLeave={hoverOff}>
             <div style={{ fontSize:10, fontWeight:600, letterSpacing:'2.5px', textTransform:'uppercase', color:'#55efc4', marginBottom:10 }}>✨ Podstawowa Motywacja</div>
             <p style={{ fontSize:16, color:'#fff', lineHeight:1.6, margin:0, fontWeight:500 }}>{primaryType.core_motivation}</p>
+            <div className="en-glow-line" style={{ background:'#55efc4', boxShadow:'0 0 10px 2px rgba(85,239,196,.5)' }}/>
           </div>
-          <div className="en-glass" style={{ ...G, padding:28 }}>
+          <div className="en-glass en-card" style={{ ...G, padding:28, overflow:'hidden' }}
+            onMouseEnter={hoverOn('#ff6b81','rgba(255,107,129,.4)')}
+            onMouseLeave={hoverOff}>
             <div style={{ fontSize:10, fontWeight:600, letterSpacing:'2.5px', textTransform:'uppercase', color:'#ff6b81', marginBottom:10 }}>⚠️ Podstawowy Lęk</div>
             <p style={{ fontSize:16, color:'#fff', lineHeight:1.6, margin:0, fontWeight:500 }}>{primaryType.basic_fear}</p>
+            <div className="en-glow-line" style={{ background:'#ff6b81', boxShadow:'0 0 10px 2px rgba(255,107,129,.5)' }}/>
           </div>
         </div>
 
         {/* ── Strengths + Challenges ── */}
         {interp && (
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom:24 }}>
-            <div className="en-glass" style={{ ...G, padding:28 }}>
+            <div className="en-glass en-card" style={{ ...G, padding:28, overflow:'hidden' }}
+              onMouseEnter={hoverOn('#55efc4','rgba(85,239,196,.4)')}
+              onMouseLeave={hoverOff}>
               <div style={{ fontSize:11, fontWeight:600, letterSpacing:'3px', textTransform:'uppercase', color:'rgba(255,255,255,.3)', marginBottom:20, display:'flex', alignItems:'center', gap:10 }}>
                 💪 Mocne Strony <span style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(85,239,196,.2),transparent)' }}/>
               </div>
@@ -430,8 +469,11 @@ export default function EnneagramResults() {
                   </li>
                 ))}
               </ul>
+              <div className="en-glow-line" style={{ background:'#55efc4', boxShadow:'0 0 10px 2px rgba(85,239,196,.5)' }}/>
             </div>
-            <div className="en-glass" style={{ ...G, padding:28 }}>
+            <div className="en-glass en-card" style={{ ...G, padding:28, overflow:'hidden' }}
+              onMouseEnter={hoverOn('#fd9644','rgba(253,150,68,.4)')}
+              onMouseLeave={hoverOff}>
               <div style={{ fontSize:11, fontWeight:600, letterSpacing:'3px', textTransform:'uppercase', color:'rgba(255,255,255,.3)', marginBottom:20, display:'flex', alignItems:'center', gap:10 }}>
                 ⚡ Wyzwania <span style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(253,150,68,.2),transparent)' }}/>
               </div>
@@ -443,14 +485,18 @@ export default function EnneagramResults() {
                   </li>
                 ))}
               </ul>
+              <div className="en-glow-line" style={{ background:'#fd9644', boxShadow:'0 0 10px 2px rgba(253,150,68,.5)' }}/>
             </div>
           </div>
         )}
 
         {/* ── Growth Path ── */}
         {interp?.growth_path && (
-          <div className="en-glass" style={{ ...G, padding:32, marginBottom:24, overflow:'hidden' }}>
+          <div className="en-glass en-card" style={{ ...G, padding:32, marginBottom:24, overflow:'hidden' }}
+            onMouseEnter={hoverOn(ac.color, ac.glow)}
+            onMouseLeave={hoverOff}>
             <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:400, height:200, background:`${ac.color}0a`, borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }}/>
+            <div className="en-glow-line" style={{ background:ac.color, boxShadow:`0 0 10px 2px ${ac.glow}` }}/>
             <div style={{ position:'relative' }}>
               <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:16 }}>
                 <div style={{ width:36, height:36, borderRadius:10, background:`${ac.color}20`, border:`1px solid ${ac.color}40`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18 }}>🌱</div>
@@ -462,10 +508,13 @@ export default function EnneagramResults() {
         )}
 
         {/* ── All Type Scores ── */}
-        <div className="en-glass" style={{ ...G, padding:32, marginBottom:24 }}>
+        <div className="en-glass en-card" style={{ ...G, padding:32, marginBottom:24, overflow:'hidden' }}
+          onMouseEnter={hoverOn('#a29bfe','rgba(162,155,254,.4)')}
+          onMouseLeave={hoverOff}>
           <div style={{ fontSize:11, fontWeight:600, letterSpacing:'3px', textTransform:'uppercase', color:'rgba(255,255,255,.3)', marginBottom:24, display:'flex', alignItems:'center', gap:12 }}>
             Wszystkie Typy <span style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(162,155,254,.2),transparent)' }}/>
           </div>
+          <div className="en-glow-line" style={{ background:'#a29bfe', boxShadow:'0 0 10px 2px rgba(162,155,254,.5)' }}/>
           <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
             {sortedTypes.map(({ type, score }) => {
               const typeAc = TYPE_ACCENT[type] || TYPE_ACCENT[1];
@@ -494,8 +543,11 @@ export default function EnneagramResults() {
         </div>
 
         {/* ── AI Interpretation ── */}
-        <div className="en-glass" style={{ ...G, padding:36, marginBottom:32, overflow:'hidden' }}>
+        <div className="en-glass en-card" style={{ ...G, padding:36, marginBottom:32, overflow:'hidden' }}
+          onMouseEnter={hoverOn('#a29bfe','rgba(162,155,254,.4)')}
+          onMouseLeave={hoverOff}>
           <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:400, height:180, background:'rgba(162,155,254,.06)', borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }}/>
+          <div className="en-glow-line" style={{ background:'#a29bfe', boxShadow:'0 0 10px 2px rgba(162,155,254,.5)' }}/>
           <div style={{ position:'relative' }}>
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:24 }}>
               <div style={{ display:'flex', alignItems:'center', gap:12 }}>
