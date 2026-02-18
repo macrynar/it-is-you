@@ -337,20 +337,20 @@ export default function TestWizard({ testType = 'hexaco' }) {
                 {/* Option A */}
                 <button
                   onClick={() => handleAnswer('a')}
-                  className={`group relative p-4 rounded-xl transition-all duration-300 min-h-[120px] flex flex-col justify-center ${
+                  className={`group p-5 rounded-xl transition-all duration-300 min-h-[140px] flex flex-row items-start gap-4 text-left ${
                     responses[currentQuestion.id] === 'a'
                       ? 'border-2 border-cyan-400 bg-cyan-900/50 shadow-[0_0_30px_rgba(34,211,238,0.35)] scale-[1.02]'
                       : 'border-2 border-slate-700 bg-slate-900/50 hover:border-cyan-500/50 hover:bg-cyan-950/20'
                   }`}
                 >
-                  <div className="absolute top-4 left-4">
+                  <div className="shrink-0 mt-0.5">
                     <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all duration-300 ${
                       responses[currentQuestion.id] === 'a'
                         ? 'border-cyan-400 bg-cyan-500 text-white'
                         : 'border-slate-600 text-slate-500 group-hover:border-cyan-500/50 group-hover:text-cyan-400'
                     }`}>A</div>
                   </div>
-                  <p className={`text-sm leading-relaxed pl-2 transition-colors duration-300 ${
+                  <p className={`text-sm leading-relaxed transition-colors duration-300 ${
                     responses[currentQuestion.id] === 'a' ? 'text-white font-medium' : 'text-slate-300 group-hover:text-white'
                   }`}>
                     {currentQuestion.option_a}
@@ -360,20 +360,20 @@ export default function TestWizard({ testType = 'hexaco' }) {
                 {/* Option B */}
                 <button
                   onClick={() => handleAnswer('b')}
-                  className={`group relative p-4 rounded-xl transition-all duration-300 min-h-[120px] flex flex-col justify-center ${
+                  className={`group p-5 rounded-xl transition-all duration-300 min-h-[140px] flex flex-row items-start gap-4 text-left ${
                     responses[currentQuestion.id] === 'b'
                       ? 'border-2 border-purple-400 bg-purple-900/50 shadow-[0_0_30px_rgba(168,85,247,0.35)] scale-[1.02]'
                       : 'border-2 border-slate-700 bg-slate-900/50 hover:border-purple-500/50 hover:bg-purple-950/20'
                   }`}
                 >
-                  <div className="absolute top-4 left-4">
+                  <div className="shrink-0 mt-0.5">
                     <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all duration-300 ${
                       responses[currentQuestion.id] === 'b'
                         ? 'border-purple-400 bg-purple-500 text-white'
                         : 'border-slate-600 text-slate-500 group-hover:border-purple-500/50 group-hover:text-purple-400'
                     }`}>B</div>
                   </div>
-                  <p className={`text-sm leading-relaxed pl-2 transition-colors duration-300 ${
+                  <p className={`text-sm leading-relaxed transition-colors duration-300 ${
                     responses[currentQuestion.id] === 'b' ? 'text-white font-medium' : 'text-slate-300 group-hover:text-white'
                   }`}>
                     {currentQuestion.option_b}
