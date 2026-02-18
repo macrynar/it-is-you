@@ -331,7 +331,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
         {isEnneagram ? (
           /* ENNEAGRAM: Forced Choice - Two Cards Side by Side */
           <div className="mb-8">
-            <h2 className="text-xl font-medium text-center text-white mb-6">
+            <h2 className="text-lg font-medium text-center text-white mb-6">
               Która opcja bardziej do Ciebie pasuje?
             </h2>
             <div className="grid md:grid-cols-2 gap-4">
@@ -353,7 +353,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
                     A
                   </div>
                 </div>
-                <p className={`text-lg leading-relaxed transition-colors duration-300 ${
+                <p className={`text-base leading-relaxed transition-colors duration-300 ${
                   responses[currentQuestion.id] === 'a'
                     ? 'text-white font-medium'
                     : 'text-slate-300 group-hover:text-white'
@@ -380,7 +380,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
                     B
                   </div>
                 </div>
-                <p className={`text-xl leading-relaxed transition-colors duration-300 ${
+                <p className={`text-base leading-relaxed transition-colors duration-300 ${
                   responses[currentQuestion.id] === 'b'
                     ? 'text-white font-medium'
                     : 'text-slate-300 group-hover:text-white'
@@ -396,7 +396,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
             {/* Question Text */}
             <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 md:p-8 mb-6">
               <div className="text-center">
-                <p className="text-xl md:text-2xl font-medium leading-relaxed text-white">
+                <p className="text-base md:text-lg font-medium leading-relaxed text-white">
                   {currentQuestion.text}
                 </p>
               </div>
