@@ -51,16 +51,23 @@ function DarkTriadResults() {
 
       const testResult = data[0];
       
+      // Extract Dark Triad data from raw_scores JSONB
+      const darkTriadData = testResult.raw_scores || {};
+      const dimensions = darkTriadData.dimensions || {};
+      const riskLevels = darkTriadData.risk_levels || {};
+      const overallRisk = darkTriadData.overall_risk || 'average';
+      const highestDimension = darkTriadData.highest_dimension || {};
+      
       // Generate full report
       const fullReport = generateDarkTriadReport({
         test_id: testResult.test_type,
         test_name: 'Dark Triad SD3',
         completed_at: testResult.completed_at,
-        dimensions: testResult.raw_scores,
-        risk_levels: testResult.risk_levels || {},
-        overall_risk: testResult.overall_risk || 'average',
-        highest_dimension: testResult.highest_dimension || {},
-        sorted_dimensions: Object.entries(testResult.raw_scores || {}).map(([id, data]) => {
+        dimensions: dimensions,
+        risk_levels: riskLevels,
+        overall_risk: overallRisk,
+        highest_dimension: highestDimension,
+        sorted_dimensions: Object.entries(dimensions).map(([id, data]) => {
           const dim = DARK_TRIAD_TEST.dimensions.find(d => d.id === id);
           return {
             id,

@@ -106,10 +106,13 @@ export default function TestWizard({ testType = 'hexaco' }) {
 
       // Add appropriate scores based on test type
       if (isDarkTriad) {
-        dbPayload.raw_scores = scores.dimensions;
-        dbPayload.risk_levels = scores.risk_levels;
-        dbPayload.overall_risk = scores.overall_risk;
-        dbPayload.highest_dimension = scores.highest_dimension;
+        // Store all Dark Triad data in JSONB fields
+        dbPayload.raw_scores = {
+          dimensions: scores.dimensions,
+          risk_levels: scores.risk_levels,
+          overall_risk: scores.overall_risk,
+          highest_dimension: scores.highest_dimension
+        };
         dbPayload.raw_answers = responses;
       } else if (isEnneagram) {
         dbPayload.raw_scores = scores.all_scores;
@@ -230,10 +233,10 @@ export default function TestWizard({ testType = 'hexaco' }) {
       </div>
 
       {/* Question Content */}
-      <div className="max-w-4xl mx-auto px-6 py-16">
+      <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Dimension Badge */}
-        <div className="flex justify-center mb-12">
-          <div className={`px-5 py-2 rounded-full bg-slate-800/50 border ${isDarkTriad ? 'border-rose-500/30' : 'border-cyan-500/30'} backdrop-blur-sm`}>
+        <div className="flex justify-center mb-6">
+          <div className={`px-4 py-1.5 rounded-full bg-slate-800/50 border ${isDarkTriad ? 'border-rose-500/30' : 'border-cyan-500/30'} backdrop-blur-sm`}>
             <span className={`text-xs font-semibold ${isDarkTriad ? 'text-rose-400' : 'text-cyan-400'} uppercase tracking-wider`}>{badgeInfo.label}</span>
           </div>
         </div>
@@ -241,15 +244,15 @@ export default function TestWizard({ testType = 'hexaco' }) {
         {/* Question UI - Conditional based on test type */}
         {isEnneagram ? (
           /* ENNEAGRAM: Forced Choice - Two Cards Side by Side */
-          <div className="mb-12">
-            <h2 className="text-2xl font-medium text-center text-white mb-10">
+          <div className="mb-8">
+            <h2 className="text-xl font-medium text-center text-white mb-6">
               Która opcja bardziej do Ciebie pasuje?
             </h2>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-4">
               {/* Option A */}
               <button
                 onClick={() => handleAnswer('a')}
-                className={`group relative p-12 rounded-3xl transition-all duration-500 min-h-[280px] flex flex-col justify-center ${
+                className={`group relative p-6 rounded-2xl transition-all duration-500 min-h-[200px] flex flex-col justify-center ${
                   responses[currentQuestion.id] === 'a'
                     ? 'border-2 border-cyan-400 bg-cyan-900/50 shadow-[0_0_40px_rgba(34,211,238,0.4)] scale-105'
                     : 'border-2 border-slate-700 bg-slate-900/50 hover:border-cyan-500/50 hover:bg-cyan-950/20 hover:scale-102'
@@ -264,7 +267,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
                     A
                   </div>
                 </div>
-                <p className={`text-xl leading-relaxed transition-colors duration-300 ${
+                <p className={`text-lg leading-relaxed transition-colors duration-300 ${
                   responses[currentQuestion.id] === 'a'
                     ? 'text-white font-medium'
                     : 'text-slate-300 group-hover:text-white'
@@ -276,7 +279,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
               {/* Option B */}
               <button
                 onClick={() => handleAnswer('b')}
-                className={`group relative p-12 rounded-3xl transition-all duration-500 min-h-[280px] flex flex-col justify-center ${
+                className={`group relative p-6 rounded-2xl transition-all duration-500 min-h-[200px] flex flex-col justify-center ${
                   responses[currentQuestion.id] === 'b'
                     ? 'border-2 border-purple-400 bg-purple-900/50 shadow-[0_0_40px_rgba(168,85,247,0.4)] scale-105'
                     : 'border-2 border-slate-700 bg-slate-900/50 hover:border-purple-500/50 hover:bg-purple-950/20 hover:scale-102'
@@ -305,29 +308,29 @@ export default function TestWizard({ testType = 'hexaco' }) {
           /* HEXACO: Likert Scale 1-5 */
           <>
             {/* Question Text */}
-            <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-3xl p-10 md:p-16 mb-12">
+            <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 md:p-8 mb-6">
               <div className="text-center">
-                <p className="text-2xl md:text-3xl font-medium leading-relaxed text-white">
+                <p className="text-xl md:text-2xl font-medium leading-relaxed text-white">
                   {currentQuestion.text}
                 </p>
               </div>
             </div>
 
             {/* Likert Scale Options */}
-            <div className="space-y-4 mb-12">
+            <div className="space-y-3 mb-8">
               {[1, 2, 3, 4, 5].map((value) => (
                 <button
                   key={value}
                   onClick={() => handleAnswer(value)}
-                  className={`group w-full p-6 rounded-2xl transition-all duration-300 ${
+                  className={`group w-full p-4 rounded-xl transition-all duration-300 ${
                     responses[currentQuestion.id] === value
                       ? `border ${isDarkTriad ? 'border-rose-400 bg-rose-900/50 shadow-[0_0_25px_rgba(244,63,94,0.4)]' : 'border-cyan-400 bg-cyan-900/50 shadow-[0_0_25px_rgba(34,211,238,0.4)]'}`
                       : `border border-slate-700 bg-slate-900/50 ${isDarkTriad ? 'hover:border-rose-500/50 hover:bg-rose-950/30' : 'hover:border-cyan-500/50 hover:bg-cyan-950/30'}`
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-5">
-                      <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                    <div className="flex items-center space-x-4">
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
                         responses[currentQuestion.id] === value
                           ? `${isDarkTriad ? 'border-rose-400 bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)]' : 'border-cyan-400 bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]'}`
                           : `border-slate-600 ${isDarkTriad ? 'group-hover:border-rose-500/50' : 'group-hover:border-cyan-500/50'}`
@@ -336,7 +339,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
                           <div className="w-3 h-3 rounded-full bg-white" />
                         )}
                       </div>
-                      <span className={`text-lg font-medium transition-colors duration-300 ${
+                      <span className={`text-base font-medium transition-colors duration-300 ${
                         responses[currentQuestion.id] === value 
                           ? 'text-white' 
                           : 'text-slate-300 group-hover:text-white'
@@ -344,7 +347,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
                         {TEST_DATA.scale_labels[value]}
                       </span>
                     </div>
-                    <span className={`text-3xl font-bold transition-colors duration-300 ${
+                    <span className={`text-2xl font-bold transition-colors duration-300 ${
                       responses[currentQuestion.id] === value
                         ? `${isDarkTriad ? 'text-rose-400' : 'text-cyan-400'}`
                         : 'text-slate-700 group-hover:text-slate-500'
