@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, RefreshCw, Share2, Download } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { HEXACO_TEST } from '../../data/tests/hexaco.js';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 
 export default function HexacoResults() {
   const [results, setResults] = useState(null);
@@ -172,6 +173,102 @@ export default function HexacoResults() {
                   minute: '2-digit'
                 })}</span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Radar Chart Section */}
+        <div className="bg-gradient-to-br from-indigo-950/40 to-purple-950/40 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-indigo-500/20 mb-16 relative overflow-hidden">
+          {/* Background glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
+          
+          <div className="relative">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full mb-4">
+                <span className="text-2xl">🧠</span>
+                <span className="text-sm font-semibold text-slate-300">Personality Radar</span>
+              </div>
+              <p className="text-slate-400 text-sm">
+                HEXACO / Big Five Test • Shows how you react, work, and handle conflicts
+              </p>
+            </div>
+
+            {/* Radar Chart */}
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/10 mb-8">
+              <ResponsiveContainer width="100%" height={400}>
+                <RadarChart data={HEXACO_TEST.dimensions.map(dim => {
+                  // Create shorter labels for radar chart
+                  const shortLabels = {
+                    'honesty_humility': 'Honesty-Humility',
+                    'emotionality': 'Emotionality',
+                    'extraversion': 'Extraversion',
+                    'agreeableness': 'Agreeableness',
+                    'conscientiousness': 'Conscientiousness',
+                    'openness': 'Openness'
+                  };
+                  return {
+                    dimension: shortLabels[dim.id] || dim.name,
+                    value: Math.round(results.percentile_scores[dim.id]),
+                    fullName: dim.name
+                  };
+                })}>
+                  <PolarGrid 
+                    stroke="#475569" 
+                    strokeWidth={1}
+                    strokeOpacity={0.3}
+                  />
+                  <PolarAngleAxis 
+                    dataKey="dimension" 
+                    tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 600 }}
+                    tickLine={false}
+                  />
+                  <PolarRadiusAxis 
+                    angle={90} 
+                    domain={[0, 100]} 
+                    tick={{ fill: '#64748b', fontSize: 11 }}
+                    tickCount={6}
+                  />
+                  <Radar 
+                    dataKey="value" 
+                    stroke="#8b5cf6" 
+                    fill="#8b5cf6" 
+                    fillOpacity={0.6}
+                    strokeWidth={2}
+                  />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Dimension Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {HEXACO_TEST.dimensions.map((dimension) => {
+                const percentile = results.percentile_scores[dimension.id];
+                const report = results.report?.dimensions?.find(d => d.id === dimension.id);
+                
+                return (
+                  <div key={dimension.id} className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-indigo-400/30 transition-all">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-white font-semibold text-sm">
+                        {dimension.name.split('-')[0]}
+                      </h3>
+                      <span className="text-indigo-400 font-bold text-lg">
+                        {Math.round(percentile)}%
+                      </span>
+                    </div>
+                    {/* Progress bar */}
+                    <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden mb-2">
+                      <div 
+                        className={`h-full bg-gradient-to-r ${getProgressBarColor(percentile)} transition-all duration-1000`}
+                        style={{ width: `${percentile}%` }}
+                      />
+                    </div>
+                    <p className="text-slate-400 text-xs leading-relaxed">
+                      {report?.interpretation?.keywords || dimension.description.substring(0, 50) + '...'}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
