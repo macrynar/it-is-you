@@ -8,6 +8,7 @@ import { ENNEAGRAM_TEST } from '../data/tests/enneagram.js';
 import { DARK_TRIAD_TEST } from '../data/tests/darkTriad.js';
 import { STRENGTHS_TEST } from '../data/tests/strengths.js';
 import { CAREER_TEST } from '../data/tests/career.js';
+import { VALUES_TEST } from '../data/tests/values.js';
 
 /**
  * Calculate HEXACO-60 scores from user responses
@@ -1368,6 +1369,422 @@ export function generateCareerReport(scores) {
     summary: {
       primary_interest: top3WithInterpretations[0],
       holland_code_explanation: `Twój Kod Hollanda to ${scores.holland_code}. Ten trójliteralny kod reprezentuje Twoje trzy najsilniejsze zainteresowania zawodowe w kolejności od najważniejszego.`
+    }
+  };
+}
+
+/**
+ * Calculate Personal Values scores using MRAT (Mean-Referenced Average Technique)
+ * This method centers scores around the person's mean response
+ * @param {Object} responses - Object mapping question IDs to answers (1-6)
+ * @returns {Object} Centered value scores
+ */
+export function calculateValuesScore(responses) {
+  // Validate all 40 questions are answered
+  if (Object.keys(responses).length !== 40) {
+    throw new Error(`Expected 40 responses, got ${Object.keys(responses).length}`);
+  }
+
+  // Step 1: Calculate raw averages for each value
+  const rawScores = {};
+  
+  VALUES_TEST.values.forEach(value => {
+    const questions = VALUES_TEST.questions.filter(q => q.value === value.id);
+    const sum = questions.reduce((acc, q) => acc + (responses[q.id] || 0), 0);
+    const average = sum / questions.length;
+    
+    rawScores[value.id] = {
+      raw_average: parseFloat(average.toFixed(3)),
+      name: value.name,
+      name_en: value.name_en,
+      description: value.description,
+      color: value.color,
+      motivational_goal: value.motivational_goal,
+      question_count: questions.length
+    };
+  });
+
+  // Step 2: Calculate MRAT (person's mean across all 40 responses)
+  const allResponses = Object.values(responses);
+  const mrat = allResponses.reduce((sum, val) => sum + val, 0) / allResponses.length;
+  const mratRounded = parseFloat(mrat.toFixed(3));
+
+  // Step 3: Center scores (subtract MRAT from each raw average)
+  const centeredScores = {};
+  Object.entries(rawScores).forEach(([valueId, data]) => {
+    centeredScores[valueId] = {
+      ...data,
+      centered_score: parseFloat((data.raw_average - mratRounded).toFixed(3))
+    };
+  });
+
+  // Step 4: Sort by centered score (descending)
+  const sortedValues = Object.entries(centeredScores)
+    .sort((a, b) => b[1].centered_score - a[1].centered_score);
+
+  // Get top 3 priorities and bottom 3 sacrifices
+  const top3 = sortedValues.slice(0, 3).map(([id, data], index) => ({
+    rank: index + 1,
+    id: id,
+    name: data.name,
+    name_en: data.name_en,
+    score: data.centered_score,
+    raw_average: data.raw_average,
+    description: data.description,
+    color: data.color
+  }));
+
+  const bottom3 = sortedValues.slice(-3).map(([id, data], index) => ({
+    rank: 8 + index,
+    id: id,
+    name: data.name,
+    name_en: data.name_en,
+    score: data.centered_score,
+    raw_average: data.raw_average,
+    description: data.description,
+    color: data.color
+  }));
+
+  // Prepare data for diverging bar chart
+  const chartData = sortedValues.map(([id, data]) => ({
+    value: data.name,
+    score: data.centered_score,
+    color: data.color,
+    fullMark: 3.0
+  }));
+
+  return {
+    test_id: 'values_schwartz',
+    test_name: 'Test Wartości Osobistych',
+    completed_at: new Date().toISOString(),
+    mrat: mratRounded,
+    top_3: top3,
+    bottom_3: bottom3,
+    all_scores: centeredScores,
+    chart_data: chartData,
+    sorted_values: sortedValues.map(([id, data]) => ({
+      id,
+      ...data
+    }))
+  };
+}
+
+/**
+ * Get interpretation for a specific value
+ * @param {string} valueId - Value ID
+ * @param {number} centeredScore - Centered score (-3 to +3)
+ * @returns {Object} Value interpretation
+ */
+export function getValueInterpretation(valueId, centeredScore) {
+  const interpretations = {
+    self_direction: {
+      high: {
+        description: "Samokierowanie jest dla Ciebie kluczową wartością. Cenisz niezależność myślenia i działania.",
+        characteristics: [
+          "Preferujesz autonomię w podejmowaniu decyzji",
+          "Kreatywność i innowacyjność są dla Ciebie ważne",
+          "Cenisz możliwość eksplorowania i odkrywania",
+          "Wolisz mieć kontrolę nad swoim życiem"
+        ],
+        life_implications: [
+          "Szukasz kariery dającej swobodę działania",
+          "Unikasz nadmiernej kontroli ze strony innych",
+          "Rozwijasz unikalne pomysły i rozwiązania",
+          "Cenisz środowiska sprzyjające kreatywności"
+        ]
+      },
+      low: {
+        description: "Samokierowanie nie jest Twoim priorytetem. Prawdopodobnie cenisz strukturę i wskazówki.",
+        characteristics: [
+          "Czujesz się komfortowo z jasnymi wytycznymi",
+          "Preferujesz sprawdzone rozwiązania",
+          "Cenisz współpracę nad indywidualizmem",
+          "Doceniasz doświadczenie innych"
+        ]
+      }
+    },
+    stimulation: {
+      high: {
+        description: "Stymulacja jest dla Ciebie istotna. Szukasz emocji, wyzwań i nowości.",
+        characteristics: [
+          "Lubisz ekscytujące i różnorodne doświadczenia",
+          "Łatwo znudzisz się rutyną",
+          "Chętnie podejmujesz ryzyko",
+          "Poszukujesz nowych wyzwań"
+        ],
+        life_implications: [
+          "Szukasz dynamicznego środowiska pracy",
+          "Potrzebujesz zmian i różnorodności",
+          "Podróże i przygody są dla Ciebie ważne",
+          "Eksperymentujesz z nowymi ideami"
+        ]
+      },
+      low: {
+        description: "Stymulacja nie jest Twoim priorytetem. Cenisz stabilność i przewidywalność.",
+        characteristics: [
+          "Preferujesz rutynę i stabilność",
+          "Czujesz się komfortowo w znanym otoczeniu",
+          "Ostrożnie podchodzisz do ryzyka",
+          "Doceniasz spokój i porządek"
+        ]
+      }
+    },
+    hedonism: {
+      high: {
+        description: "Hedonizm jest dla Ciebie ważny. Cenisz przyjemność i życiowe radości.",
+        characteristics: [
+          "Ważne jest dla Ciebie czerpanie przyjemności z życia",
+          "Doceniasz zmysłowe doświadczenia",
+          "Lubisz się dobrze bawić",
+          "Stawiasz na komfort i przyjemność"
+        ],
+        life_implications: [
+          "Dbasz o work-life balance",
+          "Aktywnie szukasz źródeł przyjemności",
+          "Doceniasz estetykę i piękno",
+          "Nie boisz się celebrować sukcesów"
+        ]
+      },
+      low: {
+        description: "Hedonizm nie jest Twoim priorytetem. Prawdopodobnie stawiasz na inne wartości niż osobista przyjemność.",
+        characteristics: [
+          "Potrafisz odkładać gratyfikację",
+          "Skupiasz się na celach długoterminowych",
+          "Przyjemność nie jest głównym motywatorem",
+          "Potrafisz dostrzec wartość w wysiłku"
+        ]
+      }
+    },
+    achievement: {
+      high: {
+        description: "Osiągnięcia są dla Ciebie kluczowe. Dążysz do sukcesu i uznania.",
+        characteristics: [
+          "Ambitny i skoncentrowany na celach",
+          "Chcesz wykazać się kompetencjami",
+          "Sukces zawodowy jest dla Ciebie ważny",
+          "Motywuje Cię uznanie innych"
+        ],
+        life_implications: [
+          "Stawiasz sobie wysokie cele",
+          "Pracujesz nad rozwojem kompetencji",
+          "Szukasz okazji do wykazania się",
+          "Cenisz konkurencyjne środowiska"
+        ]
+      },
+      low: {
+        description: "Osiągnięcia nie są Twoim głównym priorytetem. Prawdopodobnie kierują Tobą inne motywatory.",
+        characteristics: [
+          "Sukces materialny nie jest najważniejszy",
+          "Cenisz inne aspekty życia",
+          "Nie potrzebujesz zewnętrznego uznania",
+          "Masz własną definicję sukcesu"
+        ]
+      }
+    },
+    power: {
+      high: {
+        description: "Władza jest dla Ciebie istotna. Cenisz status, prestiż i kontrolę.",
+        characteristics: [
+          "Dążysz do pozycji wpływowych",
+          "Ważny jest dla Ciebie status społeczny",
+          "Lubisz mieć kontrolę nad sytuacją",
+          "Zasoby i prestiż są dla Ciebie ważne"
+        ],
+        life_implications: [
+          "Szukasz pozycji liderskich",
+          "Dbasz o swoją reputację",
+          "Chcesz wpływać na decyzje",
+          "Sukces materialny jest ważny"
+        ]
+      },
+      low: {
+        description: "Władza nie jest Twoim priorytetem. Prawdopodobnie bardziej cenisz równość i współpracę.",
+        characteristics: [
+          "Status społeczny nie jest dla Ciebie kluczowy",
+          "Cenisz równość nad hierarchię",
+          "Nie potrzebujesz dominacji",
+          "Wolisz współpracę od kontroli"
+        ]
+      }
+    },
+    security: {
+      high: {
+        description: "Bezpieczeństwo jest dla Ciebie fundamentalne. Cenisz stabilność i przewidywalność.",
+        characteristics: [
+          "Potrzebujesz poczucia bezpieczeństwa",
+          "Ważna jest dla Ciebie stabilność",
+          "Planujesz i zabezpieczasz przyszłość",
+          "Cenisz porządek i harmonię"
+        ],
+        life_implications: [
+          "Dbasz o zabezpieczenie finansowe",
+          "Unikasz nadmiernego ryzyka",
+          "Cenisz stałe relacje",
+          "Preferujesz sprawdzone rozwiązania"
+        ]
+      },
+      low: {
+        description: "Bezpieczeństwo nie jest Twoim głównym priorytetem. Prawdopodobnie bardziej cenisz elastyczność.",
+        characteristics: [
+          "Nie potrzebujesz stałości",
+          "Komfortowo czujesz się z niepewnością",
+          "Otwartość ważniejsza niż bezpieczeństwo",
+          "Potrafisz żyć w zmiennym środowisku"
+        ]
+      }
+    },
+    conformity: {
+      high: {
+        description: "Konformizm jest dla Ciebie ważny. Cenisz zgodność z normami i oczekiwaniami.",
+        characteristics: [
+          "Szanujesz normy społeczne",
+          "Ważne jest dla Ciebie nie ranić innych",
+          "Przestrzegasz zasad i konwencji",
+          "Dbasz o właściwe zachowanie"
+        ],
+        life_implications: [
+          "Unikasz konfliktów",
+          "Dostosujesz się do oczekiwań",
+          "Cenisz harmonię społeczną",
+          "Respektujesz autorytet"
+        ]
+      },
+      low: {
+        description: "Konformizm nie jest Twoim priorytetem. Prawdopodobnie bardziej cenisz autentyczność.",
+        characteristics: [
+          "Nie boisz się wyrażać odmiennego zdania",
+          "Kwestionujesz status quo",
+          "Cenisz autentyczność nad konwencję",
+          "Potrafisz iść pod prąd"
+        ]
+      }
+    },
+    tradition: {
+      high: {
+        description: "Tradycja jest dla Ciebie istotna. Szanujesz zwyczaje i kulturowe dziedzictwo.",
+        characteristics: [
+          "Cenisz tradycyjne wartości",
+          "Respektujesz zwyczaje rodzinne",
+          "Ważne są dla Ciebie korzenie",
+          "Doceniasz sprawdzone wzorce"
+        ],
+        life_implications: [
+          "Podtrzymujesz tradycje rodzinne",
+          "Szanujesz kulturowe dziedzictwo",
+          "Cenisz ciągłość i historię",
+          "Wolisz sprawdzone sposoby"
+        ]
+      },
+      low: {
+        description: "Tradycja nie jest Twoim priorytetem. Prawdopodobnie bardziej jesteś otwarty na zmiany.",
+        characteristics: [
+          "Nie przywiązujesz się do przeszłości",
+          "Otwarty na nowe podejścia",
+          "Kwestionujesz tradycyjne wzorce",
+          "Skupiasz się na przyszłości"
+        ]
+      }
+    },
+    benevolence: {
+      high: {
+        description: "Życzliwość jest dla Ciebie kluczowa. Dbasz o dobro bliskich osób.",
+        characteristics: [
+          "Troska o innych jest dla Ciebie ważna",
+          "Jesteś lojalny i pomocny",
+          "Stawiasz potrzeby bliskich wysoko",
+          "Budowanie relacji jest priorytetem"
+        ],
+        life_implications: [
+          "Poświęcasz czas dla bliskich",
+          "Aktywnie wspierasz innych",
+          "Relacje są dla Ciebie kluczowe",
+          "Potrafisz się poświęcić dla bliskich"
+        ]
+      },
+      low: {
+        description: "Życzliwość nie jest Twoim głównym priorytetem. Prawdopodobnie skupiasz się na innych aspektach.",
+        characteristics: [
+          "Niezależność jest dla Ciebie ważniejsza",
+          "Skupiasz się na własnych celach",
+          "Granice osobiste są istotne",
+          "Stawiasz na samowystarczalność"
+        ]
+      }
+    },
+    universalism: {
+      high: {
+        description: "Uniwersalizm jest dla Ciebie fundamentalny. Dbasz o dobro wszystkich ludzi i natury.",
+        characteristics: [
+          "Zależy Ci na sprawiedliwości społecznej",
+          "Dbasz o ochronę środowiska",
+          "Cenisz różnorodność i tolerancję",
+          "Patrzysz globalnie"
+        ],
+        life_implications: [
+          "Angażujesz się w sprawy społeczne",
+          "Podejmujesz ekologiczne wybory",
+          "Wspierasz równość i sprawiedliwość",
+          "Działasz na rzecz większego dobra"
+        ]
+      },
+      low: {
+        description: "Uniwersalizm nie jest Twoim priorytetem. Prawdopodobnie skupiasz się na bliższym otoczeniu.",
+        characteristics: [
+          "Skupiasz się na swoim kręgu",
+          "Lokalne sprawy są ważniejsze",
+          "Pragmatyczne podejście do świata",
+          "Priorytet dla bliskich, nie ogółu"
+        ]
+      }
+    }
+  };
+
+  const interpretation = interpretations[valueId] || {};
+  const level = centeredScore >= 0.5 ? 'high' : 'low';
+  
+  return {
+    level,
+    score: centeredScore,
+    ...interpretation[level]
+  };
+}
+
+/**
+ * Generate complete values report with interpretations
+ * @param {Object} scores - Values scores object from calculateValuesScore
+ * @returns {Object} Full report with interpretations
+ */
+export function generateValuesReport(scores) {
+  const valuesWithInterpretations = scores.sorted_values.map(value => ({
+    id: value.id,
+    name: value.name,
+    name_en: value.name_en,
+    centered_score: value.centered_score,
+    raw_average: value.raw_average,
+    color: value.color,
+    description: value.description,
+    motivational_goal: value.motivational_goal,
+    interpretation: getValueInterpretation(value.id, value.centered_score)
+  }));
+
+  return {
+    test_id: scores.test_id,
+    test_name: scores.test_name,
+    completed_at: scores.completed_at,
+    mrat: scores.mrat,
+    top_3: scores.top_3.map(v => ({
+      ...v,
+      interpretation: getValueInterpretation(v.id, v.score)
+    })),
+    bottom_3: scores.bottom_3.map(v => ({
+      ...v,
+      interpretation: getValueInterpretation(v.id, v.score)
+    })),
+    all_values: valuesWithInterpretations,
+    chart_data: scores.chart_data,
+    summary: {
+      primary_value: valuesWithInterpretations[0],
+      mrat_explanation: `Twoje wyniki są wycentrowane względem Twojej osobistej średniej (MRAT = ${scores.mrat.toFixed(2)}). Wartości dodatnie to Twoje prioretety, ujemne to rzeczy mniej istotne w Twoim życiu.`
     }
   };
 }

@@ -5,6 +5,7 @@ import { ENNEAGRAM_TEST } from '../../data/tests/enneagram.js';
 import { DARK_TRIAD_TEST } from '../../data/tests/darkTriad.js';
 import { STRENGTHS_TEST } from '../../data/tests/strengths.js';
 import { CAREER_TEST } from '../../data/tests/career.js';
+import { VALUES_TEST } from '../../data/tests/values.js';
 import { 
   calculateHexacoScore, 
   generateHexacoReport,
@@ -15,7 +16,9 @@ import {
   calculateStrengthsScore,
   generateStrengthsReport,
   calculateCareerScore,
-  generateCareerReport
+  generateCareerReport,
+  calculateValuesScore,
+  generateValuesReport
 } from '../../utils/scoring.js';
 import { supabase } from '../../lib/supabaseClient.js';
 
@@ -29,11 +32,15 @@ export default function TestWizard({ testType = 'hexaco' }) {
         ? STRENGTHS_TEST
         : testType === 'career'
           ? CAREER_TEST
-          : HEXACO_TEST;
+          : testType === 'values'
+            ? VALUES_TEST
+            : HEXACO_TEST;
   const isEnneagram = TEST_DATA.scale_type === 'forced_choice';
   const isDarkTriad = testType === 'dark_triad';
   const isStrengths = testType === 'strengths';
   const isCareer = testType === 'career';
+  const isValues = testType === 'values';
+  const isLikert6 = TEST_DATA.scale_type === 'likert_6';
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [responses, setResponses] = useState({});
@@ -103,6 +110,11 @@ export default function TestWizard({ testType = 'hexaco' }) {
         report = generateCareerReport(scores);
         dbTestType = 'CAREER';
         redirectPath = '/test/career/results';
+      } else if (isValues) {
+        scores = calculateValuesScore(responses);
+        report = generateValuesReport(scores);
+        dbTestType = 'VALUES';
+        redirectPath = '/test/values/results';
       } else {
         scores = calculateHexacoScore(responses);
         report = generateHexacoReport(scores);
@@ -157,6 +169,17 @@ export default function TestWizard({ testType = 'hexaco' }) {
           chart_data: scores.chart_data
         };
         dbPayload.raw_answers = responses;
+      } else if (isValues) {
+        // Store MRAT centered scores and value data
+        dbPayload.raw_scores = {
+          mrat: scores.mrat,
+          top_3: scores.top_3,
+          bottom_3: scores.bottom_3,
+          all_scores: scores.all_scores,
+          chart_data: scores.chart_data,
+          sorted_values: scores.sorted_values
+        };
+        dbPayload.raw_answers = responses;
       } else {
         dbPayload.raw_scores = scores.raw_scores;
         dbPayload.percentile_scores = scores.percentile_scores;
@@ -195,7 +218,12 @@ export default function TestWizard({ testType = 'hexaco' }) {
         handleAnswer('b');
       }
       // For HEXACO: number keys 1-5
-      else if (!isEnneagram && e.key >= '1' && e.key <= '5') {
+      else if (!isEnneagram && !isLikert6 && e.key >= '1' && e.key <= '5') {
+        const value = parseInt(e.key);
+        handleAnswer(value);
+      }
+      // For Values (6-point scale): number keys 1-6
+      else if (!isEnneagram && isLikert6 && e.key >= '1' && e.key <= '6') {
         const value = parseInt(e.key);
         handleAnswer(value);
       }
@@ -213,7 +241,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [currentQuestionIndex, responses, canGoNext, canGoPrev, isEnneagram]);
+  }, [currentQuestionIndex, responses, canGoNext, canGoPrev, isEnneagram, isLikert6]);
 
   // Get dimension/type badge info
   const getBadgeInfo = () => {
@@ -240,6 +268,12 @@ export default function TestWizard({ testType = 'hexaco' }) {
         label: interestInfo?.name || 'Zainteresowania',
         color: 'from-indigo-500 to-purple-500'
       };
+    } else if (isValues) {
+      const valueInfo = TEST_DATA.values.find(v => v.id === currentQuestion.value);
+      return {
+        label: valueInfo?.name || 'Wartości',
+        color: 'from-teal-500 to-cyan-500'
+      };
     } else {
       const dimensionInfo = TEST_DATA.dimensions.find(d => d.id === currentQuestion.dimension);
       return {
@@ -264,7 +298,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
             </div>
             <div className="text-right">
               <div className="text-sm font-medium text-slate-400">
-                Pytanie <span className={`font-bold ${isDarkTriad ? 'text-rose-400' : isStrengths ? 'text-indigo-400' : isCareer ? 'text-purple-400' : 'text-cyan-400'}`}>{currentQuestionIndex + 1}</span>
+                Pytanie <span className={`font-bold ${isDarkTriad ? 'text-rose-400' : isStrengths ? 'text-indigo-400' : isCareer ? 'text-purple-400' : isValues ? 'text-teal-400' : 'text-cyan-400'}`}>{currentQuestionIndex + 1}</span>
                 <span className="text-slate-600"> / {totalQuestions}</span>
               </div>
             </div>
@@ -276,10 +310,10 @@ export default function TestWizard({ testType = 'hexaco' }) {
       <div className="relative">
         <div className="absolute top-0 left-0 right-0 h-1 bg-slate-800">
           <div 
-            className={`h-full bg-gradient-to-r ${isDarkTriad ? 'from-rose-600 to-red-600' : isStrengths ? 'from-cyan-500 to-indigo-500' : isCareer ? 'from-indigo-500 to-purple-500' : 'from-cyan-500 to-blue-500'} transition-all duration-500 ease-out relative`}
+            className={`h-full bg-gradient-to-r ${isDarkTriad ? 'from-rose-600 to-red-600' : isStrengths ? 'from-cyan-500 to-indigo-500' : isCareer ? 'from-indigo-500 to-purple-500' : isValues ? 'from-teal-500 to-cyan-500' : 'from-cyan-500 to-blue-500'} transition-all duration-500 ease-out relative`}
             style={{ width: `${progress}%` }}
           >
-            <div className={`absolute inset-0 bg-gradient-to-r ${isDarkTriad ? 'from-rose-600 to-red-600' : isStrengths ? 'from-cyan-500 to-indigo-500' : isCareer ? 'from-indigo-500 to-purple-500' : 'from-cyan-500 to-blue-500'} blur-md opacity-60`}></div>
+            <div className={`absolute inset-0 bg-gradient-to-r ${isDarkTriad ? 'from-rose-600 to-red-600' : isStrengths ? 'from-cyan-500 to-indigo-500' : isCareer ? 'from-indigo-500 to-purple-500' : isValues ? 'from-teal-500 to-cyan-500' : 'from-cyan-500 to-blue-500'} blur-md opacity-60`}></div>
           </div>
         </div>
       </div>
@@ -288,8 +322,8 @@ export default function TestWizard({ testType = 'hexaco' }) {
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Dimension Badge */}
         <div className="flex justify-center mb-6">
-          <div className={`px-4 py-1.5 rounded-full bg-slate-800/50 border ${isDarkTriad ? 'border-rose-500/30' : isStrengths ? 'border-indigo-500/30' : 'border-cyan-500/30'} backdrop-blur-sm`}>
-            <span className={`text-xs font-semibold ${isDarkTriad ? 'text-rose-400' : isStrengths ? 'text-indigo-400' : 'text-cyan-400'} uppercase tracking-wider`}>{badgeInfo.label}</span>
+          <div className={`px-4 py-1.5 rounded-full bg-slate-800/50 border ${isDarkTriad ? 'border-rose-500/30' : isStrengths ? 'border-indigo-500/30' : isValues ? 'border-teal-500/30' : 'border-cyan-500/30'} backdrop-blur-sm`}>
+            <span className={`text-xs font-semibold ${isDarkTriad ? 'text-rose-400' : isStrengths ? 'text-indigo-400' : isValues ? 'text-teal-400' : 'text-cyan-400'} uppercase tracking-wider`}>{badgeInfo.label}</span>
           </div>
         </div>
 
@@ -370,22 +404,22 @@ export default function TestWizard({ testType = 'hexaco' }) {
 
             {/* Likert Scale Options */}
             <div className="space-y-3 mb-8">
-              {[1, 2, 3, 4, 5].map((value) => (
+              {(isLikert6 ? [1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5]).map((value) => (
                 <button
                   key={value}
                   onClick={() => handleAnswer(value)}
                   className={`group w-full p-4 rounded-xl transition-all duration-300 ${
                     responses[currentQuestion.id] === value
-                      ? `border ${isDarkTriad ? 'border-rose-400 bg-rose-900/50 shadow-[0_0_25px_rgba(244,63,94,0.4)]' : isStrengths ? 'border-indigo-400 bg-indigo-900/50 shadow-[0_0_25px_rgba(99,102,241,0.4)]' : 'border-cyan-400 bg-cyan-900/50 shadow-[0_0_25px_rgba(34,211,238,0.4)]'}`
-                      : `border border-slate-700 bg-slate-900/50 ${isDarkTriad ? 'hover:border-rose-500/50 hover:bg-rose-950/30' : isStrengths ? 'hover:border-indigo-500/50 hover:bg-indigo-950/30' : 'hover:border-cyan-500/50 hover:bg-cyan-950/30'}`
+                      ? `border ${isDarkTriad ? 'border-rose-400 bg-rose-900/50 shadow-[0_0_25px_rgba(244,63,94,0.4)]' : isStrengths ? 'border-indigo-400 bg-indigo-900/50 shadow-[0_0_25px_rgba(99,102,241,0.4)]' : isValues ? 'border-teal-400 bg-teal-900/50 shadow-[0_0_25px_rgba(20,184,166,0.4)]' : 'border-cyan-400 bg-cyan-900/50 shadow-[0_0_25px_rgba(34,211,238,0.4)]'}`
+                      : `border border-slate-700 bg-slate-900/50 ${isDarkTriad ? 'hover:border-rose-500/50 hover:bg-rose-950/30' : isStrengths ? 'hover:border-indigo-500/50 hover:bg-indigo-950/30' : isValues ? 'hover:border-teal-500/50 hover:bg-teal-950/30' : 'hover:border-cyan-500/50 hover:bg-cyan-950/30'}`
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
                         responses[currentQuestion.id] === value
-                          ? `${isDarkTriad ? 'border-rose-400 bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)]' : isStrengths ? 'border-indigo-400 bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : 'border-cyan-400 bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]'}`
-                          : `border-slate-600 ${isDarkTriad ? 'group-hover:border-rose-500/50' : isStrengths ? 'group-hover:border-indigo-500/50' : 'group-hover:border-cyan-500/50'}`
+                          ? `${isDarkTriad ? 'border-rose-400 bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.5)]' : isStrengths ? 'border-indigo-400 bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : isValues ? 'border-teal-400 bg-teal-500 shadow-[0_0_10px_rgba(20,184,166,0.5)]' : 'border-cyan-400 bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]'}`
+                          : `border-slate-600 ${isDarkTriad ? 'group-hover:border-rose-500/50' : isStrengths ? 'group-hover:border-indigo-500/50' : isValues ? 'group-hover:border-teal-500/50' : 'group-hover:border-cyan-500/50'}`
                       }`}>
                         {responses[currentQuestion.id] === value && (
                           <div className="w-3 h-3 rounded-full bg-white" />
@@ -401,7 +435,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
                     </div>
                     <span className={`text-2xl font-bold transition-colors duration-300 ${
                       responses[currentQuestion.id] === value
-                        ? `${isDarkTriad ? 'text-rose-400' : isStrengths ? 'text-indigo-400' : 'text-cyan-400'}`
+                        ? `${isDarkTriad ? 'text-rose-400' : isStrengths ? 'text-indigo-400' : isValues ? 'text-teal-400' : 'text-cyan-400'}`
                         : 'text-slate-700 group-hover:text-slate-500'
                     }`}>
                       {value}
@@ -420,6 +454,11 @@ export default function TestWizard({ testType = 'hexaco' }) {
               <>
                 <kbd className="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs">A</kbd>
                 <kbd className="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs">B</kbd>
+                <span>lub strzałki do nawigacji</span>
+              </>
+            ) : isLikert6 ? (
+              <>
+                <kbd className="px-2 py-1 bg-slate-800 border border-slate-700 rounded text-xs">1-6</kbd>
                 <span>lub strzałki do nawigacji</span>
               </>
             ) : (
@@ -459,7 +498,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
               disabled={!canGoNext}
               className={`flex items-center space-x-2 px-8 py-3.5 rounded-xl font-semibold transition-all duration-300 ${
                 canGoNext
-                  ? `bg-gradient-to-r ${isDarkTriad ? 'from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 shadow-lg shadow-rose-500/30 hover:shadow-rose-500/50' : isStrengths ? 'from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50' : 'from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50'} text-white`
+                  ? `bg-gradient-to-r ${isDarkTriad ? 'from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 shadow-lg shadow-rose-500/30 hover:shadow-rose-500/50' : isStrengths ? 'from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50' : isCareer ? 'from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50' : isValues ? 'from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 shadow-lg shadow-teal-500/30 hover:shadow-teal-500/50' : 'from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50'} text-white`
                   : 'bg-slate-900/30 border border-slate-800 text-slate-700 cursor-not-allowed'
               }`}
             >
