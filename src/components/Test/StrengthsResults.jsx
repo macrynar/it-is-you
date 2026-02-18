@@ -1,403 +1,334 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, RefreshCw, Award, Sparkles } from 'lucide-react';
+import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { STRENGTHS_TEST } from '../../data/tests/strengths.js';
 import { generateStrengthsReport } from '../../utils/scoring.js';
+import AiInterpretation from './AiInterpretation.jsx';
 
-/**
- * Strengths Assessment Results Component
- * Displays Top 5 talents with detailed interpretations
- * Organized by 4 competency categories
- */
+const CAT = {
+  strategic_thinking: {
+    color: '#34d399', glow: 'rgba(52,211,153,.5)',
+    bar: 'linear-gradient(90deg,#065f46,#34d399)',
+    badge: 'linear-gradient(135deg,#065f46,#34d399)',
+    shadow: '0 0 0 1px rgba(52,211,153,.35),0 0 30px -4px rgba(52,211,153,.3)',
+  },
+  executing: {
+    color: '#b08fff', glow: 'rgba(123,94,167,.6)',
+    bar: 'linear-gradient(90deg,#4a28b0,#b08fff)',
+    badge: 'linear-gradient(135deg,#4a28b0,#b08fff)',
+    shadow: '0 0 0 1px rgba(123,94,167,.4),0 0 30px -4px rgba(123,94,167,.3)',
+  },
+  influencing: {
+    color: '#fbbf24', glow: 'rgba(251,191,36,.5)',
+    bar: 'linear-gradient(90deg,#78350f,#fbbf24)',
+    badge: 'linear-gradient(135deg,#78350f,#fbbf24)',
+    shadow: '0 0 0 1px rgba(251,191,36,.35),0 0 30px -4px rgba(251,191,36,.25)',
+  },
+  relationship_building: {
+    color: '#60a5fa', glow: 'rgba(96,165,250,.5)',
+    bar: 'linear-gradient(90deg,#1e3a5f,#60a5fa)',
+    badge: 'linear-gradient(135deg,#1e3a5f,#60a5fa)',
+    shadow: '0 0 0 1px rgba(96,165,250,.35),0 0 30px -4px rgba(96,165,250,.3)',
+  },
+};
+
+const getCat = id => CAT[id] || CAT.strategic_thinking;
+const getCategoryInfo = id => STRENGTHS_TEST.categories.find(c => c.id === id);
+
+const CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+.sr-root{font-family:'Space Grotesk',sans-serif;background:#0d0f2b;color:#fff;min-height:100vh;overflow-x:hidden;}
+.sr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(52,211,153,.08) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(123,94,167,.12) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
+.sr-glass{background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:20px;position:relative;isolation:isolate;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6);}
+.sr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(52,211,153,.15) 35%,rgba(123,94,167,.12) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.sr-talent-card{border-radius:20px;position:relative;isolation:isolate;overflow:hidden;background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;}
+.sr-talent-card:hover{transform:translateY(-4px);}
+.sr-talent-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.sr-bar-track{height:6px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden;}
+.sr-bar-fill{height:100%;border-radius:100px;position:relative;transition:width 1s cubic-bezier(.22,.68,0,1.1);}
+.sr-bar-fill::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.6);}
+.sr-rank-badge{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#fff;flex-shrink:0;}
+.sr-cat-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600;letter-spacing:.3px;}
+.sr-keyword{padding:3px 10px;border-radius:100px;font-size:.7rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);}
+.sr-cat-mini{border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);padding:16px;transition:border-color .2s;}
+.sr-cat-mini:hover{border-color:rgba(255,255,255,.14);}
+@keyframes spinLoader{to{transform:rotate(360deg);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.sr-fadein{animation:fadeUp .6s cubic-bezier(.22,.68,0,1.1) both;}
+`;
+
 export default function StrengthsResults() {
-  const [report, setReport] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [report,         setReport]         = useState(null);
+  const [loading,        setLoading]        = useState(true);
+  const [error,          setError]          = useState(null);
+  const [rawScores,      setRawScores]      = useState(null);
+  const [interpretation, setInterpretation] = useState(null);
+  const [interpLoading,  setInterpLoading]  = useState(false);
+  const [interpError,    setInterpError]    = useState(null);
 
-  useEffect(() => {
-    loadResults();
-  }, []);
+  useEffect(() => { loadResults(); }, []);
 
-  async function loadResults() {
+  const loadResults = async () => {
     try {
       setLoading(true);
-      
-      // Get current user session
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError || !session) {
-        setError('Nie jesteś zalogowany');
-        setLoading(false);
-        return;
-      }
+      const { data: { user }, error: ue } = await supabase.auth.getUser();
+      if (ue || !user) throw new Error('Nie jesteś zalogowany');
 
-      // Fetch latest Strengths test result
-      const { data, error: fetchError } = await supabase
-        .from('user_psychometrics')
-        .select('*')
-        .eq('user_id', session.user.id)
-        .eq('test_type', 'STRENGTHS')
-        .order('completed_at', { ascending: false })
-        .limit(1);
+      const [{ data, error: fe }, { data: cached }] = await Promise.all([
+        supabase.from('user_psychometrics').select('*')
+          .eq('user_id', user.id).eq('test_type', 'STRENGTHS')
+          .order('completed_at', { ascending: false }).limit(1),
+        supabase.from('ai_interpretations').select('interpretation')
+          .eq('user_id', user.id).eq('test_type', 'STRENGTHS')
+          .maybeSingle(),
+      ]);
 
-      if (fetchError) {
-        throw fetchError;
-      }
-
-      if (!data || data.length === 0) {
+      if (fe) throw fe;
+      if (!data?.length) {
         setError('Nie znaleziono wyników testu. Wykonaj test najpierw.');
         setLoading(false);
         return;
       }
 
       const testResult = data[0];
-      
-      // Extract scores from raw_scores JSONB
       const scoresData = testResult.raw_scores || {};
-      
-      // Fix legacy data: convert keywords from string to array if needed
+
       if (scoresData.top_5) {
-        scoresData.top_5 = scoresData.top_5.map(talent => ({
-          ...talent,
-          keywords: typeof talent.keywords === 'string' 
-            ? talent.keywords.split(',').map(k => k.trim())
-            : (talent.keywords || [])
+        scoresData.top_5 = scoresData.top_5.map(t => ({
+          ...t,
+          keywords: typeof t.keywords === 'string'
+            ? t.keywords.split(',').map(k => k.trim())
+            : (t.keywords || []),
         }));
       }
-      
-      // Generate full report with interpretations
+
       const fullReport = generateStrengthsReport(scoresData);
-      
-      setReport({
-        ...fullReport,
-        completed_at: testResult.completed_at
-      });
-      
+      setReport({ ...fullReport, completed_at: testResult.completed_at });
+      setRawScores(scoresData);
       setLoading(false);
+
+      if (cached?.interpretation) {
+        setInterpretation(cached.interpretation);
+      } else {
+        generateInterpretation(scoresData);
+      }
     } catch (err) {
-      console.error('Error loading results:', err);
       setError(err.message || 'Błąd podczas ładowania wyników');
       setLoading(false);
     }
-  }
+  };
 
-  const handleRetakeTest = () => {
-    if (confirm('Czy na pewno chcesz wykonać test ponownie?')) {
-      window.location.href = '/test?type=strengths';
+  const generateInterpretation = async (scores) => {
+    setInterpLoading(true);
+    setInterpError(null);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Brak sesji');
+      const { data, error: fe } = await supabase.functions.invoke('interpret-test', {
+        body: { test_type: 'STRENGTHS', raw_scores: scores, report: scores },
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (fe) throw fe;
+      setInterpretation(data?.interpretation || '');
+    } catch (err) {
+      setInterpError(err.message || 'Błąd generowania interpretacji');
+    } finally {
+      setInterpLoading(false);
     }
   };
 
-  const handleBackToDashboard = () => {
-    window.location.href = '/user-profile-tests.html';
+  const handleRegenerate = async () => {
+    if (!rawScores) return;
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) await supabase.from('ai_interpretations').delete().eq('user_id', user.id).eq('test_type', 'STRENGTHS');
+    setInterpretation(null);
+    generateInterpretation(rawScores);
   };
 
-  // Get category color classes (Tailwind requires full class names, no interpolation)
-  const getCategoryColorClasses = (categoryId) => {
-    const category = STRENGTHS_TEST.categories.find(c => c.id === categoryId);
-    
-    // Map category colors to Tailwind class sets
-    const colorClassMap = {
-      'emerald-500': {
-        badge: 'bg-gradient-to-br from-emerald-500 to-emerald-600',
-        text: 'text-emerald-400',
-        bg: 'bg-emerald-950/50 border-emerald-500/30 text-emerald-400',
-        bar: 'bg-gradient-to-r from-emerald-500 to-emerald-400',
-        glow: 'shadow-emerald-500/20'
-      },
-      'purple-500': {
-        badge: 'bg-gradient-to-br from-purple-500 to-purple-600',
-        text: 'text-purple-400',
-        bg: 'bg-purple-950/50 border-purple-500/30 text-purple-400',
-        bar: 'bg-gradient-to-r from-purple-500 to-purple-400',
-        glow: 'shadow-purple-500/20'
-      },
-      'amber-500': {
-        badge: 'bg-gradient-to-br from-amber-500 to-amber-600',
-        text: 'text-amber-400',
-        bg: 'bg-amber-950/50 border-amber-500/30 text-amber-400',
-        bar: 'bg-gradient-to-r from-amber-500 to-amber-400',
-        glow: 'shadow-amber-500/20'
-      },
-      'blue-500': {
-        badge: 'bg-gradient-to-br from-blue-500 to-blue-600',
-        text: 'text-blue-400',
-        bg: 'bg-blue-950/50 border-blue-500/30 text-blue-400',
-        bar: 'bg-gradient-to-r from-blue-500 to-blue-400',
-        glow: 'shadow-blue-500/20'
-      }
-    };
-    
-    return colorClassMap[category?.color] || colorClassMap['emerald-500'];
-  };
-
-  const getCategoryInfo = (categoryId) => {
-    return STRENGTHS_TEST.categories.find(c => c.id === categoryId);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mb-4"></div>
-          <p className="text-cyan-400">Ładowanie wyników...</p>
-        </div>
+  if (loading) return (
+    <div style={{ background: '#0d0f2b', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <style>{CSS}</style>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ width: 48, height: 48, border: '3px solid rgba(52,211,153,.2)', borderTopColor: '#34d399', borderRadius: '50%', margin: '0 auto 16px', animation: 'spinLoader 1s linear infinite' }} />
+        <p style={{ color: '#34d399', fontFamily: 'Space Grotesk,sans-serif', fontWeight: 600 }}>Ładowanie wyników...</p>
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-        <div className="glass-card-active max-w-md w-full p-8 text-center">
-          <div className="text-red-400 text-5xl mb-4">⚠️</div>
-          <h2 className="text-xl font-bold text-red-400 mb-4">Błąd</h2>
-          <p className="text-slate-300 mb-6">{error}</p>
-          <button
-            onClick={handleBackToDashboard}
-            className="btn-primary"
-          >
-            Wróć do Dashboardu
-          </button>
-        </div>
+  if (error) return (
+    <div style={{ background: '#0d0f2b', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <style>{CSS}</style>
+      <div className="sr-glass" style={{ maxWidth: 400, width: '100%', padding: 40, textAlign: 'center' }}>
+        <div style={{ fontSize: '3rem', marginBottom: 16 }}>⚠️</div>
+        <h2 style={{ color: '#f87171', fontSize: '1.2rem', fontWeight: 700, marginBottom: 12 }}>Błąd</h2>
+        <p style={{ color: 'rgba(255,255,255,.6)', marginBottom: 24 }}>{error}</p>
+        <button onClick={() => window.location.href = '/user-profile-tests.html'}
+          style={{ padding: '10px 24px', borderRadius: 10, background: 'linear-gradient(135deg,#065f46,#34d399)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'Space Grotesk,sans-serif' }}>
+          Wróć do Dashboardu
+        </button>
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (!report || !report.top_5) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-        <div className="glass-card-active max-w-md w-full p-8 text-center">
-          <p className="text-slate-300">Brak danych do wyświetlenia</p>
-          <button onClick={handleBackToDashboard} className="btn-primary mt-4">
-            Wróć do Dashboardu
-          </button>
-        </div>
-      </div>
-    );
-  }
+  if (!report?.top_5) return null;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      {/* Header */}
-      <div className="border-b border-white/5 bg-black/40 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={handleBackToDashboard}
-              className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
-            >
-              <ArrowLeft size={20} />
-              <span>Dashboard</span>
-            </button>
-            
-            <button
-              onClick={handleRetakeTest}
-              className="btn-ghost flex items-center gap-2"
-            >
-              <RefreshCw size={18} />
-              <span>Powtórz Test</span>
-            </button>
-          </div>
+    <div className="sr-root">
+      <style>{CSS}</style>
+
+      <div style={{ position: 'relative', zIndex: 10, borderBottom: '1px solid rgba(255,255,255,.06)', background: 'rgba(13,15,43,.8)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', padding: '14px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <button
+            onClick={() => window.location.href = '/user-profile-tests.html'}
+            style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,.5)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Space Grotesk,sans-serif', fontSize: '.9rem' }}
+            onMouseEnter={e => e.currentTarget.style.color = '#fff'}
+            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.5)'}
+          >
+            <ArrowLeft size={18} /> Dashboard
+          </button>
+          <span style={{ color: 'rgba(255,255,255,.25)', fontSize: '.8rem', fontWeight: 500, letterSpacing: 1 }}>TEST TALENTÓW</span>
+          <button
+            onClick={() => { if (window.confirm('Czy na pewno chcesz wykonać test ponownie?')) window.location.href = '/test?type=strengths'; }}
+            style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,.45)', background: 'none', border: '1px solid rgba(255,255,255,.1)', borderRadius: 8, padding: '6px 14px', cursor: 'pointer', fontFamily: 'Space Grotesk,sans-serif', fontSize: '.82rem' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.25)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,.45)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.1)'; }}
+          >
+            <RefreshCw size={14} /> Powtórz Test
+          </button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-5xl mx-auto px-6 py-16">
-        
-        {/* Hero Section */}
-        <div className="glass-card-active p-6 mb-8 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-blue-950/40 to-purple-950/40"></div>
-          <div className="relative z-10">
-            <div className="text-5xl mb-3">🎯</div>
-            <h1 className="text-3xl font-bold gradient-text mb-2">
-              Twoje Top 5 Talentów
-            </h1>
-            <p className="text-slate-300 text-sm">
-              Odkryj swoje naturalne mocne strony
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 900, margin: '0 auto', padding: '48px 28px 80px' }}>
+
+        <div className="sr-glass sr-fadein" style={{ padding: '44px 40px', marginBottom: 32, textAlign: 'center' }}>
+          <div style={{ fontSize: '3.2rem', marginBottom: 12, lineHeight: 1 }}>🎯</div>
+          <h1 style={{ fontSize: '2.1rem', fontWeight: 800, marginBottom: 8, background: 'linear-gradient(135deg,#34d399 0%,#60a5fa 50%,#b08fff 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            Twoje Top 5 Talentów
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,.5)', fontSize: '.95rem' }}>Odkryj swoje naturalne mocne strony</p>
+          {report.completed_at && (
+            <p style={{ color: 'rgba(255,255,255,.3)', fontSize: '.78rem', marginTop: 8 }}>
+              Ukończono: {new Date(report.completed_at).toLocaleDateString('pl-PL')}
             </p>
-            {report.completed_at && (
-              <p className="text-slate-400 text-xs mt-2">
-                Ukończono: {new Date(report.completed_at).toLocaleDateString('pl-PL')}
-              </p>
-            )}
-          </div>
+          )}
         </div>
 
-        {/* Primary Strength Highlight */}
-        {report.summary?.primary_strength && (
-          <div className="glass-card-active p-6 mb-8 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-950/30 to-yellow-950/30"></div>
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-2">
-                <Award className="text-amber-400" size={24} />
-                <h2 className="text-xl font-bold text-amber-400">
-                  Twój Główny Talent
-                </h2>
-              </div>
-              <p className="text-2xl font-bold text-white mb-2">
-                {report.summary.primary_strength.name}
-              </p>
-              <p className="text-slate-300 text-sm">
-                {report.summary.primary_strength.name_en}
-              </p>
-            </div>
-          </div>
-        )}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 36, justifyContent: 'center' }}>
+          {STRENGTHS_TEST.categories.map(cat => {
+            const c = getCat(cat.id);
+            return (
+              <span key={cat.id} className="sr-cat-chip" style={{ background: c.color + '18', border: '1px solid ' + c.color + '40', color: c.color }}>
+                {cat.icon} {cat.name}
+              </span>
+            );
+          })}
+        </div>
 
-        {/* Top 5 Talents List */}
-        <div className="space-y-6 mb-8">
-          {report.top_5.map((talent, index) => {
-            const categoryInfo = getCategoryInfo(talent.category);
-            const colorClasses = getCategoryColorClasses(talent.category);
-            
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 36 }}>
+          {report.top_5.map((talent, idx) => {
+            const catInfo = getCategoryInfo(talent.category);
+            const c = getCat(talent.category);
+            const scorePct = Math.round((talent.score / 5) * 100);
             return (
               <div
                 key={talent.id}
-                className="glass-card-active p-6 relative overflow-hidden hover:shadow-xl transition-shadow"
+                className="sr-talent-card sr-fadein"
+                style={{ padding: 28, boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08),' + c.shadow + ',0 8px 32px -4px rgba(0,0,0,.6)', animationDelay: (idx * 90) + 'ms' }}
               >
-                {/* Rank Badge */}
-                <div className={`absolute top-4 right-4 w-10 h-10 rounded-full ${colorClasses.badge} flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
-                  #{talent.rank}
-                </div>
-
-                {/* Talent Header */}
-                <div className="pr-16 mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">{categoryInfo?.icon || '⭐'}</span>
-                    <h3 className="text-2xl font-bold text-white">
-                      {talent.name}
-                    </h3>
-                  </div>
-                  <p className={`${colorClasses.text} text-sm mb-2`}>
-                    {talent.name_en}
-                  </p>
-                  <div className={`inline-block px-3 py-1 rounded-full ${colorClasses.bg} text-xs`}>
-                    {categoryInfo?.name || talent.category}
-                  </div>
-                </div>
-
-                {/* Score Bar */}
-                <div className="mb-4">
-                  <div className="flex justify-between text-xs text-slate-400 mb-1">
-                    <span>Wynik</span>
-                    <span>{talent.score.toFixed(2)} / 5.00</span>
-                  </div>
-                  <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full ${colorClasses.bar} transition-all duration-1000`}
-                      style={{ width: `${(talent.score / 5) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-slate-300 text-sm mb-4 leading-relaxed">
-                  {talent.description}
-                </p>
-
-                {/* Keywords */}
-                {talent.keywords && talent.keywords.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-xs text-slate-400 mb-2">Kluczowe cechy:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {talent.keywords.map((keyword, kidx) => (
-                        <span
-                          key={kidx}
-                          className="px-2 py-1 bg-slate-800/50 text-slate-300 text-xs rounded"
-                        >
-                          {keyword}
-                        </span>
-                      ))}
+                <div style={{ position: 'absolute', width: 200, height: 200, borderRadius: '50%', background: c.color, filter: 'blur(80px)', opacity: .06, top: -60, right: -60, pointerEvents: 'none' }} />
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20, gap: 12 }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+                        <span style={{ fontSize: '1.5rem' }}>{catInfo?.icon || '⭐'}</span>
+                        <h3 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#fff', lineHeight: 1.1 }}>{talent.name}</h3>
+                      </div>
+                      <p style={{ color: 'rgba(255,255,255,.38)', fontSize: '.8rem', fontWeight: 500, marginBottom: 10 }}>{talent.name_en}</p>
+                      <span className="sr-cat-chip" style={{ background: c.color + '20', border: '1px solid ' + c.color + '45', color: c.color }}>
+                        {catInfo?.name || talent.category}
+                      </span>
+                    </div>
+                    <div className="sr-rank-badge" style={{ background: c.badge, boxShadow: '0 4px 20px -2px ' + c.glow }}>
+                      #{talent.rank}
                     </div>
                   </div>
-                )}
 
-                {/* Interpretation */}
-                {talent.interpretation && (
-                  <div className="border-t border-slate-700 pt-4 mt-4 space-y-4">
-                    {/* Overview */}
-                    <div>
-                      <p className="text-slate-300 text-sm leading-relaxed">
-                        {talent.interpretation.overview}
-                      </p>
+                  <div style={{ marginBottom: 20 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,.35)', fontSize: '.72rem', marginBottom: 6 }}>
+                      <span>Wynik</span>
+                      <span style={{ color: c.color, fontWeight: 700 }}>{talent.score.toFixed(2)} / 5.00</span>
                     </div>
-
-                    {/* How to Use */}
-                    {talent.interpretation.how_to_use && talent.interpretation.how_to_use.length > 0 && (
-                      <div>
-                        <h4 className={`${colorClasses.text} font-bold text-sm mb-2 flex items-center gap-2`}>
-                          <Sparkles size={16} />
-                          Jak wykorzystać ten talent:
-                        </h4>
-                        <ul className="space-y-1.5 ml-6">
-                          {talent.interpretation.how_to_use.map((tip, tidx) => (
-                            <li key={tidx} className="text-slate-300 text-sm list-disc">
-                              {tip}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {/* Watch Out */}
-                    {talent.interpretation.watch_out && talent.interpretation.watch_out.length > 0 && (
-                      <div>
-                        <h4 className="text-amber-400 font-bold text-sm mb-2">
-                          ⚠️ Na co uważać:
-                        </h4>
-                        <ul className="space-y-1.5 ml-6">
-                          {talent.interpretation.watch_out.map((warning, widx) => (
-                            <li key={widx} className="text-slate-300 text-sm list-disc">
-                              {warning}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                    <div className="sr-bar-track">
+                      <div className="sr-bar-fill" style={{ width: scorePct + '%', background: c.bar }} />
+                    </div>
                   </div>
-                )}
+
+                  <p style={{ color: 'rgba(255,255,255,.65)', fontSize: '.9rem', lineHeight: 1.65, marginBottom: 16 }}>{talent.description}</p>
+
+                  {talent.keywords?.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
+                      {talent.keywords.map((kw, i) => <span key={i} className="sr-keyword">{kw}</span>)}
+                    </div>
+                  )}
+
+                  {talent.interpretation && (
+                    <div style={{ borderTop: '1px solid rgba(255,255,255,.06)', paddingTop: 20, marginTop: 4, display: 'flex', flexDirection: 'column', gap: 16 }}>
+                      {talent.interpretation.overview && (
+                        <p style={{ color: 'rgba(255,255,255,.58)', fontSize: '.88rem', lineHeight: 1.65 }}>{talent.interpretation.overview}</p>
+                      )}
+                      {talent.interpretation.how_to_use?.length > 0 && (
+                        <div>
+                          <p style={{ color: c.color, fontSize: '.8rem', fontWeight: 700, marginBottom: 8 }}>✦ Jak wykorzystać ten talent:</p>
+                          <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 5 }}>
+                            {talent.interpretation.how_to_use.map((tip, i) => (
+                              <li key={i} style={{ color: 'rgba(255,255,255,.58)', fontSize: '.85rem', lineHeight: 1.55 }}>{tip}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {talent.interpretation.watch_out?.length > 0 && (
+                        <div>
+                          <p style={{ color: '#fbbf24', fontSize: '.8rem', fontWeight: 700, marginBottom: 8 }}>⚠️ Na co uważać:</p>
+                          <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 5 }}>
+                            {talent.interpretation.watch_out.map((w, i) => (
+                              <li key={i} style={{ color: 'rgba(255,255,255,.58)', fontSize: '.85rem', lineHeight: 1.55 }}>{w}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })}
         </div>
 
-        {/* Category Distribution */}
         {report.category_scores && (
-          <div className="glass-card-active p-6 mb-8">
-            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-              📊 Rozkład Kategorii
+          <div className="sr-glass sr-fadein" style={{ padding: 28, marginBottom: 24, animationDelay: '500ms' }}>
+            <h2 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span>📊</span><span>Rozkład Kategorii</span>
             </h2>
-            <div className="grid md:grid-cols-2 gap-4">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(190px,1fr))', gap: 12 }}>
               {Object.entries(report.category_scores).map(([catId, catData]) => {
-                const categoryInfo = getCategoryInfo(catId);
-                const colorClasses = getCategoryColorClasses(catId);
-                
+                const catInfo = getCategoryInfo(catId);
+                const c = getCat(catId);
                 return (
-                  <div
-                    key={catId}
-                    className="bg-slate-800/30 p-4 rounded-lg border border-slate-700/50"
-                  >
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xl">{categoryInfo?.icon || '⭐'}</span>
-                      <h3 className={`font-bold ${colorClasses.text}`}>
-                        {categoryInfo?.name || catId}
-                      </h3>
+                  <div key={catId} className="sr-cat-mini">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                      <span style={{ fontSize: '1.1rem' }}>{catInfo?.icon || '⭐'}</span>
+                      <span style={{ color: c.color, fontWeight: 700, fontSize: '.85rem' }}>{catInfo?.name || catId}</span>
                     </div>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between text-slate-300">
-                        <span>Średni wynik:</span>
-                        <span className="font-bold">{catData.average_score.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between text-slate-300">
-                        <span>Talenty w Top 5:</span>
-                        <span className="font-bold">{catData.count_in_top5}</span>
-                      </div>
-                      <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden mt-2">
-                        <div
-                          className={`h-full ${colorClasses.bar}`}
-                          style={{ width: `${(catData.average_score / 5) * 100}%` }}
-                        ></div>
-                      </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,.45)', fontSize: '.75rem', marginBottom: 4 }}>
+                      <span>Średnni wynik</span>
+                      <span style={{ color: '#fff', fontWeight: 600 }}>{catData.average_score?.toFixed(2)}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,.45)', fontSize: '.75rem', marginBottom: 8 }}>
+                      <span>Talenty w Top 5</span>
+                      <span style={{ color: c.color, fontWeight: 700 }}>{catData.count_in_top5}</span>
+                    </div>
+                    <div className="sr-bar-track">
+                      <div className="sr-bar-fill" style={{ width: (((catData.average_score || 0) / 5) * 100) + '%', background: c.bar }} />
                     </div>
                   </div>
                 );
@@ -406,33 +337,42 @@ export default function StrengthsResults() {
           </div>
         )}
 
-        {/* Dominant Category */}
-        {report.dominant_category && (
-          <div className="glass-card-active p-6 mb-8 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-950/30 to-indigo-950/30"></div>
-            <div className="relative z-10">
-              <h2 className="text-xl font-bold text-purple-400 mb-3 flex items-center gap-2">
-                👑 Twoja Dominująca Kategoria
-              </h2>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-3xl">{report.dominant_category.icon}</span>
-                <div>
-                  <h3 className="text-2xl font-bold text-white">
-                    {report.dominant_category.name}
-                  </h3>
-                  <p className="text-slate-300 text-sm">
-                    {report.dominant_category.name_en}
-                  </p>
-                </div>
-              </div>
-              {report.dominant_category.description && (
-                <p className="text-slate-300 text-sm leading-relaxed">
-                  {report.dominant_category.description}
+        {report.dominant_category && (() => {
+          const c = getCat(report.dominant_category.id || 'strategic_thinking');
+          return (
+            <div className="sr-glass sr-fadein" style={{ padding: 28, marginBottom: 32, animationDelay: '600ms', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08),' + c.shadow + ',0 8px 32px -4px rgba(0,0,0,.6)' }}>
+              <div style={{ position: 'absolute', width: 160, height: 160, borderRadius: '50%', background: c.color, filter: 'blur(70px)', opacity: .07, top: -40, right: -40, pointerEvents: 'none' }} />
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <p style={{ color: c.color, fontSize: '.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 14 }}>
+                  👑 Twoja Dominująca Kategoria
                 </p>
-              )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
+                  <span style={{ fontSize: '2.2rem' }}>{report.dominant_category.icon}</span>
+                  <div>
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff', lineHeight: 1.1 }}>{report.dominant_category.name}</h3>
+                    <p style={{ color: 'rgba(255,255,255,.38)', fontSize: '.8rem' }}>{report.dominant_category.name_en}</p>
+                  </div>
+                </div>
+                {report.dominant_category.description && (
+                  <p style={{ color: 'rgba(255,255,255,.55)', fontSize: '.88rem', lineHeight: 1.65 }}>{report.dominant_category.description}</p>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
+
+        <div className="sr-fadein" style={{ animationDelay: '700ms' }}>
+          <AiInterpretation
+            interpretation={interpretation}
+            loading={interpLoading}
+            error={interpError}
+            onRegenerate={handleRegenerate}
+            onRetry={() => rawScores && generateInterpretation(rawScores)}
+            accentColor="#34d399"
+            accentGlow="rgba(52,211,153,.5)"
+            testLabel="Test Talentów"
+          />
+        </div>
 
       </div>
     </div>

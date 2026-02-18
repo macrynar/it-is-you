@@ -252,5 +252,48 @@ Zasady:
 - Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
   }
 
+  if (testType === 'STRENGTHS') {
+    const top5 = (report?.top_5 as Array<{ name: string; name_en?: string; category: string; score?: number }> | undefined) ?? []
+    const talentList = top5.map((t, i) =>
+      `${i + 1}. **${t.name}** (${t.name_en ?? ''}) — kategoria: ${t.category}, wynik: ${t.score?.toFixed(2) ?? '?'}/5.00`
+    ).join('\n')
+
+    return `Jesteś doświadczonym coachem kariery i psychologiem specjalizującym się w odkrywaniu talentów oraz mocnych stronach osobowości. Na podstawie wyników testu talentów napisz głęboką, spersonalizowaną interpretację w języku polskim.
+
+Top 5 talentów badanej osoby:
+${talentList}
+
+Napisz interpretację w formacie Markdown z DOKŁADNIE następującą strukturą:
+
+## Twój unikalny profil talentów
+
+[2–3 zdania opisujące ogólny wzorzec — jak te 5 talentów razem tworzy spójny obraz tej osoby i jej naturalnego sposobu działania]
+
+## Dominujące mocne strony
+
+[Opisz 2–3 najwyżej wypadające talenty (z listy Top 5). Dla każdego: bold tytuł + 1–2 zdania pokazujące, jak ten talent przejawia się w codziennym życiu, pracy i relacjach. Przykład: **Analityk** Twój umysł naturalnie szuka danych i dowodów...]
+
+## Jak te talenty współpracują
+
+[Opisz synergie między talentami — jak jeden talent wzmacnia lub uzupełnia drugi. Pokaż, jak razem tworzą unikalny styl działania.]
+
+## Twoje naturalne środowiska
+
+[Opisz 2–3 typy środowisk, sytuacji lub ról, w których ta osoba będzie rozkwitać, korzystając ze swoich talentów. Każde z bold tytułem: **W pracy:** tekst]
+
+## Obszary do świadomego rozwoju
+
+[1–2 potencjalne ślepe plamki lub tendencje, na które warto zwrócić uwagę. Bez negatywnej oceny — jako informacja o balansie.]
+
+---
+*[Jedno zdanie — krótka "esencja" tego profilu talentów, np. "Jesteś osobą, która..."]*
+
+Zasady:
+- Pisz bezpośrednio do osoby, w 2. osobie
+- Ton: inspirujący, wzmacniający, psychologicznie precyzyjny
+- Koncentruj się na mocnych stronach i potencjale
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
+  }
+
   return `Napisz krótką interpretację wyników psychometrycznych dla testu "${testType}" w języku polskim.`
 }
