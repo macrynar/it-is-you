@@ -1,667 +1,305 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, RefreshCw, Share2, Download } from 'lucide-react';
+import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { HEXACO_TEST } from '../../data/tests/hexaco.js';
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer } from 'recharts';
+
+const ACCENT = {
+  honesty_humility: { plName:'Szczerość', name:'Honesty-Humility', color:'#38b6ff', gradient:'linear-gradient(90deg,#1a6aff,#38b6ff)', glow:'rgba(56,182,255,.5)', blob:'#38b6ff', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(56,182,255,.35),0 0 30px -4px rgba(56,182,255,.3),0 16px 48px -6px rgba(0,0,0,.7)' },
+  emotionality:     { plName:'Emocjonalność', name:'Emotionality', color:'#ff9532', gradient:'linear-gradient(90deg,#a04000,#ff9532)', glow:'rgba(255,149,50,.5)', blob:'#ff9532', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(255,149,50,.35),0 0 30px -4px rgba(255,149,50,.25),0 16px 48px -6px rgba(0,0,0,.7)' },
+  extraversion:     { plName:'Ekstrawersja', name:'Extraversion', color:'#b08fff', gradient:'linear-gradient(90deg,#4a28b0,#b08fff)', glow:'rgba(123,94,167,.6)', blob:'#7b5ea7', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(123,94,167,.4),0 0 30px -4px rgba(123,94,167,.3),0 16px 48px -6px rgba(0,0,0,.7)' },
+  agreeableness:    { plName:'Ugodowość', name:'Agreeableness', color:'#40e0d0', gradient:'linear-gradient(90deg,#006060,#40e0d0)', glow:'rgba(64,224,208,.5)', blob:'#40e0d0', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(64,224,208,.35),0 0 30px -4px rgba(64,224,208,.25),0 16px 48px -6px rgba(0,0,0,.7)' },
+  conscientiousness:{ plName:'Sumienność', name:'Conscientiousness', color:'#00e5a0', gradient:'linear-gradient(90deg,#007a50,#00e5a0)', glow:'rgba(0,229,160,.5)', blob:'#00e5a0', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(0,229,160,.35),0 0 30px -4px rgba(0,229,160,.25),0 16px 48px -6px rgba(0,0,0,.7)' },
+  openness:         { plName:'Otwartość', name:'Openness', color:'#e878e0', gradient:'linear-gradient(90deg,#7b1fa2,#e878e0)', glow:'rgba(200,80,192,.5)', blob:'#c850c0', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(200,80,192,.4),0 0 30px -4px rgba(200,80,192,.3),0 16px 48px -6px rgba(0,0,0,.7)' },
+};
+
+const DIM_ORDER = ['honesty_humility','emotionality','extraversion','agreeableness','conscientiousness','openness'];
+const DIM_EMOJI = { honesty_humility:'⚖️', emotionality:'💜', extraversion:'💬', agreeableness:'🤝', conscientiousness:'📋', openness:'✨' };
+const DIM_LABEL = { honesty_humility:'Honesty', emotionality:'Emocjonalność', extraversion:'Ekstrawersja', agreeableness:'Ugodowość', conscientiousness:'Sumienność', openness:'Otwartość' };
+
+const CX = 210, CY = 210, MAX_R = 155;
+function pt(i, pct) { const a = (i * 60 - 90) * Math.PI / 180; const r = (pct / 100) * MAX_R; return [CX + r * Math.cos(a), CY + r * Math.sin(a)]; }
+function ringPts(pct) { return DIM_ORDER.map((_, i) => pt(i, pct).join(',')).join(' '); }
+
+const CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+.hr-root{font-family:'Space Grotesk',sans-serif;background:#0d0f2b;color:#fff;min-height:100vh;overflow-x:hidden;}
+.hr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(56,182,255,.1) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(123,94,167,.14) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
+.hr-glass{background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:20px;position:relative;isolation:isolate;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6),0 2px 8px -2px rgba(0,0,0,.4);}
+.hr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(56,182,255,.2) 35%,rgba(123,94,167,.15) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.hr-stat-card{border-radius:16px;cursor:pointer;overflow:hidden;position:relative;isolation:isolate;transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;}
+.hr-stat-card::after{content:'';position:absolute;width:120px;height:120px;border-radius:50%;filter:blur(45px);bottom:-40px;right:-30px;opacity:.18;pointer-events:none;z-index:-1;transition:opacity .3s,transform .3s;}
+.hr-stat-card:hover::after{opacity:.35;transform:scale(1.2);}
+.hr-glow-line{position:absolute;bottom:0;left:15%;right:15%;height:1px;border-radius:100px;opacity:0;transition:opacity .3s;}
+.hr-stat-card:hover .hr-glow-line{opacity:1;}
+.hr-pfill{height:100%;border-radius:100px;position:relative;}
+.hr-pfill::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.6);}
+.hr-tbar{height:100%;border-radius:100px;position:relative;}
+.hr-tbar::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:inherit;box-shadow:0 0 8px currentColor;}
+.hr-radar-shape{animation:radarIn 1s cubic-bezier(.22,.68,0,1.1) forwards;}
+.hr-radar-dot{animation:radarIn 1s cubic-bezier(.22,.68,0,1.1) .2s both;}
+@keyframes radarIn{from{opacity:0;}to{opacity:1;}}
+@keyframes spinLoader{to{transform:rotate(360deg);}}
+@keyframes shimmer{0%{background-position:-600px 0;}100%{background-position:600px 0;}}
+.hr-shimmer{background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.05) 75%);background-size:600px 100%;animation:shimmer 1.8s ease-in-out infinite;}
+`;
+
+const G = { background:'rgba(16,20,56,.6)', backdropFilter:'blur(24px) saturate(180%)', WebkitBackdropFilter:'blur(24px) saturate(180%)', border:'1px solid rgba(255,255,255,.07)', boxShadow:'inset 0 1px 0 rgba(255,255,255,.1),0 8px 32px -4px rgba(0,0,0,.6)', borderRadius:20 };
+
+const labelAnchors = [
+  { id:'honesty_humility', lx:210, ly:33  },
+  { id:'emotionality',     lx:376, ly:100 },
+  { id:'extraversion',     lx:376, ly:320 },
+  { id:'agreeableness',    lx:210, ly:390 },
+  { id:'conscientiousness',lx:44,  ly:320 },
+  { id:'openness',         lx:44,  ly:100 },
+];
 
 export default function HexacoResults() {
-  const [results, setResults] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [results,        setResults]        = useState(null);
+  const [loading,        setLoading]        = useState(true);
+  const [error,          setError]          = useState(null);
   const [interpretation, setInterpretation] = useState(null);
-  const [interpretationLoading, setInterpretationLoading] = useState(false);
-  const [interpretationError, setInterpretationError] = useState(null);
+  const [interpLoading,  setInterpLoading]  = useState(false);
+  const [interpError,    setInterpError]    = useState(null);
 
-  useEffect(() => {
-    loadResults();
-  }, []);
+  useEffect(() => { loadResults(); }, []);
 
   const loadResults = async () => {
     try {
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      
-      if (userError || !user) {
-        throw new Error('Nie jesteś zalogowany');
-      }
-
-      // Get latest HEXACO test result
-      const { data, error: fetchError } = await supabase
-        .from('user_psychometrics')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('test_type', 'HEXACO')
-        .order('completed_at', { ascending: false })
-        .limit(1);
-
-      if (fetchError) throw fetchError;
-
-      if (!data || data.length === 0) {
-        setError('Nie znaleziono wyników testu. Wykonaj test ponownie.');
-        setLoading(false);
-        return;
-      }
-
+      const { data: { user }, error: ue } = await supabase.auth.getUser();
+      if (ue || !user) throw new Error('Nie jesteś zalogowany');
+      const { data, error: fe } = await supabase
+        .from('user_psychometrics').select('*')
+        .eq('user_id', user.id).eq('test_type', 'HEXACO')
+        .order('completed_at', { ascending: false }).limit(1);
+      if (fe) throw fe;
+      if (!data?.length) { setError('Nie znaleziono wyników testu.'); setLoading(false); return; }
       setResults(data[0]);
       setLoading(false);
       loadInterpretation(data[0]);
-    } catch (err) {
-      console.error('Error loading results:', err);
-      setError(err.message);
-      setLoading(false);
-    }
+    } catch (err) { setError(err.message); setLoading(false); }
   };
 
-  const loadInterpretation = async (testResult) => {
-    setInterpretationLoading(true);
-    setInterpretationError(null);
+  const loadInterpretation = async (r) => {
+    setInterpLoading(true); setInterpError(null);
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData?.session?.access_token;
-      if (!token) throw new Error('Brak sesji użytkownika');
-
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-      const fnUrl = `${supabaseUrl}/functions/v1/interpret-test`;
-
-      const res = await fetch(fnUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-          'apikey': supabaseAnonKey,
-        },
-        body: JSON.stringify({
-          test_type: 'HEXACO',
-          percentile_scores: testResult.percentile_scores,
-          raw_scores: testResult.raw_scores
-        })
-      });
-
-      if (!res.ok) {
-        const errText = await res.text();
-        console.error('Edge function error:', res.status, errText);
-        throw new Error(`HTTP ${res.status}`);
-      }
-
-      const data = await res.json();
-      setInterpretation(data?.interpretation ?? null);
-    } catch (err) {
-      console.error('Interpretation error:', err);
-      setInterpretationError('Nie udało się wygenerować interpretacji.');
-    } finally {
-      setInterpretationLoading(false);
-    }
+      const { data: s } = await supabase.auth.getSession();
+      const token = s?.session?.access_token;
+      if (!token) throw new Error('Brak sesji');
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/interpret-test`,
+        { method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':`Bearer ${token}`, 'apikey':import.meta.env.VITE_SUPABASE_ANON_KEY }, body:JSON.stringify({ test_type:'HEXACO', percentile_scores:r.percentile_scores, raw_scores:r.raw_scores }) }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const d = await res.json();
+      setInterpretation(d?.interpretation ?? null);
+    } catch (err) { setInterpError('Nie udało się wygenerować interpretacji.'); }
+    finally { setInterpLoading(false); }
   };
 
-  const regenerateInterpretation = async () => {
+  const regenerate = async () => {
     if (!results) return;
-    const { data: sessionData } = await supabase.auth.getSession();
-    const token = sessionData?.session?.access_token;
-    if (!token) return;
-    // Delete cache first so edge function regenerates
-    await supabase
-      .from('ai_interpretations')
-      .delete()
-      .eq('test_type', 'HEXACO');
+    await supabase.from('ai_interpretations').delete().eq('test_type','HEXACO');
     setInterpretation(null);
     loadInterpretation(results);
   };
 
-  const handleRetakeTest = () => {
-    if (confirm('Czy na pewno chcesz wykonać test ponownie? Obecne wyniki zostaną zastąpione.')) {
-      window.location.href = '/test';
-    }
+  const handleRetake = () => {
+    if (confirm('Czy na pewno chcesz wykonać test ponownie?')) window.location.href = '/test';
   };
 
-  // Get progress bar color based on percentile
-  const getProgressBarColor = (percentile) => {
-    if (percentile >= 80) {
-      return 'from-emerald-500 to-cyan-500'; // High - Neon Green/Cyan
-    } else if (percentile >= 50) {
-      return 'from-blue-500 to-purple-500'; // Medium - Blue/Purple
-    } else if (percentile >= 30) {
-      return 'from-yellow-500 to-orange-500'; // Below average - Yellow/Orange
-    } else {
-      return 'from-orange-500 to-red-500'; // Low - Orange/Red
-    }
-  };
-
-  // Get glow color for high scores
-  const getGlowColor = (percentile) => {
-    if (percentile >= 80) {
-      return 'shadow-[0_0_20px_rgba(16,185,129,0.4)]';
-    }
-    return '';
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-slate-400 text-lg">Ładowanie wyników...</p>
-        </div>
+  if (loading) return (
+    <><style>{CSS}</style>
+    <div className="hr-root" style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'100vh'}}>
+      <div style={{textAlign:'center'}}>
+        <div style={{width:44,height:44,border:'3px solid rgba(56,182,255,.25)',borderTopColor:'#38b6ff',borderRadius:'50%',animation:'spinLoader 1s linear infinite',margin:'0 auto 16px'}}/>
+        <p style={{color:'rgba(255,255,255,.4)',fontSize:13}}>Ładowanie wyników...</p>
       </div>
-    );
-  }
+    </div></>
+  );
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-        <div className="bg-black/40 backdrop-blur-xl p-8 rounded-2xl border border-red-500/30 text-center max-w-md">
-          <div className="text-red-400 text-5xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-white mb-4">Błąd</h2>
-          <p className="text-slate-300 mb-6">{error}</p>
-          <button
-            onClick={() => window.location.href = '/user-profile-tests.html'}
-            className="btn-neural"
-          >
-            Wróć do Dashboardu
-          </button>
-        </div>
+  if (error) return (
+    <><style>{CSS}</style>
+    <div className="hr-root" style={{display:'flex',alignItems:'center',justifyContent:'center',padding:24,minHeight:'100vh'}}>
+      <div className="hr-glass" style={{...G,padding:40,textAlign:'center',maxWidth:380}}>
+        <div style={{fontSize:44,marginBottom:16}}>⚠️</div>
+        <p style={{color:'rgba(255,255,255,.7)',marginBottom:24,lineHeight:1.6}}>{error}</p>
+        <button onClick={()=>window.location.href='/user-profile-tests.html'} style={{background:'linear-gradient(135deg,#1a6aff,#38b6ff)',color:'#fff',border:'none',borderRadius:10,padding:'12px 24px',fontWeight:700,cursor:'pointer',fontFamily:'inherit',fontSize:14}}>Wróć do Dashboardu</button>
       </div>
-    );
-  }
+    </div></>
+  );
 
-  const dimensionIcons = {
-    honesty_humility: '🎭',
-    emotionality: '💭',
-    extraversion: '⚡',
-    agreeableness: '🤝',
-    conscientiousness: '📋',
-    openness: '🌟'
-  };
-
-  // Icon paths for radar chart vertices
-  const radarTickIcons = {
-    'Honesty-Humility': {
-      emoji: '⚖️',
-      color: '#a78bfa'
-    },
-    'Emotionality': {
-      emoji: '💜',
-      color: '#f472b6'
-    },
-    'Extraversion': {
-      emoji: '💬',
-      color: '#60a5fa'
-    },
-    'Agreeableness': {
-      emoji: '🤝',
-      color: '#34d399'
-    },
-    'Conscientiousness': {
-      emoji: '📋',
-      color: '#fbbf24'
-    },
-    'Openness': {
-      emoji: '🌟',
-      color: '#f87171'
-    },
-  };
-
-  const CustomRadarTick = ({ x, y, payload }) => {
-    const cfg = radarTickIcons[payload.value] || { emoji: '●', color: '#94a3b8' };
-    const label = payload.value;
-    const charWidth = 7.5;
-    const pillW = Math.max(label.length * charWidth + 28, 90);
-    const pillH = 22;
-    const emojiSize = 18;
-    const gap = 5;
-
-    return (
-      <g>
-        {/* Icon circle background */}
-        <circle cx={x} cy={y - pillH / 2 - gap - emojiSize / 2 + 2} r={14}
-          fill="rgba(10,16,35,0.9)" stroke={cfg.color + '55'} strokeWidth={1.5} />
-        {/* Emoji icon */}
-        <text x={x} y={y - pillH / 2 - gap - emojiSize / 2 + 2}
-          textAnchor="middle" dominantBaseline="central" fontSize={14}>
-          {cfg.emoji}
-        </text>
-        {/* Label pill background */}
-        <rect x={x - pillW / 2} y={y - pillH / 2}
-          width={pillW} height={pillH} rx={6}
-          fill="rgba(10,16,35,0.88)" stroke={cfg.color + '44'} strokeWidth={1} />
-        {/* Label text */}
-        <text x={x} y={y}
-          textAnchor="middle" dominantBaseline="central"
-          fill="#cbd5e1" fontSize={11} fontWeight="600">
-          {label}
-        </text>
-      </g>
-    );
-  };
+  const sorted   = DIM_ORDER.map(id => ({ id, pct: Math.round(results.percentile_scores[id] ?? 0) })).sort((a,b) => b.pct - a.pct);
+  const highest  = sorted[0];
+  const lowest   = sorted[sorted.length - 1];
+  const avg      = Math.round(sorted.reduce((s,d) => s + d.pct, 0) / sorted.length);
+  const shapePts = DIM_ORDER.map((id,i) => pt(i, results.percentile_scores[id] ?? 0).join(',')).join(' ');
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      {/* Header */}
-      <div className="border-b border-white/5 bg-black/40 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => window.location.href = '/user-profile-tests.html'}
-              className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
-            >
-              <ArrowLeft size={20} />
-              <span>Dashboard</span>
-            </button>
-            
-            <button
-              onClick={handleRetakeTest}
-              className="btn-ghost flex items-center gap-2"
-            >
-              <RefreshCw size={18} />
-              <span>Powtórz Test</span>
-            </button>
-          </div>
-        </div>
-      </div>
+    <><style>{CSS}</style>
+    <div className="hr-root">
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        
-        {/* Hero Section - Mission Report Style */}
-        <div className="text-center mb-16 relative">
-          {/* Glow effect */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
-          
-          <div className="relative">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-bold uppercase tracking-wider mb-6">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-              Status: Ukończono
+      <nav style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 40px',borderBottom:'1px solid rgba(255,255,255,.05)',backdropFilter:'blur(20px)',position:'sticky',top:0,zIndex:100,background:'rgba(13,15,43,.88)'}}>
+        <button onClick={()=>window.location.href='/user-profile-tests.html'} style={{display:'flex',alignItems:'center',gap:8,background:'none',border:'none',color:'rgba(255,255,255,.5)',cursor:'pointer',fontFamily:'inherit',fontSize:14,fontWeight:500,padding:0}} onMouseEnter={e=>e.currentTarget.style.color='#fff'} onMouseLeave={e=>e.currentTarget.style.color='rgba(255,255,255,.5)'}>
+          <ArrowLeft size={18}/> Dashboard
+        </button>
+        <button onClick={handleRetake} style={{display:'flex',alignItems:'center',gap:8,background:'rgba(255,255,255,.05)',border:'1px solid rgba(255,255,255,.1)',color:'rgba(255,255,255,.55)',cursor:'pointer',fontFamily:'inherit',fontSize:13,fontWeight:600,borderRadius:8,padding:'8px 16px'}} onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,.1)';e.currentTarget.style.color='#fff';}} onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,.05)';e.currentTarget.style.color='rgba(255,255,255,.55)';}}>
+          <RefreshCw size={14}/> Powtórz Test
+        </button>
+      </nav>
+
+      <div style={{maxWidth:1160,margin:'0 auto',padding:'48px 40px 80px',position:'relative',zIndex:1}}>
+
+        <header style={{textAlign:'center',marginBottom:40}}>
+          <div style={{display:'inline-flex',alignItems:'center',gap:8,padding:'8px 18px',borderRadius:100,background:'rgba(56,182,255,.1)',border:'1px solid rgba(56,182,255,.25)',fontSize:13,fontWeight:600,color:'#38b6ff',letterSpacing:'.5px',marginBottom:14}}>🧠 Personality Radar</div>
+          <h1 style={{fontSize:32,fontWeight:800,letterSpacing:'-.5px',margin:'0 0 8px'}}>Twoje wyniki <span style={{color:'#38b6ff'}}>HEXACO-60</span></h1>
+          <p style={{fontSize:14,color:'rgba(255,255,255,.35)',margin:0}}><strong style={{color:'rgba(255,255,255,.55)',fontWeight:500}}>HEXACO / Big Five Test</strong> · Pokazuje jak reagujesz, pracujesz i radzisz sobie z konfliktami</p>
+        </header>
+
+        <div style={{display:'grid',gridTemplateColumns:'1fr 360px',gap:24,marginBottom:24}}>
+
+          <div className="hr-glass" style={{...G,padding:36}}>
+            <div style={{fontSize:11,fontWeight:600,letterSpacing:'3px',textTransform:'uppercase',color:'rgba(255,255,255,.3)',marginBottom:28,display:'flex',alignItems:'center',gap:12}}>
+              Mapa Osobowości <span style={{flex:1,height:1,background:'linear-gradient(90deg,rgba(56,182,255,.2),transparent)'}}/>
             </div>
-            
-            <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-cyan-200 to-white bg-clip-text text-transparent tracking-tight">
-              ANALIZA UKOŃCZONA
-            </h1>
-            
-            <div className="flex items-center justify-center gap-4 text-slate-500 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-1 h-1 rounded-full bg-cyan-500"></div>
-                <span>HEXACO-60 Test Osobowości</span>
-              </div>
-              <div className="w-1 h-1 rounded-full bg-slate-700"></div>
-              <div className="flex items-center gap-2">
-                <span>{new Date(results.completed_at).toLocaleDateString('pl-PL', { 
-                  day: '2-digit', 
-                  month: '2-digit', 
-                  year: 'numeric'
-                })}</span>
-                <span className="text-slate-700">•</span>
-                <span>{new Date(results.completed_at).toLocaleTimeString('pl-PL', { 
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}</span>
-              </div>
+            <div style={{display:'flex',justifyContent:'center'}}>
+              <svg viewBox="0 0 420 420" style={{width:'100%',maxWidth:420,height:'auto',overflow:'visible'}}>
+                <defs>
+                  <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#38b6ff" stopOpacity=".35"/>
+                    <stop offset="100%" stopColor="#7b5ea7" stopOpacity=".25"/>
+                  </linearGradient>
+                </defs>
+                {[20,40,60,80,100].map(p => <polygon key={p} points={ringPts(p)} fill="none" stroke="rgba(255,255,255,.07)" strokeWidth="1"/>)}
+                {DIM_ORDER.map((_,i) => { const [ex,ey]=pt(i,100); return <line key={i} x1={CX} y1={CY} x2={ex} y2={ey} stroke="rgba(255,255,255,.1)" strokeWidth="1"/>; })}
+                <polygon className="hr-radar-shape" points={shapePts} fill="url(#rg)" stroke="#38b6ff" strokeWidth="2" style={{filter:'drop-shadow(0 0 12px rgba(56,182,255,.45))'}}/>
+                {DIM_ORDER.map((id,i) => { const [px,py]=pt(i,results.percentile_scores[id]??0); return <circle key={id} className="hr-radar-dot" cx={px} cy={py} r="4" fill="#38b6ff" style={{filter:'drop-shadow(0 0 6px #38b6ff)'}}/>; })}
+                {labelAnchors.map(({id,lx,ly}) => {
+                  const txt=`${DIM_EMOJI[id]} ${DIM_LABEL[id]}`;
+                  const w=Math.max(txt.length*7.2+16,82);
+                  return <g key={id}><rect x={lx-w/2} y={ly-12} width={w} height={23} rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" strokeWidth="1"/><text x={lx} y={ly+4} textAnchor="middle" style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:11,fontWeight:600,fill:'rgba(255,255,255,.75)'}}>{txt}</text></g>;
+                })}
+              </svg>
             </div>
           </div>
-        </div>
 
-        {/* Radar Chart Section */}
-        <div className="bg-gradient-to-br from-indigo-950/40 to-purple-950/40 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-indigo-500/20 mb-16 relative overflow-hidden">
-          {/* Background glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
-          
-          <div className="relative">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full mb-4">
-                <span className="text-2xl">🧠</span>
-                <span className="text-sm font-semibold text-slate-300">Personality Radar</span>
-              </div>
-              <p className="text-slate-400 text-sm">
-                HEXACO / Big Five Test • Shows how you react, work, and handle conflicts
-              </p>
+          <div className="hr-glass" style={{...G,padding:'28px 24px',display:'flex',flexDirection:'column',gap:18}}>
+            <div style={{fontSize:11,fontWeight:600,letterSpacing:'3px',textTransform:'uppercase',color:'rgba(255,255,255,.3)'}}>Profil</div>
+            <div style={{background:'rgba(56,182,255,.06)',border:'1px solid rgba(56,182,255,.18)',borderRadius:14,padding:18}}>
+              <div style={{fontSize:10,fontWeight:600,letterSpacing:'2.5px',textTransform:'uppercase',color:'#38b6ff',marginBottom:6}}>Dominująca cecha</div>
+              <div style={{fontSize:21,fontWeight:800,letterSpacing:'-.3px',marginBottom:3}}>{ACCENT[highest.id]?.plName}</div>
+              <div style={{fontSize:12,color:'rgba(255,255,255,.4)'}}>{ACCENT[highest.id]?.name}</div>
+              <div style={{display:'inline-flex',alignItems:'center',gap:6,marginTop:10,fontSize:11,fontWeight:600,color:'#b08fff',background:'rgba(123,94,167,.12)',border:'1px solid rgba(123,94,167,.25)',padding:'4px 10px',borderRadius:100}}>💎 Wynik: {highest.pct}% · Śr: {avg}%</div>
             </div>
-
-            {/* Radar Chart */}
-            <div className="bg-white/5 rounded-2xl p-4 border border-white/10 mb-8">
-              <ResponsiveContainer width="100%" height={520}>
-                <RadarChart
-                  data={HEXACO_TEST.dimensions.map(dim => {
-                    const shortLabels = {
-                      'honesty_humility': 'Honesty-Humility',
-                      'emotionality': 'Emotionality',
-                      'extraversion': 'Extraversion',
-                      'agreeableness': 'Agreeableness',
-                      'conscientiousness': 'Conscientiousness',
-                      'openness': 'Openness'
-                    };
-                    return {
-                      dimension: shortLabels[dim.id] || dim.name,
-                      value: Math.round(results.percentile_scores[dim.id]),
-                    };
-                  })}
-                  margin={{ top: 60, right: 80, bottom: 60, left: 80 }}
-                  outerRadius="62%"
-                >
-                  <PolarGrid
-                    stroke="#334155"
-                    strokeWidth={1}
-                    strokeOpacity={0.5}
-                  />
-                  <PolarAngleAxis
-                    dataKey="dimension"
-                    tick={<CustomRadarTick />}
-                    tickLine={false}
-                  />
-                  <Radar
-                    dataKey="value"
-                    stroke="#8b5cf6"
-                    fill="#8b5cf6"
-                    fillOpacity={0.55}
-                    strokeWidth={2.5}
-                    dot={{ fill: '#8b5cf6', r: 4, strokeWidth: 0 }}
-                  />
-                </RadarChart>
-              </ResponsiveContainer>
-            </div>
-
-            {/* Dimension Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {HEXACO_TEST.dimensions.map((dimension) => {
-                const percentile = results.percentile_scores[dimension.id];
-                const report = results.report?.dimensions?.find(d => d.id === dimension.id);
-                
-                return (
-                  <div key={dimension.id} className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-indigo-400/30 transition-all">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-white font-semibold text-sm">
-                        {dimension.name.split('-')[0]}
-                      </h3>
-                      <span className="text-indigo-400 font-bold text-lg">
-                        {Math.round(percentile)}%
-                      </span>
-                    </div>
-                    {/* Progress bar */}
-                    <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden mb-2">
-                      <div 
-                        className={`h-full bg-gradient-to-r ${getProgressBarColor(percentile)} transition-all duration-1000`}
-                        style={{ width: `${percentile}%` }}
-                      />
-                    </div>
-                    <p className="text-slate-400 text-xs leading-relaxed">
-                      {report?.interpretation?.keywords || dimension.description.substring(0, 50) + '...'}
-                    </p>
+            <div style={{height:1,background:'rgba(255,255,255,.07)'}}/>
+            <div style={{fontSize:11,fontWeight:600,letterSpacing:'3px',textTransform:'uppercase',color:'rgba(255,255,255,.3)'}}>Dominujące cechy</div>
+            <div style={{display:'flex',flexDirection:'column',gap:10}}>
+              {sorted.slice(0,5).map(({id,pct}) => {
+                const ac=ACCENT[id];
+                return <div key={id} style={{display:'flex',alignItems:'center',gap:10}}>
+                  <span style={{fontSize:12,fontWeight:600,color:'rgba(255,255,255,.6)',width:108,flexShrink:0}}>{ac.plName}</span>
+                  <div style={{flex:1,height:4,background:'rgba(255,255,255,.07)',borderRadius:100,overflow:'visible',position:'relative'}}>
+                    <div className="hr-tbar" style={{width:`${pct}%`,height:'100%',background:ac.gradient,boxShadow:`0 0 8px ${ac.glow}`,borderRadius:100}}/>
                   </div>
-                );
+                  <span style={{fontSize:12,fontWeight:700,minWidth:32,textAlign:'right',color:ac.color}}>{pct}%</span>
+                </div>;
               })}
             </div>
+            <div style={{height:1,background:'rgba(255,255,255,.07)'}}/>
+            <div style={{background:'rgba(123,94,167,.08)',border:'1px solid rgba(123,94,167,.2)',borderRadius:12,padding:16,fontSize:13,lineHeight:1.65,color:'rgba(255,255,255,.52)'}}>
+              <strong style={{color:'rgba(255,255,255,.85)',fontWeight:600}}>Twój dominujący wymiar to {ACCENT[highest.id]?.plName}</strong>, a największy potencjał wzrostu leży w obszarze <strong style={{color:'rgba(255,255,255,.85)',fontWeight:600}}>{ACCENT[lowest.id]?.plName}</strong>.
+            </div>
           </div>
         </div>
 
-        {/* Dimensions Grid - HUD Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {HEXACO_TEST.dimensions.map((dimension) => {
-            const score = results.raw_scores[dimension.id];
-            const percentile = results.percentile_scores[dimension.id];
-            const report = results.report?.dimensions?.find(d => d.id === dimension.id);
-            
-            return (
-              <div
-                key={dimension.id}
-                className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-slate-800 hover:border-slate-700 transition-all duration-300 group"
-              >
-                {/* Header */}
-                <div className="flex items-start justify-between mb-6">
-                  <div className="text-4xl opacity-80 group-hover:scale-110 transition-transform duration-300">
-                    {dimensionIcons[dimension.id]}
+        <div style={{marginBottom:24}}>
+          <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:20}}>
+            <span style={{fontSize:11,fontWeight:600,letterSpacing:'3px',textTransform:'uppercase',color:'rgba(255,255,255,.3)'}}>Szczegółowe wyniki</span>
+            <span style={{flex:1,height:1,background:'linear-gradient(90deg,rgba(56,182,255,.2),transparent)'}}/>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16}}>
+            {DIM_ORDER.map(id => {
+              const ac=ACCENT[id];
+              const pct=Math.round(results.percentile_scores[id]??0);
+              const dim=HEXACO_TEST.dimensions.find(d=>d.id===id);
+              return <div key={id} className="hr-glass hr-stat-card" style={{...G,padding:'22px 22px 20px'}}
+                onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-5px) scale(1.01)';e.currentTarget.style.boxShadow=ac.hover;}}
+                onMouseLeave={e=>{e.currentTarget.style.transform='';e.currentTarget.style.boxShadow=G.boxShadow;}}>
+                <div style={{position:'absolute',width:120,height:120,borderRadius:'50%',filter:'blur(45px)',bottom:-40,right:-30,background:ac.blob,opacity:.18,pointerEvents:'none'}}/>
+                <div className="hr-glow-line" style={{background:ac.color,boxShadow:`0 0 10px 2px ${ac.glow}`}}/>
+                <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:14}}>
+                  <div>
+                    <div style={{fontSize:10,fontWeight:600,letterSpacing:'2px',textTransform:'uppercase',color:'rgba(255,255,255,.3)',marginBottom:4}}>{ac.plName}</div>
+                    <div style={{fontSize:16,fontWeight:700,color:'#fff',letterSpacing:'-.2px'}}>{ac.name}</div>
                   </div>
-                  <div className="text-right">
-                    <div className={`text-3xl font-bold text-white mb-1 ${getGlowColor(percentile)}`}>
-                      {Math.round(percentile)}<span className="text-xl text-slate-500">%</span>
-                    </div>
-                    <div className="text-xs text-slate-600 font-mono">
-                      {score?.toFixed(2)}/5.00
-                    </div>
-                  </div>
+                  <div style={{fontSize:22,fontWeight:800,color:ac.color,lineHeight:1,letterSpacing:'-.5px'}}>{pct}%</div>
                 </div>
-
-                {/* Dimension Name */}
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  {dimension.name}
-                </h3>
-                <p className="text-xs text-slate-500 mb-5 leading-relaxed">
-                  {dimension.description}
-                </p>
-
-                {/* Progress Bar - Thin & Elegant */}
-                <div className="mb-5">
-                  <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
-                    <div 
-                      className={`h-full bg-gradient-to-r ${getProgressBarColor(percentile)} transition-all duration-1000 relative ${getGlowColor(percentile)}`}
-                      style={{ width: `${percentile}%` }}
-                    >
-                      {/* Inner glow */}
-                      <div className={`absolute inset-0 bg-gradient-to-r ${getProgressBarColor(percentile)} blur-sm opacity-50`}></div>
-                    </div>
-                  </div>
+                <div style={{height:4,borderRadius:100,background:'rgba(255,255,255,.07)',marginBottom:12,overflow:'visible',position:'relative'}}>
+                  <div className="hr-pfill" style={{width:`${pct}%`,background:ac.gradient,boxShadow:`0 0 10px ${ac.glow}`}}/>
                 </div>
-
-                {/* Interpretation */}
-                {report?.interpretation && (
-                  <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-800">
-                    <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">
-                      {report.interpretation.level}
-                    </div>
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      {report.interpretation.description}
-                    </p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Visualization Section */}
-        <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-800 mb-16">
-          <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
-            <span className="text-cyan-400">■</span>
-            Profil Osbowości
-          </h2>
-          
-          {/* Bar Chart */}
-          <div className="space-y-6">
-            {HEXACO_TEST.dimensions.map((dimension) => {
-              const percentile = results.percentile_scores[dimension.id];
-              
-              return (
-                <div key={dimension.id} className="group">
-                  <div className="flex items-center justify-between text-sm mb-3">
-                    <span className="text-slate-400 font-medium flex items-center gap-2">
-                      <span className="text-xl">{dimensionIcons[dimension.id]}</span>
-                      {dimension.name}
-                    </span>
-                    <span className="text-white font-bold text-lg">{Math.round(percentile)}<span className="text-slate-600 text-sm">%</span></span>
-                  </div>
-                  <div className="relative">
-                    <div className="w-full h-3 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
-                      <div 
-                        className={`h-full bg-gradient-to-r ${getProgressBarColor(percentile)} transition-all duration-1000 relative group-hover:opacity-90`}
-                        style={{ width: `${percentile}%` }}
-                      >
-                        {/* Glow effect */}
-                        {percentile >= 80 && (
-                          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-cyan-500 blur-md opacity-40"></div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
+                <div style={{fontSize:12,color:'rgba(255,255,255,.35)',lineHeight:1.55}}>{(dim?.description??'').substring(0,85)}</div>
+              </div>;
             })}
           </div>
         </div>
 
-        {/* Summary Section - Mission Stats */}
-        <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-slate-800 mb-12">
-          <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
-            <span className="text-cyan-400">■</span>
-            Kluczowe Statystyki
-          </h2>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Highest Dimension */}
-            <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-xl p-6 hover:border-emerald-500/50 transition-all">
-              <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-4">
-                Dominujący Wymiar
-              </div>
-              {(() => {
-                const highest = Object.entries(results.percentile_scores)
-                  .sort((a, b) => b[1] - a[1])[0];
-                const dim = HEXACO_TEST.dimensions.find(d => d.id === highest[0]);
-                return (
-                  <div>
-                    <div className="text-3xl mb-2">{dimensionIcons[highest[0]]}</div>
-                    <div className="text-xl font-bold text-white mb-1">{dim?.name}</div>
-                    <div className="text-2xl font-bold text-emerald-400">{Math.round(highest[1])}<span className="text-sm text-emerald-600">%</span></div>
-                  </div>
-                );
-              })()}
-            </div>
-
-            {/* Lowest Dimension */}
-            <div className="bg-orange-900/20 border border-orange-500/30 rounded-xl p-6 hover:border-orange-500/50 transition-all">
-              <div className="text-xs font-bold text-orange-400 uppercase tracking-wider mb-4">
-                Obszar Rozwoju
-              </div>
-              {(() => {
-                const lowest = Object.entries(results.percentile_scores)
-                  .sort((a, b) => a[1] - b[1])[0];
-                const dim = HEXACO_TEST.dimensions.find(d => d.id === lowest[0]);
-                return (
-                  <div>
-                    <div className="text-3xl mb-2">{dimensionIcons[lowest[0]]}</div>
-                    <div className="text-xl font-bold text-white mb-1">{dim?.name}</div>
-                    <div className="text-2xl font-bold text-orange-400">{Math.round(lowest[1])}<span className="text-sm text-orange-600">%</span></div>
-                  </div>
-                );
-              })()}
-            </div>
-
-            {/* Average Score */}
-            <div className="bg-cyan-900/20 border border-cyan-500/30 rounded-xl p-6 hover:border-cyan-500/50 transition-all">
-              <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-4">
-                Średni Wynik
-              </div>
-              {(() => {
-                const avg = Object.values(results.percentile_scores)
-                  .reduce((sum, val) => sum + val, 0) / 6;
-                return (
-                  <div>
-                    <div className="text-3xl mb-2">📈</div>
-                    <div className="text-xl font-bold text-white mb-1">Ogólny Profil</div>
-                    <div className="text-2xl font-bold text-cyan-400">{Math.round(avg)}<span className="text-sm text-cyan-600">%</span></div>
-                  </div>
-                );
-              })()}
-            </div>
-          </div>
-        </div>
-
-        {/* AI Interpretation Section */}
-        <div className="bg-gradient-to-br from-violet-950/40 to-indigo-950/40 backdrop-blur-sm rounded-2xl p-8 border border-violet-500/20 mb-12 relative overflow-hidden">
-          {/* Background glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-64 bg-violet-500/8 rounded-full blur-3xl pointer-events-none"></div>
-
-          <div className="relative">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-violet-500/20 border border-violet-500/30 flex items-center justify-center text-lg">
-                  🤖
-                </div>
+        <div className="hr-glass" style={{...G,padding:36,marginBottom:32,overflow:'hidden'}}>
+          <div style={{position:'absolute',top:0,left:'50%',transform:'translateX(-50%)',width:400,height:180,background:'rgba(123,94,167,.07)',borderRadius:'50%',filter:'blur(60px)',pointerEvents:'none'}}/>
+          <div style={{position:'relative'}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
+              <div style={{display:'flex',alignItems:'center',gap:12}}>
+                <div style={{width:36,height:36,borderRadius:10,background:'rgba(123,94,167,.2)',border:'1px solid rgba(123,94,167,.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18}}>🤖</div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">Interpretacja AI</h2>
-                  <p className="text-xs text-slate-500">Spersonalizowana analiza Twojego profilu HEXACO</p>
+                  <div style={{fontSize:16,fontWeight:700}}>Interpretacja AI</div>
+                  <div style={{fontSize:12,color:'rgba(255,255,255,.35)'}}>Spersonalizowana analiza Twojego profilu HEXACO</div>
                 </div>
               </div>
-              {interpretation && !interpretationLoading && (
-                <button
-                  onClick={regenerateInterpretation}
-                  className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-violet-400 transition-colors px-3 py-1.5 rounded-lg border border-slate-800 hover:border-violet-500/30"
-                >
-                  <RefreshCw size={12} />
-                  Regeneruj
+              {interpretation && !interpLoading && (
+                <button onClick={regenerate} style={{display:'flex',alignItems:'center',gap:6,fontSize:12,color:'rgba(255,255,255,.4)',background:'rgba(255,255,255,.05)',border:'1px solid rgba(255,255,255,.1)',borderRadius:8,padding:'7px 14px',cursor:'pointer',fontFamily:'inherit',fontWeight:600}} onMouseEnter={e=>{e.currentTarget.style.color='#b08fff';e.currentTarget.style.borderColor='rgba(123,94,167,.4)';}} onMouseLeave={e=>{e.currentTarget.style.color='rgba(255,255,255,.4)';e.currentTarget.style.borderColor='rgba(255,255,255,.1)';}}>
+                  <RefreshCw size={12}/> Regeneruj
                 </button>
               )}
             </div>
-
-            {/* Loading skeleton */}
-            {interpretationLoading && (
-              <div className="space-y-3 animate-pulse">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-2 h-2 rounded-full bg-violet-400 animate-ping"></div>
-                  <span className="text-sm text-violet-400">Generuję interpretację...</span>
+            {interpLoading && (
+              <div style={{display:'flex',flexDirection:'column',gap:10}}>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8}}>
+                  <div style={{width:8,height:8,borderRadius:'50%',background:'#b08fff',animation:'spinLoader 1s linear infinite'}}/>
+                  <span style={{fontSize:13,color:'#b08fff',fontWeight:600}}>Generuję interpretację...</span>
                 </div>
-                <div className="h-4 bg-slate-800/60 rounded w-full"></div>
-                <div className="h-4 bg-slate-800/60 rounded w-5/6"></div>
-                <div className="h-4 bg-slate-800/60 rounded w-4/5"></div>
-                <div className="h-4 bg-slate-800/60 rounded w-full mt-4"></div>
-                <div className="h-4 bg-slate-800/60 rounded w-3/4"></div>
-                <div className="h-4 bg-slate-800/60 rounded w-5/6"></div>
-                <div className="h-4 bg-slate-800/60 rounded w-full mt-4"></div>
-                <div className="h-4 bg-slate-800/60 rounded w-4/6"></div>
+                {[1,.88,.76,.92,.8,.68].map((w,i)=><div key={i} className="hr-shimmer" style={{height:14,borderRadius:7,width:`${w*100}%`}}/>)}
               </div>
             )}
-
-            {/* Error state */}
-            {interpretationError && !interpretationLoading && (
-              <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-4 text-center">
-                <p className="text-red-400 text-sm mb-3">{interpretationError}</p>
-                <button
-                  onClick={() => loadInterpretation(results)}
-                  className="text-xs text-slate-400 hover:text-white transition-colors underline"
-                >
-                  Spróbuj ponownie
-                </button>
+            {interpError && !interpLoading && (
+              <div style={{background:'rgba(239,68,68,.08)',border:'1px solid rgba(239,68,68,.2)',borderRadius:12,padding:'16px 20px',textAlign:'center'}}>
+                <p style={{color:'rgba(239,68,68,.8)',fontSize:13,marginBottom:8}}>{interpError}</p>
+                <button onClick={()=>loadInterpretation(results)} style={{fontSize:12,color:'rgba(255,255,255,.4)',background:'none',border:'none',cursor:'pointer',fontFamily:'inherit',textDecoration:'underline'}}>Spróbuj ponownie</button>
               </div>
             )}
-
-            {/* Interpretation text */}
-            {interpretation && !interpretationLoading && (
-              <div className="space-y-4">
-                {interpretation.split('\n\n').filter(p => p.trim()).map((paragraph, i) => {
-                  const isItalic = paragraph.trim().startsWith('*') && paragraph.trim().endsWith('*');
-                  const text = isItalic ? paragraph.trim().replace(/^\*|\*$/g, '') : paragraph.trim();
-                  return isItalic ? (
-                    <p key={i} className="text-violet-300 text-sm italic border-l-2 border-violet-500/50 pl-4 mt-2">
-                      {text}
-                    </p>
-                  ) : (
-                    <p key={i} className="text-slate-300 text-sm leading-relaxed">
-                      {text}
-                    </p>
-                  );
+            {interpretation && !interpLoading && (
+              <div style={{display:'flex',flexDirection:'column',gap:14}}>
+                {interpretation.split('\n\n').filter(p=>p.trim()).map((para,i)=>{
+                  const italic=para.trim().startsWith('*')&&para.trim().endsWith('*');
+                  const text=italic?para.trim().replace(/^\*|\*$/g,''):para.trim();
+                  return italic
+                    ?<p key={i} style={{color:'#b08fff',fontSize:14,fontStyle:'italic',borderLeft:'2px solid rgba(123,94,167,.5)',paddingLeft:16,margin:0}}>{text}</p>
+                    :<p key={i} style={{color:'rgba(255,255,255,.65)',fontSize:14,lineHeight:1.75,margin:0}}>{text}</p>;
                 })}
-                <div className="flex items-center gap-2 pt-4 border-t border-white/5">
-                  <span className="text-xs text-slate-600">Wygenerowane przez GPT-4o-mini • Interpretacja psychologiczna, nie diagnoza medyczna</span>
+                <div style={{borderTop:'1px solid rgba(255,255,255,.05)',paddingTop:12,marginTop:4}}>
+                  <span style={{fontSize:11,color:'rgba(255,255,255,.2)'}}>Wygenerowane przez GPT-4o-mini · Interpretacja psychologiczna, nie diagnoza medyczna</span>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex justify-center gap-4">
-          <button
-            onClick={() => window.location.href = '/user-profile-tests.html'}
-            className="btn-neural"
-          >
-            Wróć do Dashboardu
-          </button>
-          <button
-            onClick={handleRetakeTest}
-            className="btn-ghost flex items-center gap-2"
-          >
-            <RefreshCw size={18} />
-            Wykonaj Test Ponownie
+        <div style={{display:'flex',justifyContent:'center',gap:12}}>
+          <button onClick={()=>window.location.href='/user-profile-tests.html'} style={{background:'linear-gradient(135deg,#1a6aff,#38b6ff)',color:'#fff',border:'none',borderRadius:12,padding:'13px 28px',fontWeight:700,fontSize:14,cursor:'pointer',fontFamily:'inherit',boxShadow:'0 0 20px rgba(56,182,255,.3)'}}>Wróć do Dashboardu</button>
+          <button onClick={handleRetake} style={{display:'flex',alignItems:'center',gap:8,background:'rgba(255,255,255,.05)',color:'rgba(255,255,255,.65)',border:'1px solid rgba(255,255,255,.1)',borderRadius:12,padding:'13px 28px',fontWeight:600,fontSize:14,cursor:'pointer',fontFamily:'inherit'}}>
+            <RefreshCw size={16}/> Wykonaj Test Ponownie
           </button>
         </div>
 
       </div>
-    </div>
+    </div></>
   );
 }
