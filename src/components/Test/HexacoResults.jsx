@@ -195,24 +195,27 @@ export default function HexacoResults() {
             </div>
 
             {/* Radar Chart */}
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10 mb-8">
-              <ResponsiveContainer width="100%" height={400}>
-                <RadarChart data={HEXACO_TEST.dimensions.map(dim => {
-                  // Create shorter labels for radar chart
-                  const shortLabels = {
-                    'honesty_humility': 'Honesty-Humility',
-                    'emotionality': 'Emotionality',
-                    'extraversion': 'Extraversion',
-                    'agreeableness': 'Agreeableness',
-                    'conscientiousness': 'Conscientiousness',
-                    'openness': 'Openness'
-                  };
-                  return {
-                    dimension: shortLabels[dim.id] || dim.name,
-                    value: Math.round(results.percentile_scores[dim.id]),
-                    fullName: dim.name
-                  };
-                })}>
+            <div className="bg-white/5 rounded-2xl p-8 md:p-10 border border-white/10 mb-8">
+              <ResponsiveContainer width="100%" height={500}>
+                <RadarChart 
+                  data={HEXACO_TEST.dimensions.map(dim => {
+                    // Create shorter labels for radar chart
+                    const shortLabels = {
+                      'honesty_humility': 'Honesty-Humility',
+                      'emotionality': 'Emotionality',
+                      'extraversion': 'Extraversion',
+                      'agreeableness': 'Agreeableness',
+                      'conscientiousness': 'Conscientiousness',
+                      'openness': 'Openness'
+                    };
+                    return {
+                      dimension: shortLabels[dim.id] || dim.name,
+                      value: Math.round(results.percentile_scores[dim.id]),
+                      fullName: dim.name
+                    };
+                  })}
+                  margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+                >
                   <PolarGrid 
                     stroke="#475569" 
                     strokeWidth={1}
@@ -220,14 +223,15 @@ export default function HexacoResults() {
                   />
                   <PolarAngleAxis 
                     dataKey="dimension" 
-                    tick={{ fill: '#94a3b8', fontSize: 12, fontWeight: 600 }}
+                    tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 600 }}
                     tickLine={false}
                   />
                   <PolarRadiusAxis 
-                    angle={90} 
+                    angle={30} 
                     domain={[0, 100]} 
-                    tick={{ fill: '#64748b', fontSize: 11 }}
-                    tickCount={6}
+                    tick={{ fill: '#64748b', fontSize: 10 }}
+                    tickCount={5}
+                    axisLine={false}
                   />
                   <Radar 
                     dataKey="value" 
