@@ -96,8 +96,11 @@ export default function HexacoResults() {
   const generateInterpretation = async (r) => {
     setInterpLoading(true); setInterpError(null);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Brak sesji');
       const { data: d, error: fnErr } = await supabase.functions.invoke('interpret-test', {
         body: { test_type: 'HEXACO', percentile_scores: r.percentile_scores, raw_scores: r.raw_scores },
+        headers: { Authorization: `Bearer ${session.access_token}` },
       });
       if (fnErr) throw fnErr;
       setInterpretation(d?.interpretation ?? null);

@@ -255,8 +255,11 @@ export default function EnneagramResults() {
   const generateInterpretation = async (r) => {
     setAiLoading(true); setAiError(null);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Brak sesji');
       const { data: d, error: fnErr } = await supabase.functions.invoke('interpret-test', {
         body: { test_type: 'ENNEAGRAM', raw_scores: r.raw_scores, report: r.report },
+        headers: { Authorization: `Bearer ${session.access_token}` },
       });
       if (fnErr) throw fnErr;
       setAiInterp(d?.interpretation ?? null);
