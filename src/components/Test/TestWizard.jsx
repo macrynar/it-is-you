@@ -4,6 +4,7 @@ import { HEXACO_TEST } from '../../data/tests/hexaco.js';
 import { ENNEAGRAM_TEST } from '../../data/tests/enneagram.js';
 import { DARK_TRIAD_TEST } from '../../data/tests/darkTriad.js';
 import { STRENGTHS_TEST } from '../../data/tests/strengths.js';
+import { CAREER_TEST } from '../../data/tests/career.js';
 import { 
   calculateHexacoScore, 
   generateHexacoReport,
@@ -12,7 +13,9 @@ import {
   calculateDarkTriadScore,
   generateDarkTriadReport,
   calculateStrengthsScore,
-  generateStrengthsReport
+  generateStrengthsReport,
+  calculateCareerScore,
+  generateCareerReport
 } from '../../utils/scoring.js';
 import { supabase } from '../../lib/supabaseClient.js';
 
@@ -24,10 +27,13 @@ export default function TestWizard({ testType = 'hexaco' }) {
       ? ENNEAGRAM_TEST 
       : testType === 'strengths'
         ? STRENGTHS_TEST
-        : HEXACO_TEST;
+        : testType === 'career'
+          ? CAREER_TEST
+          : HEXACO_TEST;
   const isEnneagram = TEST_DATA.scale_type === 'forced_choice';
   const isDarkTriad = testType === 'dark_triad';
   const isStrengths = testType === 'strengths';
+  const isCareer = testType === 'career';
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [responses, setResponses] = useState({});
@@ -92,6 +98,11 @@ export default function TestWizard({ testType = 'hexaco' }) {
         report = generateStrengthsReport(scores);
         dbTestType = 'STRENGTHS';
         redirectPath = '/test/strengths/results';
+      } else if (isCareer) {
+        scores = calculateCareerScore(responses);
+        report = generateCareerReport(scores);
+        dbTestType = 'CAREER';
+        redirectPath = '/test/career/results';
       } else {
         scores = calculateHexacoScore(responses);
         report = generateHexacoReport(scores);
@@ -135,6 +146,15 @@ export default function TestWizard({ testType = 'hexaco' }) {
           all_scores: scores.all_scores,
           category_scores: scores.category_scores,
           dominant_category: scores.dominant_category
+        };
+        dbPayload.raw_answers = responses;
+      } else if (isCareer) {
+        // Store Holland Code and top 3 interests
+        dbPayload.raw_scores = {
+          holland_code: scores.holland_code,
+          top_3: scores.top_3,
+          all_scores: scores.all_scores,
+          chart_data: scores.chart_data
         };
         dbPayload.raw_answers = responses;
       } else {
@@ -214,6 +234,12 @@ export default function TestWizard({ testType = 'hexaco' }) {
         label: strengthInfo?.name || 'Talenty',
         color: 'from-cyan-500 to-indigo-500'
       };
+    } else if (isCareer) {
+      const interestInfo = TEST_DATA.interest_types.find(t => t.id === currentQuestion.interest);
+      return {
+        label: interestInfo?.name || 'Zainteresowania',
+        color: 'from-indigo-500 to-purple-500'
+      };
     } else {
       const dimensionInfo = TEST_DATA.dimensions.find(d => d.id === currentQuestion.dimension);
       return {
@@ -238,7 +264,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
             </div>
             <div className="text-right">
               <div className="text-sm font-medium text-slate-400">
-                Pytanie <span className={`font-bold ${isDarkTriad ? 'text-rose-400' : isStrengths ? 'text-indigo-400' : 'text-cyan-400'}`}>{currentQuestionIndex + 1}</span>
+                Pytanie <span className={`font-bold ${isDarkTriad ? 'text-rose-400' : isStrengths ? 'text-indigo-400' : isCareer ? 'text-purple-400' : 'text-cyan-400'}`}>{currentQuestionIndex + 1}</span>
                 <span className="text-slate-600"> / {totalQuestions}</span>
               </div>
             </div>
@@ -250,10 +276,10 @@ export default function TestWizard({ testType = 'hexaco' }) {
       <div className="relative">
         <div className="absolute top-0 left-0 right-0 h-1 bg-slate-800">
           <div 
-            className={`h-full bg-gradient-to-r ${isDarkTriad ? 'from-rose-600 to-red-600' : isStrengths ? 'from-cyan-500 to-indigo-500' : 'from-cyan-500 to-blue-500'} transition-all duration-500 ease-out relative`}
+            className={`h-full bg-gradient-to-r ${isDarkTriad ? 'from-rose-600 to-red-600' : isStrengths ? 'from-cyan-500 to-indigo-500' : isCareer ? 'from-indigo-500 to-purple-500' : 'from-cyan-500 to-blue-500'} transition-all duration-500 ease-out relative`}
             style={{ width: `${progress}%` }}
           >
-            <div className={`absolute inset-0 bg-gradient-to-r ${isDarkTriad ? 'from-rose-600 to-red-600' : isStrengths ? 'from-cyan-500 to-indigo-500' : 'from-cyan-500 to-blue-500'} blur-md opacity-60`}></div>
+            <div className={`absolute inset-0 bg-gradient-to-r ${isDarkTriad ? 'from-rose-600 to-red-600' : isStrengths ? 'from-cyan-500 to-indigo-500' : isCareer ? 'from-indigo-500 to-purple-500' : 'from-cyan-500 to-blue-500'} blur-md opacity-60`}></div>
           </div>
         </div>
       </div>

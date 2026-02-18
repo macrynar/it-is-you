@@ -7,6 +7,7 @@ import { HEXACO_TEST } from '../data/tests/hexaco.js';
 import { ENNEAGRAM_TEST } from '../data/tests/enneagram.js';
 import { DARK_TRIAD_TEST } from '../data/tests/darkTriad.js';
 import { STRENGTHS_TEST } from '../data/tests/strengths.js';
+import { CAREER_TEST } from '../data/tests/career.js';
 
 /**
  * Calculate HEXACO-60 scores from user responses
@@ -1122,6 +1123,251 @@ export function generateStrengthsReport(scores) {
         id,
         ...data
       }))
+    }
+  };
+}
+
+/**
+ * Calculate Career Interests (RIASEC) scores from user responses
+ * Generates Holland Code from top 3 interest types
+ * @param {Object} responses - Object mapping question IDs to answers (1-5)
+ * @returns {Object} Interest type scores and Holland Code
+ */
+export function calculateCareerScore(responses) {
+  // Validate all 48 questions are answered
+  if (Object.keys(responses).length !== 48) {
+    throw new Error(`Expected 48 responses, got ${Object.keys(responses).length}`);
+  }
+
+  const typeScores = {};
+  
+  // Calculate average for each of 6 RIASEC types
+  CAREER_TEST.interest_types.forEach(type => {
+    const questions = CAREER_TEST.questions.filter(q => q.interest === type.id);
+    const sum = questions.reduce((acc, q) => acc + (responses[q.id] || 0), 0);
+    const average = sum / questions.length;
+    
+    typeScores[type.id] = {
+      raw_score: parseFloat(average.toFixed(2)),
+      letter: type.letter,
+      name: type.name,
+      name_en: type.name_en,
+      description: type.description,
+      color: type.color,
+      fullMark: type.fullMark
+    };
+  });
+  
+  // Sort types by score (descending)
+  const sortedTypes = Object.entries(typeScores)
+    .sort((a, b) => b[1].raw_score - a[1].raw_score);
+  
+  // Get Top 3 for Holland Code
+  const top3 = sortedTypes.slice(0, 3).map(([id, data], index) => ({
+    rank: index + 1,
+    id: id,
+    letter: data.letter,
+    name: data.name,
+    name_en: data.name_en,
+    score: data.raw_score,
+    description: data.description,
+    color: data.color
+  }));
+  
+  // Generate Holland Code (3-letter code from top 3 types)
+  const hollandCode = top3.map(t => t.letter).join('');
+  
+  // Prepare data for radar chart
+  const chartData = CAREER_TEST.interest_types.map(type => ({
+    subject: type.name,
+    A: typeScores[type.id].raw_score,
+    fullMark: 5
+  }));
+
+  return {
+    test_id: 'career_interests_riasec',
+    test_name: 'Test Zainteresowań Zawodowych',
+    completed_at: new Date().toISOString(),
+    holland_code: hollandCode,
+    top_3: top3,
+    all_scores: typeScores,
+    chart_data: chartData
+  };
+}
+
+/**
+ * Get career path recommendations for RIASEC type
+ * @param {string} typeId - RIASEC type ID
+ * @param {number} rank - Ranking position (1-3)
+ * @returns {Object} Career recommendations and description
+ */
+export function getCareerInterpretation(typeId, rank) {
+  const interpretations = {
+    realistic: {
+      overview: "Osoby z wysokim wynikiem w kategorii Wykonawca (Realista) preferują praktyczną, fizyczną pracę z narzędziami, maszynami i obiektami. Cenią konkretne, wymierne rezultaty swojej pracy.",
+      characteristics: [
+        "Preferujesz pracę z rzeczami, a nie z ludźmi",
+        "Lubisz rozwiązywać praktyczne problemy",
+        "Cenisz umiejętności techniczne i manualne",
+        "Wolisz jasne, strukturalne zadania"
+      ],
+      career_paths: [
+        "Inżynier / Mechanik / Technik",
+        "Elektryk / Spawacz / Cieśla",
+        "Pilot / Kierowca / Operator maszyn",
+        "Rolnik / Ogrodnik / Leśnik",
+        "Sportowiec / Trener personalny"
+      ],
+      work_environments: [
+        "Warsztaty i fabryki",
+        "Budowy i place produkcyjne",
+        "Laboratoria techniczne",
+        "Miejsca na świeżym powietrzu"
+      ]
+    },
+    investigative: {
+      overview: "Osoby z wysokim wynikiem w kategorii Badacz (Analityk) uwielbiają rozwiązywać skomplikowane problemy, prowadzić badania i analizować dane. Są natura dociekliwe i systematyczne.",
+      characteristics: [
+        "Lubisz zadawać pytania i testować hipotezy",
+        "Preferujesz pracę analityczną nad manualną",
+        "Cenisz głęboką wiedzę i kompetencje",
+        "Wolisz samodzielne myślenie nad rutynowymi zadaniami"
+      ],
+      career_paths: [
+        "Naukowiec / Badacz / Analityk",
+        "Lekarz / Farmaceuta / Dentysta",
+        "Programista / Data Scientist",
+        "Inżynier oprogramowania / Architekt systemów",
+        "Psycholog badawczy / Socjolog"
+      ],
+      work_environments: [
+        "Laboratoria badawcze",
+        "Uniwersytety i ośrodki naukowe",
+        "Firmy technologiczne",
+        "Instytuty medyczne"
+      ]
+    },
+    artistic: {
+      overview: "Osoby z wysokim wynikiem w kategorii Artysta (Twórca) cenią kreatywność, samowyrażanie i estetykę. Lubią pracować w niestandardowych, innowacyjnych projektach.",
+      characteristics: [
+        "Masz bogate życie wewnętrzne i wyobraźnię",
+        "Preferujesz swobodę twórczą nad rutynowymi zadaniami",
+        "Cenisz piękno, harmonię i oryginalność",
+        "Wolisz elastyczne środowisko pracy"
+      ],
+      career_paths: [
+        "Grafik / Designer / Artysta wizualny",
+        "Muzyk / Kompozytor / Producent muzyczny",
+        "Pisarz / Dziennikarz / Copywriter",
+        "Aktor / Reżyser / Choreograf",
+        "Architekt / Designer wnętrz"
+      ],
+      work_environments: [
+        "Studia artystyczne i agencje kreatywne",
+        "Media i rozrywka",
+        "Muzea i galerie",
+        "Firmy projektowe"
+      ]
+    },
+    social: {
+      overview: "Osoby z wysokim wynikiem w kategorii Społecznik (Pomagacz) uwielbiają pracować z ludźmi, pomagać innym i służyć społeczeństwu. Są empatyczne i zorientowane na relacje.",
+      characteristics: [
+        "Lubisz pomagać ludziom w rozwoju",
+        "Masz naturalne zdolności interpersonalne",
+        "Cenisz współpracę i pracę zespołową",
+        "Wolisz środowiska wspierające i opiekuńcze"
+      ],
+      career_paths: [
+        "Nauczyciel / Wykładowca / Trener",
+        "Pielęgniarka / Terapeuta / Fizjoterapeuta",
+        "Psycholog / Doradca / Coach",
+        "Pracownik socjalny / HR Specialist",
+        "Logopeda / Pedagog specjalny"
+      ],
+      work_environments: [
+        "Szkoły i uniwersytety",
+        "Szpitale i kliniki",
+        "Ośrodki terapeutyczne",
+        "Organizacje non-profit"
+      ]
+    },
+    enterprising: {
+      overview: "Osoby z wysokim wynikiem w kategorii Przedsiębiorca (Lider) lubią przewodzić, przekonywać i wpływać na innych. Są ambitne, pewne siebie i zorientowane na cel.",
+      characteristics: [
+        "Lubisz przejmować inicjatywę i liderować",
+        "Masz naturalne zdolności perswazyjne",
+        "Cenisz osiągnięcia i sukces",
+        "Wolisz dynamiczne, konkurencyjne środowisko"
+      ],
+      career_paths: [
+        "Manager / Dyrektor / CEO",
+        "Przedsiębiorca / Właściciel firmy",
+        "Sprzedawca / Account Manager",
+        "Prawnik / Adwokat / Konsultant",
+        "Polityk / Lobbysta / Rzecznik prasowy"
+      ],
+      work_environments: [
+        "Korporacje i firmy konsultingowe",
+        "Start-upy i własne biznesy",
+        "Biura sprzedaży i rozwoju biznesu",
+        "Kancelarie prawne"
+      ]
+    },
+    conventional: {
+      overview: "Osoby z wysokim wynikiem w kategorii Organizator (Systematyk) preferują ustrukturyzowaną, uporządkowaną pracę z jasnymi procedurami. Cenią dokładność, terminowość i porządek.",
+      characteristics: [
+        "Lubisz jasne zasady i procedury",
+        "Masz doskonałe zdolności organizacyjne",
+        "Cenisz szczegółowość i dokładność",
+        "Wolisz przewidywalne środowisko pracy"
+      ],
+      career_paths: [
+        "Księgowy / Audytor / Kontroler finansowy",
+        "Administrator / Asystent zarządu",
+        "Bibliotekarz / Archiwista",
+        "Analityk finansowy / Specjalista ds. budżetu",
+        "Urzędnik / Specjalista ds. compliance"
+      ],
+      work_environments: [
+        "Biura księgowe i finansowe",
+        "Instytucje rządowe",
+        "Banki i firmy ubezpieczeniowe",
+        "Działy administracyjne"
+      ]
+    }
+  };
+
+  const interpretation = interpretations[typeId] || {};
+  const rankLabel = rank === 1 ? 'Główne zainteresowanie' : rank === 2 ? 'Drugie zainteresowanie' : 'Trzecie zainteresowanie';
+
+  return {
+    rank_label: rankLabel,
+    ...interpretation
+  };
+}
+
+/**
+ * Generate complete career interests report with interpretations
+ * @param {Object} scores - Career scores object from calculateCareerScore
+ * @returns {Object} Full report with interpretations
+ */
+export function generateCareerReport(scores) {
+  const top3WithInterpretations = scores.top_3.map(type => ({
+    ...type,
+    interpretation: getCareerInterpretation(type.id, type.rank)
+  }));
+
+  return {
+    test_id: scores.test_id,
+    test_name: scores.test_name,
+    completed_at: scores.completed_at,
+    holland_code: scores.holland_code,
+    top_3: top3WithInterpretations,
+    all_scores: scores.all_scores,
+    chart_data: scores.chart_data,
+    summary: {
+      primary_interest: top3WithInterpretations[0],
+      holland_code_explanation: `Twój Kod Hollanda to ${scores.holland_code}. Ten trójliteralny kod reprezentuje Twoje trzy najsilniejsze zainteresowania zawodowe w kolejności od najważniejszego.`
     }
   };
 }

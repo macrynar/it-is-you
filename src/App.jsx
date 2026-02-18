@@ -5,6 +5,7 @@ import HexacoResults from './components/Test/HexacoResults'
 import EnneagramResults from './components/Test/EnneagramResults'
 import DarkTriadResults from './components/Test/DarkTriadResults'
 import StrengthsResults from './components/Test/StrengthsResults'
+import CareerResults from './components/Test/CareerResults'
 import { supabase, onAuthStateChange } from './lib/supabaseClient'
 
 /**
@@ -168,6 +169,27 @@ function App() {
     }
     
     return <StrengthsResults />
+  }
+
+  // Handle /test/career/results route - show career results
+  if (currentRoute === '/test/career/results' || currentRoute === '/test/career/results/') {
+    if (loading) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-purple-950 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-slate-400">Ładowanie...</p>
+          </div>
+        </div>
+      )
+    }
+    
+    if (!user) {
+      window.location.href = '/auth'
+      return null
+    }
+    
+    return <CareerResults />
   }
 
   // Handle /test route - require authentication & check for test type
