@@ -177,8 +177,32 @@ export default function StrengthsResults() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 py-8 px-4">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-slate-950 text-white">
+      {/* Header */}
+      <div className="border-b border-white/5 bg-black/40 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={handleBackToDashboard}
+              className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+            >
+              <ArrowLeft size={20} />
+              <span>Dashboard</span>
+            </button>
+            
+            <button
+              onClick={handleRetakeTest}
+              className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/70 text-white rounded-lg border border-slate-700 hover:border-cyan-500/50 transition-all"
+            >
+              <RefreshCw size={18} />
+              <span>Powtórz Test</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-5xl mx-auto px-6 py-16">
         
         {/* Hero Section */}
         <div className="glass-card-active p-6 mb-8 text-center relative overflow-hidden">
@@ -409,24 +433,6 @@ export default function StrengthsResults() {
             </div>
           </div>
         )}
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <button
-            onClick={handleBackToDashboard}
-            className="btn-secondary flex items-center justify-center gap-2"
-          >
-            <ArrowLeft size={20} />
-            Wróć do Dashboardu
-          </button>
-          <button
-            onClick={handleRetakeTest}
-            className="btn-primary flex items-center justify-center gap-2"
-          >
-            <RefreshCw size={20} />
-            Wykonaj Ponownie
-          </button>
-        </div>
 
       </div>
     </div>
