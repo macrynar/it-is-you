@@ -59,15 +59,31 @@ export default function HexacoResults() {
       const token = sessionData?.session?.access_token;
       if (!token) throw new Error('Brak sesji użytkownika');
 
-      const { data, error: fnError } = await supabase.functions.invoke('interpret-test', {
-        headers: { Authorization: `Bearer ${token}` },
-        body: {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const fnUrl = `${supabaseUrl}/functions/v1/interpret-test`;
+
+      const res = await fetch(fnUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'apikey': supabaseAnonKey,
+        },
+        body: JSON.stringify({
           test_type: 'HEXACO',
           percentile_scores: testResult.percentile_scores,
           raw_scores: testResult.raw_scores
-        }
+        })
       });
-      if (fnError) throw fnError;
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error('Edge function error:', res.status, errText);
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
       setInterpretation(data?.interpretation ?? null);
     } catch (err) {
       console.error('Interpretation error:', err);
