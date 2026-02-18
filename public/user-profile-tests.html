@@ -1000,7 +1000,8 @@
         }
 
         // Logout function
-        window.logout = function() {
+        window.logout = async function() {
+            await supabase.auth.signOut();
             localStorage.removeItem('user_session');
             localStorage.removeItem('auth_token');
             localStorage.removeItem('has_profile');
