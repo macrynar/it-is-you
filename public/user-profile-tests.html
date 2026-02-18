@@ -127,6 +127,130 @@
             -webkit-mask-composite: xor;
             mask-composite: exclude;
         }
+        
+        /* Theme Toggle Animation */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 32px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+        
+        .theme-toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+        }
+        
+        .theme-toggle.light .theme-toggle-slider {
+            transform: translateX(28px);
+            background: linear-gradient(135deg, #F59E0B, #EAB308);
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+        }
+        
+        .theme-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            transition: opacity 0.3s ease;
+        }
+        
+        .theme-icon-moon {
+            left: 8px;
+            opacity: 1;
+        }
+        
+        .theme-icon-sun {
+            right: 8px;
+            opacity: 0.4;
+        }
+        
+        .theme-toggle.light .theme-icon-moon {
+            opacity: 0.4;
+        }
+        
+        .theme-toggle.light .theme-icon-sun {
+            opacity: 1;
+        }
+        
+        /* Light Mode Styles */
+        body.light-mode {
+            background: #F8FAFC;
+            background-image: 
+                radial-gradient(at 50% 0%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(at 0% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            color: #0F172A;
+        }
+        
+        body.light-mode .grid-bg {
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+        }
+        
+        body.light-mode nav {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        body.light-mode .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #0F172A;
+        }
+        
+        body.light-mode .glass-card:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+        
+        body.light-mode .text-white {
+            color: #0F172A !important;
+        }
+        
+        body.light-mode .text-slate-300,
+        body.light-mode .text-slate-400 {
+            color: #475569 !important;
+        }
+        
+        body.light-mode .text-slate-500 {
+            color: #64748B !important;
+        }
+        
+        body.light-mode .text-slate-600 {
+            color: #475569 !important;
+        }
+        
+        body.light-mode .bg-slate-800\/50,
+        body.light-mode .bg-slate-900\/40 {
+            background: rgba(241, 245, 249, 0.8) !important;
+        }
+        
+        body.light-mode .border-white\/10,
+        body.light-mode .border-slate-700 {
+            border-color: rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        body.light-mode .bg-black\/30 {
+            background: rgba(255, 255, 255, 0.8) !important;
+        }
     </style>
 </head>
 <body class="min-h-screen text-white grid-bg">
@@ -165,6 +289,20 @@
                     <button onclick="window.location.href='/user-profile-tests.html'" class="px-4 py-2 text-sm text-slate-300 hover:text-white transition-colors">
                         Dashboard
                     </button>
+                    
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="Przełącz motyw">
+                        <div class="theme-toggle-slider"></div>
+                        <!-- Moon Icon (Dark Mode) -->
+                        <svg class="theme-icon theme-icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                        <!-- Sun Icon (Light Mode) -->
+                        <svg class="theme-icon theme-icon-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </button>
+                    
                     <button onclick="logout()" class="px-4 py-2 bg-slate-800/50 hover:bg-slate-700/70 text-white rounded-lg text-sm border border-white/10 hover:border-violet-500/50 transition-all backdrop-blur-sm">
                         Wyloguj
                     </button>
@@ -531,6 +669,51 @@
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         console.log('Dashboard loaded, Supabase client created');
+        
+        // ============================================
+        // THEME TOGGLE FUNCTIONALITY
+        // ============================================
+        
+        // Load theme preference on page load
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('theme');
+            const toggle = document.getElementById('theme-toggle');
+            
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                if (toggle) toggle.classList.add('light');
+            }
+            
+            console.log('Theme loaded:', savedTheme || 'dark (default)');
+        }
+        
+        // Toggle theme function
+        window.toggleTheme = function() {
+            const body = document.body;
+            const toggle = document.getElementById('theme-toggle');
+            const isLightMode = body.classList.contains('light-mode');
+            
+            if (isLightMode) {
+                // Switch to Dark Mode
+                body.classList.remove('light-mode');
+                toggle.classList.remove('light');
+                localStorage.setItem('theme', 'dark');
+                console.log('Switched to Dark Mode');
+            } else {
+                // Switch to Light Mode
+                body.classList.add('light-mode');
+                toggle.classList.add('light');
+                localStorage.setItem('theme', 'light');
+                console.log('Switched to Light Mode');
+            }
+        }
+        
+        // Load theme immediately (before other scripts)
+        loadThemePreference();
+        
+        // ============================================
+        // END THEME TOGGLE
+        // ============================================
         
         // Debug: Check localStorage keys
         console.log('LocalStorage keys:', Object.keys(localStorage));
