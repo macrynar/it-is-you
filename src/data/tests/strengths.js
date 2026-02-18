@@ -66,7 +66,7 @@ export const STRENGTHS_TEST = {
       name_en: "Analytical",
       category: "strategic_thinking",
       description: "Potrzebujesz danych i dowodów. Kwestionujesz założenia i szukasz przyczyn.",
-      keywords: "Logiczny, dociekliwy, obiektywny"
+      keywords: ["Logiczny", "dociekliwy", "obiektywny"]
     },
     {
       id: "strategic",
@@ -74,7 +74,7 @@ export const STRENGTHS_TEST = {
       name_en: "Strategic",
       category: "strategic_thinking",
       description: "Widzisz alternatywne ścieżki i możliwe scenariusze. Planujesz długofalowo.",
-      keywords: "Planujący, przewidujący, dalekowzroczny"
+      keywords: ["Planujący", "przewidujący", "dalekowzroczny"]
     },
     {
       id: "learner",
@@ -82,7 +82,7 @@ export const STRENGTHS_TEST = {
       name_en: "Learner",
       category: "strategic_thinking",
       description: "Uwielbiasz się uczyć. Sam proces zdobywania wiedzy Cię fascynuje.",
-      keywords: "Ciekawy, rozwijający się, poszukujący"
+      keywords: ["Ciekawy", "rozwijający się", "poszukujący"]
     },
     {
       id: "ideation",
@@ -90,7 +90,7 @@ export const STRENGTHS_TEST = {
       name_en: "Ideation",
       category: "strategic_thinking",
       description: "Fascynują Cię idee. Widzisz połączenia między różnymi zjawiskami.",
-      keywords: "Kreatywny, innowacyjny, oryginalny"
+      keywords: ["Kreatywny", "innowacyjny", "oryginalny"]
     },
     {
       id: "achiever",
@@ -98,7 +98,7 @@ export const STRENGTHS_TEST = {
       name_en: "Achiever",
       category: "executing",
       description: "Pracujesz ciężko i odnosisz satysfakcję z bycia produktywnym.",
-      keywords: "Wytrwały, pracowity, energiczny"
+      keywords: ["Wytrwały", "pracowity", "energiczny"]
     },
     {
       id: "disciplined",
@@ -106,7 +106,7 @@ export const STRENGTHS_TEST = {
       name_en: "Disciplined",
       category: "executing",
       description: "Tworzysz strukturę i porządek. Lubisz rutynę i przewidywalność.",
-      keywords: "Uporządkowany, systematyczny, metodyczny"
+      keywords: ["Uporządkowany", "systematyczny", "metodyczny"]
     },
     {
       id: "focus",
@@ -114,7 +114,7 @@ export const STRENGTHS_TEST = {
       name_en: "Focus",
       category: "executing",
       description: "Potrzebujesz jasnego kierunku. Priorytetujesz i trzymasz się kursu.",
-      keywords: "Celowy, zdeterminowany, niezachwiany"
+      keywords: ["Celowy", "zdeterminowany", "niezachwiany"]
     },
     {
       id: "responsibility",
@@ -122,7 +122,7 @@ export const STRENGTHS_TEST = {
       name_en: "Responsibility",
       category: "executing",
       description: "Bierzesz psychiczne zobowiązanie wobec zobowiązań. Dotrzymujesz obietnic.",
-      keywords: "Niezawodny, rzetelny, uczciwy"
+      keywords: ["Niezawodny", "rzetelny", "uczciwy"]
     },
     {
       id: "communication",
@@ -130,7 +130,7 @@ export const STRENGTHS_TEST = {
       name_en: "Communication",
       category: "influencing",
       description: "Łatwo znajdujesz słowa. Potrafisz wyjaśniać, opisywać, przekonywać.",
-      keywords: "Elokwentny, ekspresyjny, angażujący"
+      keywords: ["Elokwentny", "ekspresyjny", "angażujący"]
     },
     {
       id: "competition",
@@ -138,7 +138,7 @@ export const STRENGTHS_TEST = {
       name_en: "Competition",
       category: "influencing",
       description: "Mierzysz swoje wyniki z innymi. Konkurencja Cię motywuje.",
-      keywords: "Rywalizujący, ambitny, nastawiony na wygraną"
+      keywords: ["Rywalizujący", "ambitny", "nastawiony na wygraną"]
     },
     {
       id: "maximizer",
@@ -146,7 +146,7 @@ export const STRENGTHS_TEST = {
       name_en: "Maximizer",
       category: "influencing",
       description: "Koncentrujesz się na mocnych stronach jako drodze do doskonałości.",
-      keywords: "Doskonalący, optymalizujący, dążący do perfekcji"
+      keywords: ["Doskonalący", "optymalizujący", "dążący do perfekcji"]
     },
     {
       id: "self_assurance",
@@ -154,7 +154,7 @@ export const STRENGTHS_TEST = {
       name_en: "Self-Assurance",
       category: "influencing",
       description: "Ufasz swoim osądom. Masz wewnętrzny kompas prowadzący Twoje decyzje.",
-      keywords: "Pewny, niezależny, odważny"
+      keywords: ["Pewny", "niezależny", "odważny"]
     },
     {
       id: "adaptability",
@@ -162,7 +162,7 @@ export const STRENGTHS_TEST = {
       name_en: "Adaptability",
       category: "relationship_building",
       description: "Żyjesz chwilą. Dobrze radzisz sobie ze zmiennością.",
-      keywords: "Giętki, spontaniczny, elastyczny"
+      keywords: ["Giętki", "spontaniczny", "elastyczny"]
     },
     {
       id: "developer",
@@ -170,7 +170,7 @@ export const STRENGTHS_TEST = {
       name_en: "Developer",
       category: "relationship_building",
       description: "Widzisz potencjał w innych. Pomagasz im się rozwijać.",
-      keywords: "Wspierający, mentorski, cierpliwy"
+      keywords: ["Wspierający", "mentorski", "cierpliwy"]
     },
     {
       id: "empathy",
@@ -178,7 +178,7 @@ export const STRENGTHS_TEST = {
       name_en: "Empathy",
       category: "relationship_building",
       description: "Wyczuwasz emocje innych ludzi. Potrafisz się w nich wczuć.",
-      keywords: "Wrażliwy, intuicyjny, troskliwy"
+      keywords: ["Wrażliwy", "intuicyjny", "troskliwy"]
     },
     {
       id: "harmony",
@@ -186,7 +186,7 @@ export const STRENGTHS_TEST = {
       name_en: "Harmony",
       category: "relationship_building",
       description: "Szukasz obszarów zgody. Unikasz konfrontacji i szukasz konsensusu.",
-      keywords: "Pokojowy, dyplomatyczny, łagodzący"
+      keywords: ["Pokojowy", "dyplomatyczny", "łagodzący"]
     }
   ],
   
