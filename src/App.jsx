@@ -92,10 +92,10 @@ function App() {
   if (currentRoute === '/test/hexaco/results' || currentRoute === '/test/hexaco/results/') {
     if (loading) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+        <div className="min-h-screen bg-bg-main flex items-center justify-center">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-slate-400">Ładowanie...</p>
+            <div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-text-muted">Ładowanie...</p>
           </div>
         </div>
       )
@@ -113,10 +113,10 @@ function App() {
   if (currentRoute === '/test/enneagram/results' || currentRoute === '/test/enneagram/results/') {
     if (loading) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+        <div className="min-h-screen bg-bg-main flex items-center justify-center">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-slate-400">Ładowanie...</p>
+            <div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-text-muted">Ładowanie...</p>
           </div>
         </div>
       )
@@ -134,10 +134,10 @@ function App() {
   if (currentRoute === '/test/dark-triad/results' || currentRoute === '/test/dark-triad/results/') {
     if (loading) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-rose-950 flex items-center justify-center">
+        <div className="min-h-screen bg-bg-main flex items-center justify-center">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-rose-500/30 border-t-rose-500 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-slate-400">Ładowanie...</p>
+            <div className="w-12 h-12 border-4 border-status-danger/30 border-t-status-danger rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-text-muted">Ładowanie...</p>
           </div>
         </div>
       )
@@ -155,10 +155,10 @@ function App() {
   if (currentRoute === '/test/strengths/results' || currentRoute === '/test/strengths/results/') {
     if (loading) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 flex items-center justify-center">
+        <div className="min-h-screen bg-bg-main flex items-center justify-center">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-slate-400">Ładowanie...</p>
+            <div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-text-muted">Ładowanie...</p>
           </div>
         </div>
       )
@@ -176,10 +176,10 @@ function App() {
   if (currentRoute === '/test/career/results' || currentRoute === '/test/career/results/') {
     if (loading) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-purple-950 flex items-center justify-center">
+        <div className="min-h-screen bg-bg-main flex items-center justify-center">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-slate-400">Ładowanie...</p>
+            <div className="w-12 h-12 border-4 border-brand-secondary/30 border-t-brand-secondary rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-text-muted">Ładowanie...</p>
           </div>
         </div>
       )
@@ -197,10 +197,10 @@ function App() {
   if (currentRoute === '/test/values/results' || currentRoute === '/test/values/results/') {
     if (loading) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-teal-950 to-cyan-950 flex items-center justify-center">
+        <div className="min-h-screen bg-bg-main flex items-center justify-center">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-teal-500/30 border-t-teal-500 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-slate-400">Ładowanie...</p>
+            <div className="w-12 h-12 border-4 border-brand-secondary/30 border-t-brand-secondary rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-text-muted">Ładowanie...</p>
           </div>
         </div>
       )
@@ -218,10 +218,10 @@ function App() {
   if (currentRoute === '/test' || currentRoute === '/test/') {
     if (loading) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+        <div className="min-h-screen bg-bg-main flex items-center justify-center">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-slate-400">Sprawdzanie autoryzacji...</p>
+            <div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-text-muted">Sprawdzanie autoryzacji...</p>
           </div>
         </div>
       )
@@ -243,10 +243,10 @@ function App() {
   // Loading state or OAuth callback processing
   if (loading || isCallbackRoute) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-bg-main flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-slate-400">{isCallbackRoute ? 'Przetwarzanie logowania...' : 'Ładowanie...'}</p>
+          <div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-text-muted">{isCallbackRoute ? 'Przetwarzanie logowania...' : 'Ładowanie...'}</p>
         </div>
       </div>
     )
@@ -255,10 +255,10 @@ function App() {
   // User is logged in - show dashboard
   if (user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-8">
+      <div className="min-h-screen p-8">
         <div className="max-w-2xl mx-auto">
           <div className="glass-panel p-8 rounded-2xl text-center">
-            <h1 className="text-4xl font-bold brand-font text-white mb-4">
+            <h1 className="text-4xl font-bold brand-font text-text-main mb-4">
               Witaj, {user.email}! 👋
             </h1>
             <p className="text-slate-300 mb-6">
@@ -266,9 +266,9 @@ function App() {
             </p>
             
             {/* User Info */}
-            <div className="bg-slate-900/50 p-6 rounded-lg mb-6 text-left">
+            <div className="bg-bg-surface/50 p-6 rounded-lg mb-6 text-left border border-white/5">
               <h2 className="text-sm font-medium text-slate-300 mb-3">Informacje o koncie:</h2>
-              <ul className="space-y-2 text-sm text-slate-400">
+              <ul className="space-y-2 text-sm text-text-muted">
                 <li><strong>Email:</strong> {user.email}</li>
                 <li><strong>Identyfikator:</strong> {user.id}</li>
                 <li><strong>Zalogowany od:</strong> {new Date(user.created_at).toLocaleDateString('pl-PL')}</li>
@@ -279,7 +279,7 @@ function App() {
             <div className="flex gap-4 justify-center flex-wrap">
               <a 
                 href="/user-profile-tests.html"
-                className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition"
+                className="btn-primary"
               >
                 Dashboard Testów
               </a>
@@ -291,7 +291,7 @@ function App() {
                   setUser(null)
                   window.location.href = '/index2.html'
                 }}
-                className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition"
+                className="btn-danger"
               >
                 Wyloguj się
               </button>
@@ -300,11 +300,11 @@ function App() {
 
           {/* Info Box */}
           <div className="mt-8 glass-panel p-6 rounded-2xl">
-            <h3 className="text-lg font-bold text-white mb-3">Następne kroki:</h3>
+            <h3 className="text-lg font-bold text-text-main mb-3">Następne kroki:</h3>
             <ul className="space-y-2 text-slate-300 text-sm">
               <li>✓ Autoryzacja Supabase wdrożona</li>
               <li>✓ Test HEXACO-60 gotowy</li>
-              <li>✓ Dashboard z 7 testami psychometrycznymi  </li>
+              <li>✓ Dashboard z 7 testami psychometrycznymi</li>
               <li>→ Wypełnij test HEXACO i zobacz wyniki</li>
               <li>→ Więcej testów wkrótce...</li>
             </ul>
