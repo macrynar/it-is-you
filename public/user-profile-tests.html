@@ -5,6 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>It Is You - Testy Psychometryczne</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bg-main':         '#020617',
+                        'bg-surface':      '#0F172A',
+                        'brand-primary':   '#6366f1',
+                        'brand-secondary': '#0ea5e9',
+                        'brand-accent':    '#d946ef',
+                        'status-success':  '#10b981',
+                        'status-danger':   '#f43f5e',
+                        'text-main':       '#f8fafc',
+                        'text-muted':      '#94a3b8',
+                    },
+                    boxShadow: {
+                        'glow-primary': '0 0 20px -5px rgba(99,102,241,0.4)',
+                        'glow-danger':  '0 0 20px -5px rgba(244,63,94,0.4)',
+                    },
+                    backgroundImage: {
+                        'neural-gradient': 'radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020617 70%)',
+                    },
+                }
+            }
+        }
+    </script>
     <style>
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 0.8; }
@@ -27,10 +53,9 @@
         }
         
         body {
-            background: #0B0F19;
-            background-image: 
-                radial-gradient(at 50% 0%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(at 0% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            background-color: #020617;
+            background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020617 70%);
+            background-attachment: fixed;
         }
         
         .grid-bg {
@@ -42,45 +67,42 @@
         
         .glass-card {
             background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow:
+                0 4px 6px -1px rgba(0,0,0,0.2),
+                0 2px 4px -1px rgba(0,0,0,0.12),
+                inset 0 1px 0 0 rgba(255,255,255,0.10);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .glass-card:hover {
             transform: translateY(-4px);
             background: rgba(15, 23, 42, 0.8);
+            border-color: rgba(255,255,255,0.12);
+            box-shadow:
+                0 8px 25px -5px rgba(0,0,0,0.35),
+                inset 0 1px 0 0 rgba(255,255,255,0.12);
         }
         
-        /* Test-specific hover colors */
-        .glass-card.test-hexaco:hover {
-            border-color: rgba(139, 92, 246, 0.3);
-            box-shadow: 0 8px 32px -8px rgba(139, 92, 246, 0.2);
+        /* Test-specific hover colors — Neural Glass accents */
+        .glass-card.test-hexaco:hover,
+        .glass-card.test-strengths:hover,
+        .glass-card.test-career:hover,
+        .glass-card.test-values:hover {
+            border-color: rgba(99, 102, 241, 0.35);
+            box-shadow: 0 0 28px -6px rgba(99,102,241,0.3), inset 0 1px 0 0 rgba(255,255,255,0.12);
         }
         
         .glass-card.test-enneagram:hover {
-            border-color: rgba(236, 72, 153, 0.3);
-            box-shadow: 0 8px 32px -8px rgba(236, 72, 153, 0.2);
+            border-color: rgba(217, 70, 239, 0.35);
+            box-shadow: 0 0 28px -6px rgba(217,70,239,0.25), inset 0 1px 0 0 rgba(255,255,255,0.12);
         }
         
         .glass-card.test-dark-triad:hover {
-            border-color: rgba(244, 63, 94, 0.3);
-            box-shadow: 0 8px 32px -8px rgba(244, 63, 94, 0.2);
-        }
-        
-        .glass-card.test-strengths:hover {
-            border-color: rgba(139, 92, 246, 0.3);
-            box-shadow: 0 8px 32px -8px rgba(139, 92, 246, 0.2);
-        }
-        
-        .glass-card.test-career:hover {
-            border-color: rgba(139, 92, 246, 0.3);
-            box-shadow: 0 8px 32px -8px rgba(139, 92, 246, 0.2);
-        }
-        
-        .glass-card.test-values:hover {
-            border-color: rgba(139, 92, 246, 0.3);
-            box-shadow: 0 8px 32px -8px rgba(139, 92, 246, 0.2);
+            border-color: rgba(244, 63, 94, 0.35);
+            box-shadow: 0 0 28px -6px rgba(244,63,94,0.25), inset 0 1px 0 0 rgba(255,255,255,0.12);
         }
         
         .glass-card-active {
@@ -275,28 +297,28 @@
 <body class="min-h-screen text-white grid-bg">
 
     <!-- NAVIGATION -->
-    <nav class="border-b border-white/10 bg-black/30 backdrop-blur-xl sticky top-0 z-50">
+    <nav class="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <!-- Logo -->
                 <a href="https://it-is-you1.vercel.app/" class="flex items-center gap-3 group">
                     <div class="relative w-10 h-10 flex items-center justify-center">
-                        <div class="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-cyan-500/10 rounded-full group-hover:from-violet-500/30 group-hover:to-cyan-500/20 transition-all" style="animation: pulse 3s ease-in-out infinite;"></div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-brand-secondary/10 rounded-full group-hover:from-brand-primary/30 transition-all" style="animation: pulse 3s ease-in-out infinite;"></div>
                         <svg class="w-10 h-10 absolute" viewBox="0 0 40 40" fill="none" style="animation: spin 18s linear infinite;">
                             <circle cx="20" cy="20" r="18" stroke="url(#grad1)" stroke-width="1.5" opacity="0.3"/>
-                            <circle cx="20" cy="3" r="2" fill="#8B5CF6"/>
+                            <circle cx="20" cy="3" r="2" fill="#6366f1"/>
                             <defs>
                                 <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:0.3" />
+                                    <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.3" />
                                 </linearGradient>
                             </defs>
                         </svg>
-                        <div class="relative w-6 h-6 rounded-full bg-gradient-to-br from-violet-600 via-purple-600 to-cyan-600 shadow-lg"></div>
+                        <div class="relative w-6 h-6 rounded-full shadow-lg" style="background: linear-gradient(135deg, #6366f1, #0ea5e9);"></div>
                         <div class="absolute w-2 h-2 rounded-full bg-white" style="animation: blink 2.8s ease-in-out infinite;"></div>
                     </div>
                     <div>
-                        <div class="text-xl font-bold tracking-tight brand-font bg-gradient-to-r from-violet-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                        <div class="text-xl font-bold tracking-tight brand-font bg-gradient-to-r from-brand-primary via-brand-secondary to-brand-accent bg-clip-text text-transparent">
                             It·is·YOU
                         </div>
                         <div class="text-[9px] text-slate-500 -mt-1 tracking-wider">PSYCHER ENGINE</div>
@@ -322,7 +344,7 @@
                         </svg>
                     </button>
                     
-                    <button onclick="logout()" class="px-4 py-2 bg-slate-800/50 hover:bg-slate-700/70 text-white rounded-lg text-sm border border-white/10 hover:border-violet-500/50 transition-all backdrop-blur-sm">
+                    <button onclick="logout()" class="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm">
                         Wyloguj
                     </button>
                 </div>
@@ -334,9 +356,9 @@
     <main class="max-w-7xl mx-auto px-6 py-16">
         
         <!-- PROFILE HERO -->
-        <div id="profile-hero" class="glass-card rounded-3xl p-8 mb-12 border-2 border-white/10 hover:border-violet-500/30 transition-all duration-500 relative overflow-hidden" style="animation: fadeUp 0.8s ease-out;">
+        <div id="profile-hero" class="glass-panel rounded-3xl p-8 mb-12 border border-brand-primary/20 hover:border-brand-primary/40 transition-all duration-500 relative overflow-hidden" style="animation: fadeUp 0.8s ease-out;">
             <!-- Animated background gradient -->
-            <div class="absolute inset-0 bg-gradient-to-br from-violet-600/5 via-purple-600/5 to-cyan-600/5 opacity-50"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-brand-primary/5 via-brand-secondary/5 to-brand-accent/5 opacity-50"></div>
             <div class="absolute -top-24 -right-24 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl"></div>
             
@@ -356,29 +378,29 @@
                                     style="transition: stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;">
                             </circle>
                             <!-- Glow effect -->
-                            <circle id="progress-glow" cx="60" cy="60" r="54" fill="none" stroke="rgba(139, 92, 246, 0.4)" stroke-width="6" stroke-linecap="round"
+                            <circle id="progress-glow" cx="60" cy="60" r="54" fill="none" stroke="rgba(99, 102, 241, 0.4)" stroke-width="6" stroke-linecap="round"
                                     stroke-dasharray="339.292" stroke-dashoffset="339.292" 
                                     style="transition: stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s; filter: blur(8px);">
                             </circle>
                             <defs>
                                 <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
-                                    <stop offset="50%" style="stop-color:#A78BFA;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+                                    <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#818cf8;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1" />
                                 </linearGradient>
                             </defs>
                         </svg>
                         
                         <!-- Avatar -->
-                        <div id="user-avatar" class="relative w-32 h-32 rounded-full overflow-hidden border-4 border-slate-800/50 shadow-2xl group-hover:border-violet-500/50 transition-all duration-500">
+                        <div id="user-avatar" class="relative w-32 h-32 rounded-full overflow-hidden border-4 border-bg-surface shadow-2xl group-hover:border-brand-primary/50 transition-all duration-500">
                             <!-- Gradient placeholder with initials -->
-                            <div class="w-full h-full bg-gradient-to-br from-violet-600 via-purple-600 to-cyan-600 flex items-center justify-center">
+                            <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, #6366f1, #0ea5e9);">
                                 <span id="user-initials" class="text-4xl font-bold text-white brand-font">?</span>
                             </div>
                         </div>
                         
                         <!-- Level indicator -->
-                        <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-violet-600 to-purple-600 rounded-full border-2 border-slate-900 shadow-lg">
+                        <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full border-2 border-bg-main shadow-lg" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
                             <span id="profile-level" class="text-xs font-bold text-white">Lvl 0</span>
                         </div>
                     </div>
@@ -407,14 +429,14 @@
                             <p class="text-slate-400 text-sm">Ukończ wszystkie moduły aby odblokować pełną analizę</p>
                         </div>
                         <div class="text-right">
-                            <div id="completion-count" class="text-4xl font-bold bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent brand-font">0/7</div>
+                            <div id="completion-count" class="text-4xl font-bold bg-clip-text text-transparent brand-font" style="background-image: linear-gradient(90deg, #6366f1, #0ea5e9); -webkit-background-clip: text;">0/7</div>
                             <p class="text-xs text-slate-500 uppercase tracking-wider">Modułów</p>
                         </div>
                     </div>
                     
                     <!-- Linear Progress Bar -->
                     <div class="relative h-4 bg-slate-800/50 rounded-full overflow-hidden mb-6 border border-slate-700/50">
-                        <div id="progress-bar" class="absolute inset-y-0 left-0 bg-gradient-to-r from-violet-600 via-purple-500 to-cyan-500 rounded-full transition-all duration-1000 ease-out shadow-lg"
+                        <div id="progress-bar" class="absolute inset-y-0 left-0 rounded-full transition-all duration-1000 ease-out shadow-lg" style="background: linear-gradient(90deg, #6366f1, #0ea5e9);"
                              style="width: 0%; box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);">
                             <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 animate-pulse"></div>
                         </div>
@@ -430,10 +452,10 @@
                                 </svg>
                             </div>
                             <div class="flex-1">
-                                <h4 class="text-sm font-semibold text-violet-300 mb-1 uppercase tracking-wide">Następny Krok</h4>
+                                <h4 class="text-sm font-semibold text-brand-secondary mb-1 uppercase tracking-wide">Następny Krok</h4>
                                 <p id="next-step-text" class="text-slate-300 text-sm leading-relaxed">Rozpocznij pierwszy test aby zbudować swój profil psychometryczny</p>
                             </div>
-                            <button id="next-step-button" onclick="startNextTest()" class="flex-shrink-0 px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white text-sm font-semibold rounded-lg transition-all shadow-lg hover:shadow-violet-500/50 hover:scale-105">
+                            <button id="next-step-button" onclick="startNextTest()" class="flex-shrink-0 px-4 py-2 text-white text-sm font-semibold rounded-lg transition-all shadow-glow-primary hover:scale-105" style="background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 0 15px -3px rgba(99,102,241,0.5);">
                                 Start
                                 <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -478,7 +500,7 @@
             <div class="glass-card glass-card-active test-hexaco rounded-2xl p-6 cursor-pointer group" onclick="startHexacoTest()">
                 <div class="flex items-center justify-between mb-5">
                     <div class="card-icon-wrapper">
-                        <svg class="w-5 h-5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
                     </div>
@@ -487,7 +509,7 @@
                     </span>
                 </div>
                 
-                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-violet-400 transition-colors">HEXACO-60</h3>
+                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-primary transition-colors">HEXACO-60</h3>
                 <p class="text-sm text-slate-400 mb-6">6 wymiarów osobowości</p>
                 
                 <div class="flex items-center gap-2 text-xs text-slate-500 mb-6">
@@ -497,7 +519,7 @@
                     <span>15 min · 60 pytań</span>
                 </div>
                 
-                <button id="hexaco-button" class="w-full px-4 py-3 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-xl transition-all shadow-lg">
+                <button id="hexaco-button" class="w-full px-4 py-3 bg-brand-primary hover:bg-indigo-500 text-white font-semibold rounded-xl transition-all shadow-glow-primary">
                     Rozpocznij Test
                 </button>
             </div>
@@ -579,7 +601,7 @@
                     <span>12 min · 48 pytań</span>
                 </div>
                 
-                <button id="strengths-button" class="w-full px-4 py-3 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-xl transition-all shadow-lg relative z-10">
+                <button id="strengths-button" class="w-full px-4 py-3 bg-brand-primary hover:bg-indigo-500 text-white font-semibold rounded-xl transition-all shadow-glow-primary relative z-10">
                     Odkryj Talenty
                 </button>
             </div>
@@ -605,7 +627,7 @@
                     <span>12 min · 48 pytań</span>
                 </div>
                 
-                <button id="career-button" class="w-full px-4 py-3 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-xl transition-all shadow-lg relative z-10">
+                <button id="career-button" class="w-full px-4 py-3 bg-brand-primary hover:bg-indigo-500 text-white font-semibold rounded-xl transition-all shadow-glow-primary relative z-10">
                     Odkryj Kod Hollanda
                 </button>
             </div>
@@ -631,7 +653,7 @@
                     <span>10 min · 40 pytań</span>
                 </div>
                 
-                <button id="values-button" class="w-full px-4 py-3 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-xl transition-all shadow-lg relative z-10">
+                <button id="values-button" class="w-full px-4 py-3 bg-brand-primary hover:bg-indigo-500 text-white font-semibold rounded-xl transition-all shadow-glow-primary relative z-10">
                     Rozpocznij Test
                 </button>
             </div>
@@ -646,7 +668,7 @@
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl"></div>
             
             <h2 class="text-3xl md:text-4xl font-bold text-white mb-8 brand-font text-center relative">
-                <span class="bg-gradient-to-r from-violet-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                <span class="bg-clip-text text-transparent" style="background-image: linear-gradient(90deg, #6366f1, #0ea5e9, #d946ef); -webkit-background-clip: text;">
                     Jak to działa?
                 </span>
             </h2>
@@ -675,7 +697,7 @@
     <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl mt-24">
         <div class="max-w-7xl mx-auto px-6 py-10 text-center">
             <p class="text-slate-500 text-sm">
-                &copy; 2026 <span class="text-violet-400 font-semibold">It Is You</span> - Psycher Engine. Wszystkie prawa zastrzeżone.
+               &copy; 2026 <span class="text-brand-primary font-semibold">It Is You</span> - Psycher Engine. Wszystkie prawa zastrzeżone.
             </p>
         </div>
     </footer>
