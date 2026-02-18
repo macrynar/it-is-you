@@ -79,19 +79,31 @@ const CSS = `
   line-height: 1.1 !important;
   letter-spacing: -1px !important;
   margin-bottom: 10px !important;
-  color: #fff !important;
+  color: #ffffff !important;
   display: block !important;
+  position: relative !important;
+  z-index: 2 !important;
+  -webkit-text-fill-color: unset !important;
+  background: none !important;
 }
 .dt-root .dt-page-title .dt-title-accent {
   color: #ff2d55 !important;
+  -webkit-text-fill-color: #ff2d55 !important;
   text-shadow: 0 0 30px rgba(255,45,85,.5), 0 0 60px rgba(255,45,85,.2) !important;
 }
 .dt-root .dt-page-sub {
   font-size: 14px !important;
   color: rgba(255,255,255,.3) !important;
+  -webkit-text-fill-color: rgba(255,255,255,.3) !important;
   font-weight: 400 !important;
   display: block !important;
   margin: 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+.dt-root header {
+  position: relative !important;
+  z-index: 2 !important;
 }
 
 /* glass base */
@@ -347,7 +359,7 @@ function DarkTriadResults() {
       <style>{CSS}</style>
 
       {/* ── PAGE HEADER ── */}
-      <header style={{ textAlign: 'center', marginBottom: 44, display: 'block' }}>
+      <header style={{ textAlign: 'center', marginBottom: 44, display: 'block', position: 'relative', zIndex: 2 }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           padding: '7px 18px', borderRadius: 100,
@@ -359,11 +371,11 @@ function DarkTriadResults() {
         }}>
           ⚠ System Alert: Personality Analysis
         </div>
-        <h1 className="dt-page-title">
-          <span>Analiza </span>
-          <span className="dt-title-accent">Cienia</span>
-        </h1>
-        <p className="dt-page-sub">Dark Triad Assessment (SD3)</p>
+        <div style={{ fontSize: 42, fontWeight: 800, letterSpacing: -1, marginBottom: 10, lineHeight: 1.1, display: 'block', fontFamily: "'Space Grotesk', sans-serif" }}>
+          <span style={{ color: '#ffffff' }}>Analiza </span>
+          <span style={{ color: '#ff2d55', textShadow: '0 0 30px rgba(255,45,85,.5), 0 0 60px rgba(255,45,85,.2)' }}>Cienia</span>
+        </div>
+        <div style={{ fontSize: 14, color: 'rgba(255,255,255,.35)', fontWeight: 400, display: 'block', marginTop: 4 }}>Dark Triad Assessment (SD3)</div>
       </header>
 
       {/* ── ALERT BANNER ── */}
