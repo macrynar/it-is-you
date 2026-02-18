@@ -4,61 +4,186 @@ import { supabase } from '../../lib/supabaseClient.js';
 import { DARK_TRIAD_TEST } from '../../data/tests/darkTriad.js';
 import { generateDarkTriadReport } from '../../utils/scoring.js';
 
+/* ════════════════════════════════════════════════════════════════════
+   ACCENT & META
+════════════════════════════════════════════════════════════════════ */
 const DT_ACCENT = {
+  psychopathy: {
+    plName: 'Psychopatia', nameEn: 'Psychopathy', emoji: '⚡',
+    color: '#e8001c', fillGrad: 'linear-gradient(90deg,#6b0012,#e8001c,#ff2d55)',
+    glow: 'rgba(232,0,28,.6)', blob: '#e8001c',
+    hoverShadow: 'inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(232,0,28,.4),0 0 30px -4px rgba(232,0,28,.3),0 16px 48px -6px rgba(0,0,0,.75)',
+    glowLine: '0 0 12px 3px rgba(232,0,28,.65)',
+    iconBg: 'rgba(232,0,28,.18)', iconBorder: 'rgba(232,0,28,.3)',
+    dotGlow: 'rgba(232,0,28,.7)', miniFill: 'linear-gradient(90deg,#6b0012,#ff2d55)',
+    miniFillShadow: '0 0 8px rgba(255,45,85,.55)', vsColor: '#ff6060',
+  },
   machiavellianism: {
-    plName: 'Makiawelizm', name: 'Machiavellianism', emoji: '🎭',
-    color: '#ff9532', gradient: 'linear-gradient(90deg,#a04000,#ff9532)',
-    glow: 'rgba(255,149,50,.5)', blob: '#ff9532',
-    hover: 'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(255,149,50,.35),0 0 30px -4px rgba(255,149,50,.25),0 16px 48px -6px rgba(0,0,0,.7)',
+    plName: 'Makiawelizm', nameEn: 'Machiavellianism', emoji: '🎭',
+    color: '#ff6230', fillGrad: 'linear-gradient(90deg,#7a1a00,#ff6230,#ff9060)',
+    glow: 'rgba(255,98,48,.6)', blob: '#ff6230',
+    hoverShadow: 'inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,98,48,.4),0 0 30px -4px rgba(255,98,48,.3),0 16px 48px -6px rgba(0,0,0,.75)',
+    glowLine: '0 0 12px 3px rgba(255,98,48,.65)',
+    iconBg: 'rgba(255,98,48,.15)', iconBorder: 'rgba(255,98,48,.28)',
+    dotGlow: 'rgba(255,98,48,.7)', miniFill: 'linear-gradient(90deg,#7a1a00,#ff6230)',
+    miniFillShadow: '0 0 8px rgba(255,98,48,.55)', vsColor: '#ff9060',
   },
   narcissism: {
-    plName: 'Narcyzm', name: 'Narcissism', emoji: '👑',
-    color: '#b08fff', gradient: 'linear-gradient(90deg,#4a28b0,#b08fff)',
-    glow: 'rgba(123,94,167,.6)', blob: '#7b5ea7',
-    hover: 'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(123,94,167,.4),0 0 30px -4px rgba(123,94,167,.3),0 16px 48px -6px rgba(0,0,0,.7)',
-  },
-  psychopathy: {
-    plName: 'Psychopatia', name: 'Psychopathy', emoji: '🔴',
-    color: '#ff4d6d', gradient: 'linear-gradient(90deg,#7f0020,#ff4d6d)',
-    glow: 'rgba(255,77,109,.5)', blob: '#ff4d6d',
-    hover: 'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(255,77,109,.4),0 0 30px -4px rgba(255,77,109,.3),0 16px 48px -6px rgba(0,0,0,.7)',
+    plName: 'Narcyzm', nameEn: 'Narcissism', emoji: '👑',
+    color: '#ffaa00', fillGrad: 'linear-gradient(90deg,#7a4000,#ffaa00,#ffd060)',
+    glow: 'rgba(255,170,0,.5)', blob: '#ffaa00',
+    hoverShadow: 'inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,170,0,.4),0 0 30px -4px rgba(255,170,0,.3),0 16px 48px -6px rgba(0,0,0,.75)',
+    glowLine: '0 0 12px 3px rgba(255,170,0,.65)',
+    iconBg: 'rgba(255,170,0,.14)', iconBorder: 'rgba(255,170,0,.28)',
+    dotGlow: 'rgba(255,170,0,.6)', miniFill: 'linear-gradient(90deg,#7a4000,#ffaa00)',
+    miniFillShadow: '0 0 8px rgba(255,170,0,.5)', vsColor: '#ffd060',
   },
 };
-
-const DT_ORDER = ['machiavellianism', 'narcissism', 'psychopathy'];
 
 const RISK_META = {
-  high:    { label: 'Wysokie', badge: '⚠️', badgeColor: '#ff4d6d', bgColor: 'rgba(255,77,109,.12)',  borderColor: 'rgba(255,77,109,.4)' },
-  average: { label: 'Średnie', badge: '⚡', badgeColor: '#ff9532', bgColor: 'rgba(255,149,50,.08)', borderColor: 'rgba(255,149,50,.3)' },
-  low:     { label: 'Niskie',  badge: '✓',  badgeColor: '#00e5a0', bgColor: 'rgba(0,229,160,.08)',  borderColor: 'rgba(0,229,160,.3)' },
+  high:    { label: 'Wysokie ryzyko', badge: '⚠', isHigh: true  },
+  average: { label: 'Średnie ryzyko', badge: '⚡', isHigh: false },
+  low:     { label: 'Niskie ryzyko',  badge: '✓', isHigh: false },
 };
 
+/* ════════════════════════════════════════════════════════════════════
+   CSS
+════════════════════════════════════════════════════════════════════ */
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
-.dt-root{font-family:'Space Grotesk',sans-serif;background:#0d0f2b;color:#fff;min-height:100vh;overflow-x:hidden;}
-.dt-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(255,77,109,.08) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(123,94,167,.12) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,10,40,.1) 0%,transparent 65%);}
-.dt-glass{background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:20px;position:relative;isolation:isolate;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6),0 2px 8px -2px rgba(0,0,0,.4);}
-.dt-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(255,77,109,.18) 35%,rgba(123,94,167,.15) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
-.dt-stat-card{border-radius:16px;cursor:default;overflow:hidden;position:relative;isolation:isolate;transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;}
-.dt-stat-card:hover{transform:translateY(-5px) scale(1.01);}
-.dt-glow-line{position:absolute;bottom:0;left:15%;right:15%;height:1px;border-radius:100px;opacity:0;transition:opacity .3s;}
-.dt-stat-card:hover .dt-glow-line{opacity:1;}
-.dt-pfill{height:100%;border-radius:100px;position:relative;}
-.dt-pfill::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.6);}
-.dt-tbar{height:100%;border-radius:100px;}
-@keyframes spinLoader{to{transform:rotate(360deg);}}
-@keyframes shimmer{0%{background-position:-600px 0;}100%{background-position:600px 0;}}
-.dt-shimmer{background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.05) 75%);background-size:600px 100%;animation:shimmer 1.8s ease-in-out infinite;}
+
+.dt-root {
+  font-family: 'Space Grotesk', sans-serif;
+  background: #0d0a1a;
+  color: #fff;
+  min-height: 100vh;
+  padding: 48px 40px 80px;
+  position: relative;
+  overflow-x: hidden;
+}
+.dt-root::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 40% at 10% 15%, rgba(232,0,28,.14) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 50% at 88% 70%, rgba(123,31,162,.16) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 55% 45%, rgba(255,45,85,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 30% at 80% 15%, rgba(255,98,48,.06) 0%, transparent 55%),
+    #0d0a1a;
+}
+
+/* glass base */
+.dt-glass {
+  background: rgba(28,10,18,.65);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-radius: 20px;
+  position: relative;
+  isolation: isolate;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 0 1px rgba(255,45,85,.1),
+    0 8px 32px -4px rgba(0,0,0,.7),
+    0 2px 8px -2px rgba(0,0,0,.5);
+}
+.dt-glass::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(145deg,
+    rgba(255,255,255,.12) 0%,
+    rgba(255,45,85,.22) 30%,
+    rgba(123,31,162,.18) 70%,
+    rgba(255,255,255,.03) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* page badge pulse */
+@keyframes badgePulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(232,0,28,0); }
+  50%     { box-shadow: 0 0 16px 2px rgba(232,0,28,.25); }
+}
+
+/* alert glow */
+@keyframes alertGlow {
+  0%,100% { box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(232,0,28,.15), 0 0 30px -4px rgba(232,0,28,.2), 0 8px 32px -4px rgba(0,0,0,.6); }
+  50%     { box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(232,0,28,.35), 0 0 50px -4px rgba(232,0,28,.35), 0 8px 32px -4px rgba(0,0,0,.6); }
+}
+
+/* trait card */
+.dt-trait-card {
+  padding: 26px 26px 22px;
+  border-radius: 18px;
+  transition: transform .28s cubic-bezier(.22,.68,0,1.15), box-shadow .28s ease;
+  overflow: hidden;
+}
+.dt-trait-card:hover { transform: translateY(-4px) scale(1.005); }
+
+/* glow line */
+.dt-glow-line {
+  position: absolute;
+  bottom: 0; left: 12%; right: 12%;
+  height: 1px;
+  border-radius: 100px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.dt-trait-card:hover .dt-glow-line { opacity: 1; }
+
+/* blob */
+.dt-blob {
+  position: absolute;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  filter: blur(55px);
+  bottom: -70px; right: -50px;
+  opacity: .12;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity .35s;
+}
+.dt-trait-card:hover .dt-blob { opacity: .28; }
+
+/* scale fill */
+.dt-scale-fill {
+  height: 100%;
+  border-radius: 100px;
+  position: relative;
+  transition: width 1.2s cubic-bezier(.22,.68,0,1.1);
+}
+
+/* impl dot */
+.dt-impl-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* shimmer */
+@keyframes shimmer { 0%{background-position:-600px 0;} 100%{background-position:600px 0;} }
+.dt-shimmer {
+  background: linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.05) 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+/* spin loader */
+@keyframes spinLoader { to { transform: rotate(360deg); } }
 `;
 
-const G = {
-  boxShadow: 'inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6)',
-};
-
+/* ════════════════════════════════════════════════════════════════════
+   COMPONENT
+════════════════════════════════════════════════════════════════════ */
 function DarkTriadResults() {
-  const [report, setReport]     = useState(null);
-  const [loading, setLoading]   = useState(true);
-  const [error, setError]       = useState(null);
+  const [report, setReport]                               = useState(null);
+  const [loading, setLoading]                             = useState(true);
+  const [error, setError]                                 = useState(null);
   const [interpretation, setInterpretation]               = useState(null);
   const [interpretationLoading, setInterpretationLoading] = useState(false);
   const [interpretationError, setInterpretationError]     = useState(null);
@@ -159,22 +284,22 @@ function DarkTriadResults() {
 
   /* ── LOADING ── */
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#0d0f2b', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
+    <div style={{ minHeight: '100vh', background: '#0d0a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
       <style>{CSS}</style>
-      <div style={{ width: 56, height: 56, border: '3px solid rgba(255,77,109,.3)', borderTopColor: '#ff4d6d', borderRadius: '50%', animation: 'spinLoader 1s linear infinite' }} />
+      <div style={{ width: 56, height: 56, border: '3px solid rgba(255,45,85,.3)', borderTopColor: '#ff2d55', borderRadius: '50%', animation: 'spinLoader 1s linear infinite' }} />
       <p style={{ color: 'rgba(255,255,255,.4)', fontFamily: 'Space Grotesk', fontSize: 14 }}>Analiza Cienia…</p>
     </div>
   );
 
   /* ── ERROR ── */
   if (error || !report) return (
-    <div style={{ minHeight: '100vh', background: '#0d0f2b', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{ minHeight: '100vh', background: '#0d0a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <style>{CSS}</style>
       <div className="dt-glass" style={{ padding: 40, maxWidth: 440, textAlign: 'center' }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
-        <h2 style={{ color: '#ff4d6d', marginBottom: 8, fontSize: 22, fontFamily: 'Space Grotesk', fontWeight: 700 }}>Błąd</h2>
-        <p style={{ color: 'rgba(255,255,255,.5)', marginBottom: 24, fontFamily: 'Space Grotesk' }}>{error}</p>
-        <button onClick={() => window.location.href = '/user-profile-tests.html'} style={{ background: 'rgba(255,77,109,.15)', border: '1px solid rgba(255,77,109,.4)', color: '#ff4d6d', padding: '10px 24px', borderRadius: 12, cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600 }}>
+        <h2 style={{ color: '#ff2d55', marginBottom: 8, fontSize: 22, fontWeight: 700 }}>Błąd</h2>
+        <p style={{ color: 'rgba(255,255,255,.5)', marginBottom: 24 }}>{error}</p>
+        <button onClick={() => window.location.href = '/user-profile-tests.html'} style={{ background: 'rgba(255,45,85,.15)', border: '1px solid rgba(255,45,85,.4)', color: '#ff2d55', padding: '10px 24px', borderRadius: 12, cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600 }}>
           Wróć do Dashboardu
         </button>
       </div>
@@ -182,211 +307,249 @@ function DarkTriadResults() {
   );
 
   /* ── DATA ── */
-  const dims        = report.dimensions || {};
-  const sorted      = DT_ORDER.filter(id => dims[id]);
-  const byScore     = [...sorted].sort((a, b) => (dims[b]?.raw_score || 0) - (dims[a]?.raw_score || 0));
+  const dims = report.dimensions || {};
+  // Sort by score desc: psychopathy, machiavellianism, narcissism (or whatever order they fall in)
+  const sortedIds = Object.keys(dims).sort((a, b) => (dims[b]?.raw_score || 0) - (dims[a]?.raw_score || 0));
+
+  // Compute average score
+  const scores = sortedIds.map(id => dims[id]?.raw_score || 0);
+  const avgScore = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2) : '0.00';
+
+  // Highest percentile for "Top X%"
+  const maxPercentile = Math.max(...sortedIds.map(id => dims[id]?.percentile || 0));
+
   const overallMeta = RISK_META[report.overall_risk] || RISK_META.average;
 
   return (
-    <div className="dt-root" style={{ padding: '48px 24px 80px', position: 'relative', zIndex: 1 }}>
+    <div className="dt-root" style={{ position: 'relative', zIndex: 1 }}>
       <style>{CSS}</style>
 
       {/* ── PAGE HEADER ── */}
-      <header style={{ textAlign: 'center', marginBottom: 40 }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 18px', borderRadius: 100, background: 'rgba(255,77,109,.1)', border: '1px solid rgba(255,77,109,.25)', fontSize: 13, fontWeight: 600, color: '#ff4d6d', letterSpacing: .5, marginBottom: 14 }}>
-          👁 System Alert: Shadow Analysis
+      <header style={{ textAlign: 'center', marginBottom: 44 }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+          padding: '7px 18px', borderRadius: 100,
+          background: 'rgba(232,0,28,.12)', border: '1px solid rgba(232,0,28,.35)',
+          fontSize: 11, fontWeight: 700, color: '#ff2d55',
+          letterSpacing: 3, textTransform: 'uppercase',
+          marginBottom: 18, backdropFilter: 'blur(10px)',
+          animation: 'badgePulse 3s ease-in-out infinite',
+        }}>
+          ⚠ System Alert: Personality Analysis
         </div>
-        <h1 style={{ fontSize: 32, fontWeight: 800, letterSpacing: -.5, marginBottom: 8 }}>
-          Analiza <span style={{ color: '#ff4d6d' }}>Cienia</span>
+        <h1 style={{ fontSize: 42, fontWeight: 800, letterSpacing: -1, marginBottom: 10, lineHeight: 1.1 }}>
+          <span style={{ color: '#fff' }}>Analiza </span>
+          <span style={{ color: '#ff2d55', textShadow: '0 0 30px rgba(255,45,85,.5), 0 0 60px rgba(255,45,85,.2)' }}>Cienia</span>
         </h1>
-        <p style={{ fontSize: 14, color: 'rgba(255,255,255,.35)', fontWeight: 400 }}>
-          <strong style={{ color: 'rgba(255,255,255,.55)', fontWeight: 500 }}>Dark Triad SD3</strong> · Makiawelizm · Narcyzm · Psychopatia
-        </p>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,.3)', fontWeight: 400 }}>Dark Triad Assessment (SD3)</p>
       </header>
 
-      {/* ── MAIN LAYOUT ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 24, maxWidth: 1160, margin: '0 auto' }}>
-
-        {/* LEFT: Bar chart per dimension */}
-        <div className="dt-glass" style={{ padding: 36 }}>
-          <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: 3, textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 32, display: 'flex', alignItems: 'center', gap: 12 }}>
-            Profil Ciemnej Triady
-            <span style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,rgba(255,77,109,.2),transparent)' }} />
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-            {sorted.map(id => {
-              const ac     = DT_ACCENT[id];
-              const dim    = dims[id];
-              if (!dim) return null;
-              const norm    = DARK_TRIAD_TEST.norms?.[id];
-              const pct     = Math.round(((dim.raw_score - 1) / 4) * 100);
-              const normPct = norm ? Math.round(((norm.mean - 1) / 4) * 100) : 50;
-              const riskM   = RISK_META[dim.level] || RISK_META.low;
-
-              return (
-                <div key={id}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <span style={{ fontSize: 24 }}>{ac.emoji}</span>
-                      <div>
-                        <div style={{ fontSize: 15, fontWeight: 700, color: '#fff' }}>{ac.plName}</div>
-                        <div style={{ fontSize: 11, color: 'rgba(255,255,255,.35)', fontWeight: 500, letterSpacing: 1 }}>{ac.name}</div>
-                      </div>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 100, background: riskM.bgColor, border: `1px solid ${riskM.borderColor}`, color: riskM.badgeColor }}>
-                        {riskM.badge} {riskM.label}
-                      </span>
-                      <span style={{ fontSize: 22, fontWeight: 800, color: ac.color, minWidth: 48, textAlign: 'right' }}>{dim.raw_score?.toFixed(1)}</span>
-                    </div>
-                  </div>
-
-                  {/* progress track */}
-                  <div style={{ position: 'relative', height: 10, background: 'rgba(255,255,255,.06)', borderRadius: 100, overflow: 'visible' }}>
-                    <div className="dt-pfill" style={{ width: `${pct}%`, background: ac.gradient, boxShadow: `0 0 10px ${ac.glow}` }} />
-                    {norm && (
-                      <div style={{ position: 'absolute', top: -4, left: `${normPct}%`, width: 2, height: 18, background: 'rgba(255,255,255,.25)', borderRadius: 2, transform: 'translateX(-50%)' }} />
-                    )}
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: 'rgba(255,255,255,.25)' }}>
-                    <span>1.0 (min)</span>
-                    {norm && <span style={{ color: 'rgba(255,255,255,.35)' }}>Norma: {norm.mean}</span>}
-                    <span>5.0 (max)</span>
-                  </div>
-
-                  {dim.interpretation?.description && (
-                    <p style={{ marginTop: 10, fontSize: 13, color: 'rgba(255,255,255,.45)', lineHeight: 1.6, borderLeft: `2px solid ${ac.color}44`, paddingLeft: 12 }}>
-                      {dim.interpretation.description}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* RIGHT: Summary panel */}
-        <div className="dt-glass" style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: 'uppercase', color: 'rgba(255,255,255,.3)' }}>Podsumowanie</div>
-
-          {/* Overall risk */}
-          <div style={{ background: overallMeta.bgColor, border: `1px solid ${overallMeta.borderColor}`, borderRadius: 14, padding: 20 }}>
-            <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: 2.5, textTransform: 'uppercase', color: overallMeta.badgeColor, marginBottom: 6 }}>Status Ogólny</div>
-            <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: -.3, marginBottom: 4 }}>
-              {overallMeta.badge} {report.risk_alert || 'Profil Analizy Cienia'}
+      {/* ── ALERT BANNER ── */}
+      {(report.overall_risk === 'high' || sortedIds.some(id => dims[id]?.level === 'high')) && (
+        <div style={{
+          maxWidth: 900, margin: '0 auto 28px', padding: '24px 28px', borderRadius: 16,
+          background: 'rgba(232,0,28,.08)', border: '1px solid rgba(232,0,28,.3)',
+          backdropFilter: 'blur(16px)', display: 'flex', alignItems: 'flex-start', gap: 16,
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(232,0,28,.15), 0 0 30px -4px rgba(232,0,28,.2), 0 8px 32px -4px rgba(0,0,0,.6)',
+          animation: 'alertGlow 3s ease-in-out infinite',
+        }}>
+          <div style={{ fontSize: 28, flexShrink: 0, filter: 'drop-shadow(0 0 8px rgba(255,170,0,.6))' }}>⚠️</div>
+          <div>
+            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 6 }}>Status Ogólny</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#ff2d55', lineHeight: 1.5, textShadow: '0 0 20px rgba(255,45,85,.3)' }}>
+              {report.risk_alert || 'Jeden lub więcej wymiarów wskazuje na podwyższone ryzyko.'}
             </div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,.4)' }}>Dark Triad SD3 · Jones &amp; Paulhus, 2014</div>
-          </div>
-
-          <div style={{ height: 1, background: 'rgba(255,255,255,.07)' }} />
-
-          {/* Trait ranking */}
-          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: 'uppercase', color: 'rgba(255,255,255,.3)' }}>Ranking cech</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {byScore.map(id => {
-              const ac  = DT_ACCENT[id];
-              const dim = dims[id];
-              if (!dim) return null;
-              const pct = Math.round(((dim.raw_score - 1) / 4) * 100);
-              return (
-                <div key={id} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,.65)', whiteSpace: 'nowrap', minWidth: 108 }}>
-                    {ac.emoji} {ac.plName}
-                  </span>
-                  <div style={{ flex: 1, height: 4, background: 'rgba(255,255,255,.07)', borderRadius: 100, overflow: 'hidden' }}>
-                    <div className="dt-tbar" style={{ width: `${pct}%`, background: ac.gradient, boxShadow: `0 0 8px ${ac.glow}` }} />
-                  </div>
-                  <span style={{ fontSize: 12, fontWeight: 700, minWidth: 30, textAlign: 'right', color: ac.color }}>{dim.raw_score?.toFixed(1)}</span>
-                </div>
-              );
-            })}
-          </div>
-
-          <div style={{ height: 1, background: 'rgba(255,255,255,.07)' }} />
-
-          {/* Insight note */}
-          <div style={{ background: 'rgba(255,77,109,.06)', border: '1px solid rgba(255,77,109,.18)', borderRadius: 12, padding: 16, fontSize: 13, lineHeight: 1.6, color: 'rgba(255,255,255,.5)' }}>
-            <strong style={{ color: 'rgba(255,255,255,.8)', fontWeight: 600 }}>Uwaga:</strong>{' '}
-            Podwyższone wyniki nie oznaczają diagnozy klinicznej. Dark Triad to spektrum cech
-            obecnych w całej populacji z różnym natężeniem.
           </div>
         </div>
-      </div>
+      )}
 
-      {/* ── STAT CARDS ── */}
-      <div style={{ maxWidth: 1160, margin: '24px auto 0' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
-          <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: 'uppercase', color: 'rgba(255,255,255,.3)' }}>Szczegółowe wyniki</span>
-          <span style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,rgba(255,77,109,.2),transparent)' }} />
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
-          {sorted.map(id => {
-            const ac    = DT_ACCENT[id];
-            const dim   = dims[id];
-            if (!dim) return null;
-            const pct   = Math.round(((dim.raw_score - 1) / 4) * 100);
-            const riskM = RISK_META[dim.level] || RISK_META.low;
+      {/* ── MAIN LAYOUT ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 20, maxWidth: 900, margin: '0 auto' }}>
+
+        {/* LEFT — trait cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {sortedIds.map(id => {
+            const ac   = DT_ACCENT[id];
+            const dim  = dims[id];
+            if (!ac || !dim) return null;
+
+            const norm    = DARK_TRIAD_TEST.norms?.[id];
+            const pct     = Math.round(((dim.raw_score - 1) / 4) * 100);
+            const normPct = norm ? Math.round(((norm.mean - 1) / 4) * 100) : 50;
+            const riskM   = RISK_META[dim.level] || RISK_META.low;
+            const vsDiff  = norm ? (dim.raw_score - norm.mean).toFixed(2) : '0';
 
             return (
-              <div key={id} className="dt-glass dt-stat-card"
-                style={{ boxShadow: G.boxShadow }}
-                onMouseEnter={e => e.currentTarget.style.boxShadow = ac.hover}
-                onMouseLeave={e => e.currentTarget.style.boxShadow = G.boxShadow}
+              <div key={id} className="dt-glass dt-trait-card"
+                style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 1px rgba(255,45,85,.1), 0 8px 32px -4px rgba(0,0,0,.7), 0 2px 8px -2px rgba(0,0,0,.5)' }}
+                onMouseEnter={e => e.currentTarget.style.boxShadow = ac.hoverShadow}
+                onMouseLeave={e => e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 1px rgba(255,45,85,.1), 0 8px 32px -4px rgba(0,0,0,.7), 0 2px 8px -2px rgba(0,0,0,.5)'}
               >
-                <div className="dt-glow-line" style={{ background: ac.color, boxShadow: `0 0 10px 2px ${ac.glow}` }} />
-                <div style={{ padding: '22px 22px 20px' }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14 }}>
+                <div className="dt-glow-line" style={{ background: ac.color, boxShadow: ac.glowLine }} />
+                <div className="dt-blob" style={{ background: ac.blob }} />
+
+                {/* card header */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <div style={{
+                      width: 48, height: 48, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 22, flexShrink: 0, background: ac.iconBg, border: `1px solid ${ac.iconBorder}`,
+                      transition: 'transform .3s ease',
+                    }}>
+                      {ac.emoji}
+                    </div>
                     <div>
-                      <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 4 }}>{ac.plName}</div>
-                      <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: -.2, color: '#fff' }}>{ac.name}</div>
-                    </div>
-                    <div style={{ fontSize: 22, fontWeight: 800, color: ac.color, lineHeight: 1 }}>
-                      {dim.raw_score?.toFixed(1)}<span style={{ fontSize: 13, color: 'rgba(255,255,255,.3)' }}>/5</span>
+                      <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: -.3, marginBottom: 2 }}>{ac.plName}</div>
+                      <div style={{ fontSize: 12, color: 'rgba(255,255,255,.3)', fontWeight: 500 }}>{ac.nameEn}</div>
                     </div>
                   </div>
-
-                  <div style={{ height: 4, borderRadius: 100, background: 'rgba(255,255,255,.07)', marginBottom: 12, overflow: 'hidden' }}>
-                    <div className="dt-pfill" style={{ width: `${pct}%`, background: ac.gradient, boxShadow: `0 0 10px ${ac.glow}` }} />
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5,
+                    padding: '6px 12px', borderRadius: 100, fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase',
+                    color: riskM.isHigh ? '#ff2d55' : '#ffaa00',
+                    background: riskM.isHigh ? 'rgba(255,45,85,.1)' : 'rgba(255,170,0,.1)',
+                    border: `1px solid ${riskM.isHigh ? 'rgba(255,45,85,.3)' : 'rgba(255,170,0,.3)'}`,
+                    boxShadow: riskM.isHigh ? '0 0 12px -2px rgba(255,45,85,.25)' : '0 0 12px -2px rgba(255,170,0,.2)',
+                  }}>
+                    {riskM.badge} {riskM.label}
                   </div>
+                </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                    <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 100, background: riskM.bgColor, border: `1px solid ${riskM.borderColor}`, color: riskM.badgeColor }}>
-                      {riskM.badge} {riskM.label} ryzyko
+                {/* scale bar */}
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ position: 'relative' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'rgba(255,255,255,.25)', fontWeight: 500, marginBottom: 8 }}>
+                      <span>1.0</span>
+                      {norm && <span style={{ position: 'absolute', left: `${normPct}%`, transform: 'translateX(-50%)', color: 'rgba(255,255,255,.3)' }}>Norma: {norm.mean}</span>}
+                      <span>5.0</span>
+                    </div>
+                  </div>
+                  <div style={{ height: 10, borderRadius: 100, background: 'rgba(255,255,255,.06)', position: 'relative', overflow: 'visible' }}>
+                    <div className="dt-scale-fill" style={{ width: `${pct}%`, background: ac.fillGrad, boxShadow: `0 0 14px ${ac.glow}` }}>
+                      <div style={{
+                        position: 'absolute', right: -1, top: '50%', transform: 'translateY(-50%)',
+                        background: 'rgba(10,6,20,.85)', border: '1px solid rgba(255,255,255,.15)',
+                        borderRadius: 6, padding: '2px 7px', fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap',
+                        backdropFilter: 'blur(8px)',
+                      }}>
+                        {dim.raw_score?.toFixed(2)}
+                      </div>
+                    </div>
+                    {norm && (
+                      <div style={{ position: 'absolute', top: -2, bottom: -2, width: 2, left: `${normPct}%`, background: 'rgba(255,255,255,.4)', borderRadius: 2, boxShadow: '0 0 6px rgba(255,255,255,.3)' }} />
+                    )}
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 11 }}>
+                    <span style={{ fontWeight: 600 }}>
+                      vs średnia: <span style={{ color: ac.vsColor }}>{parseFloat(vsDiff) >= 0 ? '+' : ''}{vsDiff}</span>
                     </span>
-                    <span style={{ fontSize: 11, color: 'rgba(255,255,255,.3)' }}>
-                      Percentyl: <strong style={{ color: 'rgba(255,255,255,.6)' }}>{dim.percentile}%</strong>
+                    <span style={{ color: 'rgba(255,255,255,.4)' }}>
+                      Percentyl: <strong style={{ color: 'rgba(255,255,255,.7)' }}>{dim.percentile}%</strong>
                     </span>
                   </div>
+                </div>
 
-                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,.35)', lineHeight: 1.5 }}>
-                    {dim.interpretation?.description?.substring(0, 120)}…
+                {/* description */}
+                {dim.interpretation?.description && (
+                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,.5)', lineHeight: 1.65, marginBottom: 16, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,.06)' }}>
+                    {dim.interpretation.description}
                   </div>
+                )}
 
-                  {dim.interpretation?.implications?.length > 0 && (
-                    <ul style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 5 }}>
-                      {dim.interpretation.implications.slice(0, 2).map((imp, i) => (
-                        <li key={i} style={{ fontSize: 11, color: 'rgba(255,255,255,.35)', display: 'flex', alignItems: 'flex-start', gap: 6 }}>
-                          <span style={{ color: ac.color, marginTop: 1 }}>▸</span>{imp}
+                {/* implications */}
+                {dim.interpretation?.implications?.length > 0 && (
+                  <>
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 2.5, textTransform: 'uppercase', color: 'rgba(255,255,255,.25)', marginBottom: 10 }}>Implikacje:</div>
+                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7 }}>
+                      {dim.interpretation.implications.map((imp, i) => (
+                        <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13, color: 'rgba(255,255,255,.55)' }}>
+                          <span className="dt-impl-dot" style={{ background: ac.color, boxShadow: `0 0 6px ${ac.dotGlow}` }} />
+                          {imp}
                         </li>
                       ))}
                     </ul>
-                  )}
-                </div>
-                {/* blob */}
-                <div style={{ position: 'absolute', width: 140, height: 140, borderRadius: '50%', filter: 'blur(50px)', bottom: -50, right: -30, background: ac.blob, opacity: .15, pointerEvents: 'none', zIndex: -1 }} />
+                  </>
+                )}
               </div>
             );
           })}
         </div>
+
+        {/* RIGHT — summary panel */}
+        <div className="dt-glass" style={{ padding: '26px 22px', display: 'flex', flexDirection: 'column', gap: 18, alignSelf: 'start', position: 'sticky', top: 32 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: 'rgba(255,255,255,.25)' }}>Podsumowanie</div>
+
+          {/* overall score */}
+          <div style={{ background: 'rgba(232,0,28,.07)', border: '1px solid rgba(232,0,28,.2)', borderRadius: 14, padding: 20, textAlign: 'center' }}>
+            <div style={{ fontSize: 52, fontWeight: 800, letterSpacing: -2, color: '#ff2d55', textShadow: '0 0 30px rgba(255,45,85,.55), 0 0 60px rgba(255,45,85,.2)', lineHeight: 1, marginBottom: 4 }}>
+              {avgScore}
+            </div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,.3)', letterSpacing: 1 }}>Średni wynik Dark Triad</div>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 12,
+              fontSize: 12, fontWeight: 700, color: '#ff2d55',
+              background: 'rgba(255,45,85,.1)', border: '1px solid rgba(255,45,85,.25)',
+              padding: '5px 12px', borderRadius: 100,
+            }}>
+              🔴 Top {maxPercentile}% populacji
+            </div>
+          </div>
+
+          <div style={{ height: 1, background: 'rgba(255,255,255,.07)' }} />
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: 'rgba(255,255,255,.25)' }}>Składowe</div>
+
+          {/* mini bars */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {sortedIds.map(id => {
+              const ac  = DT_ACCENT[id];
+              const dim = dims[id];
+              if (!ac || !dim) return null;
+              const pct = Math.round(((dim.raw_score - 1) / 4) * 100);
+              return (
+                <div key={id} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ fontSize: 16, flexShrink: 0 }}>{ac.emoji}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,.65)', marginBottom: 5, display: 'flex', justifyContent: 'space-between' }}>
+                      <span>{ac.plName}</span>
+                      <span style={{ fontWeight: 700, color: ac.color }}>{dim.raw_score?.toFixed(2)}</span>
+                    </div>
+                    <div style={{ height: 4, borderRadius: 100, background: 'rgba(255,255,255,.07)', overflow: 'hidden' }}>
+                      <div style={{ width: `${pct}%`, height: '100%', borderRadius: 100, background: ac.miniFill, boxShadow: ac.miniFillShadow }} />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ height: 1, background: 'rgba(255,255,255,.07)' }} />
+
+          {/* insight box */}
+          <div style={{ background: 'rgba(123,31,162,.08)', border: '1px solid rgba(123,31,162,.22)', borderRadius: 12, padding: 16, fontSize: 12, lineHeight: 1.65, color: 'rgba(255,255,255,.45)' }}>
+            <strong style={{ color: 'rgba(255,200,200,.85)', fontWeight: 600 }}>
+              {report.overall_risk === 'high'
+                ? 'Profil wskazuje na podwyższoną skłonność do zachowań ciemnej triady.'
+                : 'Profil mieści się w normie populacyjnej.'}
+            </strong>{' '}
+            {sortedIds[0] && DT_ACCENT[sortedIds[0]] && (
+              <>Dominujący wymiar: {DT_ACCENT[sortedIds[0]].plName}.</>
+            )}
+          </div>
+
+          {/* disclaimer */}
+          <div style={{ background: 'rgba(255,170,0,.05)', border: '1px solid rgba(255,170,0,.15)', borderRadius: 10, padding: '12px 14px', fontSize: 11, color: 'rgba(255,200,100,.5)', lineHeight: 1.55, textAlign: 'center' }}>
+            ⚠️ Wyniki mają charakter informacyjny. Nie stanowią diagnozy klinicznej. W razie wątpliwości skonsultuj się ze specjalistą.
+          </div>
+        </div>
+
       </div>
 
       {/* ── AI INTERPRETATION ── */}
-      <div style={{ maxWidth: 1160, margin: '24px auto 0' }}>
-        <div className="dt-glass" style={{ padding: 36, background: 'rgba(20,10,30,.6)' }}>
+      <div style={{ maxWidth: 900, margin: '28px auto 0' }}>
+        <div className="dt-glass" style={{ padding: 36, background: 'rgba(20,6,16,.7)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,77,109,.12)', border: '1px solid rgba(255,77,109,.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>🤖</div>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,45,85,.12)', border: '1px solid rgba(255,45,85,.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>🤖</div>
               <div>
                 <div style={{ fontSize: 18, fontWeight: 700, color: '#fff' }}>Interpretacja AI</div>
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,.3)' }}>Spersonalizowana analiza profilu Dark Triad</div>
@@ -402,8 +565,8 @@ function DarkTriadResults() {
           {interpretationLoading && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#ff4d6d' }} />
-                <span style={{ fontSize: 13, color: '#ff4d6d' }}>Generuję interpretację…</span>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#ff2d55' }} />
+                <span style={{ fontSize: 13, color: '#ff2d55' }}>Generuję interpretację…</span>
               </div>
               {[100, 83, 91, 70, 88, 75, 95].map((w, i) => (
                 <div key={i} className="dt-shimmer" style={{ height: 14, borderRadius: 8, width: `${w}%` }} />
@@ -412,8 +575,8 @@ function DarkTriadResults() {
           )}
 
           {interpretationError && !interpretationLoading && (
-            <div style={{ background: 'rgba(255,77,109,.08)', border: '1px solid rgba(255,77,109,.25)', borderRadius: 12, padding: 16, textAlign: 'center' }}>
-              <p style={{ color: '#ff4d6d', fontSize: 13, marginBottom: 10 }}>{interpretationError}</p>
+            <div style={{ background: 'rgba(255,45,85,.08)', border: '1px solid rgba(255,45,85,.25)', borderRadius: 12, padding: 16, textAlign: 'center' }}>
+              <p style={{ color: '#ff2d55', fontSize: 13, marginBottom: 10 }}>{interpretationError}</p>
               <button onClick={() => { setInterpretationError(null); loadInterpretation(null); }} style={{ fontSize: 12, color: 'rgba(255,255,255,.4)', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}>
                 Spróbuj ponownie
               </button>
@@ -426,7 +589,7 @@ function DarkTriadResults() {
                 const isItalic = para.trim().startsWith('*') && para.trim().endsWith('*');
                 const text = isItalic ? para.trim().replace(/^\*|\*$/g, '') : para.trim();
                 return isItalic
-                  ? <p key={i} style={{ fontSize: 13, fontStyle: 'italic', color: '#ff9532', borderLeft: '2px solid rgba(255,149,50,.4)', paddingLeft: 14, margin: 0 }}>{text}</p>
+                  ? <p key={i} style={{ fontSize: 13, fontStyle: 'italic', color: '#ffaa00', borderLeft: '2px solid rgba(255,170,0,.4)', paddingLeft: 14, margin: 0 }}>{text}</p>
                   : <p key={i} style={{ fontSize: 13, lineHeight: 1.7, color: 'rgba(255,255,255,.55)', margin: 0 }}>{text}</p>;
               })}
               <div style={{ borderTop: '1px solid rgba(255,255,255,.06)', paddingTop: 12, fontSize: 11, color: 'rgba(255,255,255,.2)' }}>
@@ -437,24 +600,8 @@ function DarkTriadResults() {
         </div>
       </div>
 
-      {/* ── SCIENTIFIC NOTE ── */}
-      <div style={{ maxWidth: 1160, margin: '24px auto 0' }}>
-        <div className="dt-glass" style={{ padding: 28 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 3, textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 12 }}>📊 Informacje Naukowe</div>
-          <p style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', lineHeight: 1.7, marginBottom: 8 }}>
-            Dark Triad SD3 to zwalidowane narzędzie psychometryczne mierzące trzy cechy „ciemnej" osobowości:
-            <strong style={{ color: 'rgba(255,255,255,.6)' }}> Makiawelizm</strong> (manipulacja w relacjach),
-            <strong style={{ color: 'rgba(255,255,255,.6)' }}> Narcyzm</strong> (poczucie wyższości i potrzeba podziwu) oraz
-            <strong style={{ color: 'rgba(255,255,255,.6)' }}> Psychopatię</strong> (bezwzględność i brak empatii).
-          </p>
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,.25)', lineHeight: 1.6 }}>
-            Wyniki porównane są z normami populacyjnymi (Jones &amp; Paulhus, 2014). Podwyższone wyniki nie oznaczają diagnozy klinicznej.
-          </p>
-        </div>
-      </div>
-
       {/* ── ACTIONS ── */}
-      <div style={{ maxWidth: 1160, margin: '32px auto 0', display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
+      <div style={{ maxWidth: 900, margin: '32px auto 0', display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
         <button
           onClick={() => window.location.href = '/user-profile-tests.html'}
           style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 28px', borderRadius: 14, background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.12)', color: 'rgba(255,255,255,.7)', cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600, fontSize: 14 }}
@@ -463,7 +610,7 @@ function DarkTriadResults() {
         </button>
         <button
           onClick={() => { if (confirm('Powtórzyć test? Wyniki zostaną zastąpione.')) window.location.href = '/test'; }}
-          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 28px', borderRadius: 14, background: 'rgba(255,77,109,.12)', border: '1px solid rgba(255,77,109,.35)', color: '#ff4d6d', cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600, fontSize: 14 }}
+          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 28px', borderRadius: 14, background: 'rgba(255,45,85,.12)', border: '1px solid rgba(255,45,85,.35)', color: '#ff2d55', cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600, fontSize: 14 }}
         >
           <RefreshCw size={16} /> Wykonaj Test Ponownie
         </button>
