@@ -94,7 +94,7 @@ export default function HexacoResults() {
           <p className="text-slate-300 mb-6">{error}</p>
           <button
             onClick={() => window.location.href = '/user-profile-tests.html'}
-            className="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition"
+            className="btn-neural"
           >
             Wróć do Dashboardu
           </button>
@@ -189,7 +189,7 @@ export default function HexacoResults() {
             
             <button
               onClick={handleRetakeTest}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/70 text-white rounded-lg border border-slate-700 hover:border-cyan-500/50 transition-all"
+              className="btn-ghost flex items-center gap-2"
             >
               <RefreshCw size={18} />
               <span>Powtórz Test</span>
@@ -505,13 +505,13 @@ export default function HexacoResults() {
         <div className="flex justify-center gap-4">
           <button
             onClick={() => window.location.href = '/user-profile-tests.html'}
-            className="px-8 py-3.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50"
+            className="btn-neural"
           >
             Wróć do Dashboardu
           </button>
           <button
             onClick={handleRetakeTest}
-            className="px-8 py-3.5 bg-slate-800/50 hover:bg-slate-700/70 text-white font-semibold rounded-xl border border-slate-700 hover:border-slate-600 transition-all duration-300 flex items-center gap-2"
+            className="btn-ghost flex items-center gap-2"
           >
             <RefreshCw size={18} />
             Wykonaj Test Ponownie

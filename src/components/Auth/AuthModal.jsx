@@ -269,9 +269,9 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
           <div className="flex gap-2 mb-8 bg-slate-900/20 p-1 rounded-lg">
             <button
               onClick={() => setCurrentTab('login')}
-              className={`flex-1 py-2 px-4 rounded-md transition-all ${
+              className={`flex-1 py-2 px-4 rounded-md transition-all text-sm font-medium ${
                 currentTab === 'login'
-                  ? 'bg-indigo-500/40 text-white border border-indigo-400/50'
+                  ? 'bg-neon-primary/20 text-white border border-neon-primary/40'
                   : 'text-slate-400 hover:text-slate-300'
               }`}
             >
@@ -279,9 +279,9 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
             </button>
             <button
               onClick={() => setCurrentTab('signup')}
-              className={`flex-1 py-2 px-4 rounded-md transition-all ${
+              className={`flex-1 py-2 px-4 rounded-md transition-all text-sm font-medium ${
                 currentTab === 'signup'
-                  ? 'bg-indigo-500/40 text-white border border-indigo-400/50'
+                  ? 'bg-neon-primary/20 text-white border border-neon-primary/40'
                   : 'text-slate-400 hover:text-slate-300'
               }`}
             >
@@ -289,9 +289,9 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
             </button>
             <button
               onClick={() => setCurrentTab('magic-link')}
-              className={`flex-1 py-2 px-4 rounded-md transition-all text-xs ${
+              className={`flex-1 py-2 px-4 rounded-md transition-all text-sm font-medium ${
                 currentTab === 'magic-link'
-                  ? 'bg-indigo-500/40 text-white border border-indigo-400/50'
+                  ? 'bg-neon-primary/20 text-white border border-neon-primary/40'
                   : 'text-slate-400 hover:text-slate-300'
               }`}
             >
@@ -400,7 +400,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="twoj@email.com"
-                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg pl-10 pr-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg pl-10 pr-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-neon-primary/50 focus:ring-1 focus:ring-neon-primary/30 transition-all"
                     disabled={isAnyLoading}
                   />
                 </div>
@@ -417,7 +417,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg px-4 py-3 pr-10 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg px-4 py-3 pr-10 text-white placeholder-slate-600 focus:outline-none focus:border-neon-primary/50 focus:ring-1 focus:ring-neon-primary/30 transition-all"
                     disabled={isAnyLoading}
                   />
                   <button
@@ -439,7 +439,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
               <button
                 type="submit"
                 disabled={isAnyLoading}
-                className="w-full glass-button py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-neural w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loadingStates.email ? (
                   <>
@@ -468,7 +468,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="twoj@email.com"
-                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg pl-10 pr-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg pl-10 pr-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-neon-primary/50 focus:ring-1 focus:ring-neon-primary/30 transition-all"
                     disabled={isAnyLoading}
                   />
                 </div>
@@ -485,7 +485,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg px-4 py-3 pr-10 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg px-4 py-3 pr-10 text-white placeholder-slate-600 focus:outline-none focus:border-neon-primary/50 focus:ring-1 focus:ring-neon-primary/30 transition-all"
                     disabled={isAnyLoading}
                   />
                   <button
@@ -507,7 +507,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
               <button
                 type="submit"
                 disabled={isAnyLoading}
-                className="w-full glass-button py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-neural w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loadingStates.email ? (
                   <>
@@ -548,7 +548,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="twoj@email.com"
-                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg pl-10 pr-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 transition-all"
+                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg pl-10 pr-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-neon-primary/50 focus:ring-1 focus:ring-neon-primary/30 transition-all"
                     disabled={isAnyLoading}
                   />
                 </div>
@@ -558,7 +558,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
               <button
                 type="submit"
                 disabled={isAnyLoading}
-                className="w-full glass-button py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-neural w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loadingStates.magicLink ? (
                   <>

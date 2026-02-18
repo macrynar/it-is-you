@@ -192,7 +192,7 @@ export default function StrengthsResults() {
             
             <button
               onClick={handleRetakeTest}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/70 text-white rounded-lg border border-slate-700 hover:border-cyan-500/50 transition-all"
+              className="btn-ghost flex items-center gap-2"
             >
               <RefreshCw size={18} />
               <span>Powtórz Test</span>

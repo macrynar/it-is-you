@@ -154,7 +154,7 @@ function DarkTriadResults() {
           <p className="text-slate-300 mb-6">{error}</p>
           <button 
             onClick={() => window.location.href = '/test?type=dark_triad'}
-            className="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-xl transition-all"
+            className="btn-neural-danger"
           >
             Wróć do Testu
           </button>
@@ -306,13 +306,13 @@ function DarkTriadResults() {
         <div className="mt-8 flex gap-4 justify-center flex-wrap">
           <button
             onClick={() => window.location.href = '/user-profile-tests.html'}
-            className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl transition-all shadow-lg"
+            className="btn-ghost"
           >
             ← Powrót do Testów
           </button>
           <button
             onClick={() => window.location.href = '/test?type=dark_triad'}
-            className="px-8 py-4 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-rose-500/20"
+            className="btn-neural-danger"
           >
             Wykonaj Test Ponownie
           </button>

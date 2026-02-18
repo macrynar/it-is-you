@@ -104,7 +104,7 @@ export default function EnneagramResults() {
           <p className="text-slate-400 mb-6">{error || 'Nie znaleziono wyników testu'}</p>
           <a
             href="/test?type=enneagram"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-violet-600 text-white rounded-xl font-semibold hover:from-purple-500 hover:to-violet-500 transition"
+            className="btn-neural inline-flex items-center gap-2"
           >
             <RefreshCw size={18} />
             Wykonaj Test
@@ -134,7 +134,7 @@ export default function EnneagramResults() {
           </a>
           <button
             onClick={handleRetakeTest}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 rounded-lg text-sm font-medium transition"
+            className="btn-ghost flex items-center gap-2"
           >
             <RefreshCw size={16} />
             Wykonaj ponownie
@@ -316,13 +316,13 @@ export default function EnneagramResults() {
         <div className="flex justify-center gap-4 mt-12">
           <a
             href="/user-profile-tests.html"
-            className="px-8 py-3.5 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
+            className="btn-neural"
           >
             Wróć do Dashboardu
           </a>
           <button
             onClick={handleRetakeTest}
-            className="px-8 py-3.5 bg-slate-800/50 hover:bg-slate-700/70 text-white font-semibold rounded-xl border border-slate-700 hover:border-slate-600 transition-all duration-300 flex items-center gap-2"
+            className="btn-ghost flex items-center gap-2"
           >
             <RefreshCw size={18} />
             Wykonaj Test Ponownie

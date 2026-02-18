@@ -109,7 +109,7 @@ export default function CareerResults() {
           <p className="text-slate-400 mb-6">{error}</p>
           <button
             onClick={() => window.location.href = '/user-profile-tests.html'}
-            className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors"
+            className="btn-neural"
           >
             Wróć do Dashboard
           </button>
@@ -137,7 +137,7 @@ export default function CareerResults() {
             </button>
             <button
               onClick={handleRetakeTest}
-              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors"
+              className="btn-ghost flex items-center gap-2"
             >
               <RefreshCw size={18} />
               <span>Powtórz Test</span>
