@@ -124,7 +124,8 @@ function App() {
       return null
     }
     
-   
+    return <EnneagramResults />
+  }
 
   // Handle /test/dark-triad/results route - show dark triad results
   if (currentRoute === '/test/dark-triad/results' || currentRoute === '/test/dark-triad/results/') {
@@ -145,7 +146,6 @@ function App() {
     }
     
     return <DarkTriadResults />
-  } return <EnneagramResults />
   }
 
   // Handle /test route - require authentication & check for test type
