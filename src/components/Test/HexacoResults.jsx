@@ -8,6 +8,9 @@ export default function HexacoResults() {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [interpretation, setInterpretation] = useState(null);
+  const [interpretationLoading, setInterpretationLoading] = useState(false);
+  const [interpretationError, setInterpretationError] = useState(null);
 
   useEffect(() => {
     loadResults();
@@ -40,11 +43,44 @@ export default function HexacoResults() {
 
       setResults(data[0]);
       setLoading(false);
+      loadInterpretation(data[0]);
     } catch (err) {
       console.error('Error loading results:', err);
       setError(err.message);
       setLoading(false);
     }
+  };
+
+  const loadInterpretation = async (testResult) => {
+    setInterpretationLoading(true);
+    setInterpretationError(null);
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke('interpret-test', {
+        body: {
+          test_type: 'HEXACO',
+          percentile_scores: testResult.percentile_scores,
+          raw_scores: testResult.raw_scores
+        }
+      });
+      if (fnError) throw fnError;
+      setInterpretation(data?.interpretation ?? null);
+    } catch (err) {
+      console.error('Interpretation error:', err);
+      setInterpretationError('Nie udało się wygenerować interpretacji.');
+    } finally {
+      setInterpretationLoading(false);
+    }
+  };
+
+  const regenerateInterpretation = async () => {
+    if (!results) return;
+    // Delete cache first so edge function regenerates
+    await supabase
+      .from('ai_interpretations')
+      .delete()
+      .eq('test_type', 'HEXACO');
+    setInterpretation(null);
+    loadInterpretation(results);
   };
 
   const handleRetakeTest = () => {
@@ -498,6 +534,89 @@ export default function HexacoResults() {
                 );
               })()}
             </div>
+          </div>
+        </div>
+
+        {/* AI Interpretation Section */}
+        <div className="bg-gradient-to-br from-violet-950/40 to-indigo-950/40 backdrop-blur-sm rounded-2xl p-8 border border-violet-500/20 mb-12 relative overflow-hidden">
+          {/* Background glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-64 bg-violet-500/8 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="relative">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-violet-500/20 border border-violet-500/30 flex items-center justify-center text-lg">
+                  🤖
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Interpretacja AI</h2>
+                  <p className="text-xs text-slate-500">Spersonalizowana analiza Twojego profilu HEXACO</p>
+                </div>
+              </div>
+              {interpretation && !interpretationLoading && (
+                <button
+                  onClick={regenerateInterpretation}
+                  className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-violet-400 transition-colors px-3 py-1.5 rounded-lg border border-slate-800 hover:border-violet-500/30"
+                >
+                  <RefreshCw size={12} />
+                  Regeneruj
+                </button>
+              )}
+            </div>
+
+            {/* Loading skeleton */}
+            {interpretationLoading && (
+              <div className="space-y-3 animate-pulse">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-2 h-2 rounded-full bg-violet-400 animate-ping"></div>
+                  <span className="text-sm text-violet-400">Generuję interpretację...</span>
+                </div>
+                <div className="h-4 bg-slate-800/60 rounded w-full"></div>
+                <div className="h-4 bg-slate-800/60 rounded w-5/6"></div>
+                <div className="h-4 bg-slate-800/60 rounded w-4/5"></div>
+                <div className="h-4 bg-slate-800/60 rounded w-full mt-4"></div>
+                <div className="h-4 bg-slate-800/60 rounded w-3/4"></div>
+                <div className="h-4 bg-slate-800/60 rounded w-5/6"></div>
+                <div className="h-4 bg-slate-800/60 rounded w-full mt-4"></div>
+                <div className="h-4 bg-slate-800/60 rounded w-4/6"></div>
+              </div>
+            )}
+
+            {/* Error state */}
+            {interpretationError && !interpretationLoading && (
+              <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-4 text-center">
+                <p className="text-red-400 text-sm mb-3">{interpretationError}</p>
+                <button
+                  onClick={() => loadInterpretation(results)}
+                  className="text-xs text-slate-400 hover:text-white transition-colors underline"
+                >
+                  Spróbuj ponownie
+                </button>
+              </div>
+            )}
+
+            {/* Interpretation text */}
+            {interpretation && !interpretationLoading && (
+              <div className="space-y-4">
+                {interpretation.split('\n\n').filter(p => p.trim()).map((paragraph, i) => {
+                  const isItalic = paragraph.trim().startsWith('*') && paragraph.trim().endsWith('*');
+                  const text = isItalic ? paragraph.trim().replace(/^\*|\*$/g, '') : paragraph.trim();
+                  return isItalic ? (
+                    <p key={i} className="text-violet-300 text-sm italic border-l-2 border-violet-500/50 pl-4 mt-2">
+                      {text}
+                    </p>
+                  ) : (
+                    <p key={i} className="text-slate-300 text-sm leading-relaxed">
+                      {text}
+                    </p>
+                  );
+                })}
+                <div className="flex items-center gap-2 pt-4 border-t border-white/5">
+                  <span className="text-xs text-slate-600">Wygenerowane przez GPT-4o-mini • Interpretacja psychologiczna, nie diagnoza medyczna</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
