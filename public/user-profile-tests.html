@@ -177,13 +177,140 @@
     <main class="max-w-7xl mx-auto px-6 py-16">
         
         <!-- Header Section -->
-        <div class="mb-16 text-center">
+        <div class="mb-12 text-center">
             <h1 class="text-6xl md:text-7xl font-bold brand-font mb-6 bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent leading-tight">
                 Testy Psychometryczne
             </h1>
             <p class="text-xl text-slate-400 max-w-2xl mx-auto">
                 Odkryj swoją wyjątkową psychikę przez <span class="text-violet-400 font-semibold">7 kluczowych wymiarów</span>
             </p>
+        </div>
+
+        <!-- PROFILE HERO -->
+        <div id="profile-hero" class="glass-card rounded-3xl p-8 mb-12 border-2 border-white/10 hover:border-violet-500/30 transition-all duration-500 relative overflow-hidden" style="animation: fadeUp 0.8s ease-out;">
+            <!-- Animated background gradient -->
+            <div class="absolute inset-0 bg-gradient-to-br from-violet-600/5 via-purple-600/5 to-cyan-600/5 opacity-50"></div>
+            <div class="absolute -top-24 -right-24 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl"></div>
+            
+            <div class="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8">
+                
+                <!-- LEFT: Avatar & User Info -->
+                <div class="flex flex-col items-center lg:flex-row lg:items-start gap-6 flex-shrink-0">
+                    <!-- Avatar with Progress Ring -->
+                    <div class="relative group">
+                        <!-- SVG Progress Ring -->
+                        <svg class="absolute inset-0 w-32 h-32 -rotate-90 transition-transform duration-700 group-hover:scale-110" viewBox="0 0 120 120">
+                            <!-- Background ring -->
+                            <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(148, 163, 184, 0.1)" stroke-width="3"/>
+                            <!-- Progress ring -->
+                            <circle id="progress-ring" cx="60" cy="60" r="54" fill="none" stroke="url(#progressGradient)" stroke-width="3" stroke-linecap="round"
+                                    stroke-dasharray="339.292" stroke-dashoffset="339.292" 
+                                    style="transition: stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;">
+                            </circle>
+                            <!-- Glow effect -->
+                            <circle id="progress-glow" cx="60" cy="60" r="54" fill="none" stroke="rgba(139, 92, 246, 0.4)" stroke-width="6" stroke-linecap="round"
+                                    stroke-dasharray="339.292" stroke-dashoffset="339.292" 
+                                    style="transition: stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s; filter: blur(8px);">
+                            </circle>
+                            <defs>
+                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#A78BFA;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        
+                        <!-- Avatar -->
+                        <div id="user-avatar" class="relative w-32 h-32 rounded-full overflow-hidden border-4 border-slate-800/50 shadow-2xl group-hover:border-violet-500/50 transition-all duration-500">
+                            <!-- Gradient placeholder with initials -->
+                            <div class="w-full h-full bg-gradient-to-br from-violet-600 via-purple-600 to-cyan-600 flex items-center justify-center">
+                                <span id="user-initials" class="text-4xl font-bold text-white brand-font">?</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Level indicator -->
+                        <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-violet-600 to-purple-600 rounded-full border-2 border-slate-900 shadow-lg">
+                            <span id="profile-level" class="text-xs font-bold text-white">Lvl 0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- User Data -->
+                    <div class="text-center lg:text-left">
+                        <h2 id="user-name" class="text-3xl font-bold text-white brand-font mb-2">Ładowanie...</h2>
+                        <p id="user-email" class="text-slate-400 mb-4 text-sm">---</p>
+                        
+                        <!-- Premium Badge -->
+                        <div id="premium-badge" class="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 transition-all duration-300">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <span id="badge-text" class="text-xs font-bold uppercase tracking-wider">Free</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- RIGHT: Stats & Progress -->
+                <div class="flex-1 w-full">
+                    <!-- Stats Header -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white brand-font mb-1">Postęp Profilu</h3>
+                            <p class="text-slate-400 text-sm">Ukończ wszystkie moduły aby odblokować pełną analizę</p>
+                        </div>
+                        <div class="text-right">
+                            <div id="completion-count" class="text-4xl font-bold bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent brand-font">0/7</div>
+                            <p class="text-xs text-slate-500 uppercase tracking-wider">Modułów</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Linear Progress Bar -->
+                    <div class="relative h-4 bg-slate-800/50 rounded-full overflow-hidden mb-6 border border-slate-700/50">
+                        <div id="progress-bar" class="absolute inset-y-0 left-0 bg-gradient-to-r from-violet-600 via-purple-500 to-cyan-500 rounded-full transition-all duration-1000 ease-out shadow-lg"
+                             style="width: 0%; box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);">
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 animate-pulse"></div>
+                        </div>
+                        <div id="progress-percentage" class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white mix-blend-difference">0%</div>
+                    </div>
+                    
+                    <!-- Next Step Recommendation -->
+                    <div id="next-step-card" class="bg-gradient-to-r from-violet-900/20 to-purple-900/20 border border-violet-500/30 rounded-xl p-4 backdrop-blur-sm">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-violet-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-semibold text-violet-300 mb-1 uppercase tracking-wide">Następny Krok</h4>
+                                <p id="next-step-text" class="text-slate-300 text-sm leading-relaxed">Rozpocznij pierwszy test aby zbudować swój profil psychometryczny</p>
+                            </div>
+                            <button id="next-step-button" onclick="startNextTest()" class="flex-shrink-0 px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white text-sm font-semibold rounded-lg transition-all shadow-lg hover:shadow-violet-500/50 hover:scale-105">
+                                Start
+                                <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Completion Message (hidden by default) -->
+                    <div id="completion-message" class="hidden bg-gradient-to-r from-emerald-900/20 to-green-900/20 border border-emerald-500/30 rounded-xl p-4 backdrop-blur-sm mt-4">
+                        <div class="flex items-center gap-3">
+                            <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-600 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-semibold text-emerald-300 mb-1">🎉 Profil Ukończony!</h4>
+                                <p class="text-slate-300 text-sm">Gratulacje! Ukończyłeś wszystkie 7 modułów psychometrycznych.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Test Cards Grid -->
@@ -829,6 +956,7 @@
                 return;
             }
             console.log('Auth successful, updating UI...');
+            await updateProfileHero();
             await updateHexacoUI();
             await updateEnneagramUI();
             await updateDarkTriadUI();
@@ -837,6 +965,155 @@
             await updateValuesUI();
             console.log('Dashboard initialized successfully');
         }
+
+        // ============================================
+        // PROFILE HERO FUNCTIONS
+        // ============================================
+
+        // Count all completed tests
+        async function getCompletedTestsCount() {
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                
+                if (sessionError || !session || !session.user) {
+                    return 0;
+                }
+
+                const { data, error } = await supabase
+                    .from('user_psychometrics')
+                    .select('test_type')
+                    .eq('user_id', session.user.id);
+
+                if (error) {
+                    console.error('Error counting completed tests:', error);
+                    return 0;
+                }
+
+                // Get unique test types (in case user retook a test)
+                const uniqueTests = [...new Set(data.map(item => item.test_type))];
+                return uniqueTests.length;
+            } catch (err) {
+                console.error('Error in getCompletedTestsCount:', err);
+                return 0;
+            }
+        }
+
+        // Get next recommended test
+        async function getNextTest() {
+            const tests = [
+                { name: 'HEXACO-60', type: 'hexaco', checkFn: checkHexacoCompleted, startFn: 'startHexacoTest' },
+                { name: 'Enneagram', type: 'enneagram', checkFn: checkEnneagramCompleted, startFn: 'startEnneagramTest' },
+                { name: 'Dark Triad', type: 'dark_triad', checkFn: checkDarkTriadCompleted, startFn: 'startDarkTriadTest' },
+                { name: 'Character Strengths', type: 'strengths', checkFn: checkStrengthsCompleted, startFn: 'startStrengthsTest' },
+                { name: 'Career Interests', type: 'career', checkFn: checkCareerCompleted, startFn: 'startCareerTest' },
+                { name: 'Personal Values', type: 'values', checkFn: checkValuesCompleted, startFn: 'startValuesTest' }
+            ];
+
+            for (const test of tests) {
+                const completed = await test.checkFn();
+                if (!completed) {
+                    return test;
+                }
+            }
+
+            return null; // All tests completed
+        }
+
+        // Start next recommended test
+        window.startNextTest = async function() {
+            const nextTest = await getNextTest();
+            if (nextTest) {
+                window[nextTest.startFn]();
+            }
+        }
+
+        // Update Profile Hero UI
+        async function updateProfileHero() {
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                
+                if (sessionError || !session || !session.user) {
+                    console.error('No session for profile hero');
+                    return;
+                }
+
+                const user = session.user;
+                const completedCount = await getCompletedTestsCount();
+                const totalTests = 7;
+                const percentage = Math.round((completedCount / totalTests) * 100);
+                const nextTest = await getNextTest();
+
+                // Update user info
+                const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Anonymous';
+                const userInitials = userName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                
+                document.getElementById('user-name').textContent = userName;
+                document.getElementById('user-email').textContent = user.email;
+                document.getElementById('user-initials').textContent = userInitials;
+
+                // Update level (based on completed tests)
+                const level = completedCount;
+                document.getElementById('profile-level').textContent = `Lvl ${level}`;
+
+                // Update completion stats
+                document.getElementById('completion-count').textContent = `${completedCount}/${totalTests}`;
+                document.getElementById('progress-percentage').textContent = `${percentage}%`;
+
+                // Animate progress bar
+                setTimeout(() => {
+                    document.getElementById('progress-bar').style.width = `${percentage}%`;
+                }, 300);
+
+                // Update SVG progress ring (circumference = 2 * PI * r = 2 * 3.14159 * 54 ≈ 339.292)
+                const circumference = 339.292;
+                const offset = circumference - (percentage / 100) * circumference;
+                
+                setTimeout(() => {
+                    document.getElementById('progress-ring').style.strokeDashoffset = offset;
+                    document.getElementById('progress-glow').style.strokeDashoffset = offset;
+                }, 500);
+
+                // Update Premium badge (placeholder - could be based on actual premium status)
+                const isPremium = false; // TODO: Get from database or user metadata
+                const badge = document.getElementById('premium-badge');
+                const badgeText = document.getElementById('badge-text');
+                
+                if (isPremium) {
+                    badge.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-amber-500 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 shadow-lg shadow-amber-500/20';
+                    badge.style.color = '#FCD34D';
+                    badgeText.textContent = '✨ Premium';
+                } else {
+                    badge.className = 'inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-slate-600 bg-slate-800/30';
+                    badge.style.color = '#94A3B8';
+                    badgeText.textContent = 'Free Account';
+                }
+
+                // Update Next Step recommendation
+                const nextStepCard = document.getElementById('next-step-card');
+                const nextStepText = document.getElementById('next-step-text');
+                const nextStepButton = document.getElementById('next-step-button');
+                const completionMessage = document.getElementById('completion-message');
+
+                if (nextTest) {
+                    nextStepCard.classList.remove('hidden');
+                    completionMessage.classList.add('hidden');
+                    nextStepText.textContent = `Rekomendowany krok: Wykonaj test "${nextTest.name}"`;
+                    nextStepButton.classList.remove('hidden');
+                } else {
+                    // All tests completed!
+                    nextStepCard.classList.add('hidden');
+                    completionMessage.classList.remove('hidden');
+                }
+
+                console.log('Profile Hero updated:', { completedCount, percentage, nextTest: nextTest?.name });
+            } catch (err) {
+                console.error('Error updating Profile Hero:', err);
+            }
+        }
+
+        // ============================================
+        // END PROFILE HERO FUNCTIONS
+        // ============================================
 
         // Wait for DOM to be ready
         if (document.readyState === 'loading') {
