@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { test_type, percentile_scores, raw_scores } = await req.json()
+    const { test_type, percentile_scores, raw_scores, report } = await req.json()
 
     // Auth: get user from JWT
     const authHeader = req.headers.get('Authorization')
@@ -56,7 +56,7 @@ serve(async (req) => {
     }
 
     // Build prompt
-    const prompt = buildPrompt(test_type, percentile_scores, raw_scores)
+    const prompt = buildPrompt(test_type, percentile_scores, raw_scores, report)
 
     const openaiKey = Deno.env.get('OPENAI_API_KEY')
     if (!openaiKey) {
@@ -76,7 +76,7 @@ serve(async (req) => {
         model: 'gpt-4o-mini',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
-        max_tokens: 900
+        max_tokens: 1400
       })
     })
 
@@ -110,7 +110,7 @@ serve(async (req) => {
   }
 })
 
-function buildPrompt(testType: string, percentile_scores: Record<string, number>, _raw_scores: Record<string, number>): string {
+function buildPrompt(testType: string, percentile_scores: Record<string, number>, _raw_scores: Record<string, number>, report?: Record<string, unknown>): string {
   if (testType === 'HEXACO') {
     const H = Math.round(percentile_scores.honesty_humility ?? 50)
     const E = Math.round(percentile_scores.emotionality ?? 50)
@@ -119,7 +119,7 @@ function buildPrompt(testType: string, percentile_scores: Record<string, number>
     const C = Math.round(percentile_scores.conscientiousness ?? 50)
     const O = Math.round(percentile_scores.openness ?? 50)
 
-    return `Jesteś doświadczonym psychologiem specjalizującym się w psychologii osobowości. Na podstawie wyników testu HEXACO-60 napisz szczegółową, narracyjną interpretację osobowości tej osoby w języku polskim.
+    return `Jesteś doświadczonym psychologiem specjalizującym się w psychologii osobowości. Na podstawie wyników testu HEXACO-60 napisz szczegółową, spersonalizowaną interpretację osobowości w języku polskim.
 
 Wyniki (skala percentylowa 0–100, gdzie 50 = dokładna średnia populacji):
 - Uczciwość-Pokora (Honesty-Humility): ${H}%
@@ -129,20 +129,86 @@ Wyniki (skala percentylowa 0–100, gdzie 50 = dokładna średnia populacji):
 - Sumienność (Conscientiousness): ${C}%
 - Otwartość na doświadczenia (Openness): ${O}%
 
-Napisz interpretację złożoną z 4 akapitów:
-1. Ogólny profil osobowości — co te wyniki mówią o tej osobie jako całości
-2. Mocne strony i dominujące cechy — co wyróżnia tę osobę positywnie (skup się na 2–3 cechach z najwyższymi wynikami)
-3. Obszary do refleksji i rozwoju — co sprawia wyzwanie (skup się na cechach z niższymi wynikami, bez oceniania)
-4. Praktyczne wskazówki — jedno konkretne zalecenie dotyczące relacji, pracy lub samorozwoju
+Napisz interpretację w formacie Markdown z DOKŁADNIE następującą strukturą — użyj tych nagłówków dosłownie:
 
-Zasady pisania:
-- Pisz bezpośrednio do osoby, w 2. osobie: "Twój profil...", "Wykazujesz...", "Masz tendencję do..."
-- Nie używaj sformułowań takich jak "wyniki testu wskazują", "na podstawie testu"
+## Twój profil osobowości
+
+[2–3 zdania opisujące ogólny obraz osobowości, co charakteryzuje tę osobę jako całość]
+
+## Twoje mocne strony
+
+[Opisz 2–3 dominujące cechy (z najwyższymi wynikami). Dla każdej: bold tytuł + 1–2 zdania. Przykład: **Uczciwość i integralność** Twoja wyjątkowo wysoka uczciwość...]
+
+## Obszary do refleksji
+
+[Opisz 1–2 cechy z niższymi wynikami jako przestrzeń do wzrostu, NIE jako wady. Bold tytuł każdej.]
+
+## Wskazówki dla Ciebie
+
+[2–3 konkretne praktyczne wskazówki dotyczące pracy, relacji lub samorozwoju. Każda zaczyna się od bold tytułu: **W pracy:** tekst]
+
+---
+*[Jedno zdanie — psychologiczna "esencja" profilu, np. "Twoja siła tkwi w..."]*
+
+Zasady:
+- Pisz bezpośrednio do osoby, w 2. osobie: "Twój...", "Wykazujesz...", "Masz tendencję do..."
+- Nie pisz "wyniki testu wskazują" ani "na podstawie testu"
 - Bądź ciepły, precyzyjny psychologicznie i konkretny — unikaj ogólników
-- Każdy akapit ma 3–5 zdań
-- Nie używaj list punktowych — piszez ciągłym tekstem
-- Na samym końcu (po pustej linii, po ostatnim akapicie) dodaj jedną kursywę: jedno zdanie będące psychologiczną "esencją" profilu, np. *Twoja siła tkwi w...*`
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
   }
 
-  return `Napisz krótką interpretację wyników psychometrycznych dla testu "${testType}" na podstawie danych: ${JSON.stringify(percentile_scores)}`
+  if (testType === 'ENNEAGRAM') {
+    const pt = (report as any)?.primary_type
+    const typeNum = pt?.type ?? '?'
+    const typeName = pt?.name ?? ''
+    const typeNameEn = pt?.name_en ?? ''
+    const wing = (report as any)?.wing?.type ?? null
+    const motivation = pt?.core_motivation ?? ''
+    const fear = pt?.basic_fear ?? ''
+
+    const scores = Object.entries(_raw_scores ?? {})
+      .sort((a, b) => (b[1] as number) - (a[1] as number))
+      .map(([t, s]) => `Typ ${t}: ${s}`)
+      .join(', ')
+
+    return `Jesteś doświadczonym psychologiem specjalizującym się w typologii Enneagram. Na podstawie wyników napisz głęboką, spersonalizowaną interpretację w języku polskim.
+
+Typ dominujący: **${typeNum} – ${typeName}** (${typeNameEn})${wing ? `\nSkrzydło: ${wing}` : ''}
+Podstawowa motywacja: ${motivation}
+Podstawowy lęk: ${fear}
+Wyniki wszystkich typów (malejąco): ${scores}
+
+Napisz interpretację w formacie Markdown z DOKŁADNIE następującą strukturą:
+
+## Kim jesteś
+
+[2–3 zdania opisujące esencję tego typu — jak ta osoba postrzega świat, co nią kieruje]
+
+## Twoje supermoce
+
+[Opisz 2–3 naturalne talenty i mocne strony tego typu. Dla każdej: bold tytuł + 1–2 zdania. Przykład: **Głęboka empatia** Masz wrodzoną zdolność...]
+
+## Twoje cienie
+
+[1–2 wyzwania charakterystyczne dla tego typu — bez oceniania, ze zrozumieniem. Bold tytuł każdego.]
+
+## Twoja ścieżka wzrostu
+
+[2–3 konkretne wskazówki dotyczące osobistego rozwoju, relacji i pracy. Każda zaczyna się od bold tytułu: **W relacjach:** tekst]
+
+## Twój potencjał
+
+[Jedno motywujące zdanie lub krótki akapit o tym, dokąd może prowadzić ta ścieżka w najlepszym wydaniu]
+
+---
+*[Jedno zdanie — psychologiczna "esencja" tego profilu Enneagram]*
+
+Zasady:
+- Pisz bezpośrednio do osoby, w 2. osobie
+- Nie pisz "wyniki wskazują", "test pokazuje" itp.
+- Bądź głęboki, precyzyjny psychologicznie, ciepły i motywujący
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
+  }
+
+  return `Napisz krótką interpretację wyników psychometrycznych dla testu "${testType}" w języku polskim.`
 }

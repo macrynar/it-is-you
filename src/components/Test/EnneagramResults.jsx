@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { ENNEAGRAM_TEST } from '../../data/tests/enneagram.js';
+import AiInterpretation from './AiInterpretation.jsx';
 
 /* ─────────────── Per-type accent palette ─────────────── */
 const TYPE_ACCENT = {
@@ -222,22 +223,36 @@ export default function EnneagramResults() {
     try {
       const { data: { user }, error: ue } = await supabase.auth.getUser();
       if (ue || !user) throw new Error('Nie jesteś zalogowany');
-      const { data, error: fe } = await supabase
-        .from('user_psychometrics').select('*')
-        .eq('user_id', user.id).eq('test_type', 'ENNEAGRAM')
-        .order('completed_at', { ascending: false }).limit(1);
+
+      // Load test results + cached interpretation in parallel
+      const [{ data, error: fe }, { data: cached }] = await Promise.all([
+        supabase.from('user_psychometrics').select('*')
+          .eq('user_id', user.id).eq('test_type', 'ENNEAGRAM')
+          .order('completed_at', { ascending: false }).limit(1),
+        supabase.from('ai_interpretations').select('interpretation')
+          .eq('test_type', 'ENNEAGRAM')
+          .maybeSingle(),
+      ]);
+
       if (fe) throw fe;
       if (!data?.length) { setError('Nie znaleziono wyników testu. Wykonaj test ponownie.'); setLoading(false); return; }
       setResults(data[0]);
       setLoading(false);
-      loadInterpretation(data[0]);
+
+      if (cached?.interpretation) {
+        // Instant — no skeleton
+        setAiInterp(cached.interpretation);
+      } else {
+        // Generate fresh
+        generateInterpretation(data[0]);
+      }
     } catch (err) {
       setError(err.message);
       setLoading(false);
     }
   };
 
-  const loadInterpretation = async (r) => {
+  const generateInterpretation = async (r) => {
     setAiLoading(true); setAiError(null);
     try {
       const { data: s } = await supabase.auth.getSession();
@@ -271,9 +286,10 @@ export default function EnneagramResults() {
 
   const regenerate = async () => {
     if (!results) return;
-    await supabase.from('ai_interpretations').delete().eq('test_type', 'ENNEAGRAM');
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) await supabase.from('ai_interpretations').delete().eq('user_id', user.id).eq('test_type', 'ENNEAGRAM');
     setAiInterp(null);
-    loadInterpretation(results);
+    generateInterpretation(results);
   };
 
   const handleRetake = () => {
@@ -549,57 +565,16 @@ export default function EnneagramResults() {
           <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:400, height:180, background:'rgba(162,155,254,.06)', borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }}/>
           <div className="en-glow-line" style={{ background:'#a29bfe', boxShadow:'0 0 10px 2px rgba(162,155,254,.5)' }}/>
           <div style={{ position:'relative' }}>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:24 }}>
-              <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-                <div style={{ width:36, height:36, borderRadius:10, background:'rgba(162,155,254,.2)', border:'1px solid rgba(162,155,254,.3)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:18 }}>🤖</div>
-                <div>
-                  <div style={{ fontSize:16, fontWeight:700 }}>Interpretacja AI</div>
-                  <div style={{ fontSize:12, color:'rgba(255,255,255,.35)' }}>Spersonalizowana analiza Twojego profilu Enneagram</div>
-                </div>
-              </div>
-              {aiInterp && !aiLoading && (
-                <button onClick={regenerate}
-                  style={{ display:'flex', alignItems:'center', gap:6, fontSize:12, color:'rgba(255,255,255,.4)', background:'rgba(255,255,255,.05)', border:'1px solid rgba(255,255,255,.1)', borderRadius:8, padding:'7px 14px', cursor:'pointer', fontFamily:'inherit', fontWeight:600 }}
-                  onMouseEnter={e => { e.currentTarget.style.color='#a29bfe'; e.currentTarget.style.borderColor='rgba(162,155,254,.4)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color='rgba(255,255,255,.4)'; e.currentTarget.style.borderColor='rgba(255,255,255,.1)'; }}>
-                  <RefreshCw size={12}/> Regeneruj
-                </button>
-              )}
-            </div>
-
-            {aiLoading && (
-              <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
-                <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:8 }}>
-                  <div style={{ width:8, height:8, borderRadius:'50%', background:'#a29bfe', animation:'spinLoader 1s linear infinite' }}/>
-                  <span style={{ fontSize:13, color:'#a29bfe', fontWeight:600 }}>Generuję interpretację...</span>
-                </div>
-                {[1,.88,.76,.92,.8,.68].map((w,i) => (
-                  <div key={i} className="en-shimmer" style={{ height:14, borderRadius:7, width:`${w*100}%` }}/>
-                ))}
-              </div>
-            )}
-
-            {aiError && !aiLoading && (
-              <div style={{ background:'rgba(239,68,68,.08)', border:'1px solid rgba(239,68,68,.2)', borderRadius:12, padding:'16px 20px', textAlign:'center' }}>
-                <p style={{ color:'rgba(239,68,68,.8)', fontSize:13, marginBottom:8 }}>{aiError}</p>
-                <button onClick={() => loadInterpretation(results)} style={{ fontSize:12, color:'rgba(255,255,255,.4)', background:'none', border:'none', cursor:'pointer', fontFamily:'inherit', textDecoration:'underline' }}>Spróbuj ponownie</button>
-              </div>
-            )}
-
-            {aiInterp && !aiLoading && (
-              <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-                {aiInterp.split('\n\n').filter(p => p.trim()).map((para, i) => {
-                  const italic = para.trim().startsWith('*') && para.trim().endsWith('*');
-                  const text = italic ? para.trim().replace(/^\*|\*$/g, '') : para.trim();
-                  return italic
-                    ? <p key={i} style={{ color:'#a29bfe', fontSize:14, fontStyle:'italic', borderLeft:'2px solid rgba(162,155,254,.5)', paddingLeft:16, margin:0 }}>{text}</p>
-                    : <p key={i} style={{ color:'rgba(255,255,255,.65)', fontSize:14, lineHeight:1.75, margin:0 }}>{text}</p>;
-                })}
-                <div style={{ borderTop:'1px solid rgba(255,255,255,.05)', paddingTop:12, marginTop:4 }}>
-                  <span style={{ fontSize:11, color:'rgba(255,255,255,.2)' }}>Wygenerowane przez GPT-4o-mini · Interpretacja psychologiczna, nie diagnoza medyczna</span>
-                </div>
-              </div>
-            )}
+            <AiInterpretation
+              interpretation={aiInterp}
+              loading={aiLoading}
+              error={aiError}
+              onRegenerate={regenerate}
+              onRetry={() => generateInterpretation(results)}
+              accentColor={ac.color}
+              accentGlow={ac.glow}
+              testLabel="Twojego profilu Enneagram"
+            />
           </div>
         </div>
 

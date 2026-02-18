@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { HEXACO_TEST } from '../../data/tests/hexaco.js';
+import AiInterpretation from './AiInterpretation.jsx';
 
 const ACCENT = {
   honesty_humility: { plName:'Szczerość', name:'Honesty-Humility', color:'#38b6ff', gradient:'linear-gradient(90deg,#1a6aff,#38b6ff)', glow:'rgba(56,182,255,.5)', blob:'#38b6ff', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(56,182,255,.35),0 0 30px -4px rgba(56,182,255,.3),0 16px 48px -6px rgba(0,0,0,.7)' },
@@ -68,19 +69,31 @@ export default function HexacoResults() {
     try {
       const { data: { user }, error: ue } = await supabase.auth.getUser();
       if (ue || !user) throw new Error('Nie jesteś zalogowany');
-      const { data, error: fe } = await supabase
-        .from('user_psychometrics').select('*')
-        .eq('user_id', user.id).eq('test_type', 'HEXACO')
-        .order('completed_at', { ascending: false }).limit(1);
+
+      // Load test results + cached interpretation in parallel
+      const [{ data, error: fe }, { data: cached }] = await Promise.all([
+        supabase.from('user_psychometrics').select('*')
+          .eq('user_id', user.id).eq('test_type', 'HEXACO')
+          .order('completed_at', { ascending: false }).limit(1),
+        supabase.from('ai_interpretations').select('interpretation')
+          .eq('test_type', 'HEXACO')
+          .maybeSingle(),
+      ]);
+
       if (fe) throw fe;
       if (!data?.length) { setError('Nie znaleziono wyników testu.'); setLoading(false); return; }
       setResults(data[0]);
       setLoading(false);
-      loadInterpretation(data[0]);
+
+      if (cached?.interpretation) {
+        setInterpretation(cached.interpretation);
+      } else {
+        generateInterpretation(data[0]);
+      }
     } catch (err) { setError(err.message); setLoading(false); }
   };
 
-  const loadInterpretation = async (r) => {
+  const generateInterpretation = async (r) => {
     setInterpLoading(true); setInterpError(null);
     try {
       const { data: s } = await supabase.auth.getSession();
@@ -99,9 +112,10 @@ export default function HexacoResults() {
 
   const regenerate = async () => {
     if (!results) return;
-    await supabase.from('ai_interpretations').delete().eq('test_type','HEXACO');
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) await supabase.from('ai_interpretations').delete().eq('user_id', user.id).eq('test_type','HEXACO');
     setInterpretation(null);
-    loadInterpretation(results);
+    generateInterpretation(results);
   };
 
   const handleRetake = () => {
@@ -246,49 +260,16 @@ export default function HexacoResults() {
         <div className="hr-glass" style={{...G,padding:36,marginBottom:32,overflow:'hidden'}}>
           <div style={{position:'absolute',top:0,left:'50%',transform:'translateX(-50%)',width:400,height:180,background:'rgba(123,94,167,.07)',borderRadius:'50%',filter:'blur(60px)',pointerEvents:'none'}}/>
           <div style={{position:'relative'}}>
-            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:24}}>
-              <div style={{display:'flex',alignItems:'center',gap:12}}>
-                <div style={{width:36,height:36,borderRadius:10,background:'rgba(123,94,167,.2)',border:'1px solid rgba(123,94,167,.3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18}}>🤖</div>
-                <div>
-                  <div style={{fontSize:16,fontWeight:700}}>Interpretacja AI</div>
-                  <div style={{fontSize:12,color:'rgba(255,255,255,.35)'}}>Spersonalizowana analiza Twojego profilu HEXACO</div>
-                </div>
-              </div>
-              {interpretation && !interpLoading && (
-                <button onClick={regenerate} style={{display:'flex',alignItems:'center',gap:6,fontSize:12,color:'rgba(255,255,255,.4)',background:'rgba(255,255,255,.05)',border:'1px solid rgba(255,255,255,.1)',borderRadius:8,padding:'7px 14px',cursor:'pointer',fontFamily:'inherit',fontWeight:600}} onMouseEnter={e=>{e.currentTarget.style.color='#b08fff';e.currentTarget.style.borderColor='rgba(123,94,167,.4)';}} onMouseLeave={e=>{e.currentTarget.style.color='rgba(255,255,255,.4)';e.currentTarget.style.borderColor='rgba(255,255,255,.1)';}}>
-                  <RefreshCw size={12}/> Regeneruj
-                </button>
-              )}
-            </div>
-            {interpLoading && (
-              <div style={{display:'flex',flexDirection:'column',gap:10}}>
-                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8}}>
-                  <div style={{width:8,height:8,borderRadius:'50%',background:'#b08fff',animation:'spinLoader 1s linear infinite'}}/>
-                  <span style={{fontSize:13,color:'#b08fff',fontWeight:600}}>Generuję interpretację...</span>
-                </div>
-                {[1,.88,.76,.92,.8,.68].map((w,i)=><div key={i} className="hr-shimmer" style={{height:14,borderRadius:7,width:`${w*100}%`}}/>)}
-              </div>
-            )}
-            {interpError && !interpLoading && (
-              <div style={{background:'rgba(239,68,68,.08)',border:'1px solid rgba(239,68,68,.2)',borderRadius:12,padding:'16px 20px',textAlign:'center'}}>
-                <p style={{color:'rgba(239,68,68,.8)',fontSize:13,marginBottom:8}}>{interpError}</p>
-                <button onClick={()=>loadInterpretation(results)} style={{fontSize:12,color:'rgba(255,255,255,.4)',background:'none',border:'none',cursor:'pointer',fontFamily:'inherit',textDecoration:'underline'}}>Spróbuj ponownie</button>
-              </div>
-            )}
-            {interpretation && !interpLoading && (
-              <div style={{display:'flex',flexDirection:'column',gap:14}}>
-                {interpretation.split('\n\n').filter(p=>p.trim()).map((para,i)=>{
-                  const italic=para.trim().startsWith('*')&&para.trim().endsWith('*');
-                  const text=italic?para.trim().replace(/^\*|\*$/g,''):para.trim();
-                  return italic
-                    ?<p key={i} style={{color:'#b08fff',fontSize:14,fontStyle:'italic',borderLeft:'2px solid rgba(123,94,167,.5)',paddingLeft:16,margin:0}}>{text}</p>
-                    :<p key={i} style={{color:'rgba(255,255,255,.65)',fontSize:14,lineHeight:1.75,margin:0}}>{text}</p>;
-                })}
-                <div style={{borderTop:'1px solid rgba(255,255,255,.05)',paddingTop:12,marginTop:4}}>
-                  <span style={{fontSize:11,color:'rgba(255,255,255,.2)'}}>Wygenerowane przez GPT-4o-mini · Interpretacja psychologiczna, nie diagnoza medyczna</span>
-                </div>
-              </div>
-            )}
+            <AiInterpretation
+              interpretation={interpretation}
+              loading={interpLoading}
+              error={interpError}
+              onRegenerate={regenerate}
+              onRetry={() => generateInterpretation(results)}
+              accentColor="#b08fff"
+              accentGlow="rgba(123,94,167,.5)"
+              testLabel="Twojego profilu HEXACO"
+            />
           </div>
         </div>
 
