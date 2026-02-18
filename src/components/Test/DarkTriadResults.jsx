@@ -59,7 +59,7 @@ const CSS = `
   min-height: 100vh;
   padding: 48px 40px 80px;
   position: relative;
-  overflow-x: hidden;
+  overflow: clip;
 }
 .dt-root::before {
   content: '';

@@ -30,7 +30,7 @@
       radial-gradient(circle at 0% 80%, #0d0626 0%, transparent 50%);
     background-attachment: fixed;
     color: #e2e8f0;
-    overflow-x: hidden;
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
