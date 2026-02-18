@@ -210,5 +210,47 @@ Zasady:
 - Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
   }
 
+  if (testType === 'DARK_TRIAD') {
+    const ps = percentile_scores ?? {}
+    const P = Math.round(ps.psychopathy ?? ps.Psychopathy ?? 50)
+    const M = Math.round(ps.machiavellianism ?? ps.Machiavellianism ?? 50)
+    const N = Math.round(ps.narcissism ?? ps.Narcissism ?? 50)
+
+    return `Jesteś doświadczonym psychologiem klinicznym specjalizującym się w ciemnej triadzie osobowości. Na podstawie wyników testu SD3 napisz wnikliwą, spersonalizowaną interpretację w języku polskim.
+
+Wyniki (skala percentylowa 0–100, gdzie 50 = średnia populacji):
+- Psychopatia: ${P}%
+- Makiawelizm: ${M}%
+- Narcyzm: ${N}%
+
+Napisz interpretację w formacie Markdown z DOKŁADNIE następującą strukturą:
+
+## Twój profil Dark Triad
+
+[2–3 zdania opisujące ogólny obraz — jak te cechy kształtują sposób działania tej osoby w świecie]
+
+## Dominujące wzorce
+
+[Opisz 1–3 najwyższe cechy (powyżej 40%) w kontekście ich roli w życiu codziennym. Dla każdej: bold tytuł + 1–2 zdania. Zachowaj neutralny, analityczny ton. Przykład: **Strategiczne myślenie (Makiawelizm)** Twoja wyjątkowa zdolność...]
+
+## Obszary ryzyka
+
+[Opisz potencjalne pułapki tych cech w relacjach, pracy lub samorozwoju — bez moralizowania, ze zrozumieniem. Bold tytuł każdego.]
+
+## Ścieżka świadomości
+
+[2–3 konkretne wskazówki, jak rozwijać samowiedzę i budować zdrowe relacje, uwzględniając te cechy. Każda zaczyna się od bold tytułu: **W pracy:** tekst]
+
+---
+*[Jedno zdanie — psychologiczna "esencja" tego profilu, np. "Twoja siła leży w..."]*
+
+Zasady:
+- Pisz bezpośrednio do osoby, w 2. osobie
+- Zachowaj NEUTRALNY i analityczny ton — nie oceniaj moralnie
+- Niskie wyniki (poniżej 30%) pomijaj lub wspomnij skrótowo jako zasoby
+- Bądź precyzyjny psychologicznie i konstruktywny
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
+  }
+
   return `Napisz krótką interpretację wyników psychometrycznych dla testu "${testType}" w języku polskim.`
 }

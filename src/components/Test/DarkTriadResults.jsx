@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
+import AiInterpretation from './AiInterpretation.jsx';
 import { DARK_TRIAD_TEST } from '../../data/tests/darkTriad.js';
 import { generateDarkTriadReport } from '../../utils/scoring.js';
 
@@ -218,6 +219,7 @@ function DarkTriadResults() {
   const [report, setReport]                               = useState(null);
   const [loading, setLoading]                             = useState(true);
   const [error, setError]                                 = useState(null);
+  const [rawScores, setRawScores]                         = useState(null);
   const [interpretation, setInterpretation]               = useState(null);
   const [interpretationLoading, setInterpretationLoading] = useState(false);
   const [interpretationError, setInterpretationError]     = useState(null);
@@ -262,9 +264,23 @@ function DarkTriadResults() {
         }).sort((a, b) => b.score - a.score),
       });
 
+      // Load cached interpretation in parallel
+      const { data: cached } = await supabase
+        .from('ai_interpretations')
+        .select('interpretation')
+        .eq('user_id', session.user.id)
+        .eq('test_type', 'DARK_TRIAD')
+        .maybeSingle();
+
       setReport(fullReport);
+      setRawScores(testResult.raw_scores);
       setLoading(false);
-      loadInterpretation(testResult.raw_scores);
+
+      if (cached?.interpretation) {
+        setInterpretation(cached.interpretation);
+      } else {
+        generateInterpretation(testResult.raw_scores);
+      }
     } catch (err) {
       console.error(err);
       setError('Błąd podczas ładowania wyników');
@@ -272,33 +288,22 @@ function DarkTriadResults() {
     }
   }
 
-  async function loadInterpretation(rawScores) {
+  async function generateInterpretation(rawScores) {
     setInterpretationLoading(true);
     setInterpretationError(null);
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData?.session?.access_token;
-      if (!token) throw new Error('Brak sesji');
-
-      const supabaseUrl     = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Brak sesji');
 
       const dims = rawScores?.dimensions || {};
       const percentile_scores = {};
       Object.entries(dims).forEach(([k, v]) => { percentile_scores[k] = v.percentile || 0; });
 
-      const res = await fetch(`${supabaseUrl}/functions/v1/interpret-test`, {
-        method: 'POST',
-        headers: {
-          'Content-Type':  'application/json',
-          'Authorization': `Bearer ${token}`,
-          'apikey':        supabaseAnonKey,
-        },
-        body: JSON.stringify({ test_type: 'DARK_TRIAD', percentile_scores }),
+      const { data, error: fnErr } = await supabase.functions.invoke('interpret-test', {
+        body: { test_type: 'DARK_TRIAD', percentile_scores },
+        headers: { Authorization: `Bearer ${session.access_token}` },
       });
-
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
+      if (fnErr) throw fnErr;
       setInterpretation(data?.interpretation ?? null);
     } catch (err) {
       console.error('Interpretation error:', err);
@@ -310,10 +315,11 @@ function DarkTriadResults() {
 
   async function regenerateInterpretation() {
     if (!report) return;
-    await supabase.from('ai_interpretations').delete().eq('test_type', 'DARK_TRIAD');
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) await supabase.from('ai_interpretations').delete().eq('user_id', user.id).eq('test_type', 'DARK_TRIAD');
     setInterpretation(null);
     const { data } = await supabase.from('user_psychometrics').select('raw_scores').eq('test_type', 'DARK_TRIAD').order('completed_at', { ascending: false }).limit(1);
-    if (data?.[0]) loadInterpretation(data[0].raw_scores);
+    if (data?.[0]) generateInterpretation(data[0].raw_scores);
   }
 
   /* ── LOADING ── */
@@ -583,56 +589,16 @@ function DarkTriadResults() {
       {/* ── AI INTERPRETATION ── */}
       <div style={{ maxWidth: 900, margin: '28px auto 0' }}>
         <div className="dt-glass" style={{ padding: 36, background: 'rgba(20,6,16,.7)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,45,85,.12)', border: '1px solid rgba(255,45,85,.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>🤖</div>
-              <div>
-                <div style={{ fontSize: 18, fontWeight: 700, color: '#fff' }}>Interpretacja AI</div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,.3)' }}>Spersonalizowana analiza profilu Dark Triad</div>
-              </div>
-            </div>
-            {interpretation && !interpretationLoading && (
-              <button onClick={regenerateInterpretation} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'rgba(255,255,255,.35)', padding: '6px 14px', borderRadius: 10, border: '1px solid rgba(255,255,255,.1)', background: 'transparent', cursor: 'pointer' }}>
-                <RefreshCw size={12} /> Regeneruj
-              </button>
-            )}
-          </div>
-
-          {interpretationLoading && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#ff2d55' }} />
-                <span style={{ fontSize: 13, color: '#ff2d55' }}>Generuję interpretację…</span>
-              </div>
-              {[100, 83, 91, 70, 88, 75, 95].map((w, i) => (
-                <div key={i} className="dt-shimmer" style={{ height: 14, borderRadius: 8, width: `${w}%` }} />
-              ))}
-            </div>
-          )}
-
-          {interpretationError && !interpretationLoading && (
-            <div style={{ background: 'rgba(255,45,85,.08)', border: '1px solid rgba(255,45,85,.25)', borderRadius: 12, padding: 16, textAlign: 'center' }}>
-              <p style={{ color: '#ff2d55', fontSize: 13, marginBottom: 10 }}>{interpretationError}</p>
-              <button onClick={() => { setInterpretationError(null); loadInterpretation(null); }} style={{ fontSize: 12, color: 'rgba(255,255,255,.4)', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}>
-                Spróbuj ponownie
-              </button>
-            </div>
-          )}
-
-          {interpretation && !interpretationLoading && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              {interpretation.split('\n\n').filter(p => p.trim()).map((para, i) => {
-                const isItalic = para.trim().startsWith('*') && para.trim().endsWith('*');
-                const text = isItalic ? para.trim().replace(/^\*|\*$/g, '') : para.trim();
-                return isItalic
-                  ? <p key={i} style={{ fontSize: 13, fontStyle: 'italic', color: '#ffaa00', borderLeft: '2px solid rgba(255,170,0,.4)', paddingLeft: 14, margin: 0 }}>{text}</p>
-                  : <p key={i} style={{ fontSize: 13, lineHeight: 1.7, color: 'rgba(255,255,255,.55)', margin: 0 }}>{text}</p>;
-              })}
-              <div style={{ borderTop: '1px solid rgba(255,255,255,.06)', paddingTop: 12, fontSize: 11, color: 'rgba(255,255,255,.2)' }}>
-                Wygenerowane przez GPT-4o-mini · Interpretacja psychologiczna, nie diagnoza medyczna
-              </div>
-            </div>
-          )}
+          <AiInterpretation
+            interpretation={interpretation}
+            loading={interpretationLoading}
+            error={interpretationError}
+            onRegenerate={regenerateInterpretation}
+            onRetry={() => generateInterpretation(rawScores)}
+            accentColor="#ff2d55"
+            accentGlow="rgba(255,45,85,.5)"
+            testLabel="profilu Dark Triad"
+          />
         </div>
       </div>
 
