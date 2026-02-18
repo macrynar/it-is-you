@@ -112,7 +112,7 @@ export default function AiInterpretation({
         <div style={{ display:'flex', alignItems:'center', gap:12 }}>
           <div style={{ width:36, height:36, borderRadius:10, background:`${accentColor}25`, border:`1px solid ${accentColor}44`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18 }}>🤖</div>
           <div>
-            <div style={{ fontSize:16, fontWeight:700, color:'#fff' }}>Interpretacja AI</div>
+            <div style={{ fontSize:16, fontWeight:700, color:'#fff' }}>Analiza Silnika Neuronalnego (NEA®)</div>
             <div style={{ fontSize:12, color:'rgba(255,255,255,.35)' }}>Spersonalizowana analiza {testLabel}</div>
           </div>
         </div>
@@ -152,7 +152,7 @@ export default function AiInterpretation({
         <div>
           {renderMarkdown(interpretation, accentColor)}
           <div style={{ borderTop:'1px solid rgba(255,255,255,.05)', paddingTop:12, marginTop:20 }}>
-            <span style={{ fontSize:11, color:'rgba(255,255,255,.2)' }}>Wygenerowane przez GPT-4o-mini · Interpretacja psychologiczna, nie diagnoza medyczna</span>
+            <div style={{ fontSize:11, color:'rgba(255,255,255,.2)' }}>Analiza Silnika Neuronalnego (NEA®) · Powered by GPT-4o-mini · Nie diagnoza medyczna</div>
           </div>
         </div>
       )}

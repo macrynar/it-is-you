@@ -76,7 +76,7 @@ export default function HexacoResults() {
           .eq('user_id', user.id).eq('test_type', 'HEXACO')
           .order('completed_at', { ascending: false }).limit(1),
         supabase.from('ai_interpretations').select('interpretation')
-          .eq('test_type', 'HEXACO')
+          .eq('user_id', user.id).eq('test_type', 'HEXACO')
           .maybeSingle(),
       ]);
 
@@ -96,15 +96,10 @@ export default function HexacoResults() {
   const generateInterpretation = async (r) => {
     setInterpLoading(true); setInterpError(null);
     try {
-      const { data: s } = await supabase.auth.getSession();
-      const token = s?.session?.access_token;
-      if (!token) throw new Error('Brak sesji');
-      const res = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/interpret-test`,
-        { method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':`Bearer ${token}`, 'apikey':import.meta.env.VITE_SUPABASE_ANON_KEY }, body:JSON.stringify({ test_type:'HEXACO', percentile_scores:r.percentile_scores, raw_scores:r.raw_scores }) }
-      );
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const d = await res.json();
+      const { data: d, error: fnErr } = await supabase.functions.invoke('interpret-test', {
+        body: { test_type: 'HEXACO', percentile_scores: r.percentile_scores, raw_scores: r.raw_scores },
+      });
+      if (fnErr) throw fnErr;
       setInterpretation(d?.interpretation ?? null);
     } catch (err) { setInterpError('Nie udało się wygenerować interpretacji.'); }
     finally { setInterpLoading(false); }
