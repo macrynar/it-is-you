@@ -5,6 +5,7 @@
 
 import { HEXACO_TEST } from '../data/tests/hexaco.js';
 import { ENNEAGRAM_TEST } from '../data/tests/enneagram.js';
+import { DARK_TRIAD_TEST } from '../data/tests/darkTriad.js';
 
 /**
  * Calculate HEXACO-60 scores from user responses
@@ -484,3 +485,280 @@ export function generateEnneagramReport(scores) {
   };
 }
 
+/**
+ * ===========================================
+ * DARK TRIAD (SD3) SCORING
+ * ===========================================
+ */
+
+/**
+ * Calculate Dark Triad scores from user responses
+ * Measures Machiavellianism, Narcissism, and Psychopathy
+ * @param {Object} responses - Object mapping question IDs to answers (1-5)
+ * @returns {Object} Dimension scores with risk levels
+ */
+export function calculateDarkTriadScore(responses) {
+  // Validate all 27 questions are answered
+  if (Object.keys(responses).length !== 27) {
+    throw new Error(`Expected 27 responses, got ${Object.keys(responses).length}`);
+  }
+
+  const dimensionScores = {};
+  const dimensionCounts = {};
+  
+  // Initialize scores
+  DARK_TRIAD_TEST.dimensions.forEach(dim => {
+    dimensionScores[dim.id] = 0;
+    dimensionCounts[dim.id] = 0;
+  });
+
+  // Calculate raw scores for each dimension
+  DARK_TRIAD_TEST.questions.forEach(question => {
+    const response = responses[question.id];
+    
+    if (response === undefined || response === null) {
+      throw new Error(`Missing response for question ${question.id}`);
+    }
+
+    // Validate response is in range 1-5
+    if (response < 1 || response > 5) {
+      throw new Error(`Invalid response ${response} for question ${question.id}. Must be 1-5`);
+    }
+
+    // Apply reverse scoring if needed (6 - response for reverse items)
+    const score = question.reverse ? (6 - response) : response;
+    
+    dimensionScores[question.dimension] += score;
+    dimensionCounts[question.dimension] += 1;
+  });
+
+  // Calculate averages and determine risk levels
+  const results = {};
+  const riskLevels = {};
+  
+  DARK_TRIAD_TEST.dimensions.forEach(dim => {
+    const average = dimensionScores[dim.id] / dimensionCounts[dim.id];
+    const norm = DARK_TRIAD_TEST.norms[dim.id];
+    
+    // Determine risk level based on population norms
+    let level = 'average';
+    if (average < norm.average[0]) {
+      level = 'low';
+    } else if (average >= norm.high[0]) {
+      level = 'high';
+    }
+    
+    results[dim.id] = {
+      raw_score: parseFloat(average.toFixed(2)),
+      level: level,
+      vs_population: parseFloat((average - norm.mean).toFixed(2)),
+      norm_mean: norm.mean,
+      percentile: calculatePercentileApprox(average, norm)
+    };
+    
+    riskLevels[dim.id] = level;
+  });
+
+  // Determine overall risk (highest level)
+  const overallRisk = Object.values(results).some(r => r.level === 'high') 
+    ? 'high' 
+    : Object.values(results).some(r => r.level === 'average') 
+      ? 'average' 
+      : 'low';
+
+  // Find highest scoring dimension
+  const sortedDimensions = Object.entries(results)
+    .sort((a, b) => b[1].raw_score - a[1].raw_score);
+  
+  const highestDimension = DARK_TRIAD_TEST.dimensions.find(
+    d => d.id === sortedDimensions[0][0]
+  );
+
+  return {
+    test_id: 'dark_triad_sd3',
+    test_name: 'Dark Triad SD3',
+    completed_at: new Date().toISOString(),
+    dimensions: results,
+    risk_levels: riskLevels,
+    overall_risk: overallRisk,
+    highest_dimension: {
+      id: highestDimension.id,
+      name: highestDimension.name,
+      score: results[highestDimension.id].raw_score,
+      level: results[highestDimension.id].level
+    },
+    sorted_dimensions: sortedDimensions.map(([id, data]) => {
+      const dim = DARK_TRIAD_TEST.dimensions.find(d => d.id === id);
+      return {
+        id: id,
+        name: dim.name,
+        name_en: dim.name_en,
+        icon: dim.icon,
+        score: data.raw_score,
+        level: data.level
+      };
+    })
+  };
+}
+
+/**
+ * Calculate approximate percentile based on normal distribution
+ * @param {number} score - User's score
+ * @param {Object} norm - Norm object with mean and ranges
+ * @returns {number} Approximate percentile (0-100)
+ */
+function calculatePercentileApprox(score, norm) {
+  // Simple approximation based on ranges
+  if (score < norm.average[0]) {
+    // Low range: 0-30th percentile
+    const ratio = (score - norm.low[0]) / (norm.average[0] - norm.low[0]);
+    return Math.round(ratio * 30);
+  } else if (score < norm.high[0]) {
+    // Average range: 30-70th percentile
+    const ratio = (score - norm.average[0]) / (norm.high[0] - norm.average[0]);
+    return Math.round(30 + ratio * 40);
+  } else {
+    // High range: 70-100th percentile
+    const ratio = (score - norm.high[0]) / (norm.high[1] - norm.high[0]);
+    return Math.round(70 + ratio * 30);
+  }
+}
+
+/**
+ * Get interpretation text for Dark Triad dimensions
+ * @param {string} dimension - Dimension ID
+ * @param {string} level - Risk level ('low', 'average', 'high')
+ * @returns {Object} Interpretation with description and implications
+ */
+export function getDarkTriadInterpretation(dimension, level) {
+  const interpretations = {
+    machiavellianism: {
+      low: {
+        description: "Masz niski poziom makiawelizmu. Jesteś szczery i bezpośredni w relacjach, rzadko uciekasz się do manipulacji.",
+        implications: [
+          "Wysoka uczciwość w relacjach",
+          "Przejrzysta komunikacja",
+          "Mniejsza skłonność do gier politycznych",
+          "Mogą wykorzystywać Cię osoby bardziej manipulacyjne"
+        ]
+      },
+      average: {
+        description: "Twój poziom makiawelizmu jest w normie populacyjnej. Potrafisz być strategiczny, gdy sytuacja tego wymaga, ale nie jest to Twoja dominująca cecha.",
+        implications: [
+          "Umiejętność dostosowania się do sytuacji",
+          "Zrównoważone podejście do relacji",
+          "Możesz być strategiczny, gdy trzeba",
+          "Zachowujesz integralność w większości przypadków"
+        ]
+      },
+      high: {
+        description: "Masz podwyższony poziom makiawelizmu. Jesteś strategiczny, cyniczny i skłonny do manipulacji dla osiągnięcia celów.",
+        implications: [
+          "Silne myślenie strategiczne",
+          "Skłonność do manipulacji w relacjach",
+          "Cyniczne spojrzenie na ludzi",
+          "Ryzyko problemów w bliskich relacjach"
+        ]
+      }
+    },
+    narcissism: {
+      low: {
+        description: "Masz niski poziom narcyzmu. Jesteś skromny i nie potrzebujesz bycia w centrum uwagi.",
+        implications: [
+          "Naturalna skromność",
+          "Brak potrzeby podziwu",
+          "Empatia wobec innych",
+          "Ryzyko niedocenienia własnej wartości"
+        ]
+      },
+      average: {
+        description: "Twój poziom narcyzmu jest w normie. Masz zdrowe poczucie własnej wartości bez przesadnej potrzeby uwagi.",
+        implications: [
+          "Zrównoważone poczucie własnej wartości",
+          "Umiar w szukaniu uznania",
+          "Równowaga między ego a empatią",
+          "Zdrowe podejście do sukcesów i porażek"
+        ]
+      },
+      high: {
+        description: "Masz podwyższony poziom narcyzmu. Potrzebujesz podziwu, czujesz się wyjątkowy i uprzywilejowany.",
+        implications: [
+          "Silne poczucie własnej wartości",
+          "Potrzeba bycia w centrum uwagi",
+          "Trudności z empatią",
+          "Ryzyko problemów w relacjach interpersonalnych"
+        ]
+      }
+    },
+    psychopathy: {
+      low: {
+        description: "Masz niski poziom psychopatii. Jesteś empatyczny, kontrolujesz impulsy i unikasz ryzyka.",
+        implications: [
+          "Wysoka empatia",
+          "Dobra kontrola impulsów",
+          "Unikanie niepotrzebnego ryzyka",
+          "Silna więź emocjonalna z innymi"
+        ]
+      },
+      average: {
+        description: "Twój poziom psychopatii jest w normie. Masz zrównoważone podejście do ryzyka i kontroli emocji.",
+        implications: [
+          "Zrównoważona empatia",
+          "Umiejętność podejmowania ryzyka, gdy trzeba",
+          "Kontrola impulsów w większości sytuacji",
+          "Normalne funkcjonowanie społeczne"
+        ]
+      },
+      high: {
+        description: "Masz podwyższony poziom psychopatii. Jesteś impulsywny, szukasz ryzyka i masz trudności z empatią.",
+        implications: [
+          "Wysoka tolerancja ryzyka",
+          "Trudności z kontrolą impulsów",
+          "Ograniczona empatia",
+          "Ryzyko zachowań antyspołecznych"
+        ]
+      }
+    }
+  };
+
+  return interpretations[dimension]?.[level] || {
+    description: "Brak interpretacji dla tego poziomu.",
+    implications: []
+  };
+}
+
+/**
+ * Generate full Dark Triad report
+ * @param {Object} scores - Result from calculateDarkTriadScore
+ * @returns {Object} Full report with interpretations
+ */
+export function generateDarkTriadReport(scores) {
+  const dimensionReports = {};
+  
+  Object.keys(scores.dimensions).forEach(dimId => {
+    const dimData = scores.dimensions[dimId];
+    const interpretation = getDarkTriadInterpretation(dimId, dimData.level);
+    
+    dimensionReports[dimId] = {
+      ...dimData,
+      interpretation: interpretation
+    };
+  });
+
+  return {
+    test_info: {
+      test_id: scores.test_id,
+      test_name: scores.test_name,
+      completed_at: scores.completed_at
+    },
+    overall_risk: scores.overall_risk,
+    highest_dimension: scores.highest_dimension,
+    dimensions: dimensionReports,
+    sorted_dimensions: scores.sorted_dimensions,
+    risk_alert: scores.overall_risk === 'high' 
+      ? "⚠️ Jeden lub więcej wymiarów wskazuje na podwyższone ryzyko. Rozważ konsultację ze specjalistą."
+      : scores.overall_risk === 'average'
+        ? "✓ Twoje wyniki mieszczą się w normie populacyjnej."
+        : "✓ Wszystkie wymiary w zakresie niskiego ryzyka."
+  };
+}

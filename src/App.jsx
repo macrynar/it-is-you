@@ -3,6 +3,7 @@ import AuthModal from './components/Auth/AuthModal'
 import TestWizard from './components/Test/TestWizard'
 import HexacoResults from './components/Test/HexacoResults'
 import EnneagramResults from './components/Test/EnneagramResults'
+import DarkTriadResults from './components/Test/DarkTriadResults'
 import { supabase, onAuthStateChange } from './lib/supabaseClient'
 
 /**
@@ -123,7 +124,28 @@ function App() {
       return null
     }
     
-    return <EnneagramResults />
+   
+
+  // Handle /test/dark-triad/results route - show dark triad results
+  if (currentRoute === '/test/dark-triad/results' || currentRoute === '/test/dark-triad/results/') {
+    if (loading) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-rose-950 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-rose-500/30 border-t-rose-500 rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-slate-400">Ładowanie...</p>
+          </div>
+        </div>
+      )
+    }
+    
+    if (!user) {
+      window.location.href = '/auth'
+      return null
+    }
+    
+    return <DarkTriadResults />
+  } return <EnneagramResults />
   }
 
   // Handle /test route - require authentication & check for test type

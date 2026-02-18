@@ -245,63 +245,35 @@
                 </button>
             </div>
 
-            <!-- TEST 3: Big Five -->
-            <div class="glass-card glass-card-locked rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-5 relative z-10">
-                    <div class="card-icon-wrapper bg-gradient-to-br from-cyan-600/20 to-blue-600/20">
-                        <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path>
-                        </svg>
-                    </div>
-                    <svg class="w-5 h-5 text-slate-600 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                    </svg>
-                </div>
-                
-                <h3 class="text-xl font-bold text-white mb-2 relative z-10">Big Five IPIP-50</h3>
-                <p class="text-sm text-slate-400 mb-6 relative z-10">Wielka Piątka</p>
-                
-                <div class="flex items-center gap-2 text-xs text-slate-500 mb-6 relative z-10">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span>10 min · 50 pytań</span>
-                </div>
-                
-                <button disabled class="w-full px-4 py-3 bg-slate-800/50 text-slate-500 font-semibold rounded-xl cursor-not-allowed relative z-10 border border-slate-700/30">
-                    Wkrótce
-                </button>
-            </div>
-
-            <!-- TEST 4: Dark Triad -->
-            <div class="glass-card glass-card-locked rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-5 relative z-10">
+            <!-- TEST 3: Dark Triad -->
+            <div class="glass-card glass-card-active rounded-2xl p-6 cursor-pointer group" onclick="startDarkTriadTest()">
+                <div class="flex items-center justify-between mb-5">
                     <div class="card-icon-wrapper bg-gradient-to-br from-rose-600/20 to-red-600/20">
                         <svg class="w-7 h-7 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                         </svg>
                     </div>
-                    <svg class="w-5 h-5 text-slate-600 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                    </svg>
+                    <span id="dark-triad-status" class="neon-badge">
+                        Do wykonania
+                    </span>
                 </div>
                 
-                <h3 class="text-xl font-bold text-white mb-2 relative z-10">Dark Triad SD3</h3>
-                <p class="text-sm text-slate-400 mb-6 relative z-10">Cień / Ryzyka</p>
+                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-rose-400 transition-colors">Dark Triad SD3</h3>
+                <p class="text-sm text-slate-400 mb-6">Cień / Ryzyka</p>
                 
-                <div class="flex items-center gap-2 text-xs text-slate-500 mb-6 relative z-10">
+                <div class="flex items-center gap-2 text-xs text-slate-500 mb-6">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <span>8 min · 27 pytań</span>
                 </div>
                 
-                <button disabled class="w-full px-4 py-3 bg-slate-800/50 text-slate-500 font-semibold rounded-xl cursor-not-allowed relative z-10 border border-slate-700/30">
-                    Wkrótce
+                <button id="dark-triad-button" class="w-full px-4 py-3 bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-rose-500/20 hover:shadow-rose-500/40">
+                    Zbadaj Cień
                 </button>
             </div>
 
-            <!-- TEST 5: Strengths -->
+            <!-- TEST 4: Strengths -->
             <div class="glass-card glass-card-locked rounded-2xl p-6">
                 <div class="flex items-center justify-between mb-5 relative z-10">
                     <div class="card-icon-wrapper bg-gradient-to-br from-amber-600/20 to-yellow-600/20">
@@ -329,7 +301,7 @@
                 </button>
             </div>
 
-            <!-- TEST 6: Career Interests -->
+            <!-- TEST 5: Career Interests -->
             <div class="glass-card glass-card-locked rounded-2xl p-6">
                 <div class="flex items-center justify-between mb-5 relative z-10">
                     <div class="card-icon-wrapper bg-gradient-to-br from-emerald-600/20 to-green-600/20">
@@ -357,7 +329,7 @@
                 </button>
             </div>
 
-            <!-- TEST 7: Values Schwartz -->
+            <!-- TEST 6: Values Schwartz -->
             <div class="glass-card glass-card-locked rounded-2xl p-6">
                 <div class="flex items-center justify-between mb-5 relative z-10">
                     <div class="card-icon-wrapper bg-gradient-to-br from-purple-600/20 to-violet-600/20">
@@ -473,6 +445,35 @@
             window.location.href = '/index2.html';
         }
 
+        // Check if Dark Triad test is completed
+        async function checkDarkTriadCompleted() {
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                
+                if (sessionError || !session || !session.user) {
+                    return false;
+                }
+
+                const { data, error } = await supabase
+                    .from('user_psychometrics')
+                    .select('*')
+                    .eq('user_id', session.user.id)
+                    .eq('test_type', 'DARK_TRIAD')
+                    .order('completed_at', { ascending: false })
+                    .limit(1);
+
+                if (error) {
+                    console.error('Error checking Dark Triad completion:', error);
+                    return false;
+                }
+
+                return data && data.length > 0;
+            } catch (err) {
+                console.error('Error in checkDarkTriadCompleted:', err);
+                return false;
+            }
+        }
+
         // Check if Enneagram test is completed
         async function checkEnneagramCompleted() {
             try {
@@ -518,7 +519,18 @@
                     return false;
                 }
 
-                console.log('Checking test completion for user:', session.user.id);
+                cDark Triad test or view results
+        window.startDarkTriadTest = async function() {
+            const completed = await checkDarkTriadCompleted();
+            
+            if (completed) {
+                window.location.href = '/test/dark-triad/results';
+            } else {
+                window.location.href = '/test?type=dark_triad';
+            }
+        }
+
+        // Start onsole.log('Checking test completion for user:', session.user.id);
 
                 const { data, error } = await supabase
                     .from('user_psychometrics')
@@ -562,7 +574,26 @@
         window.startHexacoTest = async function() {
             console.log('HEXACO tile clicked, checking completion status...');
             const completed = await checkHexacoCompleted();
-            console.log('Completion check result:', completed);
+            console.log('Dark Triad test
+        async function updateDarkTriadUI() {
+            const completed = await checkDarkTriadCompleted();
+            
+            const statusEl = document.getElementById('dark-triad-status');
+            const buttonEl = document.getElementById('dark-triad-button');
+            
+            if (completed) {
+                if (statusEl) {
+                    statusEl.textContent = 'Ukończony';
+                    statusEl.className = 'neon-badge neon-badge-success';
+                }
+                if (buttonEl) {
+                    buttonEl.textContent = 'Analiza Cienia';
+                    buttonEl.className = 'w-full px-4 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40';
+                }
+            }
+        }
+
+        // Update UI for Completion check result:', completed);
             
             if (completed) {
                 console.log('Test completed, redirecting to results');
@@ -610,6 +641,7 @@
                 }
                 if (buttonEl) {
                     buttonEl.textContent = 'Zobacz Wyniki';
+            await updateDarkTriadUI();
                     buttonEl.className = 'w-full px-4 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40';
                 }
                 console.log('UI updated to show completed state');
