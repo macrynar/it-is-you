@@ -4,6 +4,7 @@ import TestWizard from './components/Test/TestWizard'
 import HexacoResults from './components/Test/HexacoResults'
 import EnneagramResults from './components/Test/EnneagramResults'
 import DarkTriadResults from './components/Test/DarkTriadResults'
+import StrengthsResults from './components/Test/StrengthsResults'
 import { supabase, onAuthStateChange } from './lib/supabaseClient'
 
 /**
@@ -146,6 +147,27 @@ function App() {
     }
     
     return <DarkTriadResults />
+  }
+
+  // Handle /test/strengths/results route - show strengths results
+  if (currentRoute === '/test/strengths/results' || currentRoute === '/test/strengths/results/') {
+    if (loading) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-slate-400">Ładowanie...</p>
+          </div>
+        </div>
+      )
+    }
+    
+    if (!user) {
+      window.location.href = '/auth'
+      return null
+    }
+    
+    return <StrengthsResults />
   }
 
   // Handle /test route - require authentication & check for test type
