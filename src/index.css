@@ -2,268 +2,289 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================
-   NEURAL GLASS DESIGN SYSTEM — Global Styles
-   ============================================ */
+/* ============================================================
+   NEURAL GLASS 2.0 - Deep Space Edition
+   Lead UI Design System
+   ============================================================ */
+
+:root {
+  --bg-deep:      #030014;
+  --bg-surface:   #0f0728;
+  --neon-primary: #7000ff;
+  --neon-cyan:    #00f0ff;
+  --neon-pink:    #ff005c;
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shine:  rgba(255, 255, 255, 0.10);
+}
 
 @layer base {
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020617 70%);
+    background-color: var(--bg-deep);
+    background-image:
+      radial-gradient(circle at 50% 0%, #2a1b5e 0%, transparent 60%),
+      radial-gradient(circle at 100% 0%, #1a0b38 0%, transparent 40%),
+      radial-gradient(circle at 0% 80%, #0d0626 0%, transparent 50%);
     background-attachment: fixed;
-    background-color: #020617;
     color: #e2e8f0;
-    min-height: 100vh;
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6, .brand-font, .font-brand {
     font-family: 'Space Grotesk', system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
 
   ::selection {
-    background: rgba(99, 102, 241, 0.35);
-    color: #f8fafc;
+    background: rgba(112, 0, 255, 0.4);
+    color: #fff;
   }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: #020617; }
-  ::-webkit-scrollbar-thumb {
-    background: rgba(99, 102, 241, 0.35);
-    border-radius: 3px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(99, 102, 241, 0.6);
-  }
+  ::-webkit-scrollbar              { width: 5px; }
+  ::-webkit-scrollbar-track        { background: var(--bg-deep); }
+  ::-webkit-scrollbar-thumb        { background: rgba(112,0,255,0.4); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover  { background: rgba(112,0,255,0.7); }
 }
 
 @layer components {
 
-  /* ─── GLASS PANEL ────────────────────────────────────────
-     Fundament każdej karty. Efekt głębokiego szkła 3D.
-  ──────────────────────────────────────────────────────── */
-  .glass-panel {
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow:
-      0 4px 6px -1px rgba(0, 0, 0, 0.2),
-      0 2px 4px -1px rgba(0, 0, 0, 0.12),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.10);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* ── 1. CARD NEURAL ──────────────────────────────────────── */
+  .card-neural {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, rgba(20,10,40,0.75) 0%, rgba(10,5,20,0.45) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 24px -1px rgba(0,0,0,0.35), inset 0 1px 0 0 var(--glass-shine);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   }
 
-  .glass-panel:hover {
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow:
-      0 8px 25px -5px rgba(0, 0, 0, 0.35),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+  .card-neural::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(112,0,255,0.04) 0%, transparent 60%);
+    pointer-events: none;
   }
 
-  /* Variant: Highlighted panel with subtle brand glow */
-  .glass-panel-brand {
-    @apply glass-panel;
-    border-color: rgba(99, 102, 241, 0.20);
+  .card-neural:hover {
+    border-color: rgba(112, 0, 255, 0.35);
     box-shadow:
-      0 0 30px -10px rgba(99, 102, 241, 0.25),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.10);
+      0 0 40px -8px rgba(112, 0, 255, 0.22),
+      0 8px 32px -8px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+    transform: translateY(-3px);
   }
 
-  .glass-panel-brand:hover {
-    border-color: rgba(99, 102, 241, 0.40);
-    box-shadow:
-      0 0 40px -8px rgba(99, 102, 241, 0.35),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+  .card-neural.card-danger:hover {
+    border-color: rgba(255, 0, 92, 0.35);
+    box-shadow: 0 0 40px -8px rgba(255,0,92,0.2), inset 0 1px 0 0 rgba(255,255,255,0.18);
   }
 
-  /* ─── BUTTONS ────────────────────────────────────────────
-     Dwa warianty: Primary (solid indigo) i Ghost (outline).
-  ──────────────────────────────────────────────────────── */
-  .btn-primary {
+  .card-neural-highlight {
+    border-color: rgba(112, 0, 255, 0.2);
+    box-shadow: 0 0 40px -12px rgba(112,0,255,0.3), inset 0 1px 0 0 var(--glass-shine);
+  }
+
+  /* Legacy aliases */
+  .glass-panel       { @apply card-neural; }
+  .glass-panel-brand { @apply card-neural card-neural-highlight; }
+  .glass-card        { @apply card-neural; }
+
+  /* ── 2. BTN NEURAL ───────────────────────────────────────── */
+  .btn-neural {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.625rem 1.25rem;
-    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    color: #ffffff;
+    padding: 0.625rem 1.5rem;
+    border-radius: 0.75rem;
     font-weight: 600;
     font-size: 0.875rem;
-    border: none;
-    border-radius: 0.75rem;
-    box-shadow:
-      0 0 15px -3px rgba(99, 102, 241, 0.5),
-      inset 0 1px 0 0 rgba(255,255,255,0.15);
+    color: #fff;
+    background: linear-gradient(90deg, #5b21b6 0%, #7c3aed 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 20px -5px rgba(124,58,237,0.55), inset 0 1px 0 0 rgba(255,255,255,0.2);
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s ease;
     white-space: nowrap;
     text-decoration: none;
   }
 
-  .btn-primary:hover {
-    background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
-    box-shadow:
-      0 0 28px -3px rgba(99, 102, 241, 0.65),
-      inset 0 1px 0 0 rgba(255,255,255,0.20);
+  .btn-neural:hover {
+    background: linear-gradient(90deg, #6d28d9 0%, #8b5cf6 100%);
+    box-shadow: 0 0 35px -5px rgba(124,58,237,0.75), inset 0 1px 0 0 rgba(255,255,255,0.25);
     transform: translateY(-1px);
   }
 
-  .btn-primary:active {
-    transform: translateY(0);
-    box-shadow: 0 0 12px -3px rgba(99, 102, 241, 0.4);
-  }
+  .btn-neural:active { transform: translateY(0); }
 
-  .btn-primary-lg {
-    @apply btn-primary;
-    padding: 0.875rem 2rem;
+  .btn-neural-lg {
+    @apply btn-neural;
+    padding: 0.875rem 2.25rem;
     font-size: 1rem;
     border-radius: 1rem;
   }
 
-  .btn-ghost {
+  .btn-neural-danger {
+    @apply btn-neural;
+    background: linear-gradient(90deg, #9f1239 0%, #e11d48 100%);
+    box-shadow: 0 0 20px -5px rgba(225,29,72,0.55), inset 0 1px 0 0 rgba(255,255,255,0.2);
+  }
+
+  .btn-neural-danger:hover {
+    background: linear-gradient(90deg, #be123c 0%, #fb7185 100%);
+    box-shadow: 0 0 35px -5px rgba(225,29,72,0.75), inset 0 1px 0 0 rgba(255,255,255,0.25);
+  }
+
+  /* Legacy aliases */
+  .btn-primary    { @apply btn-neural; }
+  .btn-primary-lg { @apply btn-neural-lg; }
+  .btn-danger     { @apply btn-neural-danger; }
+
+  /* ── 3. BTN GHOST NEURAL ─────────────────────────────────── */
+  .btn-ghost-neural {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.625rem 1.25rem;
-    background: transparent;
-    color: #94a3b8;
-    font-weight: 600;
-    font-size: 0.875rem;
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    padding: 0.625rem 1.5rem;
     border-radius: 0.75rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(8px);
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s ease;
     white-space: nowrap;
     text-decoration: none;
   }
 
-  .btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.06);
+  .btn-ghost-neural:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.14);
     color: #f8fafc;
-    border-color: rgba(255, 255, 255, 0.20);
+    box-shadow: 0 0 15px rgba(255,255,255,0.04);
   }
 
-  .btn-ghost:active {
-    background: rgba(255, 255, 255, 0.04);
-  }
+  /* Legacy alias */
+  .btn-ghost  { @apply btn-ghost-neural; }
 
-  /* Danger variant */
-  .btn-danger {
-    @apply btn-ghost;
-    color: #f43f5e;
-    border-color: rgba(244, 63, 94, 0.25);
-  }
-
-  .btn-danger:hover {
-    background: rgba(244, 63, 94, 0.08);
-    color: #fb7185;
-    border-color: rgba(244, 63, 94, 0.45);
-    box-shadow: 0 0 15px -5px rgba(244, 63, 94, 0.3);
-  }
-
-  /* ─── BADGES / PILLS ─────────────────────────────────────
-     Status indicators.
-  ──────────────────────────────────────────────────────── */
-  .badge {
+  /* ── 4. BADGES ───────────────────────────────────────────── */
+  .badge-base {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 0.375rem;
-    font-size: 0.65rem;
+    padding: 0.2rem 0.65rem;
+    border-radius: 0.35rem;
+    font-size: 0.6rem;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
+    backdrop-filter: blur(8px);
   }
 
-  .badge-pending {
-    @apply badge;
-    background: rgba(100, 116, 139, 0.15);
-    border: 1px solid rgba(100, 116, 139, 0.25);
-    color: #94a3b8;
-  }
+  .badge-pending  { @apply badge-base; background: rgba(100,116,139,0.12); border: 1px solid rgba(100,116,139,0.2); color: #94a3b8; }
+  .badge-success  { @apply badge-base; background: rgba(16,185,129,0.12);  border: 1px solid rgba(16,185,129,0.25);  color: #6ee7b7; }
+  .badge-primary  { @apply badge-base; background: rgba(112,0,255,0.15);   border: 1px solid rgba(112,0,255,0.3);    color: #c4b5fd; }
+  .badge-danger   { @apply badge-base; background: rgba(255,0,92,0.12);    border: 1px solid rgba(255,0,92,0.25);    color: #fda4af; }
 
-  .badge-success {
-    @apply badge;
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.25);
-    color: #6ee7b7;
-  }
+  .neon-badge         { @apply badge-pending; }
+  .neon-badge-success { @apply badge-success; }
 
-  .badge-primary {
-    @apply badge;
-    background: rgba(99, 102, 241, 0.15);
-    border: 1px solid rgba(99, 102, 241, 0.30);
-    color: #a5b4fc;
-  }
+  /* Legacy compat */
+  .badge { @apply badge-base; }
 
-  .badge-danger {
-    @apply badge;
-    background: rgba(244, 63, 94, 0.12);
-    border: 1px solid rgba(244, 63, 94, 0.25);
-    color: #fda4af;
-  }
-
-  /* ─── STAT BAR ───────────────────────────────────────────
-     Pasek statystyki z animacją.
-  ──────────────────────────────────────────────────────── */
+  /* ── 5. STAT BAR / PROGRESS ──────────────────────────────── */
   .stat-bar-track {
     width: 100%;
     height: 6px;
-    background: rgba(30, 41, 59, 0.8);
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 9999px;
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.04);
   }
 
   .stat-bar-fill {
     height: 100%;
     border-radius: 9999px;
-    background: linear-gradient(90deg, #6366f1, #818cf8);
-    box-shadow: 0 0 8px rgba(99,102,241,0.6);
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(90deg, #7000ff, #00f0ff);
+    box-shadow: 0 0 8px rgba(0,240,255,0.5);
+    transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* ─── SECTION DIVIDERS ───────────────────────────────── */
+  .progress-bar-glow { box-shadow: 0 0 10px rgba(0,240,255,0.5); }
+
+  /* ── 6. NEURAL DIVIDER ───────────────────────────────────── */
   .neural-divider {
     width: 100%;
     height: 1px;
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(99, 102, 241, 0.3) 30%,
-      rgba(99, 102, 241, 0.5) 50%,
-      rgba(99, 102, 241, 0.3) 70%,
+      rgba(112, 0, 255, 0.4) 30%,
+      rgba(0, 240, 255, 0.5) 50%,
+      rgba(112, 0, 255, 0.4) 70%,
       transparent 100%
     );
   }
 
-  /* ─── LEGACY COMPAT ──────────────────────────────────────
-     Zachowuje kompatybilność ze starszymi klasami używanymi
-     w static HTML (user-profile-tests.html etc.)
-  ──────────────────────────────────────────────────────── */
-  .glass-button {
-    @apply btn-ghost;
+  /* ── 7. NAV ──────────────────────────────────────────────── */
+  .nav-neural {
+    background: rgba(3, 0, 20, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 0 1px 0 0 rgba(112,0,255,0.1);
   }
 
+  /* ── 8. ICON BOX ─────────────────────────────────────────── */
+  .icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.625rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .card-neural:hover .icon-box {
+    background: rgba(112, 0, 255, 0.12);
+    border-color: rgba(112, 0, 255, 0.3);
+  }
+
+  .card-icon-wrapper { @apply icon-box; }
+  .glass-button      { @apply btn-ghost-neural; }
 }
 
-/* ─── ANIMATIONS ─────────────────────────────────────────── */
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
+/* ─── ANIMATIONS ──────────────────────────────────────────────── */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
 .animate-spin-slow { animation: spin-slow 3s linear infinite; }
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 15px -3px rgba(112,0,255,0.45); }
+  50%       { box-shadow: 0 0 35px -3px rgba(112,0,255,0.75); }
+}
+.animate-glow-pulse { animation: glow-pulse 2.5s ease-in-out infinite; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeUp 0.7s ease-out forwards; }
 
 @keyframes neural-scan {
   0%   { transform: translateY(-100%); opacity: 0; }
