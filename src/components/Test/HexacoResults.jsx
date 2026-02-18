@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, RefreshCw, Share2, Download } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { HEXACO_TEST } from '../../data/tests/hexaco.js';
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer } from 'recharts';
 
 export default function HexacoResults() {
   const [results, setResults] = useState(null);
@@ -112,6 +112,67 @@ export default function HexacoResults() {
     openness: '🌟'
   };
 
+  // Icon paths for radar chart vertices
+  const radarTickIcons = {
+    'Honesty-Humility': {
+      emoji: '⚖️',
+      color: '#a78bfa'
+    },
+    'Emotionality': {
+      emoji: '💜',
+      color: '#f472b6'
+    },
+    'Extraversion': {
+      emoji: '💬',
+      color: '#60a5fa'
+    },
+    'Agreeableness': {
+      emoji: '🤝',
+      color: '#34d399'
+    },
+    'Conscientiousness': {
+      emoji: '📋',
+      color: '#fbbf24'
+    },
+    'Openness': {
+      emoji: '🌟',
+      color: '#f87171'
+    },
+  };
+
+  const CustomRadarTick = ({ x, y, payload }) => {
+    const cfg = radarTickIcons[payload.value] || { emoji: '●', color: '#94a3b8' };
+    const label = payload.value;
+    const charWidth = 7.5;
+    const pillW = Math.max(label.length * charWidth + 28, 90);
+    const pillH = 22;
+    const emojiSize = 18;
+    const gap = 5;
+
+    return (
+      <g>
+        {/* Icon circle background */}
+        <circle cx={x} cy={y - pillH / 2 - gap - emojiSize / 2 + 2} r={14}
+          fill="rgba(10,16,35,0.9)" stroke={cfg.color + '55'} strokeWidth={1.5} />
+        {/* Emoji icon */}
+        <text x={x} y={y - pillH / 2 - gap - emojiSize / 2 + 2}
+          textAnchor="middle" dominantBaseline="central" fontSize={14}>
+          {cfg.emoji}
+        </text>
+        {/* Label pill background */}
+        <rect x={x - pillW / 2} y={y - pillH / 2}
+          width={pillW} height={pillH} rx={6}
+          fill="rgba(10,16,35,0.88)" stroke={cfg.color + '44'} strokeWidth={1} />
+        {/* Label text */}
+        <text x={x} y={y}
+          textAnchor="middle" dominantBaseline="central"
+          fill="#cbd5e1" fontSize={11} fontWeight="600">
+          {label}
+        </text>
+      </g>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       {/* Header */}
@@ -195,11 +256,10 @@ export default function HexacoResults() {
             </div>
 
             {/* Radar Chart */}
-            <div className="bg-white/5 rounded-2xl p-8 md:p-10 border border-white/10 mb-8">
-              <ResponsiveContainer width="100%" height={500}>
-                <RadarChart 
+            <div className="bg-white/5 rounded-2xl p-4 border border-white/10 mb-8">
+              <ResponsiveContainer width="100%" height={520}>
+                <RadarChart
                   data={HEXACO_TEST.dimensions.map(dim => {
-                    // Create shorter labels for radar chart
                     const shortLabels = {
                       'honesty_humility': 'Honesty-Humility',
                       'emotionality': 'Emotionality',
@@ -211,34 +271,28 @@ export default function HexacoResults() {
                     return {
                       dimension: shortLabels[dim.id] || dim.name,
                       value: Math.round(results.percentile_scores[dim.id]),
-                      fullName: dim.name
                     };
                   })}
-                  margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+                  margin={{ top: 60, right: 80, bottom: 60, left: 80 }}
+                  outerRadius="62%"
                 >
-                  <PolarGrid 
-                    stroke="#475569" 
+                  <PolarGrid
+                    stroke="#334155"
                     strokeWidth={1}
-                    strokeOpacity={0.3}
+                    strokeOpacity={0.5}
                   />
-                  <PolarAngleAxis 
-                    dataKey="dimension" 
-                    tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 600 }}
+                  <PolarAngleAxis
+                    dataKey="dimension"
+                    tick={<CustomRadarTick />}
                     tickLine={false}
                   />
-                  <PolarRadiusAxis 
-                    angle={30} 
-                    domain={[0, 100]} 
-                    tick={{ fill: '#64748b', fontSize: 10 }}
-                    tickCount={5}
-                    axisLine={false}
-                  />
-                  <Radar 
-                    dataKey="value" 
-                    stroke="#8b5cf6" 
-                    fill="#8b5cf6" 
-                    fillOpacity={0.6}
-                    strokeWidth={2}
+                  <Radar
+                    dataKey="value"
+                    stroke="#8b5cf6"
+                    fill="#8b5cf6"
+                    fillOpacity={0.55}
+                    strokeWidth={2.5}
+                    dot={{ fill: '#8b5cf6', r: 4, strokeWidth: 0 }}
                   />
                 </RadarChart>
               </ResponsiveContainer>
