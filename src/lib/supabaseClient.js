@@ -35,6 +35,13 @@ console.log('🔧 Supabase Config Check:', {
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 /**
+ * Canonical app URL used for OAuth callback redirects.
+ * In production this reads VITE_APP_URL from .env.production (https://it-is-you1.vercel.app).
+ * Falls back to window.location.origin for local development / any other environment.
+ */
+const APP_URL = import.meta.env.VITE_APP_URL?.replace(/\/$/, '') || window.location.origin
+
+/**
  * Helper function to sign in with Google
  */
 export const signInWithGoogle = async () => {
@@ -42,7 +49,7 @@ export const signInWithGoogle = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${APP_URL}/auth/callback`,
       },
     })
 
@@ -62,7 +69,7 @@ export const signInWithFacebook = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'facebook',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${APP_URL}/auth/callback`,
       },
     })
 
@@ -82,7 +89,7 @@ export const signInWithApple = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'apple',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${APP_URL}/auth/callback`,
       },
     })
 
@@ -121,7 +128,7 @@ export const signUpWithEmail = async (email, password) => {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${APP_URL}/auth/callback`,
       },
     })
 
@@ -141,7 +148,7 @@ export const signInWithMagicLink = async (email) => {
     const { data, error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${APP_URL}/auth/callback`,
       },
     })
 
