@@ -295,5 +295,57 @@ Zasady:
 - Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
   }
 
+  if (testType === 'CAREER') {
+    const hollandCode = (report as any)?.holland_code ?? '???'
+    const top3 = ((report as any)?.top_3 as Array<{ name: string; name_en?: string; letter: string; score?: number }>) ?? []
+    const allScores = (report as any)?.all_scores ?? {}
+    const topList = top3.map((t, i) =>
+      `${i + 1}. **${t.name}** (${t.name_en ?? ''}, litera: ${t.letter}) — wynik: ${typeof t.score === 'number' ? t.score.toFixed(2) : '?'}/5.00`
+    ).join('\n')
+    const allList = Object.entries(allScores)
+      .sort((a: any, b: any) => (b[1] as any).raw_score - (a[1] as any).raw_score)
+      .map(([, d]: any) => `${d.letter} (${d.name}): ${d.raw_score?.toFixed(2) ?? '?'}`)
+      .join(', ')
+
+    return `Jesteś doświadczonym doradcą kariery i psychologiem specjalizującym się w typologii zawodowej RIASEC (model Hollanda). Na podstawie wyników testu zainteresowań zawodowych napisz głęboką, spersonalizowaną interpretację w języku polskim.
+
+Kod Hollanda: **${hollandCode}**
+Top 3 zainteresowania:
+${topList}
+Wszystkie wyniki (malejąco): ${allList}
+
+Napisz interpretację w formacie Markdown z DOKŁADNIE następującą strukturą — użyj tych nagłówków dosłownie:
+
+## Twój profil zawodowy
+
+[2–3 zdania opisujące ogólny obraz — co ten kod Hollanda mówi o tej osobie, jak naturalnie podchodzi do pracy i środowiska zawodowego]
+
+## Twoje dominujące zainteresowania
+
+[Opisz 2–3 najsilniejsze typy zainteresowań z Top 3. Dla każdego: bold tytuł + 1–2 zdania pokazujące, jak te zainteresowania przejawiają się w preferencjach zawodowych i codziennym działaniu. Przykład: **Analityk (I)** Twój umysł naturalnie szuka zrozumienia złożonych zjawisk...]
+
+## Jak te zainteresowania współpracują
+
+[Opisz synergię między dominującymi typami — jak razem tworzą unikalny styl pracy i podejście do kariery. Co sprawia, że ta kombinacja jest wyjątkowa i co daje tej osobie przewagę?]
+
+## Twoje idealne środowiska pracy
+
+[Opisz 2–3 typy środowisk, organizacji lub ról, w których ta osoba będzie się rozwijać najlepiej. Każde z bold tytułem: **W projektach badawczych:** tekst]
+
+## Ścieżki kariery warte rozważenia
+
+[1–2 akapity lub lista sugerująca konkretne kierunki kariery, branże lub role zawodowe pasujące do profilu. Bądź konkretny i inspirujący.]
+
+---
+*[Jedno zdanie — zawodowa "esencja" tego profilu, np. "Twoja siła zawodowa tkwi w..."]*
+
+Zasady:
+- Pisz bezpośrednio do osoby, w 2. osobie: "Twój...", "Naturalne dla Ciebie..."
+- Ton: motywujący, profesjonalny, konkretny — jak dobry doradca kariery
+- Nie pisz "wyniki wskazują", "test pokazuje" itp.
+- Odwołuj się do kodu Hollanda i liter RIASEC w naturalny sposób
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
+  }
+
   return `Napisz krótką interpretację wyników psychometrycznych dla testu "${testType}" w języku polskim.`
 }
