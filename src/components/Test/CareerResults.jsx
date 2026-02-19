@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
-import {
-  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
-  Radar, Legend, ResponsiveContainer
-} from 'recharts';
 import { supabase } from '../../lib/supabaseClient.js';
 import { CAREER_TEST } from '../../data/tests/career.js';
 import { generateCareerReport } from '../../utils/scoring.js';
@@ -23,6 +19,28 @@ const RIASEC = {
 };
 
 const getR = id => RIASEC[id] || RIASEC.conventional;
+
+// ── Custom SVG Radar (hexagon, same style as HEXACO) ─────────────────
+const RIASEC_ORDER = ['realistic','investigative','artistic','social','enterprising','conventional'];
+const RIASEC_EMOJI = { realistic:'🔧', investigative:'🔬', artistic:'🎨', social:'🤝', enterprising:'📢', conventional:'📋' };
+const RIASEC_PL    = { realistic:'Praktyczny', investigative:'Badawczy', artistic:'Twórczy', social:'Społeczny', enterprising:'Przedsiębiorczy', conventional:'Konwencjonalny' };
+
+const R_CX = 210, R_CY = 210, R_MAX = 155;
+function radarPt(i, pct) {
+  const a = (i * 60 - 90) * Math.PI / 180;
+  const r = (pct / 100) * R_MAX;
+  return [R_CX + r * Math.cos(a), R_CY + r * Math.sin(a)];
+}
+function radarRing(pct) { return RIASEC_ORDER.map((_, i) => radarPt(i, pct).join(',')).join(' '); }
+
+const radarLabelAnchors = [
+  { id: 'realistic',     lx: 210, ly: 33  },
+  { id: 'investigative', lx: 380, ly: 100 },
+  { id: 'artistic',      lx: 380, ly: 320 },
+  { id: 'social',        lx: 210, ly: 390 },
+  { id: 'enterprising',  lx: 44,  ly: 320 },
+  { id: 'conventional',  lx: 44,  ly: 100 },
+];
 
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
@@ -51,6 +69,9 @@ const CSS = `
 @keyframes spinLoader{to{transform:rotate(360deg);}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 .cr-fadein{animation:fadeUp .6s cubic-bezier(.22,.68,0,1.1) both;}
+.cr-radar-shape{animation:radarIn 1s cubic-bezier(.22,.68,0,1.1) forwards;}
+.cr-radar-dot{animation:radarIn 1s cubic-bezier(.22,.68,0,1.1) .2s both;}
+@keyframes radarIn{from{opacity:0;}to{opacity:1;}}
 `;
 
 export default function CareerResults() {
@@ -229,44 +250,76 @@ export default function CareerResults() {
           </div>
         </div>
 
-        {/* ─── Radar Chart ─── */}
-        <div className="cr-glass cr-fadein" style={{ padding: '28px 24px', marginBottom: 24, animationDelay: '.1s' }}>
-          <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,.85)' }}>
-            <span>📊</span> Profil Zainteresowań (Wykres Radarowy)
-          </h2>
-          <ResponsiveContainer width="100%" height={360}>
-            <RadarChart data={report.chart_data}>
-              <PolarGrid stroke="rgba(255,255,255,.08)" strokeWidth={1} />
-              <PolarAngleAxis
-                dataKey="subject"
-                tick={{ fill: 'rgba(255,255,255,.7)', fontSize: 13, fontFamily: "'Space Grotesk', sans-serif" }}
-                tickLine={{ stroke: 'rgba(255,255,255,.15)' }}
-              />
-              <PolarRadiusAxis
-                angle={90}
-                domain={[0, 5]}
-                tick={{ fill: 'rgba(255,255,255,.3)', fontSize: 11 }}
-                tickCount={6}
-              />
-              <Radar
-                name="Poziom zainteresowania"
-                dataKey="A"
-                stroke={domR.color}
-                fill={domR.color}
-                fillOpacity={0.18}
-                strokeWidth={2}
-                dot={{ r: 4, fill: domR.color, strokeWidth: 0 }}
-              />
-              <Legend
-                wrapperStyle={{ color: 'rgba(255,255,255,.45)', fontSize: '.78rem', fontFamily: "'Space Grotesk', sans-serif" }}
-                iconType="circle"
-              />
-            </RadarChart>
-          </ResponsiveContainer>
-          <p style={{ textAlign: 'center', color: 'rgba(255,255,255,.28)', fontSize: '.72rem', marginTop: 4 }}>
-            Skala: 1 (Nie lubię) → 5 (Bardzo lubię)
-          </p>
-        </div>
+        {/* ─── Radar Chart (custom SVG, HEXACO-style) ─── */}
+        {(() => {
+          // convert 1-5 score to 0-100 pct
+          const pctOf = id => Math.round(((rawScores?.[id] ?? 1) - 1) / 4 * 100);
+          const shapePts = RIASEC_ORDER.map((id, i) => radarPt(i, pctOf(id)).join(',')).join(' ');
+          return (
+            <div className="cr-glass cr-fadein" style={{ padding: '28px 24px 20px', marginBottom: 24, animationDelay: '.1s' }}>
+              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 28, display: 'flex', alignItems: 'center', gap: 12 }}>
+                Profil Zainteresowań
+                <span style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,rgba(14,165,233,.2),transparent)' }} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <svg viewBox="0 0 420 420" style={{ width: '100%', maxWidth: 420, height: 'auto', overflow: 'visible' }}>
+                  <defs>
+                    <linearGradient id="crg" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor={domR.color} stopOpacity=".35" />
+                      <stop offset="100%" stopColor="#c084fc" stopOpacity=".2" />
+                    </linearGradient>
+                  </defs>
+                  {/* Grid rings */}
+                  {[20, 40, 60, 80, 100].map(p => (
+                    <polygon key={p} points={radarRing(p)} fill="none" stroke="rgba(255,255,255,.07)" strokeWidth="1" />
+                  ))}
+                  {/* Axis lines */}
+                  {RIASEC_ORDER.map((_, i) => {
+                    const [ex, ey] = radarPt(i, 100);
+                    return <line key={i} x1={R_CX} y1={R_CY} x2={ex} y2={ey} stroke="rgba(255,255,255,.1)" strokeWidth="1" />;
+                  })}
+                  {/* Data shape */}
+                  <polygon
+                    className="cr-radar-shape"
+                    points={shapePts}
+                    fill="url(#crg)"
+                    stroke={domR.color}
+                    strokeWidth="2"
+                    style={{ filter: `drop-shadow(0 0 12px ${domR.glow})` }}
+                  />
+                  {/* Dots per type with own color */}
+                  {RIASEC_ORDER.map((id, i) => {
+                    const [px, py] = radarPt(i, pctOf(id));
+                    const col = RIASEC[id]?.color ?? '#38b6ff';
+                    return (
+                      <circle
+                        key={id}
+                        className="cr-radar-dot"
+                        cx={px} cy={py} r="5"
+                        fill={col}
+                        style={{ filter: `drop-shadow(0 0 7px ${col})` }}
+                      />
+                    );
+                  })}
+                  {/* Badge labels */}
+                  {radarLabelAnchors.map(({ id, lx, ly }) => {
+                    const txt = `${RIASEC_EMOJI[id]} ${RIASEC_PL[id]}`;
+                    const w = Math.max(txt.length * 6.8 + 16, 82);
+                    return (
+                      <g key={id}>
+                        <rect x={lx - w / 2} y={ly - 12} width={w} height={23} rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" strokeWidth="1" />
+                        <text x={lx} y={ly + 4} textAnchor="middle" style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: 11, fontWeight: 600, fill: 'rgba(255,255,255,.75)' }}>{txt}</text>
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+              <p style={{ textAlign: 'center', color: 'rgba(255,255,255,.25)', fontSize: '.7rem', marginTop: 6 }}>
+                Skala: 1 (Nie lubię) → 5 (Bardzo lubię)
+              </p>
+            </div>
+          );
+        })()}
 
         {/* ─── Top 3 Interests ─── */}
         <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,.75)' }}>
