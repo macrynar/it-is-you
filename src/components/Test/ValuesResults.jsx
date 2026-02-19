@@ -434,16 +434,18 @@ export default function ValuesResults() {
         </div>
 
         {/* ─── AI Interpretation ─── */}
-        <AiInterpretation
-          interpretation={interpretation}
-          loading={interpLoading}
-          error={interpError}
-          onRegenerate={handleRegenerate}
-          onRetry={() => generateInterpretation(rawScores, report)}
-          accentColor="#14b8a6"
-          accentGlow="rgba(20,184,166,.5)"
-          testLabel="KOMPAS WARTOŚCI"
-        />
+        <div className="vr-glass vr-fadein" style={{ padding: 36, marginBottom: 24 }}>
+          <AiInterpretation
+            interpretation={interpretation}
+            loading={interpLoading}
+            error={interpError}
+            onRegenerate={handleRegenerate}
+            onRetry={() => generateInterpretation(rawScores, report)}
+            accentColor="#14b8a6"
+            accentGlow="rgba(20,184,166,.5)"
+            testLabel="KOMPAS WARTOŚCI"
+          />
+        </div>
 
       </div>
     </div>

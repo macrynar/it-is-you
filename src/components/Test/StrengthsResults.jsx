@@ -369,7 +369,7 @@ export default function StrengthsResults() {
           );
         })()}
 
-        <div className="sr-fadein" style={{ animationDelay: '700ms' }}>
+        <div className="sr-glass sr-fadein" style={{ padding: 36, marginBottom: 24, animationDelay: '700ms' }}>
           <AiInterpretation
             interpretation={interpretation}
             loading={interpLoading}

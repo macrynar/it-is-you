@@ -446,16 +446,18 @@ export default function CareerResults() {
         </div>
 
         {/* ─── AI Interpretation ─── */}
-        <AiInterpretation
-          interpretation={interpretation}
-          loading={interpLoading}
-          error={interpError}
-          onRegenerate={handleRegenerate}
-          onRetry={() => generateInterpretation(rawScores, report)}
-          accentColor={domR.color}
-          accentGlow={domR.glow}
-          testLabel="PROFIL ZAWODOWY"
-        />
+        <div className="cr-glass cr-fadein" style={{ padding: 36, marginBottom: 24 }}>
+          <AiInterpretation
+            interpretation={interpretation}
+            loading={interpLoading}
+            error={interpError}
+            onRegenerate={handleRegenerate}
+            onRetry={() => generateInterpretation(rawScores, report)}
+            accentColor={domR.color}
+            accentGlow={domR.glow}
+            testLabel="PROFIL ZAWODOWY"
+          />
+        </div>
 
       </div>
     </div>
