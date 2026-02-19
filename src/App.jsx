@@ -7,6 +7,7 @@ import DarkTriadResults from './components/Test/DarkTriadResults'
 import StrengthsResults from './components/Test/StrengthsResults'
 import CareerResults from './components/Test/CareerResults'
 import ValuesResults from './components/Test/ValuesResults'
+import Settings from './components/Settings/Settings'
 import { supabase, onAuthStateChange } from './lib/supabaseClient'
 
 /**
@@ -212,6 +213,22 @@ function App() {
     }
     
     return <ValuesResults />
+  }
+
+  // Handle /settings route
+  if (currentRoute === '/settings' || currentRoute === '/settings/') {
+    if (loading) {
+      return (
+        <div className="min-h-screen bg-bg-main flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-text-muted">Ładowanie...</p>
+          </div>
+        </div>
+      )
+    }
+    if (!user) { window.location.href = '/auth'; return null; }
+    return <Settings />
   }
 
   // Handle /test route - require authentication & check for test type
