@@ -22,7 +22,7 @@ export default function NewUserDashboard({
             <div className="w-8 h-8 rounded-lg bg-brand-gradient flex items-center justify-center shadow-glow-primary">
               <Zap className="w-5 h-5 text-white" />
             </div>
-            <span className="text-lg font-bold text-text-main font-brand">It Is You</span>
+            <span className="text-lg font-bold text-text-main font-brand">Psycher</span>
           </div>
 
           {/* Right Side */}
@@ -257,7 +257,7 @@ export default function NewUserDashboard({
       <footer className="border-t border-white/5 bg-bg-surface/50 mt-20">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="text-center text-slate-600 text-xs">
-            <p>© 2026 It Is You — Psychologiczna Analiza Osobowości | Jakość gwarantowana</p>
+            <p>© 2026 Psycher — Psychologiczna Analiza Osobowości | Jakość gwarantowana</p>
           </div>
         </div>
       </footer>

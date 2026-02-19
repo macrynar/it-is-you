@@ -277,7 +277,7 @@ function App() {
               Witaj, {user.email}! 👋
             </h1>
             <p className="text-slate-300 mb-6">
-              Zostałeś pomyślnie zalogowany do portalu "It Is You"
+              Zostałeś pomyślnie zalogowany do portalu "Psycher"
             </p>
             
             {/* User Info */}
