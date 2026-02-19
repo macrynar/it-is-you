@@ -41,9 +41,15 @@ const CSS = `
 .sr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(52,211,153,.08) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(123,94,167,.12) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
 .sr-glass{background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:20px;position:relative;isolation:isolate;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6);}
 .sr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(52,211,153,.15) 35%,rgba(123,94,167,.12) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
-.sr-talent-card{border-radius:20px;position:relative;isolation:isolate;overflow:hidden;background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;}
-.sr-talent-card:hover{transform:translateY(-4px);}
+.sr-talent-card{border-radius:20px;position:relative;isolation:isolate;overflow:hidden;background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;cursor:default;}
+.sr-talent-card:hover{transform:translateY(-6px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(255,255,255,.1),0 0 40px -8px var(--cat-color,#34d399),0 20px 48px -8px rgba(0,0,0,.7);}
 .sr-talent-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.sr-talent-card::after{content:'';position:absolute;width:140px;height:140px;border-radius:50%;filter:blur(50px);bottom:-50px;right:-40px;opacity:.14;pointer-events:none;z-index:0;transition:opacity .35s,transform .35s;background:var(--cat-color,#34d399);}
+.sr-talent-card:hover::after{opacity:.38;transform:scale(1.25);}
+.sr-glow-line{position:absolute;bottom:0;left:12%;right:12%;height:1px;border-radius:100px;opacity:0;transition:opacity .3s;}
+.sr-talent-card:hover .sr-glow-line{opacity:1;}
+.sr-talent-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:36px;}
+@media(max-width:640px){.sr-talent-grid{grid-template-columns:1fr;}}
 .sr-bar-track{height:6px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden;}
 .sr-bar-fill{height:100%;border-radius:100px;position:relative;transition:width 1s cubic-bezier(.22,.68,0,1.1);}
 .sr-bar-fill::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.6);}
@@ -224,7 +230,7 @@ export default function StrengthsResults() {
           })}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 36 }}>
+        <div className="sr-talent-grid">
           {report.top_5.map((talent, idx) => {
             const catInfo = getCategoryInfo(talent.category);
             const c = getCat(talent.category);
@@ -233,15 +239,17 @@ export default function StrengthsResults() {
               <div
                 key={talent.id}
                 className="sr-talent-card sr-fadein"
-                style={{ padding: 28, boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08),' + c.shadow + ',0 8px 32px -4px rgba(0,0,0,.6)', animationDelay: (idx * 90) + 'ms' }}
+                style={{ padding: 20, '--cat-color': c.color, boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08),' + c.shadow + ',0 8px 32px -4px rgba(0,0,0,.6)', animationDelay: (idx * 90) + 'ms' }}
               >
-                <div style={{ position: 'absolute', width: 200, height: 200, borderRadius: '50%', background: c.color, filter: 'blur(80px)', opacity: .06, top: -60, right: -60, pointerEvents: 'none' }} />
+                {/* glow line (hover) */}
+                <div className="sr-glow-line" style={{ background: 'linear-gradient(90deg,transparent,' + c.color + ',' + c.color + ',transparent)' }} />
+                {/* ::after glow blob handled via CSS var + pseudo-element */}
                 <div style={{ position: 'relative', zIndex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20, gap: 12 }}>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
                         <span style={{ fontSize: '1.5rem' }}>{catInfo?.icon || '⭐'}</span>
-                        <h3 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#fff', lineHeight: 1.1 }}>{talent.name}</h3>
+                        <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff', lineHeight: 1.1 }}>{talent.name}</h3>
                       </div>
                       <p style={{ color: 'rgba(255,255,255,.38)', fontSize: '.8rem', fontWeight: 500, marginBottom: 10 }}>{talent.name_en}</p>
                       <span className="sr-cat-chip" style={{ background: c.color + '20', border: '1px solid ' + c.color + '45', color: c.color }}>
