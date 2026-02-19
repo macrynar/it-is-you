@@ -86,7 +86,8 @@ serve(async (req) => {
     }
 
     // ── 6. Create Checkout Session ──────────────────────────
-    const appUrl = Deno.env.get('APP_URL') ?? 'https://psycher.vercel.app'
+    // Strip trailing slash to avoid double-slash in redirect URLs
+    const appUrl = (Deno.env.get('APP_URL') ?? 'https://psycher.vercel.app').replace(/\/$/, '')
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
