@@ -2085,16 +2085,43 @@
         }
 
         // ── Handle Stripe return redirect ──────────────────────────────────
-        (function handleStripeReturn() {
+        (async function handleStripeReturn() {
             const params = new URLSearchParams(window.location.search);
             const paymentStatus = params.get('payment');
+            const sessionId     = params.get('session_id');
             if (!paymentStatus) return;
 
-            // Remove query param from URL without reload
+            // Remove query params from URL without reload
             window.history.replaceState({}, '', window.location.pathname);
 
-            if (paymentStatus === 'success') {
-                // Small delay so the page is fully rendered
+            if (paymentStatus === 'success' && sessionId) {
+                // ── Verify payment with Stripe and update is_premium in DB ──
+                try {
+                    const { data: { session } } = await supabase.auth.getSession();
+                    if (session?.access_token) {
+                        const resp = await fetch(
+                            `${supabaseUrl}/functions/v1/create-checkout-session`,
+                            {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${session.access_token}`,
+                                },
+                                body: JSON.stringify({ action: 'verify', session_id: sessionId }),
+                            }
+                        );
+                        const result = await resp.json();
+                        if (result.is_premium) {
+                            window.userIsPremium = true;
+                            // Update Dark Triad card UI immediately
+                            if (typeof updateDarkTriadUI === 'function') updateDarkTriadUI();
+                            if (typeof updateProfileHero === 'function') updateProfileHero(session.user);
+                        }
+                    }
+                } catch (e) {
+                    console.warn('[payment] verify-payment error:', e);
+                }
+
                 setTimeout(() => {
                     const toast = document.createElement('div');
                     toast.style.cssText = `
@@ -2110,7 +2137,7 @@
                     toast.innerHTML = '✨ <strong>Płatność zakończona sukcesem!</strong><br><span style="color:rgba(255,255,255,.6);font-size:13px;">Test Dark Triad SD3 jest teraz odblokowany.</span>';
                     document.body.appendChild(toast);
                     setTimeout(() => toast.remove(), 7000);
-                }, 600);
+                }, 300);
             } else if (paymentStatus === 'cancelled') {
                 setTimeout(() => {
                     const toast = document.createElement('div');
