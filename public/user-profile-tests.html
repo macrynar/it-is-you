@@ -528,6 +528,32 @@
         .iiy-card-btn.primary:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 1px rgba(56,182,255,0.5), 0 0 24px -2px rgba(56,182,255,0.4), 0 8px 24px -4px rgba(0,0,0,0.6); }
         .iiy-card-btn.primary-pink { background: linear-gradient(110deg, #7b1fa2 0%, #c850c0 50%, #ff6b9d 100%); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(200,80,192,0.25), 0 0 20px -2px rgba(200,80,192,0.3), 0 4px 16px -2px rgba(0,0,0,0.5); }
         .iiy-card-btn.primary-pink:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 1px rgba(200,80,192,0.6), 0 0 28px -2px rgba(200,80,192,0.5), 0 8px 24px -4px rgba(0,0,0,0.6); }
+        /* Premium lock button — purple-golden gradient */
+        .iiy-card-btn.premium-lock {
+          background: linear-gradient(110deg, #4f22a0 0%, #7c3aed 40%, #d97706 100%);
+          color: #fff;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.18),
+                      0 0 0 1px rgba(245,158,11,0.3),
+                      0 0 22px -4px rgba(245,158,11,0.35),
+                      0 4px 16px -2px rgba(0,0,0,0.5);
+        }
+        .iiy-card-btn.premium-lock:hover {
+          transform: translateY(-2px);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.25),
+                      0 0 0 1px rgba(245,158,11,0.55),
+                      0 0 30px -4px rgba(245,158,11,0.5),
+                      0 8px 24px -4px rgba(0,0,0,0.6);
+        }
+        /* Small PREMIUM badge inside the Dark Triad card top */
+        .iiy-badge-premium {
+          font-size: 9px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase;
+          padding: 3px 10px; border-radius: 999px;
+          color: #fbbf24;
+          background: rgba(245,158,11,0.12);
+          border: 1px solid rgba(245,158,11,0.4);
+          box-shadow: 0 0 10px -2px rgba(245,158,11,0.4);
+          white-space: nowrap;
+        }
         .iiy-card-btn-arrow { font-size: 16px; transition: transform 0.2s ease; }
         .iiy-card-btn:hover .iiy-card-btn-arrow { transform: translateX(4px); }
 
@@ -867,7 +893,7 @@
             </div>
 
             <!-- CARD 3: Dark Triad — pink -->
-            <div class="iiy-card pink" onclick="startDarkTriadTest()">
+            <div class="iiy-card pink" id="dark-triad-card" onclick="startDarkTriadTest()">
               <div class="iiy-card-glow"></div>
               <div class="iiy-card-top">
                 <div class="iiy-card-icon-wrap">
@@ -875,7 +901,10 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                   </span>
                 </div>
-                <span id="dark-triad-status" class="iiy-card-tag">Do Wykonania</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-premium">⭐ PREMIUM</span>
+                  <span id="dark-triad-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
               </div>
               <div class="iiy-card-title">Analiza Cienia</div>
               <div class="iiy-card-methodology">DARK TRIAD (SD3)</div>
@@ -1117,6 +1146,86 @@
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         console.log('Dashboard loaded, Supabase client created');
+
+        // ============================================
+        // PREMIUM / STRIPE HELPERS
+        // ============================================
+
+        // Global premium flag — set once on page load
+        window.userIsPremium = false;
+
+        /**
+         * Fetch is_premium from the profiles table for the current user.
+         * Returns true/false; also sets window.userIsPremium.
+         */
+        async function fetchUserPremiumStatus() {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session?.user) return false;
+
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('is_premium')
+                    .eq('id', session.user.id)
+                    .single();
+
+                if (error) {
+                    console.warn('[premium] Error fetching profile:', error.message);
+                    return false;
+                }
+
+                window.userIsPremium = data?.is_premium ?? false;
+                return window.userIsPremium;
+            } catch (err) {
+                console.error('[premium] fetchUserPremiumStatus error:', err);
+                return false;
+            }
+        }
+
+        /**
+         * Redirect user to Stripe Checkout.
+         * Called from the Dark Triad locked button.
+         */
+        window.handleUpgradeToPremium = async function() {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session?.access_token) {
+                    alert('Musisz być zalogowany, aby przejść na konto Premium.');
+                    return;
+                }
+
+                // Show loading state on the button
+                const btn = document.getElementById('dark-triad-button');
+                if (btn) { btn.textContent = 'Ładowanie...'; btn.disabled = true; }
+
+                const response = await fetch(
+                    `${supabaseUrl}/functions/v1/create-checkout-session`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${session.access_token}`,
+                        },
+                        body: JSON.stringify({}),
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.url) {
+                    if (btn) { btn.innerHTML = '🔒 Odblokuj Premium'; btn.disabled = false; }
+                    alert(`Błąd: ${result.error ?? 'Nie udało się utworzyć sesji płatności.'}`);
+                    return;
+                }
+
+                window.location.href = result.url;
+            } catch (err) {
+                console.error('[handleUpgradeToPremium] Error:', err);
+                const btn = document.getElementById('dark-triad-button');
+                if (btn) { btn.innerHTML = '🔒 Odblokuj Premium'; btn.disabled = false; }
+                alert('Wystąpił błąd. Spróbuj ponownie.');
+            }
+        };
         
         // ============================================
         // THEME TOGGLE FUNCTIONALITY
@@ -1422,8 +1531,14 @@
             }
         }
 
-        // Start Dark Triad test or view results
+        // Start Dark Triad test or view results — PREMIUM GATED
         window.startDarkTriadTest = async function() {
+            // Block non-premium users
+            if (!window.userIsPremium) {
+                await window.handleUpgradeToPremium();
+                return;
+            }
+
             const completed = await checkDarkTriadCompleted();
             
             if (completed) {
@@ -1516,23 +1631,43 @@
             }
         }
 
-        // Update UI for Dark Triad test
+        // Update UI for Dark Triad test — PREMIUM GATED
         async function updateDarkTriadUI() {
-            const completed = await checkDarkTriadCompleted();
-            
             const statusEl = document.getElementById('dark-triad-status');
             const buttonEl = document.getElementById('dark-triad-button');
+            const cardEl   = document.getElementById('dark-triad-card');
+
+            if (!window.userIsPremium) {
+                // Locked: show upgrade CTA
+                if (statusEl) {
+                    statusEl.textContent = 'Zablokowany';
+                    statusEl.style.color = '#fbbf24';
+                    statusEl.style.borderColor = 'rgba(245,158,11,0.35)';
+                    statusEl.style.background = 'rgba(245,158,11,0.08)';
+                }
+                if (buttonEl) {
+                    buttonEl.innerHTML = '🔒 Odblokuj Premium';
+                    buttonEl.className = 'iiy-card-btn premium-lock';
+                }
+                return;
+            }
+
+            // Premium user: show normal completion state
+            const completed = await checkDarkTriadCompleted();
             
             if (completed) {
                 if (statusEl) {
                     statusEl.textContent = 'Ukończony';
-                    statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)';
+                    statusEl.style.color = '#38b6ff';
+                    statusEl.style.borderColor = 'rgba(56,182,255,0.35)';
+                    statusEl.style.background = 'rgba(56,182,255,0.1)';
                 }
                 if (buttonEl) {
                     buttonEl.innerHTML = '👁 Zobacz Wynik';
                     buttonEl.className = 'iiy-card-btn ghost';
                 }
             }
+            // If not completed, button stays as default "Zbadaj Cień"
         }
 
         // Update UI for Enneagram test
@@ -1589,6 +1724,9 @@
                 return;
             }
             console.log('Auth successful, updating UI...');
+            // Fetch premium status FIRST so all UI components have the correct state
+            await fetchUserPremiumStatus();
+            console.log('[init] isPremium:', window.userIsPremium);
             await updateProfileHero();
             await updateHexacoUI();
             await updateEnneagramUI();
@@ -1699,8 +1837,8 @@
 
                 // Update SVG progress ring - removed (no ring in new layout)
 
-                // Update Premium badge (placeholder - could be based on actual premium status)
-                const isPremium = false; // TODO: Get from database or user metadata
+                // Update Premium badge — wire to actual data from profiles table
+                const isPremium = window.userIsPremium;
                 const badge = document.getElementById('premium-badge');
                 const badgeText = document.getElementById('badge-text');
                 
@@ -1945,6 +2083,50 @@
         } else {
             initialize();
         }
+
+        // ── Handle Stripe return redirect ──────────────────────────────────
+        (function handleStripeReturn() {
+            const params = new URLSearchParams(window.location.search);
+            const paymentStatus = params.get('payment');
+            if (!paymentStatus) return;
+
+            // Remove query param from URL without reload
+            window.history.replaceState({}, '', window.location.pathname);
+
+            if (paymentStatus === 'success') {
+                // Small delay so the page is fully rendered
+                setTimeout(() => {
+                    const toast = document.createElement('div');
+                    toast.style.cssText = `
+                        position:fixed;bottom:28px;right:28px;z-index:9999;
+                        background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(217,119,6,.12));
+                        border:1px solid rgba(245,158,11,.45);
+                        border-radius:16px;padding:18px 24px;
+                        color:#fcd34d;font-family:'Space Grotesk',sans-serif;
+                        font-size:14px;font-weight:600;max-width:340px;
+                        box-shadow:0 0 32px -6px rgba(245,158,11,.4);
+                        animation:slideInRight .4s ease;
+                    `;
+                    toast.innerHTML = '✨ <strong>Płatność zakończona sukcesem!</strong><br><span style="color:rgba(255,255,255,.6);font-size:13px;">Test Dark Triad SD3 jest teraz odblokowany.</span>';
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 7000);
+                }, 600);
+            } else if (paymentStatus === 'cancelled') {
+                setTimeout(() => {
+                    const toast = document.createElement('div');
+                    toast.style.cssText = `
+                        position:fixed;bottom:28px;right:28px;z-index:9999;
+                        background:rgba(15,20,40,.9);border:1px solid rgba(255,255,255,.1);
+                        border-radius:16px;padding:16px 22px;
+                        color:rgba(255,255,255,.6);font-family:'Space Grotesk',sans-serif;
+                        font-size:13px;max-width:320px;
+                    `;
+                    toast.textContent = 'Płatność anulowana. Możesz spróbować ponownie w dowolnej chwili.';
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 5000);
+                }, 400);
+            }
+        })();
     </script>
 
 </body>

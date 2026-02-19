@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../lib/supabaseClient.js';
+import { handleUpgradeToPremium, getUserPremiumStatus } from '../../lib/stripeService';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 type Tab = 'profile' | 'security' | 'subscription' | 'privacy';
@@ -183,6 +184,23 @@ const CSS = `
   border: 1px solid rgba(99,102,241,.3); border-radius: 16px; padding: 24px;
   box-shadow: 0 0 40px -8px rgba(99,102,241,.2);
 }
+.st-plan-active-premium {
+  background: linear-gradient(135deg, rgba(245,158,11,.10), rgba(217,119,6,.07));
+  border: 1px solid rgba(245,158,11,.4); border-radius: 16px; padding: 24px;
+  box-shadow: 0 0 40px -8px rgba(245,158,11,.25);
+}
+/* Account status badge */
+.st-badge-free {
+  display:inline-flex;align-items:center;gap:5px;padding:3px 12px;
+  border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;
+  background:rgba(148,163,184,.08);border:1px solid rgba(148,163,184,.25);color:#94a3b8;
+}
+.st-badge-premium {
+  display:inline-flex;align-items:center;gap:5px;padding:3px 12px;
+  border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;
+  background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);color:#fcd34d;
+  box-shadow:0 0 14px -4px rgba(245,158,11,.35);
+}
 .st-perk { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(255,255,255,.7); padding: 6px 0; }
 .st-perk-dot { width: 7px; height: 7px; border-radius: 50%; background: #818cf8; flex-shrink: 0; box-shadow: 0 0 6px rgba(99,102,241,.6); }
 
@@ -241,6 +259,10 @@ export default function Settings() {
   const [emailNotifs, setEmailNotifs]   = useState(true);
   const [analyticsAgree, setAnalytics]  = useState(false);
 
+  // ── Premium state
+  const [isPremium, setIsPremium] = useState(false);
+  const [premiumLoading, setPremiumLoading] = useState(true);
+
   // ── Load user
   useEffect(() => {
     (async () => {
@@ -251,6 +273,10 @@ export default function Settings() {
         setDisplayName(user.user_metadata?.full_name || user.user_metadata?.name || '');
         setAvatarUrl(user.user_metadata?.avatar_url || null);
       }
+      // Load premium status
+      const status = await getUserPremiumStatus();
+      setIsPremium(status?.isPremium ?? false);
+      setPremiumLoading(false);
     })();
   }, []);
 
@@ -388,7 +414,15 @@ export default function Settings() {
         <input ref={avatarInputRef} type="file" accept="image/*" style={{ display:'none' }} onChange={handleAvatarUpload} />
         <div>
           <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{displayName || 'Brak nazwy'}</div>
-          <div style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', marginBottom: 10 }}>{email}</div>
+          <div style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', marginBottom: 8 }}>{email}</div>
+          {!premiumLoading && (
+            <div style={{ marginBottom: 10 }}>
+              {isPremium
+                ? <span className="st-badge-premium">✨ Premium Account</span>
+                : <span className="st-badge-free">Free Account</span>
+              }
+            </div>
+          )}
           <button className="st-btn-ghost" style={{ fontSize: 13, padding: '7px 16px' }} onClick={() => avatarInputRef.current?.click()}>
             Zmień zdjęcie
           </button>
@@ -498,63 +532,110 @@ export default function Settings() {
     <div>
       <p className="st-section-title">Twój plan</p>
 
-      {/* Current plan: Free */}
-      <div className="st-plan-free" style={{ marginBottom: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-          <div style={{ fontSize: 28 }}>🆓</div>
-          <div>
-            <div style={{ fontSize: 18, fontWeight: 800 }}>Plan Darmowy</div>
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,.4)' }}>Aktywny</div>
-          </div>
-        </div>
-        <div style={{ fontSize: 13, color: 'rgba(255,255,255,.45)', lineHeight: 1.6 }}>
-          Masz dostęp do 6 podstawowych testów psychometrycznych i prostego podsumowania wyników.
-        </div>
-      </div>
-
-      {/* Premium upsell */}
-      <div className="st-plan-premium">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', marginBottom: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ fontSize: 28 }}>⭐</div>
+      {isPremium ? (
+        /* ── PREMIUM ACTIVE ── */
+        <div className="st-plan-active-premium">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+            <div style={{ fontSize: 36 }}>✨</div>
             <div>
-              <div style={{ fontSize: 18, fontWeight: 800, background: 'linear-gradient(135deg,#818cf8,#c084fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+              <div style={{
+                fontSize: 22, fontWeight: 800,
+                background: 'linear-gradient(135deg,#fbbf24,#f59e0b)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+              }}>
                 Psycher Premium
               </div>
-              <div style={{ fontSize: 13, color: 'rgba(255,255,255,.4)' }}>Pełen dostęp · 29 zł / mies.</div>
+              <div style={{ fontSize: 13, color: 'rgba(245,158,11,.7)', marginTop: 2 }}>Aktywna Subskrypcja Premium</div>
             </div>
           </div>
-          <button
-            style={{
-              padding: '11px 28px', borderRadius: 12, fontWeight: 800, fontSize: 14, cursor: 'pointer',
-              fontFamily: 'Space Grotesk, sans-serif', border: 'none',
-              background: 'linear-gradient(135deg,#4f46e5,#7c3aed,#c026d3)',
-              color: '#fff', boxShadow: '0 0 32px -4px rgba(99,102,241,.6)',
-              transition: 'opacity .2s, transform .15s',
-            }}
-            onMouseEnter={e => { (e.target as HTMLElement).style.opacity = '.85'; (e.target as HTMLElement).style.transform = 'translateY(-1px)'; }}
-            onMouseLeave={e => { (e.target as HTMLElement).style.opacity = '1'; (e.target as HTMLElement).style.transform = ''; }}
-          >
-            Przejdź na Premium ✨
-          </button>
-        </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 20px' }}>
-          {[
-            'Szczegółowe interpretacje AI każdego testu',
-            'Odblokowana Karta Postaci',
-            'Porównanie z innymi profilami',
-            'Historia i śledzenie zmian wyników',
-            'Eksport PDF z pełnym raportem',
-            'Priorytetowe wsparcie',
-          ].map(perk => (
-            <div className="st-perk" key={perk}>
-              <div className="st-perk-dot" />
-              {perk}
-            </div>
-          ))}
+          <div style={{
+            background: 'rgba(245,158,11,.08)', border: '1px solid rgba(245,158,11,.2)',
+            borderRadius: 12, padding: '16px 20px', marginBottom: 20,
+          }}>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,.75)', lineHeight: 1.65, margin: 0 }}>
+              🎉 Dziękujemy za wsparcie Psycher! Masz pełny dostęp do testu <strong style={{ color: '#fcd34d' }}>Dark Triad SD3</strong> oraz wszystkich przyszłych funkcji Premium.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 20px' }}>
+            {[
+              '✅ Test Dark Triad SD3 odblokowany',
+              '✅ Szczegółowe interpretacje AI',
+              '✅ Pełna Karta Postaci',
+              '✅ Historia i śledzenie zmian',
+              '✅ Eksport PDF z raportem',
+              '✅ Priorytetowe wsparcie',
+            ].map(perk => (
+              <div style={{ display:'flex', alignItems:'center', gap:8, fontSize:13, color:'rgba(255,255,255,.7)', padding:'5px 0' }} key={perk}>
+                {perk}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        /* ── FREE USER ── */
+        <>
+          {/* Current plan: Free */}
+          <div className="st-plan-free" style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+              <div style={{ fontSize: 28 }}>🆓</div>
+              <div>
+                <div style={{ fontSize: 18, fontWeight: 800 }}>Plan Darmowy</div>
+                <div style={{ fontSize: 13, color: 'rgba(255,255,255,.4)' }}>Aktywny</div>
+              </div>
+            </div>
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,.45)', lineHeight: 1.6 }}>
+              Masz dostęp do 6 podstawowych testów psychometrycznych i prostego podsumowania wyników.
+            </div>
+          </div>
+
+          {/* Dark Triad Premium upsell */}
+          <div className="st-plan-premium">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', marginBottom: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ fontSize: 28 }}>⭐</div>
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 800, background: 'linear-gradient(135deg,#818cf8,#c084fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                    Psycher Premium
+                  </div>
+                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,.4)' }}>Odblokuj Dark Triad SD3 · 29 zł</div>
+                </div>
+              </div>
+              <button
+                onClick={() => handleUpgradeToPremium()}
+                style={{
+                  padding: '11px 28px', borderRadius: 12, fontWeight: 800, fontSize: 14, cursor: 'pointer',
+                  fontFamily: 'Space Grotesk, sans-serif', border: 'none',
+                  background: 'linear-gradient(135deg,#4f46e5,#7c3aed,#c026d3)',
+                  color: '#fff', boxShadow: '0 0 32px -4px rgba(99,102,241,.6)',
+                  transition: 'opacity .2s, transform .15s',
+                }}
+                onMouseEnter={e => { (e.target as HTMLElement).style.opacity = '.85'; (e.target as HTMLElement).style.transform = 'translateY(-1px)'; }}
+                onMouseLeave={e => { (e.target as HTMLElement).style.opacity = '1'; (e.target as HTMLElement).style.transform = ''; }}
+              >
+                🔒 Odblokuj Premium
+              </button>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 20px' }}>
+              {[
+                'Test Dark Triad SD3 (Analiza Cienia)',
+                'Szczegółowe interpretacje AI każdego testu',
+                'Odblokowana Karta Postaci',
+                'Historia i śledzenie zmian wyników',
+                'Eksport PDF z pełnym raportem',
+                'Priorytetowe wsparcie',
+              ].map(perk => (
+                <div className="st-perk" key={perk}>
+                  <div className="st-perk-dot" />
+                  {perk}
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 
@@ -733,9 +814,14 @@ export default function Settings() {
                   <div style={{ fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {displayName || 'Użytkownik'}
                   </div>
-                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,.35)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,.35)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: 4 }}>
                     {email}
                   </div>
+                  {!premiumLoading && (
+                    isPremium
+                      ? <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '.6px', textTransform: 'uppercase', color: '#fcd34d', background: 'rgba(245,158,11,.12)', border: '1px solid rgba(245,158,11,.3)', borderRadius: 999, padding: '2px 8px' }}>✨ Premium</span>
+                      : <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '.6px', textTransform: 'uppercase', color: '#94a3b8', background: 'rgba(148,163,184,.08)', border: '1px solid rgba(148,163,184,.2)', borderRadius: 999, padding: '2px 8px' }}>Free</span>
+                  )}
                 </div>
               </div>
             </div>
