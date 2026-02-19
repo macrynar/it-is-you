@@ -295,6 +295,63 @@ Zasady:
 - Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
   }
 
+  if (testType === 'VALUES') {
+    const top3 = ((report as any)?.top_3 as Array<{ name: string; name_en?: string; score?: number }> | undefined) ?? []
+    const bottom3 = ((report as any)?.bottom_3 as Array<{ name: string; score?: number }> | undefined) ?? []
+    const allValues = ((report as any)?.all_values as Array<{ name: string; centered_score?: number; motivational_goal?: string }> | undefined) ?? []
+
+    const topList = top3.map((v, i) =>
+      `${i + 1}. **${v.name}** (${v.name_en ?? ''}) — wynik MRAT: +${typeof v.score === 'number' ? v.score.toFixed(2) : '?'}`
+    ).join('\n')
+
+    const allRanking = allValues.map((v, i) =>
+      `${i + 1}. ${v.name}: ${typeof v.centered_score === 'number' ? (v.centered_score > 0 ? '+' : '') + v.centered_score.toFixed(2) : '?'}`
+    ).join(', ')
+
+    const bottomList = bottom3.map(v => v.name).join(', ')
+
+    return `Jesteś doświadczonym psychologiem i coachem specjalizującym się w teoriach wartości osobistych. Na podstawie wyników testu Schwartz PVQ napisz głęboką, spersonalizowaną interpretację systemu wartości w języku polskim.
+
+Top 3 priorytety wartości (teoria Schwartza, wyniki MRAT):
+${topList}
+
+Ranking wszystkich wartości: ${allRanking}
+
+Wartości mniej istotne: ${bottomList}
+
+Napisz interpretację w formacie Markdown z DOKŁADNIE następującą strukturą — użyj tych nagłówków dosłownie:
+
+## Twój kompas wartości
+
+[2–3 zdania opisujące ogólny obraz systemu wartości tej osoby — co nim kieruje, jakie jest jej esencjalne "dlaczego" w podejmowaniu decyzji]
+
+## Twoje fundamentalne priorytety
+
+[Opisz 2–3 najwyższych wartości. Dla każdej: bold tytuł + 1–2 zdania pokazujące, jak ta wartość przejawia się w życiu codziennym, pracy, decyzjach i relacjach. Przykład: **Samokierowanie** Niezależność myślenia i działania to dla Ciebie nie przywilej, ale konieczność...]
+
+## Napięcia i równowaga
+
+[Opisz jak różne wartości mogą ze sobą współgrać lub tworzyć napięcia. Pokaż, jak ta konkretna konfiguracja wartości tworzy unikalny rdzeń osobowości.]
+
+## Jak te wartości kształtują Twoje wybory
+
+[2–3 konkretne obszary życia (np. praca, relacje, styl życia), w których te wartości szczególnie widać. Każdy z bold tytułem: **W pracy:** tekst]
+
+## Wartości jako przewodnik
+
+[Jeden motywujący akapit o tym, jak świadome rozumienie własnych wartości może wzmacniać autentyczne decyzje i poczucie sensu]
+
+---
+*[Jedno zdanie — esencja systemu wartości tej osoby, np. "Jesteś osobą, dla której..."]*
+
+Zasady:
+- Pisz bezpośrednio do osoby, w 2. osobie: "Twoje...", "Dla Ciebie..."
+- Ton: refleksyjny, ciepły, psychologicznie precyzyjny — jak mądry psycholog
+- Nie pisz "wyniki wskazują", "test pokazuje" itp.
+- Odwołuj się do konkretnych nazw wartości z teorii Schwartza
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
+  }
+
   if (testType === 'CAREER') {
     const hollandCode = (report as any)?.holland_code ?? '???'
     const top3 = ((report as any)?.top_3 as Array<{ name: string; name_en?: string; letter: string; score?: number }>) ?? []
