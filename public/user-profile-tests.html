@@ -554,6 +554,85 @@
         .iiy-logo.iiy-sm .iiy-title { font-size: 22px; letter-spacing: 5px; }
         .iiy-logo.iiy-sm .iiy-sub { font-size: 7px; letter-spacing: 2.5px; }
         .iiy-logo.iiy-sm .iiy-divider { margin: 4px 0 3px; }
+
+        /* ── Page Tabs ────────────────────────────────────────── */
+        .iiy-tab-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 40px;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 14px;
+            padding: 5px;
+        }
+        .iiy-tab-btn {
+            flex: 1;
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,.45);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .22s;
+            letter-spacing: .2px;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+        }
+        .iiy-tab-btn:hover { color: rgba(255,255,255,.75); background: rgba(255,255,255,.05); }
+        .iiy-tab-btn.active {
+            background: linear-gradient(135deg, rgba(99,102,241,.25), rgba(56,182,255,.18));
+            color: #fff;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 0 0 1px rgba(99,102,241,.3);
+        }
+        /* ── Character Card ───────────────────────────────────── */
+        .cc-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        @media (max-width: 900px) { .cc-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) { .cc-grid { grid-template-columns: 1fr; } }
+        .cc-card {
+            border-radius: 18px;
+            position: relative;
+            overflow: hidden;
+            background: rgba(15,23,42,.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,.08);
+            padding: 20px;
+            transition: transform .25s, box-shadow .25s;
+        }
+        .cc-card:hover { transform: translateY(-4px); }
+        .cc-card.cc-done { border-color: rgba(56,182,255,.22); }
+        .cc-card.cc-done:hover { box-shadow: 0 0 0 1px rgba(56,182,255,.3), 0 0 28px -6px rgba(56,182,255,.2), 0 12px 32px -6px rgba(0,0,0,.5); }
+        .cc-card.cc-empty { opacity: .55; }
+        .cc-card-label { font-size: 9px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 6px; }
+        .cc-card-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 14px; }
+        .cc-mini-bar-track { height: 4px; background: rgba(255,255,255,.07); border-radius: 100px; overflow: hidden; margin-bottom: 3px; }
+        .cc-mini-bar-fill { height: 100%; border-radius: 100px; }
+        .cc-row-label { font-size: 10px; color: rgba(255,255,255,.38); margin-bottom: 2px; }
+        .cc-big-val { font-size: 2.6rem; font-weight: 900; line-height: 1; }
+        .cc-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 100px; font-size: .68rem; font-weight: 600; margin: 2px; }
+        .cc-empty-icon { font-size: 2rem; margin-bottom: 8px; opacity: .4; }
+        .cc-empty-text { font-size: .78rem; color: rgba(255,255,255,.3); }
+        .cc-go-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(99,102,241,.4);
+            background: rgba(99,102,241,.12);
+            color: #a5b4fc;
+            font-size: .75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            font-family: inherit;
+        }
+        .cc-go-btn:hover { background: rgba(99,102,241,.22); color: #fff; }
     </style>
 </head>
 <body class="min-h-screen text-white grid-bg">
@@ -631,6 +710,19 @@
     <!-- MAIN CONTENT -->
     <main class="max-w-7xl mx-auto px-6 py-16">
         
+        <!-- TAB NAVIGATION -->
+        <div class="iiy-tab-bar">
+            <button class="iiy-tab-btn active" id="tab-btn-tests" onclick="switchTab('tests')">
+                🧪 Testy
+            </button>
+            <button class="iiy-tab-btn" id="tab-btn-character" onclick="switchTab('character')">
+                🃏 Karta Postaci
+            </button>
+        </div>
+
+        <!-- TAB: TESTY (default) -->
+        <div id="tab-tests">
+
         <!-- PROFILE HERO -->
         <div id="profile-hero" style="animation: fadeUp 0.8s ease-out; background: rgba(15,23,42,0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 28px 32px; margin-bottom: 48px; position: relative; overflow: hidden;">
             <!-- Background glow blobs -->
@@ -906,6 +998,102 @@
                 </div>
             </div>
         </div>
+
+        </div><!-- /tab-tests -->
+
+        <!-- TAB: KARTA POSTACI -->
+        <div id="tab-character" style="display:none;">
+
+            <!-- Hero -->
+            <div id="cc-hero" style="text-align:center;padding:40px 0 32px;animation:fadeUp .7s ease both;">
+                <div style="font-size:2.4rem;margin-bottom:10px;">🃏</div>
+                <h2 style="font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;margin:0 0 6px;background:linear-gradient(135deg,#6366f1,#38b6ff,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Karta Postaci</h2>
+                <p id="cc-subtitle" style="font-size:.88rem;color:rgba(255,255,255,.4);margin-bottom:8px;">Psychometryczny profil użytkownika</p>
+                <div id="cc-completeness" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:6px 16px;font-size:.75rem;color:rgba(255,255,255,.45);">
+                    <span id="cc-done-count">0</span><span>/6 testów ukończonych</span>
+                </div>
+            </div>
+
+            <!-- Cards grid -->
+            <div class="cc-grid" id="cc-grid">
+
+                <!-- HEXACO -->
+                <div class="cc-card" id="cc-hexaco">
+                    <div class="cc-card-label" style="color:#38b6ff;">HEXACO-60 · Osobowość</div>
+                    <div class="cc-card-title">Rdzeń Osobowości</div>
+                    <div id="cc-hexaco-body">
+                        <div class="cc-empty-icon">🧠</div>
+                        <div class="cc-empty-text">Test nie wykonany</div>
+                        <button class="cc-go-btn" onclick="startHexacoTest()">Rozpocznij →</button>
+                    </div>
+                </div>
+
+                <!-- Enneagram -->
+                <div class="cc-card" id="cc-enneagram">
+                    <div class="cc-card-label" style="color:#b08fff;">Enneagram · Motywacja</div>
+                    <div class="cc-card-title">Silnik Motywacji</div>
+                    <div id="cc-enneagram-body">
+                        <div class="cc-empty-icon">🌀</div>
+                        <div class="cc-empty-text">Test nie wykonany</div>
+                        <button class="cc-go-btn" onclick="startEnneagramTest()">Rozpocznij →</button>
+                    </div>
+                </div>
+
+                <!-- Dark Triad -->
+                <div class="cc-card" id="cc-dark-triad">
+                    <div class="cc-card-label" style="color:#e878e0;">Dark Triad · Cień</div>
+                    <div class="cc-card-title">Analiza Cienia</div>
+                    <div id="cc-dark-triad-body">
+                        <div class="cc-empty-icon">🌑</div>
+                        <div class="cc-empty-text">Test nie wykonany</div>
+                        <button class="cc-go-btn" onclick="startDarkTriadTest()">Rozpocznij →</button>
+                    </div>
+                </div>
+
+                <!-- Strengths -->
+                <div class="cc-card" id="cc-strengths">
+                    <div class="cc-card-label" style="color:#34d399;">Strengths · Talenty</div>
+                    <div class="cc-card-title">Mocne Strony</div>
+                    <div id="cc-strengths-body">
+                        <div class="cc-empty-icon">⚡</div>
+                        <div class="cc-empty-text">Test nie wykonany</div>
+                        <button class="cc-go-btn" onclick="startStrengthsTest()">Rozpocznij →</button>
+                    </div>
+                </div>
+
+                <!-- Career -->
+                <div class="cc-card" id="cc-career">
+                    <div class="cc-card-label" style="color:#0ea5e9;">RIASEC · Kariera</div>
+                    <div class="cc-card-title">Profil Kariery</div>
+                    <div id="cc-career-body">
+                        <div class="cc-empty-icon">💼</div>
+                        <div class="cc-empty-text">Test nie wykonany</div>
+                        <button class="cc-go-btn" onclick="startCareerTest()">Rozpocznij →</button>
+                    </div>
+                </div>
+
+                <!-- Values -->
+                <div class="cc-card" id="cc-values">
+                    <div class="cc-card-label" style="color:#14b8a6;">Schwartz PVQ · Wartości</div>
+                    <div class="cc-card-title">Kompas Wartości</div>
+                    <div id="cc-values-body">
+                        <div class="cc-empty-icon">🧭</div>
+                        <div class="cc-empty-text">Test nie wykonany</div>
+                        <button class="cc-go-btn" onclick="startValuesTest()">Rozpocznij →</button>
+                    </div>
+                </div>
+
+            </div><!-- /cc-grid -->
+
+            <!-- CTA when not all done -->
+            <div id="cc-cta" style="text-align:center;padding:8px 0 48px;display:none;">
+                <p style="font-size:.82rem;color:rgba(255,255,255,.3);margin-bottom:12px;">Uzupełnij brakujące testy, aby uzyskać pełny profil psychometryczny.</p>
+                <button onclick="switchTab('tests')" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);border:none;border-radius:10px;color:#fff;padding:10px 24px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;">
+                    Przejdź do Testów →
+                </button>
+            </div>
+
+        </div><!-- /tab-character -->
 
     </main>
 
@@ -1551,6 +1739,202 @@
         // ============================================
         // END PROFILE HERO FUNCTIONS
         // ============================================
+
+
+        // ============================================
+        // TAB SWITCHING
+        // ============================================
+        window.switchTab = function(tab) {
+            const tests     = document.getElementById('tab-tests');
+            const character = document.getElementById('tab-character');
+            const btnTests  = document.getElementById('tab-btn-tests');
+            const btnChar   = document.getElementById('tab-btn-character');
+
+            if (tab === 'tests') {
+                tests.style.display     = '';
+                character.style.display = 'none';
+                btnTests.classList.add('active');
+                btnChar.classList.remove('active');
+            } else {
+                tests.style.display     = 'none';
+                character.style.display = '';
+                btnTests.classList.remove('active');
+                btnChar.classList.add('active');
+                loadCharacterCard();
+            }
+        }
+
+        // ============================================
+        // KARTA POSTACI — DATA LOADING
+        // ============================================
+        let ccLoaded = false;
+
+        async function loadCharacterCard() {
+            if (ccLoaded) return;
+            ccLoaded = true;
+
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return;
+
+            // Fetch latest result for each test type in one query
+            const { data, error } = await supabase
+                .from('user_psychometrics')
+                .select('test_type, raw_scores, completed_at')
+                .eq('user_id', session.user.id)
+                .in('test_type', ['HEXACO', 'ENNEAGRAM', 'DARK_TRIAD', 'STRENGTHS', 'CAREER', 'VALUES'])
+                .order('completed_at', { ascending: false });
+
+            if (error) { console.error('CC load error:', error); return; }
+
+            // Keep only the latest for each test_type
+            const latest = {};
+            (data || []).forEach(row => {
+                if (!latest[row.test_type]) latest[row.test_type] = row;
+            });
+
+            let doneCount = 0;
+
+            // ── HEXACO ──────────────────────────────────
+            if (latest.HEXACO) {
+                doneCount++;
+                const s = latest.HEXACO.raw_scores || {};
+                const traits = [
+                    { key: 'honesty_humility',  label: 'Uczciwość-Pokora', color: '#38b6ff' },
+                    { key: 'emotionality',       label: 'Emocjonalność',    color: '#b08fff' },
+                    { key: 'extraversion',       label: 'Ekstrawersja',     color: '#34d399' },
+                    { key: 'agreeableness',      label: 'Ugodowość',        color: '#fbbf24' },
+                    { key: 'conscientiousness',  label: 'Sumienność',       color: '#0ea5e9' },
+                    { key: 'openness',           label: 'Otwartość',        color: '#c084fc' },
+                ];
+                const card = document.getElementById('cc-hexaco');
+                card.classList.add('cc-done');
+                document.getElementById('cc-hexaco-body').innerHTML = traits.map(t => {
+                    const pct = Math.round(s[t.key] ?? 50);
+                    return \`<div style="margin-bottom:7px;">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+                            <span class="cc-row-label">\${t.label}</span>
+                            <span style="font-size:10px;font-weight:700;color:\${t.color};">\${pct}%</span>
+                        </div>
+                        <div class="cc-mini-bar-track"><div class="cc-mini-bar-fill" style="width:\${pct}%;background:\${t.color};"></div></div>
+                    </div>\`;
+                }).join('') + \`<button class="cc-go-btn" onclick="window.location.href='/test/hexaco/results'" style="margin-top:8px;">Zobacz wyniki →</button>\`;
+            }
+
+            // ── ENNEAGRAM ────────────────────────────────
+            if (latest.ENNEAGRAM) {
+                doneCount++;
+                const s = latest.ENNEAGRAM.raw_scores || {};
+                // find dominant type
+                let topType = null, topScore = -1;
+                for (const [k, v] of Object.entries(s)) {
+                    if (Number(v) > topScore) { topScore = Number(v); topType = k; }
+                }
+                const ENAMES = {1:'Reformator',2:'Pomocnik',3:'Osiągacz',4:'Indywidualista',5:'Obserwator',6:'Lojalista',7:'Entuzjasta',8:'Przywódca',9:'Mediator'};
+                const name = topType ? (ENAMES[topType] || \`Typ \${topType}\`) : '?';
+                const colors = ['#6366f1','#38b6ff','#fbbf24','#34d399','#b08fff','#f97316','#0ea5e9','#ef4444','#14b8a6'];
+                const col = topType ? (colors[(parseInt(topType)-1) % colors.length]) : '#b08fff';
+                const card = document.getElementById('cc-enneagram');
+                card.classList.add('cc-done');
+                document.getElementById('cc-enneagram-body').innerHTML = \`
+                    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;">
+                        <span class="cc-big-val" style="color:\${col};">\${topType || '?'}</span>
+                        <span style="font-size:.9rem;font-weight:700;color:rgba(255,255,255,.8);">\${name}</span>
+                    </div>
+                    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;">
+                        \${Object.entries(s).sort((a,b)=>Number(b[1])-Number(a[1])).slice(0,5).map(([t,v])=>\`<span class="cc-chip" style="background:\${colors[(parseInt(t)-1)%colors.length]}20;border:1px solid \${colors[(parseInt(t)-1)%colors.length]}44;color:\${colors[(parseInt(t)-1)%colors.length]};">T\${t}: \${Number(v).toFixed(0)}</span>\`).join('')}
+                    </div>
+                    <button class="cc-go-btn" onclick="window.location.href='/test/enneagram/results'">Zobacz wyniki →</button>
+                \`;
+            }
+
+            // ── DARK TRIAD ───────────────────────────────
+            if (latest.DARK_TRIAD) {
+                doneCount++;
+                const s = latest.DARK_TRIAD.raw_scores || {};
+                const traits = [
+                    { key: 'psychopathy',       label: 'Psychopatia',  color: '#ef4444' },
+                    { key: 'machiavellianism',  label: 'Makiawelizm',  color: '#f97316' },
+                    { key: 'narcissism',        label: 'Narcyzm',      color: '#e878e0' },
+                ];
+                const card = document.getElementById('cc-dark-triad');
+                card.classList.add('cc-done');
+                document.getElementById('cc-dark-triad-body').innerHTML = traits.map(t => {
+                    const pct = Math.round(s[t.key] ?? s[t.key.charAt(0).toUpperCase()+t.key.slice(1)] ?? 50);
+                    return \`<div style="margin-bottom:9px;">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+                            <span class="cc-row-label">\${t.label}</span>
+                            <span style="font-size:10px;font-weight:700;color:\${t.color};">\${pct}%</span>
+                        </div>
+                        <div class="cc-mini-bar-track"><div class="cc-mini-bar-fill" style="width:\${pct}%;background:\${t.color};"></div></div>
+                    </div>\`;
+                }).join('') + \`<button class="cc-go-btn" onclick="window.location.href='/test/dark-triad/results'" style="margin-top:6px;">Zobacz wyniki →</button>\`;
+            }
+
+            // ── STRENGTHS ────────────────────────────────
+            if (latest.STRENGTHS) {
+                doneCount++;
+                const s = latest.STRENGTHS.raw_scores || {};
+                const top5 = (s.top_5 || []).slice(0, 5);
+                const CAT_COLORS = { strategic_thinking: '#34d399', executing: '#b08fff', influencing: '#fbbf24', relationship_building: '#60a5fa' };
+                const card = document.getElementById('cc-strengths');
+                card.classList.add('cc-done');
+                document.getElementById('cc-strengths-body').innerHTML = (top5.length > 0
+                    ? \`<div style="margin-bottom:10px;">\${top5.map((t,i)=>
+                        \`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                            <span style="width:18px;height:18px;border-radius:50%;background:\${CAT_COLORS[t.category]||'#38b6ff'};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#000;flex-shrink:0;">\${i+1}</span>
+                            <span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">\${t.name||t.name_en||'?'}</span>
+                        </div>\`).join('')}
+                    </div>\`
+                    : '<div class="cc-empty-text">Brak danych top 5</div>'
+                ) + \`<button class="cc-go-btn" onclick="window.location.href='/test/strengths/results'">Zobacz wyniki →</button>\`;
+            }
+
+            // ── CAREER ───────────────────────────────────
+            if (latest.CAREER) {
+                doneCount++;
+                const s = latest.CAREER.raw_scores || {};
+                const code = s.holland_code || '???';
+                const top3 = (s.top_3 || []).slice(0,3);
+                const RCOLORS = { realistic:'#ef4444', investigative:'#0ea5e9', artistic:'#d946ef', social:'#10b981', enterprising:'#f59e0b', conventional:'#94a3b8' };
+                const card = document.getElementById('cc-career');
+                card.classList.add('cc-done');
+                document.getElementById('cc-career-body').innerHTML = \`
+                    <div style="margin-bottom:12px;">
+                        <div style="font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:4px;">Kod Hollanda</div>
+                        <div class="cc-big-val" style="background:linear-gradient(135deg,#0ea5e9,#d946ef);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">\${code}</div>
+                    </div>
+                    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;">
+                        \${top3.map(t=>\`<span class="cc-chip" style="background:\${RCOLORS[t.id]||'#38b6ff'}20;border:1px solid \${RCOLORS[t.id]||'#38b6ff'}44;color:\${RCOLORS[t.id]||'#38b6ff'};">\${t.letter}: \${t.name?.split(' ')[0]||'?'}</span>\`).join('')}
+                    </div>
+                    <button class="cc-go-btn" onclick="window.location.href='/test/career/results'">Zobacz wyniki →</button>
+                \`;
+            }
+
+            // ── VALUES ───────────────────────────────────
+            if (latest.VALUES) {
+                doneCount++;
+                const s = latest.VALUES.raw_scores || {};
+                const top3 = (s.top_3 || []).slice(0,3);
+                const card = document.getElementById('cc-values');
+                card.classList.add('cc-done');
+                document.getElementById('cc-values-body').innerHTML = (top3.length > 0
+                    ? \`<div style="margin-bottom:10px;">\${top3.map((v,i)=>
+                        \`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                            <span style="width:18px;height:18px;border-radius:50%;background:\${v.color||'#14b8a6'};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#000;flex-shrink:0;">\${i+1}</span>
+                            <span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">\${v.name||'?'}</span>
+                            <span style="font-size:.7rem;color:rgba(255,255,255,.35);margin-left:auto;">+\${(typeof v.score==='number'?v.score:0).toFixed(2)}</span>
+                        </div>\`).join('')}
+                    </div>\`
+                    : '<div class="cc-empty-text">Brak danych</div>'
+                ) + \`<button class="cc-go-btn" onclick="window.location.href='/test/values/results'">Zobacz wyniki →</button>\`;
+            }
+
+            // Update header counts
+            document.getElementById('cc-done-count').textContent = doneCount;
+            if (doneCount < 6) {
+                document.getElementById('cc-cta').style.display = 'block';
+            }
+        }
 
         // Wait for DOM to be ready
         if (document.readyState === 'loading') {
