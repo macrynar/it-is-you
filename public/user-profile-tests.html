@@ -1810,14 +1810,14 @@
                 card.classList.add('cc-done');
                 document.getElementById('cc-hexaco-body').innerHTML = traits.map(t => {
                     const pct = Math.round(s[t.key] ?? 50);
-                    return \`<div style="margin-bottom:7px;">
+                    return `<div style="margin-bottom:7px;">
                         <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
-                            <span class="cc-row-label">\${t.label}</span>
-                            <span style="font-size:10px;font-weight:700;color:\${t.color};">\${pct}%</span>
+                            <span class="cc-row-label">${t.label}</span>
+                            <span style="font-size:10px;font-weight:700;color:${t.color};">${pct}%</span>
                         </div>
-                        <div class="cc-mini-bar-track"><div class="cc-mini-bar-fill" style="width:\${pct}%;background:\${t.color};"></div></div>
-                    </div>\`;
-                }).join('') + \`<button class="cc-go-btn" onclick="window.location.href='/test/hexaco/results'" style="margin-top:8px;">Zobacz wyniki →</button>\`;
+                        <div class="cc-mini-bar-track"><div class="cc-mini-bar-fill" style="width:${pct}%;background:${t.color};"></div></div>
+                    </div>`;
+                }).join('') + `<button class="cc-go-btn" onclick="window.location.href='/test/hexaco/results'" style="margin-top:8px;">Zobacz wyniki →</button>`;
             }
 
             // ── ENNEAGRAM ────────────────────────────────
@@ -1830,21 +1830,21 @@
                     if (Number(v) > topScore) { topScore = Number(v); topType = k; }
                 }
                 const ENAMES = {1:'Reformator',2:'Pomocnik',3:'Osiągacz',4:'Indywidualista',5:'Obserwator',6:'Lojalista',7:'Entuzjasta',8:'Przywódca',9:'Mediator'};
-                const name = topType ? (ENAMES[topType] || \`Typ \${topType}\`) : '?';
+                const name = topType ? (ENAMES[topType] || `Typ ${topType}`) : '?';
                 const colors = ['#6366f1','#38b6ff','#fbbf24','#34d399','#b08fff','#f97316','#0ea5e9','#ef4444','#14b8a6'];
                 const col = topType ? (colors[(parseInt(topType)-1) % colors.length]) : '#b08fff';
                 const card = document.getElementById('cc-enneagram');
                 card.classList.add('cc-done');
-                document.getElementById('cc-enneagram-body').innerHTML = \`
+                document.getElementById('cc-enneagram-body').innerHTML = `
                     <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;">
-                        <span class="cc-big-val" style="color:\${col};">\${topType || '?'}</span>
-                        <span style="font-size:.9rem;font-weight:700;color:rgba(255,255,255,.8);">\${name}</span>
+                        <span class="cc-big-val" style="color:${col};">${topType || '?'}</span>
+                        <span style="font-size:.9rem;font-weight:700;color:rgba(255,255,255,.8);">${name}</span>
                     </div>
                     <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;">
-                        \${Object.entries(s).sort((a,b)=>Number(b[1])-Number(a[1])).slice(0,5).map(([t,v])=>\`<span class="cc-chip" style="background:\${colors[(parseInt(t)-1)%colors.length]}20;border:1px solid \${colors[(parseInt(t)-1)%colors.length]}44;color:\${colors[(parseInt(t)-1)%colors.length]};">T\${t}: \${Number(v).toFixed(0)}</span>\`).join('')}
+                        ${Object.entries(s).sort((a,b)=>Number(b[1])-Number(a[1])).slice(0,5).map(([t,v])=>`<span class="cc-chip" style="background:${colors[(parseInt(t)-1)%colors.length]}20;border:1px solid ${colors[(parseInt(t)-1)%colors.length]}44;color:${colors[(parseInt(t)-1)%colors.length]};">T${t}: ${Number(v).toFixed(0)}</span>`).join('')}
                     </div>
                     <button class="cc-go-btn" onclick="window.location.href='/test/enneagram/results'">Zobacz wyniki →</button>
-                \`;
+                `;
             }
 
             // ── DARK TRIAD ───────────────────────────────
@@ -1860,14 +1860,14 @@
                 card.classList.add('cc-done');
                 document.getElementById('cc-dark-triad-body').innerHTML = traits.map(t => {
                     const pct = Math.round(s[t.key] ?? s[t.key.charAt(0).toUpperCase()+t.key.slice(1)] ?? 50);
-                    return \`<div style="margin-bottom:9px;">
+                    return `<div style="margin-bottom:9px;">
                         <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
-                            <span class="cc-row-label">\${t.label}</span>
-                            <span style="font-size:10px;font-weight:700;color:\${t.color};">\${pct}%</span>
+                            <span class="cc-row-label">${t.label}</span>
+                            <span style="font-size:10px;font-weight:700;color:${t.color};">${pct}%</span>
                         </div>
-                        <div class="cc-mini-bar-track"><div class="cc-mini-bar-fill" style="width:\${pct}%;background:\${t.color};"></div></div>
-                    </div>\`;
-                }).join('') + \`<button class="cc-go-btn" onclick="window.location.href='/test/dark-triad/results'" style="margin-top:6px;">Zobacz wyniki →</button>\`;
+                        <div class="cc-mini-bar-track"><div class="cc-mini-bar-fill" style="width:${pct}%;background:${t.color};"></div></div>
+                    </div>`;
+                }).join('') + `<button class="cc-go-btn" onclick="window.location.href='/test/dark-triad/results'" style="margin-top:6px;">Zobacz wyniki →</button>`;
             }
 
             // ── STRENGTHS ────────────────────────────────
@@ -1879,14 +1879,14 @@
                 const card = document.getElementById('cc-strengths');
                 card.classList.add('cc-done');
                 document.getElementById('cc-strengths-body').innerHTML = (top5.length > 0
-                    ? \`<div style="margin-bottom:10px;">\${top5.map((t,i)=>
-                        \`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-                            <span style="width:18px;height:18px;border-radius:50%;background:\${CAT_COLORS[t.category]||'#38b6ff'};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#000;flex-shrink:0;">\${i+1}</span>
-                            <span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">\${t.name||t.name_en||'?'}</span>
-                        </div>\`).join('')}
-                    </div>\`
+                    ? `<div style="margin-bottom:10px;">${top5.map((t,i)=>
+                        `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                            <span style="width:18px;height:18px;border-radius:50%;background:${CAT_COLORS[t.category]||'#38b6ff'};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#000;flex-shrink:0;">${i+1}</span>
+                            <span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">${t.name||t.name_en||'?'}</span>
+                        </div>`).join('')}
+                    </div>`
                     : '<div class="cc-empty-text">Brak danych top 5</div>'
-                ) + \`<button class="cc-go-btn" onclick="window.location.href='/test/strengths/results'">Zobacz wyniki →</button>\`;
+                ) + `<button class="cc-go-btn" onclick="window.location.href='/test/strengths/results'">Zobacz wyniki →</button>`;
             }
 
             // ── CAREER ───────────────────────────────────
@@ -1898,16 +1898,16 @@
                 const RCOLORS = { realistic:'#ef4444', investigative:'#0ea5e9', artistic:'#d946ef', social:'#10b981', enterprising:'#f59e0b', conventional:'#94a3b8' };
                 const card = document.getElementById('cc-career');
                 card.classList.add('cc-done');
-                document.getElementById('cc-career-body').innerHTML = \`
+                document.getElementById('cc-career-body').innerHTML = `
                     <div style="margin-bottom:12px;">
                         <div style="font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:4px;">Kod Hollanda</div>
-                        <div class="cc-big-val" style="background:linear-gradient(135deg,#0ea5e9,#d946ef);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">\${code}</div>
+                        <div class="cc-big-val" style="background:linear-gradient(135deg,#0ea5e9,#d946ef);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${code}</div>
                     </div>
                     <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;">
-                        \${top3.map(t=>\`<span class="cc-chip" style="background:\${RCOLORS[t.id]||'#38b6ff'}20;border:1px solid \${RCOLORS[t.id]||'#38b6ff'}44;color:\${RCOLORS[t.id]||'#38b6ff'};">\${t.letter}: \${t.name?.split(' ')[0]||'?'}</span>\`).join('')}
+                        ${top3.map(t=>`<span class="cc-chip" style="background:${RCOLORS[t.id]||'#38b6ff'}20;border:1px solid ${RCOLORS[t.id]||'#38b6ff'}44;color:${RCOLORS[t.id]||'#38b6ff'};">${t.letter}: ${t.name?.split(' ')[0]||'?'}</span>`).join('')}
                     </div>
                     <button class="cc-go-btn" onclick="window.location.href='/test/career/results'">Zobacz wyniki →</button>
-                \`;
+                `;
             }
 
             // ── VALUES ───────────────────────────────────
@@ -1918,15 +1918,15 @@
                 const card = document.getElementById('cc-values');
                 card.classList.add('cc-done');
                 document.getElementById('cc-values-body').innerHTML = (top3.length > 0
-                    ? \`<div style="margin-bottom:10px;">\${top3.map((v,i)=>
-                        \`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-                            <span style="width:18px;height:18px;border-radius:50%;background:\${v.color||'#14b8a6'};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#000;flex-shrink:0;">\${i+1}</span>
-                            <span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">\${v.name||'?'}</span>
-                            <span style="font-size:.7rem;color:rgba(255,255,255,.35);margin-left:auto;">+\${(typeof v.score==='number'?v.score:0).toFixed(2)}</span>
-                        </div>\`).join('')}
-                    </div>\`
+                    ? `<div style="margin-bottom:10px;">${top3.map((v,i)=>
+                        `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                            <span style="width:18px;height:18px;border-radius:50%;background:${v.color||'#14b8a6'};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#000;flex-shrink:0;">${i+1}</span>
+                            <span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">${v.name||'?'}</span>
+                            <span style="font-size:.7rem;color:rgba(255,255,255,.35);margin-left:auto;">+${(typeof v.score==='number'?v.score:0).toFixed(2)}</span>
+                        </div>`).join('')}
+                    </div>`
                     : '<div class="cc-empty-text">Brak danych</div>'
-                ) + \`<button class="cc-go-btn" onclick="window.location.href='/test/values/results'">Zobacz wyniki →</button>\`;
+                ) + `<button class="cc-go-btn" onclick="window.location.href='/test/values/results'">Zobacz wyniki →</button>`;
             }
 
             // Update header counts
