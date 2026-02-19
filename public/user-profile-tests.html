@@ -6,7 +6,7 @@
     <title>Psycher - Testy Psychometryczne</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -659,6 +659,173 @@
             font-family: inherit;
         }
         .cc-go-btn:hover { background: rgba(99,102,241,.22); color: #fff; }
+
+        /* ═══════════════════════════════════════════════
+           KARTA POSTACI — CHARACTER SHEET (ch-*)
+        ═══════════════════════════════════════════════ */
+        .ch-sheet-wrapper { font-family: 'Space Grotesk', sans-serif; padding-bottom: 48px; }
+        /* Top status bar */
+        .ch-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding:9px 16px; background:rgba(8,14,40,.72); border:1px solid rgba(56,182,255,.10); border-radius:8px; backdrop-filter:blur(14px); flex-wrap:wrap; gap:8px; }
+        .ch-tb-pill { display:inline-flex; align-items:center; gap:7px; padding:4px 12px; border-radius:3px; background:rgba(52,211,153,.07); border:1px solid rgba(52,211,153,.22); font-family:'Share Tech Mono',monospace; font-size:9.5px; letter-spacing:2px; color:#34d399; }
+        .ch-tb-dot { width:5px; height:5px; border-radius:50%; background:#34d399; box-shadow:0 0 8px #34d399; animation:ch-blink 1.8s ease-in-out infinite; }
+        @keyframes ch-blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.5)} }
+        .ch-tb-meta { font-family:'Share Tech Mono',monospace; font-size:8.5px; color:rgba(56,182,255,.28); letter-spacing:2px; text-align:right; line-height:1.9; }
+        /* Panel base */
+        .ch-panel { background:rgba(8,14,38,.84); backdrop-filter:blur(28px) saturate(160%); -webkit-backdrop-filter:blur(28px) saturate(160%); border:1px solid rgba(56,182,255,.11); border-radius:6px; position:relative; overflow:hidden; }
+        .ch-panel::before,.ch-panel::after { content:''; position:absolute; width:13px; height:13px; border-color:#38b6ff; border-style:solid; opacity:.38; pointer-events:none; }
+        .ch-panel::before { top:0; left:0; border-width:1.5px 0 0 1.5px; }
+        .ch-panel::after  { bottom:0; right:0; border-width:0 1.5px 1.5px 0; }
+        .ch-pi { padding:18px 20px; }
+        .ch-pl { font-family:'Share Tech Mono',monospace; font-size:8.5px; letter-spacing:3px; color:rgba(56,182,255,.40); margin-bottom:14px; display:flex; align-items:center; gap:9px; }
+        .ch-pl::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(56,182,255,.18),transparent); }
+        /* HERO layout */
+        .ch-hero { display:grid; grid-template-columns:232px 1fr 252px; gap:13px; margin-bottom:13px; }
+        @media (max-width:1100px) { .ch-hero { grid-template-columns:1fr 1fr; } .ch-type-panel{grid-column:1/-1;} }
+        @media (max-width:680px)  { .ch-hero { grid-template-columns:1fr; } }
+        /* Avatar panel */
+        .ch-av-panel .ch-pi { display:flex; flex-direction:column; align-items:center; text-align:center; padding:22px 16px 18px; }
+        .ch-av-wrap { position:relative; width:118px; height:118px; margin-bottom:15px; }
+        .ch-av-svg { width:118px; height:118px; }
+        .ch-sp  { animation:ch-sp  24s linear infinite; transform-origin:60px 60px; }
+        .ch-spr { animation:ch-spr 16s linear infinite; transform-origin:60px 60px; }
+        @keyframes ch-sp  { to{transform:rotate(360deg)}  }
+        @keyframes ch-spr { to{transform:rotate(-360deg)} }
+        .ch-asc { animation:ch-asc 3.4s ease-in-out infinite; }
+        @keyframes ch-asc { 0%{transform:translateY(-33px);opacity:0} 6%{opacity:.6} 94%{opacity:.6} 100%{transform:translateY(33px);opacity:0} }
+        .ch-an { animation:ch-an 2.6s ease-in-out infinite; }
+        .ch-an:nth-child(2n){animation-delay:.5s} .ch-an:nth-child(3n){animation-delay:1s} .ch-an:nth-child(4n){animation-delay:1.5s} .ch-an:nth-child(5n){animation-delay:.8s}
+        @keyframes ch-an { 0%,100%{opacity:.22} 50%{opacity:1} }
+        .ch-al { animation:ch-al 2.6s ease-in-out infinite; }
+        .ch-al:nth-child(2n){animation-delay:.4s} .ch-al:nth-child(3n){animation-delay:.9s} .ch-al:nth-child(4n){animation-delay:1.4s}
+        @keyframes ch-al { 0%,100%{opacity:.06} 50%{opacity:.58} }
+        .ch-lvl { display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:2px; background:linear-gradient(110deg,rgba(99,102,241,.14),rgba(56,182,255,.11)); border:1px solid rgba(99,102,241,.28); font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:2px; color:#a5b4fc; margin-bottom:11px; }
+        .ch-ldot { width:4px; height:4px; border-radius:50%; background:#a5b4fc; box-shadow:0 0 6px #a5b4fc; }
+        .ch-cname { font-family:'Orbitron',monospace; font-size:17px; font-weight:900; letter-spacing:2.5px; text-transform:uppercase; color:#fff; margin-bottom:4px; text-shadow:0 0 18px rgba(56,182,255,.22); word-break:break-all; }
+        .ch-carch { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:2px; color:#38b6ff; text-shadow:0 0 10px rgba(56,182,255,.4); margin-bottom:3px; }
+        .ch-ccodes { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:1.5px; color:rgba(255,255,255,.22); margin-bottom:11px; }
+        .ch-rare { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:2px; background:rgba(176,143,255,.07); border:1px solid rgba(176,143,255,.2); font-family:'Share Tech Mono',monospace; font-size:8.5px; letter-spacing:1.5px; color:#b08fff; margin-bottom:13px; }
+        .ch-dvd { width:100%; height:1px; background:linear-gradient(90deg,transparent,rgba(56,182,255,.14),transparent); margin:10px 0; }
+        .ch-xp-wrap { width:100%; }
+        .ch-xp-lbl { display:flex; justify-content:space-between; margin-bottom:4px; font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:1.5px; }
+        .ch-xp-track { height:4px; background:rgba(255,255,255,.05); border-radius:2px; overflow:visible; position:relative; }
+        .ch-xp-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,#3d2a9e,#38b6ff); box-shadow:0 0 10px rgba(56,182,255,.5); position:relative; transition:width 1s ease-out; }
+        .ch-xp-fill::after { content:''; position:absolute; right:-1px; top:50%; transform:translateY(-50%); width:8px; height:8px; border-radius:50%; background:#fff; box-shadow:0 0 8px rgba(56,182,255,.8); }
+        /* Attribute grid (HEXACO) */
+        .ch-attr-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:16px; }
+        .ch-attr-b { padding:10px 9px; border-radius:4px; position:relative; overflow:hidden; cursor:default; transition:transform .22s; }
+        .ch-attr-b:hover { transform:translateY(-2px); }
+        .ch-attr-b::before { content:''; position:absolute; inset:0; background:linear-gradient(160deg,rgba(255,255,255,.04) 0%,transparent 60%); pointer-events:none; }
+        .ch-a-lbl { font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:1.5px; color:rgba(255,255,255,.26); margin-bottom:2px; text-transform:uppercase; }
+        .ch-a-val { font-family:'Orbitron',monospace; font-size:25px; font-weight:700; line-height:1; margin-bottom:1px; }
+        .ch-a-nm  { font-size:8px; font-weight:600; color:rgba(255,255,255,.28); }
+        .ch-ag { background:rgba(0,229,160,.07);   border:1px solid rgba(0,229,160,.18);   } .ch-ag .ch-a-val{color:#34d399;text-shadow:0 0 12px rgba(0,229,160,.4);}   .ch-ag:hover{box-shadow:0 0 16px -4px rgba(0,229,160,.25);}
+        .ch-ac { background:rgba(56,182,255,.07);  border:1px solid rgba(56,182,255,.18);  } .ch-ac .ch-a-val{color:#38b6ff;text-shadow:0 0 12px rgba(56,182,255,.45);}  .ch-ac:hover{box-shadow:0 0 16px -4px rgba(56,182,255,.25);}
+        .ch-av { background:rgba(176,143,255,.07); border:1px solid rgba(176,143,255,.18); } .ch-av .ch-a-val{color:#b08fff;text-shadow:0 0 12px rgba(176,143,255,.4);}  .ch-av:hover{box-shadow:0 0 16px -4px rgba(176,143,255,.2);}
+        .ch-at { background:rgba(64,224,208,.07);  border:1px solid rgba(64,224,208,.18);  } .ch-at .ch-a-val{color:#40e0d0;text-shadow:0 0 12px rgba(64,224,208,.38);} .ch-at:hover{box-shadow:0 0 16px -4px rgba(64,224,208,.18);}
+        .ch-ap { background:rgba(232,120,224,.07); border:1px solid rgba(232,120,224,.18); } .ch-ap .ch-a-val{color:#e878e0;text-shadow:0 0 12px rgba(232,120,224,.35);}  .ch-ap:hover{box-shadow:0 0 16px -4px rgba(232,120,224,.18);}
+        .ch-ao { background:rgba(249,115,22,.07);  border:1px solid rgba(249,115,22,.18);  } .ch-ao .ch-a-val{color:#f97316;text-shadow:0 0 12px rgba(249,115,22,.35);}  .ch-ao:hover{box-shadow:0 0 16px -4px rgba(249,115,22,.18);}
+        /* HEXACO detail bars */
+        .ch-hx-bars { display:grid; grid-template-columns:1fr 1fr; gap:6px 20px; }
+        .ch-hb { display:flex; flex-direction:column; gap:4px; }
+        .ch-hb-top { display:flex; justify-content:space-between; align-items:center; }
+        .ch-hb-name { font-size:10px; font-weight:600; color:rgba(255,255,255,.44); }
+        .ch-hb-val  { font-family:'Share Tech Mono',monospace; font-size:10px; font-weight:700; }
+        .ch-hb-track { height:4px; background:rgba(255,255,255,.06); border-radius:100px; overflow:hidden; }
+        .ch-hb-fill  { height:100%; border-radius:100px; }
+        /* Typology panel */
+        .ch-type-panel .ch-pi { display:flex; flex-direction:column; gap:10px; }
+        .ch-arch-blk { border-radius:4px; padding:12px 13px; }
+        .ch-arch-lbl { font-family:'Share Tech Mono',monospace; font-size:7.5px; letter-spacing:2.5px; color:rgba(255,255,255,.22); margin-bottom:6px; text-transform:uppercase; }
+        .ch-enn-blk { background:rgba(56,182,255,.05);   border:1px solid rgba(56,182,255,.13);  }
+        .ch-hol-blk { background:rgba(123,94,167,.06);   border:1px solid rgba(123,94,167,.15);  }
+        .ch-val-blk { background:rgba(245,158,11,.04);   border:1px solid rgba(245,158,11,.13);  }
+        .ch-cog-blk { background:rgba(255,255,255,.025); border:1px solid rgba(255,255,255,.07); }
+        .ch-enn-row  { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+        .ch-enn-num  { font-family:'Orbitron',monospace; font-size:38px; font-weight:900; color:#38b6ff; text-shadow:0 0 22px rgba(56,182,255,.5); line-height:1; }
+        .ch-enn-type { font-size:13px; font-weight:700; color:rgba(255,255,255,.85); }
+        .ch-enn-sub  { font-family:'Share Tech Mono',monospace; font-size:7.5px; color:rgba(255,255,255,.25); letter-spacing:1px; margin-top:2px; }
+        .ch-enn-desc { font-size:10px; color:rgba(255,255,255,.38); line-height:1.6; }
+        .ch-hol-ltrs { display:flex; gap:5px; margin-bottom:8px; }
+        .ch-hl       { font-family:'Orbitron',monospace; font-size:15px; font-weight:700; width:29px; height:29px; border-radius:3px; display:flex; align-items:center; justify-content:center; }
+        .ch-hl-i     { background:rgba(56,182,255,.12);  color:#38b6ff; border:1px solid rgba(56,182,255,.28); }
+        .ch-hl-e     { background:rgba(0,229,160,.10);   color:#34d399; border:1px solid rgba(0,229,160,.24); }
+        .ch-hl-a     { background:rgba(232,120,224,.10); color:#e878e0; border:1px solid rgba(232,120,224,.24);}
+        .ch-careers  { display:flex; flex-wrap:wrap; gap:4px; }
+        .ch-ct       { font-family:'Share Tech Mono',monospace; font-size:7.5px; padding:3px 7px; border-radius:2px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10); color:rgba(255,255,255,.38); }
+        .ch-val-chips { display:flex; flex-wrap:wrap; gap:4px; }
+        .ch-vc  { font-size:9.5px; font-weight:600; padding:3px 8px; border-radius:2px; }
+        .ch-vc1 { background:rgba(56,182,255,.09);  border:1px solid rgba(56,182,255,.22);  color:#38b6ff; }
+        .ch-vc2 { background:rgba(0,229,160,.07);   border:1px solid rgba(0,229,160,.2);    color:#34d399; }
+        .ch-vc3 { background:rgba(245,158,11,.08);  border:1px solid rgba(245,158,11,.2);   color:#f59e0b; }
+        .ch-vc4 { background:rgba(176,143,255,.08); border:1px solid rgba(176,143,255,.2);  color:#b08fff; }
+        /* MID row */
+        .ch-mid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:13px; margin-bottom:13px; }
+        @media (max-width:900px) { .ch-mid { grid-template-columns:1fr 1fr; } }
+        @media (max-width:600px) { .ch-mid { grid-template-columns:1fr; } }
+        /* Dark Triad panel */
+        .ch-dt-panel { border-color:rgba(239,68,68,.15) !important; }
+        .ch-dt-panel::before { border-color:rgba(239,68,68,.42); }
+        .ch-dt-panel::after  { border-color:rgba(239,68,68,.42); }
+        .ch-dt-bars  { display:flex; flex-direction:column; gap:14px; }
+        .ch-dt-row   { display:flex; flex-direction:column; gap:5px; }
+        .ch-dt-head  { display:flex; align-items:center; justify-content:space-between; }
+        .ch-dt-name  { display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:700; }
+        .ch-dt-sw    { display:flex; align-items:baseline; gap:2px; }
+        .ch-dt-sc    { font-family:'Orbitron',monospace; font-size:18px; font-weight:700; }
+        .ch-dt-mx    { font-family:'Share Tech Mono',monospace; font-size:8px; color:rgba(255,255,255,.28); }
+        .ch-dt-pc    { font-family:'Share Tech Mono',monospace; font-size:8px; }
+        .ch-dt-track { height:9px; border-radius:2px; background:rgba(255,255,255,.04); overflow:hidden; }
+        .ch-dt-fill  { height:100%; border-radius:2px; transition:width 1s ease-out; }
+        .ch-dt-tags  { display:flex; flex-wrap:wrap; gap:3px; }
+        .ch-dtag     { font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:.5px; padding:2px 6px; border-radius:2px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); color:rgba(255,255,255,.3); }
+        /* Strengths panel */
+        .ch-str-list { display:flex; flex-direction:column; gap:6px; }
+        .ch-str-item { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:4px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); transition:background .2s,border-color .2s,transform .18s; }
+        .ch-str-item:hover { background:rgba(56,182,255,.05); border-color:rgba(56,182,255,.18); transform:translateX(3px); }
+        .ch-srk { font-family:'Share Tech Mono',monospace; font-size:9px; color:rgba(255,255,255,.18); width:14px; flex-shrink:0; text-align:center; }
+        .ch-sinf { flex:1; }
+        .ch-snm  { font-size:11px; font-weight:700; color:rgba(255,255,255,.78); }
+        .ch-sct  { font-family:'Share Tech Mono',monospace; font-size:7px; color:rgba(255,255,255,.27); }
+        .ch-sbar { width:30px; height:3px; background:rgba(255,255,255,.06); border-radius:100px; flex-shrink:0; overflow:hidden; }
+        .ch-sbf  { height:100%; border-radius:100px; }
+        /* Trait chips */
+        .ch-tflow { display:flex; flex-wrap:wrap; gap:6px; }
+        .ch-tt  { display:flex; align-items:center; gap:4px; padding:4px 10px; border-radius:2px; font-size:10px; font-weight:600; cursor:default; transition:transform .18s; }
+        .ch-tt:hover { transform:translateY(-2px); }
+        .ch-ttc { background:rgba(56,182,255,.09);  border:1px solid rgba(56,182,255,.22);  color:#38b6ff; }
+        .ch-ttv { background:rgba(176,143,255,.09); border:1px solid rgba(176,143,255,.22); color:#b08fff; }
+        .ch-ttg { background:rgba(0,229,160,.08);   border:1px solid rgba(0,229,160,.2);    color:#34d399; }
+        .ch-tto { background:rgba(249,115,22,.08);  border:1px solid rgba(249,115,22,.2);   color:#f97316; }
+        .ch-ttp { background:rgba(232,120,224,.08); border:1px solid rgba(232,120,224,.2);  color:#e878e0; }
+        .ch-ttw { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);  color:rgba(255,255,255,.5); }
+        .ch-ttt { background:rgba(64,224,208,.08);  border:1px solid rgba(64,224,208,.2);   color:#40e0d0; }
+        /* Bottom row */
+        .ch-bot { display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+        @media (max-width:700px) { .ch-bot { grid-template-columns:1fr; } }
+        .ch-shadow-panel { border-color:rgba(239,68,68,.12) !important; }
+        .ch-shadow-panel::before { border-color:rgba(239,68,68,.42); }
+        .ch-shadow-panel::after  { border-color:rgba(239,68,68,.42); }
+        .ch-sh-list  { display:flex; flex-direction:column; gap:8px; }
+        .ch-sh-item  { display:flex; align-items:flex-start; gap:10px; padding:10px 12px; border-radius:4px; background:rgba(239,68,68,.04); border:1px solid rgba(239,68,68,.10); transition:background .2s,border-color .2s; }
+        .ch-sh-item:hover { background:rgba(239,68,68,.07); border-color:rgba(239,68,68,.2); }
+        .ch-shico { font-size:16px; flex-shrink:0; margin-top:1px; }
+        .ch-shbd  { flex:1; }
+        .ch-shtt  { font-size:11px; font-weight:700; color:rgba(255,100,100,.82); margin-bottom:2px; }
+        .ch-sht   { font-size:10px; color:rgba(255,255,255,.35); line-height:1.6; }
+        .ch-iblk  { padding:12px 13px; border-radius:4px; margin-bottom:9px; }
+        .ch-iblk:last-child { margin-bottom:0; }
+        .ch-ib-hd { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; margin-bottom:5px; text-transform:uppercase; }
+        .ch-ib-tx { font-size:10.5px; color:rgba(255,255,255,.42); line-height:1.7; }
+        .ch-ib-tx strong { color:rgba(255,255,255,.8); font-weight:600; }
+        .ch-footer { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-top:13px; padding:10px 14px; border-radius:4px; background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.05); }
+        .ch-fid    { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; color:rgba(56,182,255,.28); }
+        .ch-ftests { font-family:'Share Tech Mono',monospace; font-size:7.5px; color:rgba(255,255,255,.12); letter-spacing:.8px; text-align:center; }
+        .ch-fver   { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; color:rgba(123,94,167,.35); }
+        .ch-empty-block { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px 10px; text-align:center; opacity:.55; }
+        .ch-empty-icon { font-size:2rem; margin-bottom:8px; }
+        .ch-empty-text { font-size:.78rem; color:rgba(255,255,255,.3); margin-bottom:10px; }
+        .ch-go-btn { display:inline-block; padding:6px 13px; border-radius:6px; border:1px solid rgba(99,102,241,.4); background:rgba(99,102,241,.12); color:#a5b4fc; font-size:.72rem; font-weight:600; cursor:pointer; transition:all .2s; font-family:inherit; }
+        .ch-go-btn:hover { background:rgba(99,102,241,.22); color:#fff; }
     </style>
 </head>
 <body class="min-h-screen text-white grid-bg">
@@ -1035,96 +1202,243 @@
 
         <!-- TAB: KARTA POSTACI -->
         <div id="tab-character" style="display:none;">
+        <div class="ch-sheet-wrapper">
 
-            <!-- Hero -->
-            <div id="cc-hero" style="text-align:center;padding:40px 0 32px;animation:fadeUp .7s ease both;">
-                <div style="font-size:2.4rem;margin-bottom:10px;">🃏</div>
-                <h2 style="font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;margin:0 0 6px;background:linear-gradient(135deg,#6366f1,#38b6ff,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Karta Postaci</h2>
-                <p id="cc-subtitle" style="font-size:.88rem;color:rgba(255,255,255,.4);margin-bottom:8px;">Psychometryczny profil użytkownika</p>
-                <div id="cc-completeness" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:100px;padding:6px 16px;font-size:.75rem;color:rgba(255,255,255,.45);">
-                    <span id="cc-done-count">0</span><span>/6 testów ukończonych</span>
+          <!-- TOP STATUS BAR -->
+          <div class="ch-topbar">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="ch-tb-pill"><div class="ch-tb-dot"></div><span id="ch-completion-pill">ŁADOWANIE PROFILU…</span></div>
+            </div>
+            <div class="ch-tb-meta" id="ch-footer-id-top">CHAR-ID: PSY----- · PSYCHER v2.0</div>
+          </div>
+
+          <!-- HERO ROW -->
+          <div class="ch-hero">
+
+            <!-- AVATAR PANEL -->
+            <div class="ch-panel ch-av-panel">
+              <div class="ch-pi">
+                <div class="ch-av-wrap">
+                  <svg class="ch-av-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient id="chG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38b6ff"/><stop offset="100%" stop-color="#7b5ea7"/></linearGradient>
+                      <linearGradient id="chN" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38b6ff" stop-opacity=".8"/><stop offset="100%" stop-color="#7b5ea7" stop-opacity=".8"/></linearGradient>
+                      <linearGradient id="chSc" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="transparent"/><stop offset="25%" stop-color="#38b6ff" stop-opacity=".7"/><stop offset="75%" stop-color="#38b6ff" stop-opacity=".7"/><stop offset="100%" stop-color="transparent"/></linearGradient>
+                      <linearGradient id="chBd" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#38b6ff" stop-opacity=".18"/><stop offset="100%" stop-color="#7b5ea7" stop-opacity=".03"/></linearGradient>
+                      <filter id="chF" x="-45%" y="-45%" width="190%" height="190%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                      <clipPath id="chC"><circle cx="60" cy="60" r="54"/></clipPath>
+                    </defs>
+                    <circle cx="60" cy="60" r="56" fill="#030014"/>
+                    <g class="ch-sp"><circle cx="60" cy="60" r="56" fill="none" stroke="url(#chG)" stroke-width=".8" stroke-dasharray="4 7" opacity=".4"/></g>
+                    <g class="ch-spr">
+                      <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(56,182,255,.08)" stroke-width=".8" stroke-dasharray="2 9"/>
+                      <line x1="60" y1="8"   x2="60" y2="14"  stroke="#38b6ff" stroke-width="1.3" stroke-linecap="round" filter="url(#chF)" opacity=".6"/>
+                      <line x1="60" y1="106" x2="60" y2="112" stroke="#38b6ff" stroke-width="1.3" stroke-linecap="round" filter="url(#chF)" opacity=".6"/>
+                      <line x1="8"   y1="60" x2="14"  y2="60" stroke="#7b5ea7" stroke-width="1.3" stroke-linecap="round" filter="url(#chF)" opacity=".6"/>
+                      <line x1="106" y1="60" x2="112" y2="60" stroke="#7b5ea7" stroke-width="1.3" stroke-linecap="round" filter="url(#chF)" opacity=".6"/>
+                    </g>
+                    <circle cx="60" cy="60" r="54" fill="none" stroke="url(#chG)" stroke-width="1.6"/>
+                    <line x1="60" y1="4"   x2="60" y2="11"  stroke="#38b6ff" stroke-width="2" stroke-linecap="round" filter="url(#chF)"/>
+                    <line x1="60" y1="109" x2="60" y2="116" stroke="#38b6ff" stroke-width="2" stroke-linecap="round" filter="url(#chF)"/>
+                    <line x1="4"   y1="60" x2="11"  y2="60" stroke="#38b6ff" stroke-width="2" stroke-linecap="round" filter="url(#chF)"/>
+                    <line x1="109" y1="60" x2="116" y2="60" stroke="#38b6ff" stroke-width="2" stroke-linecap="round" filter="url(#chF)"/>
+                    <line x1="17" y1="17"   x2="24" y2="24"  stroke="#7b5ea7" stroke-width="1.1" stroke-linecap="round" opacity=".5" filter="url(#chF)"/>
+                    <line x1="103" y1="17"  x2="96" y2="24"  stroke="#7b5ea7" stroke-width="1.1" stroke-linecap="round" opacity=".5" filter="url(#chF)"/>
+                    <line x1="17" y1="103"  x2="24" y2="96"  stroke="#7b5ea7" stroke-width="1.1" stroke-linecap="round" opacity=".5" filter="url(#chF)"/>
+                    <line x1="103" y1="103" x2="96" y2="96"  stroke="#7b5ea7" stroke-width="1.1" stroke-linecap="round" opacity=".5" filter="url(#chF)"/>
+                    <g clip-path="url(#chC)">
+                      <path d="M60,18 C78,18 90,30 90,46 C90,57 85,65 78,70 L78,79 L42,79 L42,70 C35,65 30,57 30,46 C30,30 42,18 60,18Z" fill="url(#chBd)" stroke="url(#chG)" stroke-width="1.6" filter="url(#chF)"/>
+                      <line x1="42" y1="79" x2="35" y2="93" stroke="url(#chG)" stroke-width="1.2" stroke-linecap="round" opacity=".38"/>
+                      <line x1="78" y1="79" x2="85" y2="93" stroke="url(#chG)" stroke-width="1.2" stroke-linecap="round" opacity=".38"/>
+                      <line x1="35" y1="93" x2="85" y2="93" stroke="url(#chG)" stroke-width="1.2" stroke-linecap="round" opacity=".38"/>
+                      <line class="ch-al" x1="60" y1="28" x2="50" y2="38" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="60" y1="28" x2="70" y2="38" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="50" y1="38" x2="60" y2="48" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="70" y1="38" x2="60" y2="48" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="50" y1="38" x2="40" y2="51" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="70" y1="38" x2="80" y2="51" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="60" y1="48" x2="50" y2="60" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="60" y1="48" x2="70" y2="60" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="40" y1="51" x2="50" y2="60" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="80" y1="51" x2="70" y2="60" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="50" y1="60" x2="60" y2="72" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="70" y1="60" x2="60" y2="72" stroke="url(#chN)" stroke-width="1"/>
+                      <line class="ch-al" x1="50" y1="38" x2="70" y2="38" stroke="url(#chN)" stroke-width=".7" opacity=".5"/>
+                      <line class="ch-al" x1="50" y1="60" x2="70" y2="60" stroke="url(#chN)" stroke-width=".7" opacity=".5"/>
+                      <circle class="ch-an" cx="60" cy="28" r="2.2" fill="#38b6ff" filter="url(#chF)"/>
+                      <circle class="ch-an" cx="50" cy="38" r="1.9" fill="#38b6ff" filter="url(#chF)"/>
+                      <circle class="ch-an" cx="70" cy="38" r="1.9" fill="#7b5ea7" filter="url(#chF)"/>
+                      <circle class="ch-an" cx="60" cy="48" r="2.4" fill="#38b6ff" filter="url(#chF)"/>
+                      <circle class="ch-an" cx="40" cy="51" r="1.9" fill="#7b5ea7" filter="url(#chF)"/>
+                      <circle class="ch-an" cx="80" cy="51" r="1.9" fill="#7b5ea7" filter="url(#chF)"/>
+                      <circle class="ch-an" cx="50" cy="60" r="1.9" fill="#38b6ff" filter="url(#chF)"/>
+                      <circle class="ch-an" cx="70" cy="60" r="1.9" fill="#7b5ea7" filter="url(#chF)"/>
+                      <circle class="ch-an" cx="60" cy="72" r="1.9" fill="#38b6ff" filter="url(#chF)"/>
+                      <rect class="ch-asc" x="6" y="59" width="108" height="2" fill="url(#chSc)" rx="1"/>
+                    </g>
+                  </svg>
                 </div>
+                <div class="ch-lvl"><div class="ch-ldot"></div><span id="ch-lvl-text">LVL 0 · POCZĄTKUJĄCY</span></div>
+                <div class="ch-cname" id="ch-cname">---</div>
+                <div class="ch-carch" id="ch-carch">Profil w budowie</div>
+                <div class="ch-ccodes" id="ch-ccodes">UZUPEŁNIJ TESTY · BRAK DANYCH</div>
+                <div class="ch-rare" id="ch-rare">⚙ OBLICZANIE PROFILU</div>
+                <div class="ch-xp-wrap">
+                  <div class="ch-xp-lbl">
+                    <span style="color:rgba(255,255,255,.22)">PROFIL XP</span>
+                    <span style="color:rgba(56,182,255,.6)" id="ch-xp-label">0/7 TESTÓW</span>
+                  </div>
+                  <div class="ch-xp-track"><div class="ch-xp-fill" id="ch-xp-fill" style="width:0%"></div></div>
+                </div>
+              </div>
             </div>
 
-            <!-- Cards grid -->
-            <div class="cc-grid" id="cc-grid">
-
-                <!-- HEXACO -->
-                <div class="cc-card" id="cc-hexaco">
-                    <div class="cc-card-label" style="color:#38b6ff;">HEXACO-60 · Osobowość</div>
-                    <div class="cc-card-title">Rdzeń Osobowości</div>
-                    <div id="cc-hexaco-body">
-                        <div class="cc-empty-icon">🧠</div>
-                        <div class="cc-empty-text">Test nie wykonany</div>
-                        <button class="cc-go-btn" onclick="startHexacoTest()">Rozpocznij →</button>
-                    </div>
+            <!-- CENTER: HEXACO STATS -->
+            <div class="ch-panel">
+              <div class="ch-pi">
+                <div class="ch-pl">// ATRYBUTY · HEXACO-60</div>
+                <div class="ch-attr-grid" id="ch-attr-grid">
+                  <div class="ch-attr-b ch-ag"><div class="ch-a-lbl">Sumienność</div><div class="ch-a-val">—</div><div class="ch-a-nm">Conscientiousness</div></div>
+                  <div class="ch-attr-b ch-ac"><div class="ch-a-lbl">Otwartość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Openness</div></div>
+                  <div class="ch-attr-b ch-av"><div class="ch-a-lbl">Ugodowość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Agreeableness</div></div>
+                  <div class="ch-attr-b ch-at"><div class="ch-a-lbl">Szczerość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Honesty-Humility</div></div>
+                  <div class="ch-attr-b ch-ap"><div class="ch-a-lbl">Ekstrawersja</div><div class="ch-a-val">—</div><div class="ch-a-nm">Extraversion</div></div>
+                  <div class="ch-attr-b ch-ao"><div class="ch-a-lbl">Emocjonalność</div><div class="ch-a-val">—</div><div class="ch-a-nm">Emotionality</div></div>
                 </div>
-
-                <!-- Enneagram -->
-                <div class="cc-card" id="cc-enneagram">
-                    <div class="cc-card-label" style="color:#b08fff;">Enneagram · Motywacja</div>
-                    <div class="cc-card-title">Silnik Motywacji</div>
-                    <div id="cc-enneagram-body">
-                        <div class="cc-empty-icon">🌀</div>
-                        <div class="cc-empty-text">Test nie wykonany</div>
-                        <button class="cc-go-btn" onclick="startEnneagramTest()">Rozpocznij →</button>
-                    </div>
+                <div class="ch-pl">// PROFIL SZCZEGÓŁOWY</div>
+                <div class="ch-hx-bars" id="ch-hx-bars">
+                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Sumienność</span><span class="ch-hb-val" style="color:#34d399">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#34d399"></div></div></div>
+                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Otwartość</span><span class="ch-hb-val" style="color:#38b6ff">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#38b6ff"></div></div></div>
+                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Ugodowość</span><span class="ch-hb-val" style="color:#b08fff">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#b08fff"></div></div></div>
+                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Szczerość-Pokora</span><span class="ch-hb-val" style="color:#40e0d0">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#40e0d0"></div></div></div>
+                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Ekstrawersja</span><span class="ch-hb-val" style="color:#e878e0">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#e878e0"></div></div></div>
+                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Emocjonalność</span><span class="ch-hb-val" style="color:#f97316">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#f97316"></div></div></div>
                 </div>
-
-                <!-- Dark Triad -->
-                <div class="cc-card" id="cc-dark-triad">
-                    <div class="cc-card-label" style="color:#e878e0;">Dark Triad · Cień</div>
-                    <div class="cc-card-title">Analiza Cienia</div>
-                    <div id="cc-dark-triad-body">
-                        <div class="cc-empty-icon">🌑</div>
-                        <div class="cc-empty-text">Test nie wykonany</div>
-                        <button class="cc-go-btn" onclick="startDarkTriadTest()">Rozpocznij →</button>
-                    </div>
+                <div id="ch-hexaco-cta" style="margin-top:14px;text-align:center;">
+                  <button class="ch-go-btn" onclick="switchTab('tests')">Wykonaj test HEXACO-60 aby odblokować →</button>
                 </div>
-
-                <!-- Strengths -->
-                <div class="cc-card" id="cc-strengths">
-                    <div class="cc-card-label" style="color:#34d399;">Strengths · Talenty</div>
-                    <div class="cc-card-title">Mocne Strony</div>
-                    <div id="cc-strengths-body">
-                        <div class="cc-empty-icon">⚡</div>
-                        <div class="cc-empty-text">Test nie wykonany</div>
-                        <button class="cc-go-btn" onclick="startStrengthsTest()">Rozpocznij →</button>
-                    </div>
-                </div>
-
-                <!-- Career -->
-                <div class="cc-card" id="cc-career">
-                    <div class="cc-card-label" style="color:#0ea5e9;">RIASEC · Kariera</div>
-                    <div class="cc-card-title">Profil Kariery</div>
-                    <div id="cc-career-body">
-                        <div class="cc-empty-icon">💼</div>
-                        <div class="cc-empty-text">Test nie wykonany</div>
-                        <button class="cc-go-btn" onclick="startCareerTest()">Rozpocznij →</button>
-                    </div>
-                </div>
-
-                <!-- Values -->
-                <div class="cc-card" id="cc-values">
-                    <div class="cc-card-label" style="color:#14b8a6;">Schwartz PVQ · Wartości</div>
-                    <div class="cc-card-title">Kompas Wartości</div>
-                    <div id="cc-values-body">
-                        <div class="cc-empty-icon">🧭</div>
-                        <div class="cc-empty-text">Test nie wykonany</div>
-                        <button class="cc-go-btn" onclick="startValuesTest()">Rozpocznij →</button>
-                    </div>
-                </div>
-
-            </div><!-- /cc-grid -->
-
-            <!-- CTA when not all done -->
-            <div id="cc-cta" style="text-align:center;padding:8px 0 48px;display:none;">
-                <p style="font-size:.82rem;color:rgba(255,255,255,.3);margin-bottom:12px;">Uzupełnij brakujące testy, aby uzyskać pełny profil psychometryczny.</p>
-                <button onclick="switchTab('tests')" style="background:linear-gradient(135deg,#6366f1,#0ea5e9);border:none;border-radius:10px;color:#fff;padding:10px 24px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;">
-                    Przejdź do Testów →
-                </button>
+              </div>
             </div>
 
+            <!-- RIGHT: TYPOLOGY -->
+            <div class="ch-panel ch-type-panel">
+              <div class="ch-pi">
+                <div class="ch-pl">// TYPOLOGIA</div>
+                <div class="ch-arch-blk ch-enn-blk">
+                  <div class="ch-arch-lbl">ENNEAGRAM</div>
+                  <div class="ch-enn-row">
+                    <div class="ch-enn-num" id="ch-enn-num">?</div>
+                    <div><div class="ch-enn-type" id="ch-enn-type">Nieznany typ</div><div class="ch-enn-sub" id="ch-enn-sub">WYKONAJ TEST</div></div>
+                  </div>
+                  <div class="ch-enn-desc" id="ch-enn-desc">Wykonaj test Enneagram aby odblokować typologię motywacji.</div>
+                </div>
+                <div class="ch-arch-blk ch-hol-blk">
+                  <div class="ch-arch-lbl">HOLLAND CODE · RIASEC</div>
+                  <div class="ch-hol-ltrs" id="ch-hol-ltrs">
+                    <div class="ch-hl ch-hl-i">?</div><div class="ch-hl ch-hl-e">?</div><div class="ch-hl ch-hl-a">?</div>
+                  </div>
+                  <div class="ch-careers" id="ch-careers"><span class="ch-ct">WYKONAJ TEST KARIERY</span></div>
+                </div>
+                <div class="ch-arch-blk ch-val-blk">
+                  <div class="ch-arch-lbl">WARTOŚCI · SCHWARTZ PVQ-40</div>
+                  <div class="ch-val-chips" id="ch-val-chips"><span class="ch-vc ch-vc4">Wykonaj test wartości</span></div>
+                </div>
+                <div class="ch-arch-blk ch-cog-blk">
+                  <div class="ch-arch-lbl">CIEMNA TRIADA · SD3 SKRÓT</div>
+                  <div id="ch-dt-summary" style="font-size:10px;color:rgba(255,255,255,.32);">Wykonaj test Dark Triad SD3 aby odblokować.</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /ch-hero -->
+
+          <!-- MID ROW -->
+          <div class="ch-mid">
+
+            <!-- DARK TRIAD -->
+            <div class="ch-panel ch-dt-panel">
+              <div class="ch-pi">
+                <div class="ch-pl" style="color:rgba(239,68,68,.45)">// ⚠ CIEMNA TRIADA · SD3</div>
+                <div id="ch-dt-content">
+                  <div class="ch-empty-block">
+                    <div class="ch-empty-icon">🌑</div>
+                    <div class="ch-empty-text">Odblokuj test Dark Triad SD3 Premium aby zobaczyć analizę cienia</div>
+                    <button class="ch-go-btn" onclick="startDarkTriadTest()">Odblokuj Premium →</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STRENGTHS -->
+            <div class="ch-panel">
+              <div class="ch-pi">
+                <div class="ch-pl">// TOP TALENTY · STRENGTHS</div>
+                <div id="ch-str-content">
+                  <div class="ch-empty-block">
+                    <div class="ch-empty-icon">⚡</div>
+                    <div class="ch-empty-text">Wykonaj test Strengths aby odkryć swoje talenty</div>
+                    <button class="ch-go-btn" onclick="startStrengthsTest()">Rozpocznij →</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TRAITS -->
+            <div class="ch-panel">
+              <div class="ch-pi">
+                <div class="ch-pl">// CECHY CHARAKTERU</div>
+                <div id="ch-traits-content">
+                  <div class="ch-empty-block">
+                    <div class="ch-empty-icon">🧩</div>
+                    <div class="ch-empty-text">Cechy charakteru pojawią się po ukończeniu testów</div>
+                    <button class="ch-go-btn" onclick="switchTab('tests')">Przejdź do testów →</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /ch-mid -->
+
+          <!-- BOTTOM ROW -->
+          <div class="ch-bot">
+
+            <!-- SHADOW AREAS -->
+            <div class="ch-panel ch-shadow-panel">
+              <div class="ch-pi">
+                <div class="ch-pl" style="color:rgba(239,68,68,.42)">// 🌑 OBSZARY CIENIA</div>
+                <div id="ch-shadow-content">
+                  <div class="ch-empty-block">
+                    <div class="ch-empty-icon">🌘</div>
+                    <div class="ch-empty-text">Obszary cienia pojawią się po ukończeniu testów Dark Triad i HEXACO</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI INSIGHT -->
+            <div class="ch-panel">
+              <div class="ch-pi">
+                <div class="ch-pl">// 🤖 PSYCHER AI INSIGHT · SYNTEZA</div>
+                <div id="ch-insight-content">
+                  <div class="ch-empty-block">
+                    <div class="ch-empty-icon">🔮</div>
+                    <div class="ch-empty-text">Synteza AI pojawi się po ukończeniu co najmniej 3 testów</div>
+                    <button class="ch-go-btn" onclick="switchTab('tests')">Uzupełnij profil →</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /ch-bot -->
+
+          <!-- FOOTER -->
+          <div class="ch-footer">
+            <div class="ch-fid" id="ch-footer-id">CHAR-ID: PSY-0000 · PSYCHER ENGINE v2.0</div>
+            <div class="ch-ftests">HEXACO-60 · ENNEAGRAM · DARK TRIAD SD3 · STRENGTHS · CAREER RIASEC · VALUES PVQ-40</div>
+            <div class="ch-fver" id="ch-footer-date">BUILD 2026.02.19</div>
+          </div>
+
+        </div><!-- /ch-sheet-wrapper -->
         </div><!-- /tab-character -->
 
     </main>
@@ -1917,7 +2231,19 @@
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) return;
 
-            // Fetch latest result for each test type in one query
+            // ── Name & ID ──────────────────────────────────────
+            const userName = session.user.user_metadata?.full_name
+                || session.user.email?.split('@')[0]
+                || 'PSYCHER';
+            document.getElementById('ch-cname').textContent = userName.toUpperCase().substring(0, 14);
+            const charHash = Math.abs(userName.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % 9000 + 1000;
+            const charId = `PSY-${charHash}-PSYCHER`;
+            document.getElementById('ch-footer-id').textContent = `CHAR-ID: ${charId} · PSYCHER v2.0`;
+            document.getElementById('ch-footer-id-top').textContent = `CHAR-ID: ${charId}`;
+            document.getElementById('ch-footer-date').textContent =
+                `BUILD ${new Date().toISOString().split('T')[0].replace(/-/g,'.')}`;
+
+            // ── Fetch all test results ─────────────────────────
             const { data, error } = await supabase
                 .from('user_psychometrics')
                 .select('test_type, raw_scores, completed_at')
@@ -1927,153 +2253,266 @@
 
             if (error) { console.error('CC load error:', error); return; }
 
-            // Keep only the latest for each test_type
             const latest = {};
-            (data || []).forEach(row => {
-                if (!latest[row.test_type]) latest[row.test_type] = row;
-            });
+            (data || []).forEach(row => { if (!latest[row.test_type]) latest[row.test_type] = row; });
 
-            let doneCount = 0;
+            const doneCount = Object.keys(latest).length;
+            const xpPct = Math.round((doneCount / 7) * 100);
 
-            // ── HEXACO ──────────────────────────────────
+            // ── XP & Level ─────────────────────────────────────
+            const xpFill = document.getElementById('ch-xp-fill');
+            if (xpFill) xpFill.style.width = xpPct + '%';
+            const xpLbl = document.getElementById('ch-xp-label');
+            if (xpLbl) xpLbl.textContent = `${doneCount}/7 TESTÓW`;
+            const pillEl = document.getElementById('ch-completion-pill');
+            if (pillEl) pillEl.textContent = doneCount === 7 ? 'PROFIL UKOŃCZONY · 7/7 TESTÓW' : `PROFIL W BUDOWIE · ${doneCount}/7`;
+            const levels = ['POCZĄTKUJĄCY','ODKRYWCA','BADACZ','ANALITYK','PROFILER','SPECJALISTA','EKSPERT','MISTRZ'];
+            const lvl = Math.min(doneCount, 7);
+            const lvlEl = document.getElementById('ch-lvl-text');
+            if (lvlEl) lvlEl.textContent = `LVL ${lvl} · ${levels[lvl]}`;
+
+            // Rarity
+            const rares = [[100,'💎 TOP 1% POPULACJI'],[90,'✨ TOP 5% POPULACJI'],[80,'⭐ TOP 10% POPULACJI'],[60,'🔮 PROFIL KOMPLETNY'],[0,'⚙ PROFIL W BUDOWIE']];
+            const rarity = rares.find(r => xpPct >= r[0]);
+            const rareEl = document.getElementById('ch-rare');
+            if (rareEl) rareEl.textContent = rarity[1];
+
+            // Trait chips accumulator
+            const traitChips = [];
+
+            // ── HEXACO ──────────────────────────────────────────
             if (latest.HEXACO) {
-                doneCount++;
                 const s = latest.HEXACO.raw_scores || {};
                 const traits = [
-                    { key: 'honesty_humility',  label: 'Uczciwość-Pokora', color: '#38b6ff' },
-                    { key: 'emotionality',       label: 'Emocjonalność',    color: '#b08fff' },
-                    { key: 'extraversion',       label: 'Ekstrawersja',     color: '#34d399' },
-                    { key: 'agreeableness',      label: 'Ugodowość',        color: '#fbbf24' },
-                    { key: 'conscientiousness',  label: 'Sumienność',       color: '#0ea5e9' },
-                    { key: 'openness',           label: 'Otwartość',        color: '#c084fc' },
+                    { key:'conscientiousness', label:'Sumienność',   color:'#34d399', cls:'ch-ag', en:'Conscientiousness',  grad:'#007a50,#34d399' },
+                    { key:'openness',           label:'Otwartość',    color:'#38b6ff', cls:'ch-ac', en:'Openness',           grad:'#1a6aff,#38b6ff' },
+                    { key:'agreeableness',      label:'Ugodowość',    color:'#b08fff', cls:'ch-av', en:'Agreeableness',      grad:'#4a28b0,#b08fff' },
+                    { key:'honesty_humility',   label:'Szczerość',    color:'#40e0d0', cls:'ch-at', en:'Honesty-Humility',   grad:'#006060,#40e0d0' },
+                    { key:'extraversion',       label:'Ekstrawersja', color:'#e878e0', cls:'ch-ap', en:'Extraversion',       grad:'#7b1fa2,#e878e0' },
+                    { key:'emotionality',       label:'Emocjonalność',color:'#f97316', cls:'ch-ao', en:'Emotionality',       grad:'#7a2000,#f97316' },
                 ];
-                const card = document.getElementById('cc-hexaco');
-                card.classList.add('cc-done');
-                document.getElementById('cc-hexaco-body').innerHTML = traits.map(t => {
-                    const pct = Math.round(s[t.key] ?? 50);
-                    return `<div style="margin-bottom:7px;">
-                        <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
-                            <span class="cc-row-label">${t.label}</span>
-                            <span style="font-size:10px;font-weight:700;color:${t.color};">${pct}%</span>
-                        </div>
-                        <div class="cc-mini-bar-track"><div class="cc-mini-bar-fill" style="width:${pct}%;background:${t.color};"></div></div>
-                    </div>`;
-                }).join('') + `<button class="cc-go-btn" onclick="window.location.href='/test/hexaco/results'" style="margin-top:8px;">Zobacz wyniki →</button>`;
+                // Attribute blocks
+                const attrGrid = document.getElementById('ch-attr-grid');
+                if (attrGrid) attrGrid.innerHTML = traits.map(t => {
+                    const v = Math.round(s[t.key] ?? 50);
+                    return `<div class="ch-attr-b ${t.cls}"><div class="ch-a-lbl">${t.label}</div><div class="ch-a-val">${v}</div><div class="ch-a-nm">${t.en}</div></div>`;
+                }).join('');
+                // Detail bars
+                const hxBars = document.getElementById('ch-hx-bars');
+                if (hxBars) hxBars.innerHTML = traits.map(t => {
+                    const v = Math.round(s[t.key] ?? 50);
+                    return `<div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">${t.label}</span><span class="ch-hb-val" style="color:${t.color}">${v}%</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:${v}%;background:linear-gradient(90deg,${t.grad});box-shadow:0 0 7px ${t.color}66;"></div></div></div>`;
+                }).join('');
+                // Hide CTA
+                const ctaEl = document.getElementById('ch-hexaco-cta');
+                if (ctaEl) ctaEl.style.display = 'none';
+                // Derive archetype
+                const con = s.conscientiousness ?? 50, opn = s.openness ?? 50, ext = s.extraversion ?? 50;
+                let arch = 'Analityczny Badacz';
+                if (con > 75 && opn > 65) arch = 'Strategiczny Innowator';
+                else if (opn > 75) arch = 'Kreatywny Wizjoner';
+                else if (con > 75) arch = 'Zdyscyplinowany Strateg';
+                else if (ext > 70) arch = 'Charyzmatyczny Lider';
+                else if (ext < 35) arch = 'Głęboki Myśliciel';
+                const archEl = document.getElementById('ch-carch');
+                if (archEl) archEl.textContent = arch;
+                const codesEl = document.getElementById('ch-ccodes');
+                if (codesEl) codesEl.textContent = `HEXACO-60 · ${doneCount}/7 TESTÓW`;
+                // Trait chips
+                if (con > 70) traitChips.push({label:'📋 Zdyscyplinowany', cls:'ch-ttg'});
+                if (con > 80) traitChips.push({label:'📐 Perfekcjonista',   cls:'ch-ttw'});
+                if (opn > 70) traitChips.push({label:'💡 Innowacyjny',     cls:'ch-ttt'});
+                if (opn > 80) traitChips.push({label:'🔮 Wzorce',          cls:'ch-ttc'});
+                if (ext > 70) traitChips.push({label:'🎭 Charyzmatyczny',  cls:'ch-ttp'});
+                else if (ext < 35) traitChips.push({label:'🧘 Introwertyczny', cls:'ch-ttv'});
+                if ((s.agreeableness??50) > 70) traitChips.push({label:'🤝 Empatyczny', cls:'ch-ttg'});
+                if ((s.honesty_humility??50) > 70) traitChips.push({label:'⚖ Etyczny', cls:'ch-ttc'});
             }
 
-            // ── ENNEAGRAM ────────────────────────────────
+            // ── ENNEAGRAM ────────────────────────────────────────
             if (latest.ENNEAGRAM) {
-                doneCount++;
                 const s = latest.ENNEAGRAM.raw_scores || {};
-                // find dominant type
                 let topType = null, topScore = -1;
-                for (const [k, v] of Object.entries(s)) {
-                    if (Number(v) > topScore) { topScore = Number(v); topType = k; }
+                for (const [k, v] of Object.entries(s)) { if (Number(v) > topScore) { topScore = Number(v); topType = k; } }
+                if (topType) {
+                    const ENAMES = {1:'Reformator',2:'Pomocnik',3:'Osiągacz',4:'Indywidualista',5:'Obserwator',6:'Lojalista',7:'Entuzjasta',8:'Przywódca',9:'Mediator'};
+                    const EDESCS = {
+                        1:'Kieruje się zasadami, pragnie poprawiać siebie i świat. Świadomy kwestii etycznych.',
+                        2:'Troszczy się o innych i buduje relacje. Realizuje się przez dawanie i wsparcie.',
+                        3:'Zorientowany na cel i sukces. Adaptuje swój wizerunek, by osiągać wyznaczone cele.',
+                        4:'Szuka głębokiej tożsamości. Intensywnie przeżywa emocje, pragnie autentyczności.',
+                        5:'Gromadzi wiedzę i niezależność. Analizuje zanim działa, oddziela emocje od myślenia.',
+                        6:'Szuka bezpieczeństwa i lojalności. Wysoka czujność wobec zagrożeń i sprzeczności.',
+                        7:'Entuzjastyczny i optymistyczny. Szuka nowych doświadczeń, unika bólu i ograniczeń.',
+                        8:'Silny i zdecydowany. Chroni siebie i słabszych, nie unika konfrontacji.',
+                        9:'Dąży do harmonii i spokoju. Mediuje napięcia, unika eskalacji konfliktów.'
+                    };
+                    const ECOLS = ['#6366f1','#38b6ff','#fbbf24','#34d399','#b08fff','#f97316','#0ea5e9','#ef4444','#14b8a6'];
+                    const ennCol = ECOLS[(parseInt(topType)-1) % ECOLS.length];
+                    const ennNumEl = document.getElementById('ch-enn-num');
+                    if (ennNumEl) { ennNumEl.textContent = topType; ennNumEl.style.color = ennCol; ennNumEl.style.textShadow = `0 0 22px ${ennCol}80`; }
+                    const ennTypeEl = document.getElementById('ch-enn-type');
+                    if (ennTypeEl) ennTypeEl.textContent = ENAMES[topType] || `Typ ${topType}`;
+                    const ennSubEl = document.getElementById('ch-enn-sub');
+                    if (ennSubEl) ennSubEl.textContent = `TYP ${topType} · ENNEAGRAM`;
+                    const ennDescEl = document.getElementById('ch-enn-desc');
+                    if (ennDescEl) ennDescEl.textContent = EDESCS[topType] || '';
+                    window._ch_ennName = ENAMES[topType] || `Typ ${topType}`;
+                    traitChips.push({label:`🌀 ${ENAMES[topType]||'Typ '+topType}`, cls:'ch-ttv'});
                 }
-                const ENAMES = {1:'Reformator',2:'Pomocnik',3:'Osiągacz',4:'Indywidualista',5:'Obserwator',6:'Lojalista',7:'Entuzjasta',8:'Przywódca',9:'Mediator'};
-                const name = topType ? (ENAMES[topType] || `Typ ${topType}`) : '?';
-                const colors = ['#6366f1','#38b6ff','#fbbf24','#34d399','#b08fff','#f97316','#0ea5e9','#ef4444','#14b8a6'];
-                const col = topType ? (colors[(parseInt(topType)-1) % colors.length]) : '#b08fff';
-                const card = document.getElementById('cc-enneagram');
-                card.classList.add('cc-done');
-                document.getElementById('cc-enneagram-body').innerHTML = `
-                    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;">
-                        <span class="cc-big-val" style="color:${col};">${topType || '?'}</span>
-                        <span style="font-size:.9rem;font-weight:700;color:rgba(255,255,255,.8);">${name}</span>
-                    </div>
-                    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;">
-                        ${Object.entries(s).sort((a,b)=>Number(b[1])-Number(a[1])).slice(0,5).map(([t,v])=>`<span class="cc-chip" style="background:${colors[(parseInt(t)-1)%colors.length]}20;border:1px solid ${colors[(parseInt(t)-1)%colors.length]}44;color:${colors[(parseInt(t)-1)%colors.length]};">T${t}: ${Number(v).toFixed(0)}</span>`).join('')}
-                    </div>
-                    <button class="cc-go-btn" onclick="window.location.href='/test/enneagram/results'">Zobacz wyniki →</button>
-                `;
             }
 
-            // ── DARK TRIAD ───────────────────────────────
-            if (latest.DARK_TRIAD) {
-                doneCount++;
-                const s = latest.DARK_TRIAD.raw_scores || {};
-                const traits = [
-                    { key: 'psychopathy',       label: 'Psychopatia',  color: '#ef4444' },
-                    { key: 'machiavellianism',  label: 'Makiawelizm',  color: '#f97316' },
-                    { key: 'narcissism',        label: 'Narcyzm',      color: '#e878e0' },
-                ];
-                const card = document.getElementById('cc-dark-triad');
-                card.classList.add('cc-done');
-                document.getElementById('cc-dark-triad-body').innerHTML = traits.map(t => {
-                    const pct = Math.round(s[t.key] ?? s[t.key.charAt(0).toUpperCase()+t.key.slice(1)] ?? 50);
-                    return `<div style="margin-bottom:9px;">
-                        <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
-                            <span class="cc-row-label">${t.label}</span>
-                            <span style="font-size:10px;font-weight:700;color:${t.color};">${pct}%</span>
-                        </div>
-                        <div class="cc-mini-bar-track"><div class="cc-mini-bar-fill" style="width:${pct}%;background:${t.color};"></div></div>
-                    </div>`;
-                }).join('') + `<button class="cc-go-btn" onclick="window.location.href='/test/dark-triad/results'" style="margin-top:6px;">Zobacz wyniki →</button>`;
-            }
-
-            // ── STRENGTHS ────────────────────────────────
-            if (latest.STRENGTHS) {
-                doneCount++;
-                const s = latest.STRENGTHS.raw_scores || {};
-                const top5 = (s.top_5 || []).slice(0, 5);
-                const CAT_COLORS = { strategic_thinking: '#34d399', executing: '#b08fff', influencing: '#fbbf24', relationship_building: '#60a5fa' };
-                const card = document.getElementById('cc-strengths');
-                card.classList.add('cc-done');
-                document.getElementById('cc-strengths-body').innerHTML = (top5.length > 0
-                    ? `<div style="margin-bottom:10px;">${top5.map((t,i)=>
-                        `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-                            <span style="width:18px;height:18px;border-radius:50%;background:${CAT_COLORS[t.category]||'#38b6ff'};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#000;flex-shrink:0;">${i+1}</span>
-                            <span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">${t.name||t.name_en||'?'}</span>
-                        </div>`).join('')}
-                    </div>`
-                    : '<div class="cc-empty-text">Brak danych top 5</div>'
-                ) + `<button class="cc-go-btn" onclick="window.location.href='/test/strengths/results'">Zobacz wyniki →</button>`;
-            }
-
-            // ── CAREER ───────────────────────────────────
+            // ── CAREER (RIASEC) ──────────────────────────────────
             if (latest.CAREER) {
-                doneCount++;
                 const s = latest.CAREER.raw_scores || {};
                 const code = s.holland_code || '???';
                 const top3 = (s.top_3 || []).slice(0,3);
-                const RCOLORS = { realistic:'#ef4444', investigative:'#0ea5e9', artistic:'#d946ef', social:'#10b981', enterprising:'#f59e0b', conventional:'#94a3b8' };
-                const card = document.getElementById('cc-career');
-                card.classList.add('cc-done');
-                document.getElementById('cc-career-body').innerHTML = `
-                    <div style="margin-bottom:12px;">
-                        <div style="font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:4px;">Kod Hollanda</div>
-                        <div class="cc-big-val" style="background:linear-gradient(135deg,#0ea5e9,#d946ef);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${code}</div>
-                    </div>
-                    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;">
-                        ${top3.map(t=>`<span class="cc-chip" style="background:${RCOLORS[t.id]||'#38b6ff'}20;border:1px solid ${RCOLORS[t.id]||'#38b6ff'}44;color:${RCOLORS[t.id]||'#38b6ff'};">${t.letter}: ${t.name?.split(' ')[0]||'?'}</span>`).join('')}
-                    </div>
-                    <button class="cc-go-btn" onclick="window.location.href='/test/career/results'">Zobacz wyniki →</button>
-                `;
+                const clsMap = ['ch-hl-i','ch-hl-e','ch-hl-a'];
+                const holLtrs = document.getElementById('ch-hol-ltrs');
+                if (holLtrs) holLtrs.innerHTML = [...code].slice(0,3).map((l,i) =>
+                    `<div class="ch-hl ${clsMap[i]||'ch-hl-i'}">${l}</div>`).join('');
+                const careersEl = document.getElementById('ch-careers');
+                if (careersEl && top3.length > 0) careersEl.innerHTML = top3.map(t =>
+                    `<span class="ch-ct">${(t.name||t.letter||'?').split(' ')[0].toUpperCase()}</span>`).join('');
             }
 
-            // ── VALUES ───────────────────────────────────
+            // ── VALUES (Schwartz PVQ-40) ─────────────────────────
             if (latest.VALUES) {
-                doneCount++;
                 const s = latest.VALUES.raw_scores || {};
                 const top3 = (s.top_3 || []).slice(0,3);
-                const card = document.getElementById('cc-values');
-                card.classList.add('cc-done');
-                document.getElementById('cc-values-body').innerHTML = (top3.length > 0
-                    ? `<div style="margin-bottom:10px;">${top3.map((v,i)=>
-                        `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-                            <span style="width:18px;height:18px;border-radius:50%;background:${v.color||'#14b8a6'};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#000;flex-shrink:0;">${i+1}</span>
-                            <span style="font-size:.8rem;font-weight:600;color:rgba(255,255,255,.8);">${v.name||'?'}</span>
-                            <span style="font-size:.7rem;color:rgba(255,255,255,.35);margin-left:auto;">+${(typeof v.score==='number'?v.score:0).toFixed(2)}</span>
-                        </div>`).join('')}
-                    </div>`
-                    : '<div class="cc-empty-text">Brak danych</div>'
-                ) + `<button class="cc-go-btn" onclick="window.location.href='/test/values/results'">Zobacz wyniki →</button>`;
+                const vcClasses = ['ch-vc1','ch-vc2','ch-vc3','ch-vc4'];
+                const valEl = document.getElementById('ch-val-chips');
+                if (valEl && top3.length > 0) valEl.innerHTML = top3.map((v,i) =>
+                    `<span class="ch-vc ${vcClasses[i%vcClasses.length]}">${v.name||v.id||'?'}</span>`).join('');
             }
 
-            // Update header counts
-            document.getElementById('cc-done-count').textContent = doneCount;
-            if (doneCount < 6) {
-                document.getElementById('cc-cta').style.display = 'block';
+            // ── DARK TRIAD ───────────────────────────────────────
+            if (latest.DARK_TRIAD) {
+                const s = latest.DARK_TRIAD.raw_scores || {};
+                const toV = raw => raw <= 5 ? Math.round((raw/5)*100) : Math.round(raw);
+                const getRaw = (k) => s[k] ?? s[k.charAt(0).toUpperCase()+k.slice(1)] ?? 0;
+                const dtDefs = [
+                    { key:'psychopathy',      label:'Psychopatia',  ico:'⚡', color:'#ef4444', grad:'#6b0012,#e8001c,#ff2d55', tags:['tolerancja ryzyka','impulsywność','brak empatii'] },
+                    { key:'machiavellianism', label:'Makiawelizm',  ico:'🎭', color:'#f97316', grad:'#7a1a00,#ff6230,#ff9060',  tags:['myślenie strategiczne','cynizm','manipulacja'] },
+                    { key:'narcissism',       label:'Narcyzm',      ico:'👑', color:'#fbbf24', grad:'#7a4000,#ffaa00,#ffd060',  tags:['charyzma','potrzeba uznania','wyjątkowość'] },
+                ];
+                // Summary block in typology panel
+                const pPct = toV(getRaw('psychopathy')), mPct = toV(getRaw('machiavellianism')), nPct = toV(getRaw('narcissism'));
+                const avgDT = Math.round((pPct + mPct + nPct) / 3);
+                const dtSumEl = document.getElementById('ch-dt-summary');
+                if (dtSumEl) {
+                    const dtCol = avgDT > 70 ? '#ef4444' : avgDT > 50 ? '#f97316' : '#34d399';
+                    dtSumEl.innerHTML = `<span style="color:${dtCol};font-weight:700;font-family:'Orbitron',monospace;font-size:13px;">${avgDT}%</span> śr. · Ps: ${pPct}% / Mach: ${mPct}% / Narc: ${nPct}%`;
+                }
+                // Full bars
+                const dtContentEl = document.getElementById('ch-dt-content');
+                if (dtContentEl) {
+                    dtContentEl.innerHTML = `<div class="ch-dt-bars">` + dtDefs.map(t => {
+                        const raw = getRaw(t.key);
+                        const pct = toV(raw);
+                        const displayVal = raw <= 5 ? raw.toFixed(2) : raw;
+                        const maxLabel = raw <= 5 ? '/5' : '%';
+                        return `<div class="ch-dt-row">
+                            <div class="ch-dt-head">
+                                <div class="ch-dt-name" style="color:${t.color}">${t.ico} ${t.label}</div>
+                                <div class="ch-dt-sw">
+                                    <div class="ch-dt-sc" style="color:${t.color}">${displayVal}</div>
+                                    <div class="ch-dt-mx">${maxLabel}</div>
+                                    <div class="ch-dt-pc" style="color:${t.color}88">&nbsp;${pct}%</div>
+                                </div>
+                            </div>
+                            <div class="ch-dt-track"><div class="ch-dt-fill" style="width:${pct}%;background:linear-gradient(90deg,${t.grad});box-shadow:0 0 12px ${t.color}88;"></div></div>
+                            <div class="ch-dt-tags">${t.tags.map(tag=>`<span class="ch-dtag">${tag}</span>`).join('')}</div>
+                        </div>`;
+                    }).join('') + `</div>
+                    <div style="margin-top:10px;padding:9px 11px;border-radius:3px;background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.16);">
+                        <div style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:1.5px;color:rgba(239,68,68,.55);margin-bottom:3px;">⚠ ALERT SYSTEMOWY</div>
+                        <div style="font-size:10px;color:rgba(255,255,255,.35);line-height:1.55;">${avgDT > 60 ? 'Podwyższona Ciemna Triada. Rozważ świadome zarządzanie relacjami.' : 'Wyniki mieszczą się w normie populacyjnej.'}</div>
+                    </div>`;
+                }
+                // Shadow areas
+                const shadows = [];
+                if (pPct > 60) shadows.push({ ico:'⚡', title:`Impulsywność i ryzyko [PSYCHOPATIA ${pPct}%]`, desc:'Silna tendencja do ryzykownych decyzji bez pełnej analizy konsekwencji. Wysoka tolerancja ryzyka może prowadzić do lekkomyślnych działań.' });
+                if (mPct > 60) shadows.push({ ico:'🎭', title:`Manipulacyjność w relacjach [MAKIAWELIZM ${mPct}%]`, desc:'Skłonność do instrumentalnego traktowania innych. Cyniczne spojrzenie na motywacje ludzi może podważać autentyczność relacji.' });
+                if (nPct > 70) shadows.push({ ico:'👑', title:`Nadmierne ego [NARCYZM ${nPct}%]`, desc:'Silna potrzeba podziwu i uznania. W konflikcie dominuje perspektywa własnych interesów nad potrzebami innych.' });
+                if (shadows.length > 0) {
+                    const shadowEl = document.getElementById('ch-shadow-content');
+                    if (shadowEl) shadowEl.innerHTML = `<div class="ch-sh-list">` + shadows.map(sh =>
+                        `<div class="ch-sh-item"><div class="ch-shico">${sh.ico}</div><div class="ch-shbd"><div class="ch-shtt">${sh.title}</div><div class="ch-sht">${sh.desc}</div></div></div>`
+                    ).join('') + `</div>`;
+                }
+                // Trait additions
+                if (mPct > 60) traitChips.push({label:'♟ Strategiczny', cls:'ch-ttc'});
+                if (pPct > 60) traitChips.push({label:'⚡ Risk taker',  cls:'ch-tto'});
+                if (nPct > 60) traitChips.push({label:'👁 Pewny siebie', cls:'ch-ttp'});
+            }
+
+            // ── STRENGTHS ─────────────────────────────────────────
+            if (latest.STRENGTHS) {
+                const s = latest.STRENGTHS.raw_scores || {};
+                const top5 = (s.top_5 || []).slice(0, 5);
+                const CAT_COLORS = { strategic_thinking:'#34d399', executing:'#b08fff', influencing:'#fbbf24', relationship_building:'#60a5fa' };
+                if (top5.length > 0) {
+                    const domCat = top5.reduce((acc, t) => { acc[t.category] = (acc[t.category]||0)+1; return acc; }, {});
+                    const topCat = Object.entries(domCat).sort((a,b)=>b[1]-a[1])[0]?.[0];
+                    const strEl = document.getElementById('ch-str-content');
+                    if (strEl) strEl.innerHTML = `<div class="ch-str-list">` +
+                        top5.map((t,i) => {
+                            const col = CAT_COLORS[t.category] || '#38b6ff';
+                            return `<div class="ch-str-item">
+                                <div class="ch-srk">0${i+1}</div>
+                                <div class="ch-sinf"><div class="ch-snm">${t.name||t.name_en||'?'}</div><div class="ch-sct">${(t.category||'').replace(/_/g,' ').toUpperCase()}</div></div>
+                                <div class="ch-sbar"><div class="ch-sbf" style="width:${95-i*7}%;background:linear-gradient(90deg,#3d2a9e,${col});"></div></div>
+                            </div>`;
+                        }).join('') + `</div>` +
+                        (topCat ? `<div style="margin-top:11px;padding:9px 11px;border-radius:4px;background:rgba(56,182,255,.05);border:1px solid rgba(56,182,255,.13);">
+                            <div style="font-size:11px;font-weight:700;color:${CAT_COLORS[topCat]||'#38b6ff'};margin-bottom:2px;">${topCat.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())} Dominuje</div>
+                            <div style="font-size:9px;color:rgba(255,255,255,.35);">${domCat[topCat]}/${top5.length} talentów w klastrze</div>
+                        </div>` : '') +
+                        `<button class="ch-go-btn" onclick="window.location.href='/test/strengths/results'" style="margin-top:10px;">Zobacz pełne wyniki →</button>`;
+                    // Trait chips from strengths
+                    top5.slice(0,3).forEach(t => traitChips.push({label:`⭐ ${t.name||t.name_en||'?'}`, cls:'ch-ttg'}));
+                }
+            }
+
+            // ── TRAIT CHIPS ────────────────────────────────────────
+            if (traitChips.length > 0) {
+                const traitsEl = document.getElementById('ch-traits-content');
+                if (traitsEl) traitsEl.innerHTML = `<div class="ch-tflow">${traitChips.map(t => `<span class="ch-tt ${t.cls}">${t.label}</span>`).join('')}</div>`;
+            }
+
+            // ── AI INSIGHT ─────────────────────────────────────────
+            if (doneCount >= 3) {
+                const insights = [];
+                if (latest.HEXACO && latest.STRENGTHS) {
+                    const s = latest.HEXACO.raw_scores || {};
+                    const con = s.conscientiousness??50, opn = s.openness??50;
+                    insights.push({ color:'#38b6ff', title:'PROFIL ZAWODOWY',
+                        text:`Kombinacja <strong>HEXACO + Strengths</strong> wskazuje na profil ${opn>70?'innowatora i architekta systemów':con>70?'doskonałego wykonawcy i lidera':'wszechstronnego specjalisty'} — osoby zdolnej do syntezy wiedzy i przekładania jej na efekty.`
+                    });
+                }
+                if (latest.DARK_TRIAD) {
+                    const s2 = latest.DARK_TRIAD.raw_scores || {};
+                    const toV2 = raw => raw <= 5 ? Math.round((raw/5)*100) : Math.round(raw);
+                    const getR = k => s2[k] ?? s2[k.charAt(0).toUpperCase()+k.slice(1)] ?? 0;
+                    const pP = toV2(getR('psychopathy')), mP = toV2(getR('machiavellianism'));
+                    if (pP > 60 || mP > 60) insights.push({ color:'#ef4444', title:'PUNKT KRYTYCZNY',
+                        text:`Podwyższona Ciemna Triada (<strong>Psychopatia ${pP}% + Makiawelizm ${mP}%</strong>) w połączeniu z analitycznym profilem tworzy osobę o wyjątkowej skuteczności. Świadome zarządzanie relacjami jest kluczem.`
+                    });
+                }
+                if (latest.ENNEAGRAM && window._ch_ennName) insights.push({ color:'#b08fff', title:'ŚCIEŻKA ROZWOJU',
+                    text:`Enneagram <strong>${window._ch_ennName}</strong> wskazuje specyficzną ścieżkę wzrostu. Zrozumienie własnych mechanizmów obronnych to klucz do pełnego potencjału.`
+                });
+                if (insights.length > 0) {
+                    const insightEl = document.getElementById('ch-insight-content');
+                    if (insightEl) insightEl.innerHTML = insights.map(ins => {
+                        const rgb = ins.color === '#38b6ff' ? '56,182,255' : ins.color === '#ef4444' ? '239,68,68' : '176,143,255';
+                        return `<div class="ch-iblk" style="background:rgba(${rgb},.04);border:1px solid rgba(${rgb},.12);">
+                            <div class="ch-ib-hd" style="color:rgba(${rgb},.65)">${ins.title}</div>
+                            <div class="ch-ib-tx">${ins.text}</div>
+                        </div>`;
+                    }).join('');
+                }
             }
         }
 
