@@ -252,8 +252,8 @@ export default function CareerResults() {
 
         {/* ─── Radar Chart (custom SVG, HEXACO-style) ─── */}
         {(() => {
-          // convert 1-5 score to 0-100 pct; rawScores[id] is { raw_score, letter, ... }
-          const pctOf = id => Math.round(((rawScores?.[id]?.raw_score ?? 1) - 1) / 4 * 100);
+          // rawScores is { holland_code, top_3, all_scores: { realistic: { raw_score, ... }, ... }, chart_data }
+          const pctOf = id => Math.round(((rawScores?.all_scores?.[id]?.raw_score ?? 1) - 1) / 4 * 100);
           const shapePts = RIASEC_ORDER.map((id, i) => radarPt(i, pctOf(id)).join(',')).join(' ');
           return (
             <div className="cr-glass cr-fadein" style={{ padding: '28px 24px 20px', marginBottom: 24, animationDelay: '.1s' }}>
