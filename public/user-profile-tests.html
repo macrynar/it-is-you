@@ -1227,32 +1227,71 @@
           </div>
         </section>
 
-        <!-- Info Section -->
-        <div class="mt-20 glass-card rounded-3xl p-10 border border-violet-500/20 relative overflow-hidden">
+        <!-- Protokół Kalibracji -->
+        <div class="mt-20 glass-card rounded-3xl p-10 border border-white/10 relative overflow-hidden">
             <!-- Glow effect -->
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl"></div>
-            
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-8 brand-font text-center relative">
-                <span class="bg-clip-text text-transparent" style="background-image: linear-gradient(90deg, #6366f1, #0ea5e9, #d946ef); -webkit-background-clip: text;">
-                    Jak to działa?
-                </span>
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-indigo-500/8 rounded-full blur-3xl pointer-events-none"></div>
+
+            <h2 class="text-2xl font-bold text-white text-center mb-8 relative tracking-wide">
+                Protokół Kalibracji
             </h2>
-            <div class="grid md:grid-cols-3 gap-8 text-slate-300 relative">
-                <div class="text-center">
-                    <div class="text-5xl mb-4 filter drop-shadow-lg">📝</div>
-                    <h3 class="font-bold text-white mb-3 text-lg">1. Wypełnij Testy</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed">Odpowiedz szczerze na pytania w każdym teście. Nie ma złych odpowiedzi.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+
+                <!-- Step 1: Inicjalizacja Skanu -->
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);color:#818cf8;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+                            <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+                            <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+                            <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">1. Inicjalizacja Skanu</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">Wypełnij wybrane moduły psychometryczne. Bądź całkowicie szczery – to Twój kod źródłowy, nie ma tu błędnych odpowiedzi.</p>
                 </div>
-                <div class="text-center">
-                    <div class="text-5xl mb-4 filter drop-shadow-lg">🧠</div>
-                    <h3 class="font-bold text-white mb-3 text-lg">2. Otrzymaj Wyniki</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed">Natychmiast po zakończeniu zobaczysz szczegółową analizę swoich wyników.</p>
+
+                <!-- Step 2: Dekodowanie Modułów -->
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);color:#818cf8;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="4" width="16" height="16" rx="2"/>
+                            <rect x="9" y="9" width="6" height="6"/>
+                            <path d="M15 2v2"/><path d="M15 20v2"/>
+                            <path d="M2 15h2"/><path d="M2 9h2"/>
+                            <path d="M20 15h2"/><path d="M20 9h2"/>
+                            <path d="M9 2v2"/><path d="M9 20v2"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">2. Dekodowanie Modułów</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">Odbierz natychmiastową analizę każdego z testów. Zrozum swoje mocne strony, ukryte motywacje i potencjalne ryzyka.</p>
                 </div>
-                <div class="text-center">
-                    <div class="text-5xl mb-4 filter drop-shadow-lg">🎭</div>
-                    <h3 class="font-bold text-white mb-3 text-lg">3. Odkryj Siebie</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed">Zbudujemy Twoją unikalną Kartę Postaci na podstawie wszystkich testów.</p>
+
+                <!-- Step 3: Karta Postaci -->
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);color:#818cf8;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">3. Karta Postaci</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">Ukończ wszystkie moduły, aby odblokować pełny, zintegrowany obraz. Zobacz, jak Twoje cechy łączą się w unikalną matrycę.</p>
                 </div>
+
+                <!-- Step 4: Neural Engine Analysis -->
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);color:#818cf8;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                            <path d="M5 3v4"/><path d="M19 17v4"/>
+                            <path d="M3 5h4"/><path d="M17 19h4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-semibold mb-2">4. Neural Engine Analysis</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">Skonfrontuj wyniki z AI. Rozpocznij sesję z silnikiem NEA, który zinterpretuje Twój profil i wskaże optymalne ścieżki rozwoju.</p>
+                </div>
+
             </div>
         </div>
 
