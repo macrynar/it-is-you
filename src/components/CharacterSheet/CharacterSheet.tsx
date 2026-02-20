@@ -430,7 +430,11 @@ export default function CharacterSheet() {
                       </div>
 
                       <div className="mt-4">
-                        <HexacoDetailCards percentiles={raw.HEXACO?.percentile_scores ?? {}} />
+                        <HexacoDetailCards
+                          percentiles={raw.HEXACO?.percentile_scores ?? {}}
+                          showEnglishName={false}
+                          showDescription={false}
+                        />
                       </div>
                     </>
                   ) : (

@@ -89,9 +89,13 @@ type DimId = (typeof DIM_ORDER)[number];
 export default function HexacoDetailCards({
   percentiles,
   compact = true,
+  showEnglishName = true,
+  showDescription = true,
 }: {
   percentiles: Record<string, number>;
   compact?: boolean;
+  showEnglishName?: boolean;
+  showDescription?: boolean;
 }) {
   return (
     <div className={compact ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4' : 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5'}>
@@ -132,10 +136,12 @@ export default function HexacoDetailCards({
             />
 
             <div className={compact ? 'p-5' : 'p-6'}>
-              <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="flex items-start justify-between gap-3 mb-2">
                 <div className="min-w-0">
-                  <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase mb-1">{ac.plName}</div>
-                  <div className="text-sm font-semibold text-white/85 truncate">{ac.name}</div>
+                  <div className="text-sm font-semibold text-white/85 truncate">{ac.plName}</div>
+                  {showEnglishName && (
+                    <div className="text-xs text-white/45 truncate mt-0.5">{ac.name}</div>
+                  )}
                 </div>
                 <div className="text-2xl font-extrabold leading-none" style={{ color: ac.color }}>
                   {pct}%
@@ -171,7 +177,9 @@ export default function HexacoDetailCards({
                 </div>
               </div>
 
-              <div className="text-xs text-white/40 leading-relaxed">{desc}</div>
+              {showDescription && desc && (
+                <div className="text-xs text-white/40 leading-relaxed">{desc}</div>
+              )}
             </div>
           </div>
         );
