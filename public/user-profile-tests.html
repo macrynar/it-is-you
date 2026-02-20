@@ -2334,10 +2334,10 @@
 
         async function loadCharacterCard() {
             if (ccLoaded) return;
-            ccLoaded = true;
 
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) return;
+            ccLoaded = true;
 
             // ── Name & ID ──────────────────────────────────────
             const userName = session.user.user_metadata?.full_name
