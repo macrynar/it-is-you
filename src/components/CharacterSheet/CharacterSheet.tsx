@@ -292,30 +292,32 @@ export default function CharacterSheet() {
       <div className="max-w-7xl mx-auto p-4 md:p-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-min">
 
-          {/* ── T1: HERO CORE  2×2 ── */}
-          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 lg:row-span-2 p-8 flex flex-col justify-center relative overflow-hidden">
+          {/* ── T1: HERO CORE  1×auto ── */}
+          <div className="card-neural col-span-1 md:col-span-1 lg:col-span-1 p-6 flex flex-col relative overflow-hidden">
             {/* ambient glow */}
             <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle,rgba(112,0,255,0.15) 0%,transparent 70%)' }} />
 
             <TileLabel color="text-violet-400/45">// PROFIL GŁÓWNY · HERO CORE</TileLabel>
 
-            {/* Avatar + identity */}
-            <div className="flex gap-6 items-start mb-6 flex-wrap">
-              <div className="relative flex-shrink-0">
-                <div className="w-28 h-28 rounded-full p-0.5 flex-shrink-0"
+            {/* Avatar – centered */}
+            <div className="flex flex-col items-center text-center mb-4">
+              <div className="relative flex-shrink-0 mb-3">
+                <div className="w-28 h-28 rounded-full p-0.5"
                   style={{ background: 'linear-gradient(135deg,#7000ff,#d946ef,#00f0ff)', boxShadow: '0 0 30px rgba(112,0,255,0.5)' }}>
-                  {avatarUrl
-                    ? <img src={avatarUrl} alt="" className="w-full h-full rounded-full object-cover" />
-                    : <div className="w-full h-full rounded-full bg-[#150830] flex items-center justify-center text-3xl font-bold text-violet-400" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{initials}</div>
-                  }
+                  <div className="w-full h-full rounded-full overflow-hidden bg-[#150830] flex items-center justify-center">
+                    {avatarUrl
+                      ? <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                      : <span className="text-3xl font-bold text-violet-400" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{initials}</span>
+                    }
+                  </div>
                 </div>
                 <div className="absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-[#030014]"
                   style={{ background: completedCount >= 4 ? '#34d399' : '#f97316', boxShadow: `0 0 8px ${completedCount >= 4 ? '#34d399' : '#f97316'}` }} />
               </div>
 
-              <div className="flex-1 min-w-0">
-                <div className="text-2xl font-bold text-white truncate mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              <div className="w-full">
+                <div className="text-xl font-bold text-white mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                   {userName.toUpperCase()}
                 </div>
                 {ennLore ? (
@@ -373,43 +375,49 @@ export default function CharacterSheet() {
             </div>
           </div>
 
-          {/* ── T2: HEXACO RADAR  1×2 ── */}
-          <div className="card-neural col-span-1 lg:col-span-1 lg:row-span-2 p-6 flex flex-col items-center min-h-[350px]">
+          {/* ── T2: HEXACO RADAR  2-col wide ── */}
+          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col relative overflow-hidden">
             <div className="absolute -top-8 -left-8 w-36 h-36 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle,rgba(0,240,255,0.08) 0%,transparent 70%)' }} />
             <TileLabel color="text-cyan-400/45">// MATRYCA OSOBOWOŚCI · HEXACO-60</TileLabel>
 
             {raw.hexaco ? (
               <>
-                {/* Chart fills remaining flex space */}
-                <div className="flex-1 min-h-0 w-full cs-radar">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={radarData} margin={{ top: 14, right: 26, bottom: 14, left: 26 }}>
+                {/* Radar — fixed height so Recharts never collapses to 0 */}
+                <div className="w-full min-h-[250px] cs-radar">
+                  <ResponsiveContainer width="100%" height={280}>
+                    <RadarChart data={radarData} margin={{ top: 14, right: 30, bottom: 14, left: 30 }}>
                       <PolarGrid stroke="rgba(0,240,255,0.07)" gridType="polygon" />
-                      <PolarAngleAxis dataKey="trait" tick={{ fill: 'rgba(0,240,255,0.5)', fontSize: 9, fontFamily: 'Share Tech Mono, monospace' }} tickLine={false} />
+                      <PolarAngleAxis dataKey="trait" tick={{ fill: 'rgba(0,240,255,0.5)', fontSize: 10, fontFamily: 'Share Tech Mono, monospace' }} tickLine={false} />
                       <Radar dataKey="value" stroke="#22d3ee" strokeWidth={2} fill="#22d3ee" fillOpacity={0.12}
                         dot={{ fill: '#22d3ee', r: 3.5, strokeWidth: 0 } as any} />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
-                {hexTopDim && (
-                  <div className="text-center mt-2 pb-1">
-                    <div className="text-3xl font-black leading-none" style={{ fontFamily: 'Orbitron, monospace', color: '#00f0ff', textShadow: '0 0 20px rgba(0,240,255,0.6)' }}>
-                      {hexTopDim.value}%
+
+                {/* 2-column bars grid */}
+                <div className="grid grid-cols-2 gap-x-8 gap-y-3 mt-4">
+                  {radarData.map((d) => (
+                    <div key={d.trait}>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="font-mono text-[9px] text-white/35 tracking-wide truncate pr-2">{d.full.toUpperCase()}</span>
+                        <span className="font-mono text-[10px] font-bold text-cyan-300 flex-shrink-0" style={{ fontFamily: 'Orbitron, monospace' }}>{d.value}%</span>
+                      </div>
+                      <div className="h-[3px] rounded-full bg-white/5 overflow-hidden">
+                        <div className="h-full rounded-full transition-all duration-700"
+                          style={{ width: `${d.value}%`, background: 'linear-gradient(90deg,rgba(0,240,255,0.4),#22d3ee)', boxShadow: '0 0 6px rgba(0,240,255,0.35)' }} />
+                      </div>
                     </div>
-                    <div className="font-mono text-[8px] text-cyan-400/40 tracking-[2px] mt-1">
-                      {hexTopDim.full.toUpperCase()}
-                    </div>
-                  </div>
-                )}
+                  ))}
+                </div>
               </>
             ) : (
               <LockedTile icon={<Zap size={22} />} text="Wykonaj test HEXACO-60" href="/test?type=hexaco" color="#00f0ff" />
             )}
           </div>
 
-          {/* ── T3: ENNEAGRAM STAR  1×2 ── */}
-          <div className="card-neural col-span-1 lg:col-span-1 lg:row-span-2 p-6 flex flex-col items-center justify-center min-h-[350px]">
+          {/* ── T3: ENNEAGRAM STAR  1-col ── */}
+          <div className="card-neural col-span-1 md:col-span-1 lg:col-span-1 p-6 flex flex-col items-center justify-center">
             <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle,rgba(217,70,239,0.1) 0%,transparent 70%)' }} />
             <TileLabel color="text-fuchsia-400/45">// ENGINE · ENNEAGRAM</TileLabel>
