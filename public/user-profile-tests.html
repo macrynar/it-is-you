@@ -1396,59 +1396,56 @@
             </div>
 
             <!-- ── T2: HEXACO RADAR 1×2 ── -->
-            <div class="ch-tile ch-t-radar">
+            <div class="ch-tile ch-t-radar" style="min-height:480px;">
               <div class="ch-tile-accent" style="background:linear-gradient(90deg,#22d3ee,#38b6ff);"></div>
               <div class="ch-tl">// ATRYBUTY · HEXACO-60</div>
-              <div style="display:flex;justify-content:center;margin-bottom:12px;">
-                <svg id="ch-hex-radar" viewBox="0 0 300 300" width="260" height="260" xmlns="http://www.w3.org/2000/svg" overflow="visible" style="overflow:visible;">
-                  <circle cx="110" cy="110" r="82" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
-                  <circle cx="110" cy="110" r="62" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
-                  <circle cx="110" cy="110" r="41" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
-                  <circle cx="110" cy="110" r="21" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
-                  <text x="110" y="114" text-anchor="middle" fill="rgba(56,182,255,.2)" font-family="Share Tech Mono,monospace" font-size="8">BRAK DANYCH</text>
+              <!-- Radar fills ~65% of tile height -->
+              <div style="flex:1;min-height:0;display:flex;align-items:center;justify-content:center;">
+                <svg id="ch-hex-radar" viewBox="0 0 300 300" width="100%" style="max-height:340px;" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+                  <circle cx="150" cy="150" r="96" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                  <circle cx="150" cy="150" r="72" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                  <circle cx="150" cy="150" r="48" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                  <circle cx="150" cy="150" r="24" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                  <text x="150" y="154" text-anchor="middle" fill="rgba(56,182,255,.2)" font-family="Share Tech Mono,monospace" font-size="8">BRAK DANYCH</text>
                 </svg>
               </div>
-              <div id="ch-attr-grid" class="ch-attr-grid" style="grid-template-columns:repeat(3,1fr);">
-                <div class="ch-attr-b ch-ag"><div class="ch-a-lbl">Sumienność</div><div class="ch-a-val">—</div><div class="ch-a-nm">Conscientiousness</div></div>
-                <div class="ch-attr-b ch-ac"><div class="ch-a-lbl">Otwartość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Openness</div></div>
-                <div class="ch-attr-b ch-av"><div class="ch-a-lbl">Ugodowość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Agreeableness</div></div>
-                <div class="ch-attr-b ch-at"><div class="ch-a-lbl">Szczerość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Honesty-Humility</div></div>
-                <div class="ch-attr-b ch-ap"><div class="ch-a-lbl">Ekstrawersja</div><div class="ch-a-val">—</div><div class="ch-a-nm">Extraversion</div></div>
-                <div class="ch-attr-b ch-ao"><div class="ch-a-lbl">Emocjonalność</div><div class="ch-a-val">—</div><div class="ch-a-nm">Emotionality</div></div>
-              </div>
-              <div class="ch-hx-bars" id="ch-hx-bars" style="margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px 24px;"></div>
+              <!-- Minimalist bars: bottom ~35% -->
+              <div id="ch-attr-grid" style="display:none;"></div>
+              <div class="ch-hx-bars" id="ch-hx-bars" style="flex-shrink:0;margin-top:10px;padding-top:10px;border-top:1px solid rgba(56,182,255,.07);display:grid;grid-template-columns:repeat(2,1fr);gap:5px 20px;"></div>
               <div id="ch-hexaco-cta" style="margin-top:14px;text-align:center;">
                 <button class="ch-go-btn" onclick="switchTab('tests')">Wykonaj test HEXACO-60 aby odblokować →</button>
               </div>
             </div>
 
             <!-- ── T3: ENNEAGRAM + TYPOLOGY 1×2 ── -->
-            <div class="ch-tile ch-t-enn">
+            <div class="ch-tile ch-t-enn" style="min-height:480px;">
               <div class="ch-tile-accent" style="background:linear-gradient(90deg,#7b5ea7,#b08fff);"></div>
               <div class="ch-tl">// TYPOLOGIA · ENNEAGRAM</div>
-              <div style="display:flex;justify-content:center;margin-bottom:4px;">
-                <svg id="ch-enn-star" viewBox="0 0 200 200" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+              <!-- Star fills ~60% of tile -->
+              <div style="flex:1;min-height:0;display:flex;align-items:center;justify-content:center;">
+                <svg id="ch-enn-star" viewBox="0 0 200 200" width="100%" style="max-height:260px;" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(176,143,255,.07)" stroke-width="1.5"/>
                   <text x="100" y="104" text-anchor="middle" fill="rgba(176,143,255,.28)" font-family="Share Tech Mono,monospace" font-size="8">BRAK DANYCH</text>
                 </svg>
               </div>
-              <div style="text-align:center;margin-bottom:10px;">
-                <div id="ch-enn-num" style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;letter-spacing:2px;color:#b08fff;text-shadow:0 0 28px #b08fff55;line-height:1;">?</div>
-                <div id="ch-enn-type" style="font-size:12px;font-weight:700;color:rgba(255,255,255,.72);letter-spacing:1px;margin-top:3px;">Nieznany typ</div>
-                <div id="ch-enn-sub" style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:2px;color:rgba(176,143,255,.42);margin-top:2px;text-transform:uppercase;">WYKONAJ TEST</div>
-                <div id="ch-enn-desc" style="font-size:9.5px;color:rgba(255,255,255,.24);line-height:1.6;margin-top:7px;padding:0 6px;">Wykonaj test Enneagram aby odblokować typologię motywacji.</div>
+              <!-- Type label block -->
+              <div style="flex-shrink:0;text-align:center;margin-top:4px;margin-bottom:10px;">
+                <div id="ch-enn-num" style="font-family:'Orbitron',monospace;font-size:2.4rem;font-weight:900;letter-spacing:2px;color:#b08fff;text-shadow:0 0 30px #b08fff88;line-height:1;">?</div>
+                <div id="ch-enn-type" style="font-size:13px;font-weight:700;color:rgba(255,255,255,.8);letter-spacing:1px;margin-top:4px;">Nieznany typ</div>
+                <div id="ch-enn-sub" style="font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:2px;color:rgba(176,143,255,.35);margin-top:2px;text-transform:uppercase;">WYKONAJ TEST</div>
+                <div id="ch-enn-desc" style="font-size:9px;color:rgba(255,255,255,.22);line-height:1.5;margin-top:6px;padding:0 4px;">Wykonaj test Enneagram aby odblokować typologię motywacji.</div>
               </div>
-              <div class="ch-tl" style="margin-bottom:8px;">// KARIERA · RIASEC</div>
-              <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
-                <div class="ch-hol-ltrs" id="ch-hol-ltrs" style="display:flex;gap:5px;">
-                  <div class="ch-hl ch-hl-i">?</div><div class="ch-hl ch-hl-e">?</div><div class="ch-hl ch-hl-a">?</div>
+              <!-- Subtle meta info -->
+              <div style="flex-shrink:0;border-top:1px solid rgba(176,143,255,.07);padding-top:8px;">
+                <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;flex-wrap:wrap;">
+                  <div class="ch-hol-ltrs" id="ch-hol-ltrs" style="display:flex;gap:4px;">
+                    <div class="ch-hl ch-hl-i">?</div><div class="ch-hl ch-hl-e">?</div><div class="ch-hl ch-hl-a">?</div>
+                  </div>
+                  <div class="ch-careers" id="ch-careers" style="flex:1;"><span class="ch-ct">WYKONAJ TEST KARIERY</span></div>
                 </div>
-                <div class="ch-careers" id="ch-careers" style="flex:1;"><span class="ch-ct">WYKONAJ TEST KARIERY</span></div>
+                <div class="ch-val-chips" id="ch-val-chips" style="margin-bottom:6px;"><span class="ch-vc ch-vc4">Wykonaj test wartości</span></div>
+                <div id="ch-dt-summary" style="font-size:9px;color:rgba(255,255,255,.2);">Wykonaj test Dark Triad SD3 aby odblokować.</div>
               </div>
-              <div class="ch-tl" style="margin-bottom:8px;">// WARTOŚCI · PVQ-40</div>
-              <div class="ch-val-chips" id="ch-val-chips" style="margin-bottom:10px;"><span class="ch-vc ch-vc4">Wykonaj test wartości</span></div>
-              <div class="ch-tl" style="margin-bottom:6px;">// CIEMNA TRIADA · PODSUMOWANIE</div>
-              <div id="ch-dt-summary" style="font-size:10px;color:rgba(255,255,255,.28);">Wykonaj test Dark Triad SD3 aby odblokować.</div>
             </div>
 
             <!-- ── T4: ARSENAL / STRENGTHS 2×1 ── -->
