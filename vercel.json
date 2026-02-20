@@ -1,6 +1,8 @@
 {
+  "redirects": [
+    { "source": "/character-sheet", "destination": "/character", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/character-sheet", "destination": "/app.html" },
     { "source": "/user-profile-tests", "destination": "/user-profile-tests.html" },
     { "source": "/auth/:path*", "destination": "/app.html" },
     { "source": "/test/:path*", "destination": "/app.html" },
