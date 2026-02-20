@@ -1401,7 +1401,7 @@
               <div class="ch-tile-accent" style="background:linear-gradient(90deg,#22d3ee,#38b6ff);"></div>
               <div class="ch-tl">// ATRYBUTY · HEXACO-60</div>
               <div style="display:flex;justify-content:center;margin-bottom:12px;">
-                <svg id="ch-hex-radar" viewBox="0 0 300 300" width="260" height="260" xmlns="http://www.w3.org/2000/svg">
+                <svg id="ch-hex-radar" viewBox="0 0 300 300" width="260" height="260" xmlns="http://www.w3.org/2000/svg" overflow="visible" style="overflow:visible;">
                   <circle cx="110" cy="110" r="82" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
                   <circle cx="110" cy="110" r="62" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
                   <circle cx="110" cy="110" r="41" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
@@ -2396,8 +2396,8 @@
                         {key:'openness',         lbl:'Otwartość',   col:'#38b6ff'},
                         {key:'agreeableness',    lbl:'Ugodowość',   col:'#b08fff'},
                         {key:'honesty_humility', lbl:'Szczerość',   col:'#40e0d0'},
-                        {key:'extraversion',     lbl:'Ekstrawersja',col:'#e878e0'},
-                        {key:'emotionality',     lbl:'Emocjonalność',col:'#f97316'},
+                        {key:'extraversion',     lbl:'Ekstra.',        col:'#e878e0'},
+                        {key:'emotionality',     lbl:'Emocje',         col:'#f97316'},
                     ];
                     let svg='';
                     // Grid spokes + circles
@@ -2412,7 +2412,7 @@
                         const r=R*(hexS[d.key]||0)/100;
                         const vx=(cx+r*Math.cos(a)).toFixed(2);const vy=(cy+r*Math.sin(a)).toFixed(2);
                         svg+=`<circle cx="${vx}" cy="${vy}" r="3.5" fill="${d.col}" opacity=".85"/>`;
-                        const lr=R+32;const lx=(cx+lr*Math.cos(a)).toFixed(2);const ly=(cy+lr*Math.sin(a)).toFixed(2);
+                        const lr=R+16;const lx=(cx+lr*Math.cos(a)).toFixed(2);const ly=(cy+lr*Math.sin(a)).toFixed(2);
                         const anc=Math.cos(a)>0.15?'start':Math.cos(a)<-0.15?'end':'middle';
                         const val=Math.round(hexS[d.key]||0);
                         svg+=`<text x="${lx}" y="${(parseFloat(ly)-2).toFixed(1)}" text-anchor="${anc}" fill="${d.col}" font-family="Share Tech Mono,monospace" font-size="9" opacity=".8">${d.lbl}</text>`;
