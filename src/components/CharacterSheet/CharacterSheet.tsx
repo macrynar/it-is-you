@@ -80,6 +80,28 @@ function extractMbtiLabel(row: RawRow | undefined): string {
   return (m?.[1] ?? '').toUpperCase();
 }
 
+function traitEmoji(trait: string): string {
+  const t = trait.toLowerCase();
+  if (t.includes('wizjon')) return '🔭';
+  if (t.includes('anality')) return '🧠';
+  if (t.includes('wnikli')) return '🔎';
+  if (t.includes('strateg')) return '♟️';
+  if (t.includes('dociek')) return '🧪';
+  if (t.includes('samodziel')) return '🗝️';
+  if (t.includes('chary')) return '✨';
+  if (t.includes('dynamic')) return '⚡';
+  if (t.includes('spontan')) return '🎲';
+  if (t.includes('ambit')) return '🏔️';
+  if (t.includes('bezpośred')) return '🎯';
+  if (t.includes('ochron')) return '🛡️';
+  if (t.includes('lojal')) return '🤝';
+  if (t.includes('spokoj')) return '🧘';
+  if (t.includes('twórc')) return '🎭';
+  if (t.includes('empaty')) return '💜';
+  if (t.includes('sumien')) return '🧩';
+  return '⭐';
+}
+
 interface RawRow { test_type:string; raw_scores:any; percentile_scores:any; report:any; }
 
 function EnnStar({ active, pct }: { active: number|null; pct: number }) {
@@ -245,9 +267,8 @@ export default function CharacterSheet() {
       .map((t: any) => t?.name ?? t?.name_en)
       .filter(Boolean);
 
-    const wingPart = ennWing ? ` (${ennWing})` : '';
     const sentences = [
-      `${ennL.epithet}${wingPart}: ${ennL.desc.replace(/\s*\.*\s*$/, '.').trim()}`,
+      `${ennL.epithet}: ${ennL.desc.replace(/\s*\.*\s*$/, '.').trim()}`,
       charges.length ? `Ładuje: ${charges.join(' + ')}.` : '',
       drains.length ? `Drenuje: ${drains.join(' + ')}.` : '',
       tools.length ? `Narzędzia: ${tools.join(' + ')}.` : '',
@@ -437,37 +458,8 @@ export default function CharacterSheet() {
                           <div className="text-white font-semibold leading-tight whitespace-normal break-words text-[15px]" title={userName}>
                             {userName}
                           </div>
-                          <div className="text-[11px] text-white/35 font-mono mt-1">
-                            Profil · {done}/6 testów
-                          </div>
+                          <div className="text-[11px] text-white/35 font-mono mt-1">{done}/6 testów</div>
                         </div>
-                      </div>
-
-                      <div className="mt-3 flex flex-wrap items-center gap-2">
-                        <span className="badge-primary">{rareLabel}</span>
-                        <span className="badge-pending">Poziom {done} · {lvlLabel}</span>
-                      </div>
-                    </div>
-
-                    <div className="relative mt-4">
-                      <div className="flex items-center justify-between text-[10px] tracking-[2px] font-mono text-white/35">
-                        <span>POSTĘP PROFILU</span>
-                        <span className="text-white/50">Testy: {done}/6 · {xpPct}%</span>
-                      </div>
-                      <div className="stat-bar-track mt-2">
-                        <div className="stat-bar-fill" style={{ width: `${Math.max(0, Math.min(100, xpPct))}%` }} />
-                      </div>
-                      <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-white/45 font-mono">
-                        <span className="text-white/45">SYGNATURA</span>
-                        <span className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-white/60 whitespace-normal break-words">
-                          {profileSignature || '—'}
-                        </span>
-                        <span className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-white/45 whitespace-normal break-words">
-                          {charId}
-                        </span>
-                        <span className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-white/45 whitespace-normal break-words">
-                          Build {buildDate}
-                        </span>
                       </div>
                     </div>
                   </div>
@@ -489,46 +481,29 @@ export default function CharacterSheet() {
 
                   <div className="mt-5">
                     <div className="text-[10px] tracking-[2px] font-mono text-white/35">CECHY DOMINUJĄCE</div>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {dominantTraits.length > 0 ? (
-                        dominantTraits.map((t) => (
-                          <span key={t} className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-white/70">
-                            {t}
-                          </span>
-                        ))
-                      ) : (
-                        <a
-                          href="/user-profile-tests.html"
-                          className="bg-white/5 rounded-md p-3 text-sm text-white/45 border border-white/10 hover:border-brand-primary/30 hover:text-white/70 transition no-underline"
-                        >
-                          Ukończ Enneagram i HEXACO, aby zobaczyć cechy dominujące →
-                        </a>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="mt-5">
-                    <div className="text-[10px] tracking-[2px] font-mono text-white/35">PROFIL</div>
-                    <div className="mt-3 space-y-2">
-                      {discLabel && (
-                        <div className="flex items-center justify-between gap-3 bg-white/5 border border-white/10 rounded-md px-3 py-2">
-                          <span className="text-xs text-white/50 font-mono">Klasa (DISC)</span>
-                          <span className="text-sm text-white/75">{discLabel}</span>
+                    {dominantTraits.length > 0 ? (
+                      <div className="mt-3 bg-white/5 border border-white/10 rounded-xl p-3">
+                        <div className="flex flex-wrap gap-2">
+                          {dominantTraits.map((t) => (
+                            <span
+                              key={t}
+                              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-white/75"
+                              title={t}
+                            >
+                              <span aria-hidden className="text-sm">{traitEmoji(t)}</span>
+                              <span className="leading-none">{t}</span>
+                            </span>
+                          ))}
                         </div>
-                      )}
-                      {mbtiLabel && (
-                        <div className="flex items-center justify-between gap-3 bg-white/5 border border-white/10 rounded-md px-3 py-2">
-                          <span className="text-xs text-white/50 font-mono">Typ (MBTI)</span>
-                          <span className="text-sm text-white/75 font-mono">{mbtiLabel}</span>
-                        </div>
-                      )}
-                      <div className="flex items-center justify-between gap-3 bg-white/5 border border-white/10 rounded-md px-3 py-2">
-                        <span className="text-xs text-white/50 font-mono">Enneagram</span>
-                        <span className="text-sm text-white/75">
-                          {ennN ? `Typ ${ennN} · ${ennL?.rpg ?? ''}` : 'Brak danych'}
-                        </span>
                       </div>
-                    </div>
+                    ) : (
+                      <a
+                        href="/user-profile-tests.html"
+                        className="mt-3 bg-white/5 rounded-md p-3 text-sm text-white/45 border border-white/10 hover:border-brand-primary/30 hover:text-white/70 transition no-underline block"
+                      >
+                        Ukończ Enneagram i HEXACO, aby zobaczyć cechy dominujące →
+                      </a>
+                    )}
                   </div>
 
                   <div className="mt-5 grid grid-cols-2 gap-3">
