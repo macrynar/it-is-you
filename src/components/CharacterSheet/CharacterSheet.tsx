@@ -70,10 +70,74 @@ const SYNTH_BD = [
   'rgba(52,211,153,.15)','rgba(245,158,11,.15)','rgba(239,68,68,.13)'
 ];
 
+/* RGB triplets for dynamic inline backgrounds */
+const HEX_BG: Record<string,string> = {
+  honesty_humility:'167,139,250', emotionality:'244,114,182', extraversion:'251,146,60',
+  agreeableness:'52,211,153',     conscientiousness:'96,165,250',  openness:'251,191,36'
+};
+const HL_STYLES = [
+  {bg:'rgba(56,182,255,.12)',  color:'#38b6ff', border:'rgba(56,182,255,.28)'},
+  {bg:'rgba(0,229,160,.10)',   color:'#34d399', border:'rgba(0,229,160,.24)'},
+  {bg:'rgba(232,120,224,.10)', color:'#e878e0', border:'rgba(232,120,224,.24)'},
+  {bg:'rgba(56,182,255,.12)',  color:'#38b6ff', border:'rgba(56,182,255,.28)'},
+];
+const CHIP_STYLE: Record<string,{bg:string;border:string;color:string}> = {
+  'ch-ttc':{bg:'rgba(56,182,255,.09)', border:'rgba(56,182,255,.22)', color:'#38b6ff'},
+  'ch-ttv':{bg:'rgba(176,143,255,.09)',border:'rgba(176,143,255,.22)',color:'#b08fff'},
+  'ch-ttg':{bg:'rgba(0,229,160,.08)',  border:'rgba(0,229,160,.2)',   color:'#34d399'},
+  'ch-tto':{bg:'rgba(249,115,22,.08)', border:'rgba(249,115,22,.2)',  color:'#f97316'},
+  'ch-ttp':{bg:'rgba(232,120,224,.08)',border:'rgba(232,120,224,.2)', color:'#e878e0'},
+  'ch-ttt':{bg:'rgba(64,224,208,.08)', border:'rgba(64,224,208,.2)',  color:'#40e0d0'},
+};
+
 interface RawRow { test_type:string; raw_scores:any; percentile_scores:any; report:any; }
 
-/* ══ STYLES ══ */
-const STYLES = [
+/* ══ MINIMAL CSS — only nav/logo animations + keyframes Tailwind cannot express ══ */
+const MINIMAL_CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+.iiy-logo,.iiy-logo *{box-sizing:border-box;margin:0;padding:0}
+.iiy-logo{display:inline-flex;align-items:center;gap:20px;text-decoration:none;user-select:none}
+.iiy-logo .iiy-wordmark{display:flex;flex-direction:column}
+.iiy-logo .iiy-title{font-family:"Orbitron",monospace;font-weight:900;text-transform:uppercase;background:linear-gradient(160deg,#fff 0%,#a8c8ff 35%,#38b6ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 16px rgba(56,182,255,.45));animation:iiy-glitch 9s infinite}
+@keyframes iiy-glitch{0%,87%,100%{transform:none}88%{transform:translate(-2px,0) skewX(-2deg)}89%{transform:translate(2px,0)}90%{transform:none}}
+.iiy-logo .iiy-divider{height:1px;background:linear-gradient(90deg,#38b6ff,#7b5ea7 55%,transparent);opacity:.8}
+.iiy-logo .iiy-sub{font-family:"Share Tech Mono",monospace;color:rgba(100,160,230,.5);text-transform:uppercase;line-height:1}
+.iiy-logo.iiy-sm{gap:14px}.iiy-logo.iiy-sm .iiy-signet svg{width:44px;height:44px}
+.iiy-logo.iiy-sm .iiy-title{font-size:19px;letter-spacing:7px;line-height:1}
+.iiy-logo.iiy-sm .iiy-sub{font-size:7px;letter-spacing:2.5px}
+.iiy-logo.iiy-sm .iiy-divider{margin:4px 0 3px}
+.iiy-ring-ticks{animation:iiy-spin 20s linear infinite;transform-origin:48px 48px}
+.iiy-eye-l{animation:iiy-eye 3.5s ease-in-out infinite}.iiy-eye-r{animation:iiy-eye 3.5s ease-in-out infinite .2s}
+@keyframes iiy-eye{0%,70%,100%{opacity:1}76%{opacity:.05}}
+.iiy-scan{animation:iiy-scan 2.8s ease-in-out infinite}
+@keyframes iiy-scan{0%{transform:translateY(-22px);opacity:0}8%{opacity:.55}92%{opacity:.55}100%{transform:translateY(22px);opacity:0}}
+.iiy-core{animation:iiy-pulse 2.2s ease-in-out infinite;transform-origin:48px 61px}
+@keyframes iiy-pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.9);opacity:1}}
+.iiy-nav-tabs{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:4px}
+.iiy-tab-btn{padding:8px 20px;border-radius:9px;border:none;background:transparent;color:rgba(255,255,255,.45);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:"Space Grotesk",-apple-system,sans-serif;white-space:nowrap}
+.iiy-tab-btn:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.05)}
+.iiy-tab-btn.active{background:linear-gradient(135deg,rgba(99,102,241,.3),rgba(56,182,255,.2));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 1px rgba(99,102,241,.3)}
+.theme-toggle{position:relative;width:60px;height:32px;background:rgba(30,41,59,.6);border-radius:16px;border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .3s ease;flex-shrink:0}
+.theme-toggle:hover{background:rgba(15,7,40,.9);border-color:rgba(112,0,255,.5)}
+.theme-toggle-slider{position:absolute;top:3px;left:3px;width:24px;height:24px;background:linear-gradient(135deg,#7000ff,#00f0ff);border-radius:50%;transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:0 2px 8px rgba(112,0,255,.5)}
+.theme-toggle.light .theme-toggle-slider{transform:translateX(28px);background:linear-gradient(135deg,#F59E0B,#EAB308);box-shadow:0 2px 8px rgba(245,158,11,.4)}
+.theme-icon{position:absolute;top:50%;transform:translateY(-50%);width:16px;height:16px;transition:opacity .3s ease}
+.theme-icon-moon{left:8px;opacity:1}.theme-icon-sun{right:8px;opacity:.4}
+.theme-toggle.light .theme-icon-moon{opacity:.4}.theme-toggle.light .theme-icon-sun{opacity:1}
+@keyframes iiy-spin{to{transform:rotate(360deg)}}
+@keyframes cs-spin{to{transform:rotate(360deg)}}
+@keyframes cs-asc{0%{transform:translateY(-28px);opacity:0}6%{opacity:.6}94%{opacity:.6}100%{transform:translateY(28px);opacity:0}}
+@keyframes cs-blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.5)}}
+@keyframes cs-fadeup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.cs-asc{animation:cs-asc 3.4s ease-in-out infinite}
+.cs-blink{animation:cs-blink 1.8s ease-in-out infinite}
+.cs-spin{animation:cs-spin .8s linear infinite}
+.cs-fu1{animation:cs-fadeup .5s ease-out .05s both}.cs-fu2{animation:cs-fadeup .5s ease-out .10s both}
+.cs-fu3{animation:cs-fadeup .5s ease-out .15s both}.cs-fu4{animation:cs-fadeup .5s ease-out .20s both}
+.cs-fu5{animation:cs-fadeup .5s ease-out .25s both}.cs-fu6{animation:cs-fadeup .5s ease-out .30s both}
+`;
+
+const _STYLES_REMOVED = [
 '.iiy-logo,.iiy-logo *{box-sizing:border-box;margin:0;padding:0}',
 '.iiy-logo{display:inline-flex;align-items:center;gap:20px;text-decoration:none;user-select:none}',
 '.iiy-logo .iiy-wordmark{display:flex;flex-direction:column}',
@@ -233,8 +297,7 @@ const STYLES = [
 '.ch-tile:nth-child(1){animation-delay:.05s}.ch-tile:nth-child(2){animation-delay:.1s}',
 '.ch-tile:nth-child(3){animation-delay:.15s}.ch-tile:nth-child(4){animation-delay:.2s}',
 '.ch-tile:nth-child(5){animation-delay:.25s}.ch-tile:nth-child(6){animation-delay:.3s}',
-'@keyframes ch-spin{to{transform:rotate(360deg)}}',
-].join('\n');
+].join(''); // legacy — kept to avoid breaking git history, not injected
 
 /* ══ SVG COMPONENTS ══ */
 function HexRadar({ data }: { data: {k:string; pct:number}[] }) {
@@ -455,19 +518,34 @@ export default function CharacterSheet() {
 
   /* LOADING */
   if (loading) return (
-    <div style={{minHeight:'100vh',background:'#030014',display:'flex',alignItems:'center',justifyContent:'center'}}>
-      <style dangerouslySetInnerHTML={{__html:STYLES}}/>
-      <div style={{textAlign:'center'}}>
-        <div style={{width:40,height:40,borderRadius:'50%',border:'2px solid rgba(56,182,255,.15)',borderTopColor:'#38b6ff',animation:'ch-spin .8s linear infinite',margin:'0 auto 16px'}}/>
-        <div style={{fontFamily:'Share Tech Mono,monospace',color:'rgba(56,182,255,.35)',fontSize:11,letterSpacing:'3px'}}>LOADING PROFILE…</div>
+    <div className="min-h-screen bg-[#030014] flex items-center justify-center">
+      <style dangerouslySetInnerHTML={{__html: MINIMAL_CSS}}/>
+      <div className="text-center">
+        <div className="w-10 h-10 rounded-full border-2 border-sky-400/15 border-t-sky-400 cs-spin mx-auto mb-4"/>
+        <div className="font-mono text-sky-400/35 text-[11px] tracking-[3px]">LOADING PROFILE…</div>
       </div>
     </div>
   );
 
+
+  /* ── Reusable micro-components ── */
+  const SectionLabel = ({ children, danger }: { children: string; danger?: boolean }) => (
+    <div className="flex items-center gap-2 mb-4">
+      <span className={`text-[8px] tracking-[2.5px] uppercase font-mono ${danger ? 'text-rose-400/45' : 'text-sky-400/40'}`}>{children}</span>
+      <div className={`flex-1 h-px bg-gradient-to-r ${danger ? 'from-rose-400/20' : 'from-sky-400/20'} to-transparent`}/>
+    </div>
+  );
+  const EmptyBlock = ({ icon, text, href, btnText }: { icon:string; text:string; href?:string; btnText?:string }) => (
+    <div className="flex flex-col items-center justify-center py-6 text-center opacity-55 flex-1">
+      <div className="text-3xl mb-2">{icon}</div>
+      <div className="text-[0.78rem] text-white/30 mb-3">{text}</div>
+      {href && <a href={href} className="px-3 py-1.5 rounded-md border border-indigo-400/40 bg-indigo-400/12 text-indigo-300 text-[0.72rem] font-semibold transition-all hover:bg-indigo-400/22 hover:text-white no-underline">{btnText}</a>}
+    </div>
+  );
+
   return (
-    <div style={{background:'#030014',backgroundImage:'radial-gradient(circle at 50% 0%,#1a0b38 0%,transparent 60%)',backgroundAttachment:'fixed',minHeight:'100vh',color:'#e2e8f0',fontFamily:"'Space Grotesk',system-ui,sans-serif"}}>
-      <style dangerouslySetInnerHTML={{__html:STYLES}}/>
-      <style dangerouslySetInnerHTML={{__html:"@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');"}}/>
+    <div className="bg-[#030014] [background-image:radial-gradient(circle_at_50%_0%,#1a0b38_0%,transparent_60%)] bg-fixed min-h-screen text-slate-200">
+      <style dangerouslySetInnerHTML={{__html: MINIMAL_CSS}}/>
 
       {/* NAV — identyczna struktura jak user-profile-tests.html */}
       <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50">
@@ -482,11 +560,7 @@ export default function CharacterSheet() {
               <button
                 className={`theme-toggle${lightMode ? ' light' : ''}`}
                 title="Przełącz motyw"
-                onClick={() => {
-                  const next = !lightMode;
-                  setLightMode(next);
-                  document.body.classList.toggle('light-mode', next);
-                }}
+                onClick={() => { const n = !lightMode; setLightMode(n); document.body.classList.toggle('light-mode', n); }}
               >
                 <div className="theme-toggle-slider"/>
                 <svg className="theme-icon theme-icon-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -496,364 +570,362 @@ export default function CharacterSheet() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
                 </svg>
               </button>
-              <button
-                onClick={async () => { await supabase.auth.signOut(); window.location.href='/'; }}
+              <button onClick={async () => { await supabase.auth.signOut(); window.location.href='/'; }}
                 className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm">
                 Wyloguj
               </button>
               <a href="/settings"
-                className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm"
-                style={{display:'inline-flex',alignItems:'center',gap:6,textDecoration:'none'}}
-                title="Ustawienia konta">
-                ⚙️ Ustawienia
-              </a>
+                className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm inline-flex items-center gap-1.5 no-underline"
+                title="Ustawienia konta">⚙️ Ustawienia</a>
             </div>
           </div>
         </div>
       </nav>
 
       {/* PAGE */}
-      <div style={{maxWidth:1400,margin:'0 auto',padding:'28px 24px'}}>
-        <div className="ch-sheet-wrapper">
+      <div className="px-6 py-7 pb-16 font-[Space_Grotesk,system-ui,sans-serif]">
 
-          {/* STATUS BAR */}
-          <div className="ch-topbar">
-            <div className="ch-tb-pill">
-              <div className="ch-tb-dot"/>
-              {done >= 6 ? 'PROFIL KOMPLETNY' : 'PROFIL W BUDOWIE'} · {done}/6 TESTÓW UKOŃCZONYCH
-            </div>
-            <div className="ch-tb-meta">CHAR-ID: {charId} · PSYCHER v2.0</div>
+        {/* STATUS BAR */}
+        <div className="flex items-center justify-between flex-wrap gap-2 mb-5 py-2.5 px-4 bg-[rgba(8,14,40,.72)] border border-sky-400/10 rounded-lg backdrop-blur-md max-w-[1400px] mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-emerald-500/[0.07] border border-emerald-400/[0.22] font-mono text-[9.5px] tracking-[2px] text-emerald-400">
+            <span className="w-[5px] h-[5px] rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] cs-blink"/>
+            {done >= 6 ? 'PROFIL KOMPLETNY' : 'PROFIL W BUDOWIE'} · {done}/6 TESTÓW UKOŃCZONYCH
           </div>
-
-          {/* BENTO GRID */}
-          <div className="ch-bento">
-
-            {/* T1: HERO */}
-            <div className="ch-tile ch-t-hero">
-              <div className="ch-tile-accent" style={{background:'linear-gradient(90deg,#38b6ff,#7b5ea7,#d946ef)'}}/>
-              <div className="ch-tl">// IDENTYFIKACJA</div>
-
-              <div style={{display:'flex',flexDirection:'column',alignItems:'center',textAlign:'center',marginBottom:16}}>
-                <div style={{position:'relative',width:90,height:90,marginBottom:12}}>
-                  <svg viewBox="0 0 90 90" width="90" height="90">
-                    <defs>
-                      <linearGradient id="av-g" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#38b6ff"/><stop offset="100%" stopColor="#7b5ea7"/>
-                      </linearGradient>
-                      <linearGradient id="av-sg" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="transparent"/><stop offset="20%" stopColor="#38b6ff" stopOpacity=".7"/>
-                        <stop offset="80%" stopColor="#38b6ff" stopOpacity=".7"/><stop offset="100%" stopColor="transparent"/>
-                      </linearGradient>
-                      <clipPath id="av-cp"><circle cx="45" cy="45" r="36"/></clipPath>
-                    </defs>
-                    <circle cx="45" cy="45" r="42" fill="#030014"/>
-                    <circle cx="45" cy="45" r="40" fill="none" stroke="url(#av-g)" strokeWidth="1.5"/>
-                    {avatarUrl
-                      ? <image href={avatarUrl} x="9" y="9" width="72" height="72" clipPath="url(#av-cp)" preserveAspectRatio="xMidYMid slice"/>
-                      : <text x="45" y="51" textAnchor="middle" fontSize="23" fontWeight="700" fontFamily="Space Grotesk,sans-serif" fill="url(#av-g)">{initials}</text>
-                    }
-                    <rect className="ch-asc" x="3" y="44" width="84" height="2" fill="url(#av-sg)" rx="1"/>
-                  </svg>
-                  <div style={{position:'absolute',bottom:2,right:2,width:11,height:11,borderRadius:'50%',background:done>=4?'#34d399':'#f59e0b',border:'2px solid #030014',boxShadow:`0 0 7px ${done>=4?'#34d399':'#f59e0b'}`}}/>
-                </div>
-                <div className="ch-lvl"><div className="ch-ldot"/>LVL {done} · {lvlLabel}</div>
-                <div className="ch-cname">{userName}</div>
-                <div className="ch-carch">{ennL?.rpg ?? 'ARCHETYP NIEZNANY'}</div>
-                <div className="ch-ccodes">{codeStr || 'UZUPEŁNIJ TESTY'}</div>
-                <div className="ch-rare">{rareLabel}</div>
-              </div>
-
-              <div className="ch-xp-wrap" style={{marginBottom:16}}>
-                <div className="ch-xp-lbl">
-                  <span style={{color:'rgba(255,255,255,.22)'}}>PROFIL XP</span>
-                  <span style={{color:'rgba(56,182,255,.6)'}}>{done}/6</span>
-                </div>
-                <div className="ch-xp-track"><div className="ch-xp-fill" style={{width:`${xpPct}%`}}/></div>
-              </div>
-
-              <div className="ch-tl" style={{marginBottom:8}}>// ARCHETYP RPG</div>
-              {ennL ? (
-                <>
-                  <div className="ch-rpg-box">
-                    <div className="ch-rpg-lbl">KLASA POSTACI</div>
-                    <div className="ch-rpg-class">{ennL.symbol} {ennL.rpg}</div>
-                    <div className="ch-rpg-epit">"{ennL.epithet}"</div>
-                    <div style={{fontSize:9,color:'rgba(255,255,255,.32)',lineHeight:1.6}}>{ennL.desc.slice(0,110)}…</div>
-                  </div>
-                  <div className="ch-tl" style={{marginTop:14,marginBottom:6}}>// PODOBNE POSTACIE</div>
-                  {ennL.pop.slice(0,4).map((p,i) => (
-                    <div key={p} className="ch-pop-item">
-                      <span className="ch-pop-rank">{i+1}</span>
-                      <span className="ch-pop-name">{p}</span>
-                      <span style={{marginLeft:'auto',fontFamily:'Share Tech Mono,monospace',fontSize:8,color:'rgba(255,255,255,.18)'}}>{[97,85,74,64][i]}%</span>
-                    </div>
-                  ))}
-                </>
-              ) : (
-                <div className="ch-empty-block">
-                  <div className="ch-empty-icon">⚔</div>
-                  <div className="ch-empty-text">Ukończ test Enneagram aby odblokować archetyp RPG</div>
-                  <a className="ch-go-btn" href="/user-profile-tests.html">Przejdź do testów →</a>
-                </div>
-              )}
-            </div>
-
-            {/* T2: HEXACO RADAR */}
-            <div className="ch-tile ch-t-radar">
-              <div className="ch-tile-accent" style={{background:'linear-gradient(90deg,#22d3ee,#38b6ff)'}}/>
-              <div className="ch-tl">// ATRYBUTY · HEXACO-60</div>
-              {raw.HEXACO ? (
-                <>
-                  <HexRadar data={hexBars.map(h => ({k:h.k, pct:h.pct}))}/>
-                  <div className="ch-attr-grid" style={{marginTop:12,marginBottom:16}}>
-                    {hexBars.map(h => (
-                      <div key={h.k} className={`ch-attr-b ${h.cls}`}>
-                        <div className="ch-a-lbl">{h.short}</div>
-                        <div className="ch-a-val">{h.pct}</div>
-                        <div className="ch-a-nm">{h.label.slice(0,7)}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{borderTop:'1px solid rgba(56,182,255,.07)',paddingTop:12}}>
-                    <div className="ch-hx-bars">
-                      {hexBars.map(h => (
-                        <div key={h.k} className="ch-hb">
-                          <div className="ch-hb-top">
-                            <span className="ch-hb-name">{h.label}</span>
-                            <span className="ch-hb-val" style={{color:h.color}}>{h.pct}%</span>
-                          </div>
-                          <div className="ch-hb-track">
-                            <div className="ch-hb-fill" style={{width:`${h.pct}%`, background:h.color}}/>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div className="ch-empty-block" style={{flex:1,justifyContent:'center'}}>
-                  <div className="ch-empty-icon">📊</div>
-                  <div className="ch-empty-text">Wykonaj test HEXACO-60 aby odblokować radar osobowości</div>
-                  <a className="ch-go-btn" href="/user-profile-tests.html">Wykonaj test HEXACO-60 →</a>
-                </div>
-              )}
-            </div>
-
-            {/* T3: ENNEAGRAM */}
-            <div className="ch-tile ch-t-enn">
-              <div className="ch-tile-accent" style={{background:'linear-gradient(90deg,#7b5ea7,#b08fff)'}}/>
-              <div className="ch-tl">// TYPOLOGIA · ENNEAGRAM</div>
-              <div style={{display:'flex',alignItems:'center',justifyContent:'center',marginBottom:8}}>
-                <EnnStar active={ennN} pct={ennN ? (done/6)*100 : 0}/>
-              </div>
-              <div style={{textAlign:'center',marginBottom:12}}>
-                <div className="ch-enn-num">{ennN ?? '?'}</div>
-                <div className="ch-enn-type">{ennP?.name ?? 'Nieznany typ'}</div>
-                <div className="ch-enn-sub">{ennL ? `SKRZYDŁO ${ennWing||'?'} · ENNEAGRAM` : 'WYKONAJ TEST'}</div>
-                <div className="ch-enn-desc">{ennL?.desc.slice(0,110) ?? 'Wykonaj test Enneagram aby odblokować typologię motywacji.'}</div>
-              </div>
-              <div style={{borderTop:'1px solid rgba(176,143,255,.07)',paddingTop:10}}>
-                <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:8,flexWrap:'wrap'}}>
-                  <div className="ch-hol-ltrs">
-                    {holland ? holland.split('').map((c,i) => (
-                      <div key={c+i} className={`ch-hl ${HL_CLASS[i%4]}`}>{c}</div>
-                    )) : ['?','?','?'].map((c,i) => (
-                      <div key={i} className={`ch-hl ${HL_CLASS[i]}`}>{c}</div>
-                    ))}
-                  </div>
-                  <div className="ch-careers">
-                    {topJobs.slice(0,3).map((j:any,i:number) => (
-                      <span key={i} className="ch-ct">{j.title ?? j.name ?? ''}</span>
-                    ))}
-                    {topJobs.length === 0 && <span className="ch-ct">WYKONAJ TEST KARIERY</span>}
-                  </div>
-                </div>
-                <div className="ch-val-chips" style={{marginBottom:8}}>
-                  {topVals.length > 0 ? topVals.map((v:any,i:number) => (
-                    <span key={i} className={['ch-vc1','ch-vc2','ch-vc3','ch-vc4','ch-vc1'][i]}>
-                      {v.name ?? v.value_name ?? String(v)}
-                    </span>
-                  )) : <span className="ch-vc4">Wykonaj test wartości</span>}
-                </div>
-                <div style={{fontSize:8.5,color:'rgba(255,255,255,.18)',fontFamily:'Share Tech Mono,monospace',letterSpacing:'1px',lineHeight:1.6}}>
-                  {raw.DARK_TRIAD
-                    ? `CIEŃ · ${dtTraits.map(t => `${t.label}: ${t.pct}%`).join(' · ')}`
-                    : 'Wykonaj test Dark Triad SD3 aby zobaczyć profil cienia.'}
-                </div>
-              </div>
-            </div>
-
-            {/* T4: STRENGTHS */}
-            <div className="ch-tile ch-t-str">
-              <div className="ch-tile-accent" style={{background:'linear-gradient(90deg,#fbbf24,#34d399)'}}/>
-              <div className="ch-tl">// ARSENAL · TOP TALENTY</div>
-              {top5.length > 0 ? (
-                <>
-                  <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:12}}>
-                    <div className="ch-str-list">
-                      {top5.slice(0,3).map((t:any,i:number) => (
-                        <div key={t.name ?? i} className="ch-str-item">
-                          <span className="ch-srk">0{i+1}</span>
-                          <div className="ch-sinf">
-                            <div className="ch-snm">{t.name ?? t.name_en}</div>
-                            <div className="ch-sct">{t.category ?? t.domain ?? 'TALENT'}</div>
-                            {t.description && <div style={{fontSize:8,color:'rgba(255,255,255,.28)',lineHeight:1.5,marginTop:2}}>{String(t.description).slice(0,55)}…</div>}
-                          </div>
-                          <div className="ch-sbar"><div className="ch-sbf" style={{width:`${Math.max(65,100-i*13)}%`, background:STR_COLORS[i]}}/></div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="ch-str-list">
-                      {top5.slice(3).map((t:any,i:number) => (
-                        <div key={t.name ?? i} className="ch-str-item">
-                          <span className="ch-srk">0{i+4}</span>
-                          <div className="ch-sinf">
-                            <div className="ch-snm">{t.name ?? t.name_en}</div>
-                            <div className="ch-sct">{t.category ?? t.domain ?? 'TALENT'}</div>
-                            {t.description && <div style={{fontSize:8,color:'rgba(255,255,255,.28)',lineHeight:1.5,marginTop:2}}>{String(t.description).slice(0,55)}…</div>}
-                          </div>
-                          <div className="ch-sbar"><div className="ch-sbf" style={{width:`${Math.max(50,85-(i+3)*13)}%`, background:STR_COLORS[(i+3)%5]}}/></div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  {ennL && (
-                    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
-                      <div className="ch-energy-box" style={{background:'rgba(16,185,129,.05)',border:'1px solid rgba(16,185,129,.15)'}}>
-                        <div className="ch-energy-title" style={{color:'rgba(52,211,153,.6)'}}>⚡ CO CIĘ ŁADUJE</div>
-                        {ennL.charges.map(c => (
-                          <div key={c} className="ch-energy-row"><span style={{color:'#34d399',marginRight:4}}>›</span>{c}</div>
-                        ))}
-                      </div>
-                      <div className="ch-energy-box" style={{background:'rgba(239,68,68,.04)',border:'1px solid rgba(239,68,68,.12)'}}>
-                        <div className="ch-energy-title" style={{color:'rgba(239,68,68,.5)'}}>⬇ CO CIĘ DRENUJE</div>
-                        {ennL.drains.map(d => (
-                          <div key={d} className="ch-energy-row"><span style={{color:'#ef4444',marginRight:4}}>›</span>{d}</div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="ch-empty-block">
-                  <div className="ch-empty-icon">⚡</div>
-                  <div className="ch-empty-text">Wykonaj test Strengths aby odkryć naturalne talenty</div>
-                  <a className="ch-go-btn" href="/user-profile-tests.html">Wykonaj test Strengths →</a>
-                </div>
-              )}
-            </div>
-
-            {/* T5: DARK TRIAD */}
-            <div className="ch-tile ch-t-dt" style={{borderColor:'rgba(239,68,68,.15)'}}>
-              <div className="ch-tile-accent" style={{background:'linear-gradient(90deg,#ef4444,#f97316,#fbbf24)'}}/>
-              <div className="ch-tl" style={{color:'rgba(239,68,68,.45)'}}>// CIEMNA TRIADA · SD3 · CIEŃ</div>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,flex:1}}>
-                <div>
-                  {raw.DARK_TRIAD ? (
-                    <div className="ch-dt-bars">
-                      {dtTraits.map(t => (
-                        <div key={t.k} className="ch-dt-row">
-                          <div className="ch-dt-head">
-                            <div className="ch-dt-name" style={{color:t.color}}>
-                              <span style={{width:8,height:8,borderRadius:'50%',background:t.color,boxShadow:`0 0 6px ${t.color}`,display:'inline-block'}}/>
-                              {t.label}
-                            </div>
-                            <div className="ch-dt-sw">
-                              <span className="ch-dt-sc" style={{color:t.color}}>{t.pct}</span>
-                              <span className="ch-dt-mx">/100</span>
-                              <span className="ch-dt-pc" style={{color:t.color,marginLeft:5}}>{t.pct>70?'HIGH':t.pct>40?'MED':'LOW'}</span>
-                            </div>
-                          </div>
-                          <div className="ch-dt-track">
-                            <div className="ch-dt-fill" style={{width:`${t.pct}%`, background:`linear-gradient(90deg,${t.color}55,${t.color})`}}/>
-                          </div>
-                          <div className="ch-dt-tags">
-                            {t.pct>70 && <span className="ch-dtag">DOMINUJĄCY</span>}
-                            {t.pct>50 && t.pct<=70 && <span className="ch-dtag">PODWYŻSZONY</span>}
-                            {t.pct<=50 && <span className="ch-dtag">KONTROLOWANY</span>}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="ch-empty-block">
-                      <div className="ch-empty-icon">🌑</div>
-                      <div className="ch-empty-text">Odblokuj test Dark Triad SD3</div>
-                      <a className="ch-go-btn" href="/user-profile-tests.html">Odblokuj →</a>
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <div className="ch-tl" style={{color:'rgba(239,68,68,.35)',marginBottom:10}}>// OBSZARY CIENIA</div>
-                  {raw.DARK_TRIAD ? (
-                    <div className="ch-sh-list">
-                      {SHADOW_ITEMS.map(s => {
-                        const td = dtTraits.find(t => t.k === s.trait);
-                        const high = (td?.pct ?? 0) > 55;
-                        return (
-                          <div key={s.trait} className="ch-sh-item">
-                            <span className="ch-shico">{s.icon}</span>
-                            <div className="ch-shbd">
-                              <div className="ch-shtt">{high ? s.hi : s.lo.split('—')[0].trim()}</div>
-                              <div className="ch-sht">{high ? `Wynik ${td?.pct}% — strefa ryzyka.` : s.lo}</div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <div className="ch-empty-block">
-                      <div className="ch-empty-icon">🌘</div>
-                      <div className="ch-empty-text">Obszary cienia pojawią się po ukończeniu testu</div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* T6: AI SYNTHESIS */}
-            <div className="ch-tile ch-t-synth">
-              <div className="ch-tile-accent" style={{background:'linear-gradient(90deg,#6366f1,#38b6ff,#7b5ea7,#34d399)'}}/>
-              <div className="ch-tl">// PSYCHER AI INSIGHT · SYNTEZA PROFILU</div>
-              {synthLines.length >= 2 ? (
-                <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(250px,1fr))',gap:10}}>
-                  {synthLines.map((line,i) => (
-                    <div key={i} className="ch-iblk" style={{background:SYNTH_BG[i%6], border:`1px solid ${SYNTH_BD[i%6]}`}}>
-                      <div className="ch-ib-tx" dangerouslySetInnerHTML={{__html:line}}/>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="ch-empty-block">
-                  <div className="ch-empty-icon">🔮</div>
-                  <div className="ch-empty-text">Synteza AI pojawi się po ukończeniu co najmniej 3 testów. Aktualnie {done}/6.</div>
-                  <a className="ch-go-btn" href="/user-profile-tests.html">Uzupełnij profil →</a>
-                </div>
-              )}
-            </div>
-
-          </div>{/* /ch-bento */}
-
-          {/* TRAIT CHIPS */}
-          {chips.length > 0 && (
-            <div style={{marginTop:14}}>
-              <div className="ch-tl">// CECHY DOMINUJĄCE · TRAIT CHIPS</div>
-              <div className="ch-tflow">
-                {chips.map((c,i) => <span key={i} className={`ch-tt ${c.cls}`}>{c.label}</span>)}
-              </div>
-            </div>
-          )}
-
-          {/* FOOTER */}
-          <div className="ch-footer">
-            <div className="ch-fid">CHAR-ID: {charId} · PSYCHER v2.0</div>
-            <div className="ch-ftests">
-              {(['HEXACO','ENNEAGRAM','STRENGTHS','CAREER','DARK_TRIAD','VALUES'] as const).map(k => raw[k] ? '■' : '□').join(' ')}
-            </div>
-            <div className="ch-fver">BUILD {buildDate}</div>
-          </div>
-
+          <div className="font-mono text-[8.5px] text-sky-400/[0.28] tracking-[2px]">CHAR-ID: {charId} · PSYCHER v2.0</div>
         </div>
+
+        {/* ── BENTO GRID ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 max-w-[1400px] mx-auto auto-rows-min">
+
+          {/* ── T1: HERO & AI CORE ── */}
+          <div className="col-span-1 lg:col-span-1 lg:row-span-2 bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-2xl p-6 relative flex flex-col transition-all hover:border-violet-500/30 overflow-hidden cs-fu1">
+            <div className="absolute top-0 inset-x-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-sky-400 via-violet-500 to-fuchsia-500"/>
+            <SectionLabel>// IDENTYFIKACJA</SectionLabel>
+
+            {/* Avatar */}
+            <div className="flex flex-col items-center text-center mb-5">
+              <div className="relative w-[90px] h-[90px] mb-3">
+                <svg viewBox="0 0 90 90" width="90" height="90">
+                  <defs>
+                    <linearGradient id="av-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#38b6ff"/><stop offset="100%" stopColor="#7b5ea7"/>
+                    </linearGradient>
+                    <linearGradient id="av-sg" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="transparent"/><stop offset="20%" stopColor="#38b6ff" stopOpacity=".7"/>
+                      <stop offset="80%" stopColor="#38b6ff" stopOpacity=".7"/><stop offset="100%" stopColor="transparent"/>
+                    </linearGradient>
+                    <clipPath id="av-cp"><circle cx="45" cy="45" r="36"/></clipPath>
+                  </defs>
+                  <circle cx="45" cy="45" r="42" fill="#030014"/>
+                  <circle cx="45" cy="45" r="40" fill="none" stroke="url(#av-g)" strokeWidth="1.5"/>
+                  {avatarUrl
+                    ? <image href={avatarUrl} x="9" y="9" width="72" height="72" clipPath="url(#av-cp)" preserveAspectRatio="xMidYMid slice"/>
+                    : <text x="45" y="51" textAnchor="middle" fontSize="23" fontWeight="700" fontFamily="Space Grotesk,sans-serif" fill="url(#av-g)">{initials}</text>
+                  }
+                  <rect className="cs-asc" x="3" y="44" width="84" height="2" fill="url(#av-sg)" rx="1"/>
+                </svg>
+                <div className={`absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full border-2 border-[#030014] ${done>=4?'bg-emerald-400 shadow-[0_0_7px_#34d399]':'bg-amber-400 shadow-[0_0_7px_#f59e0b]'}`}/>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-gradient-to-r from-indigo-500/[0.14] to-sky-400/[0.11] border border-indigo-400/[0.28] font-mono text-[9px] tracking-[2px] text-indigo-300 mb-3">
+                <span className="w-1 h-1 rounded-full bg-indigo-300 shadow-[0_0_6px_#a5b4fc]"/>
+                LVL {done} · {lvlLabel}
+              </div>
+              <div className="font-['Orbitron'] font-black text-base tracking-[2.5px] uppercase text-white mb-1 break-words [text-shadow:0_0_18px_rgba(56,182,255,.22)]">{userName}</div>
+              <div className="font-mono text-[10px] tracking-[2px] text-sky-400 mb-1 [text-shadow:0_0_10px_rgba(56,182,255,.4)]">{ennL?.rpg ?? 'ARCHETYP NIEZNANY'}</div>
+              <div className="font-mono text-[7.5px] tracking-[1.5px] text-white/[0.22] mb-3">{codeStr || 'UZUPEŁNIJ TESTY'}</div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-sm bg-violet-400/[0.07] border border-violet-400/20 font-mono text-[8.5px] tracking-[1.5px] text-violet-300 mb-4">{rareLabel}</div>
+            </div>
+
+            {/* XP bar */}
+            <div className="w-full mb-5">
+              <div className="flex justify-between mb-1">
+                <span className="font-mono text-[8px] tracking-[1.5px] text-white/[0.22]">PROFIL XP</span>
+                <span className="font-mono text-[8px] tracking-[1.5px] text-sky-400/60">{done}/6</span>
+              </div>
+              <div className="h-1 bg-white/5 rounded-sm overflow-hidden relative">
+                <div className="h-full rounded-sm bg-gradient-to-r from-[#3d2a9e] to-sky-400 shadow-[0_0_10px_rgba(56,182,255,.5)] transition-[width] duration-1000 ease-out relative"
+                  style={{width:`${xpPct}%`}}>
+                  <span className="absolute -right-0.5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(56,182,255,.8)]"/>
+                </div>
+              </div>
+            </div>
+
+            <SectionLabel>// ARCHETYP RPG</SectionLabel>
+            {ennL ? (
+              <>
+                <div className="bg-indigo-500/[0.07] border border-indigo-500/20 rounded-lg p-3 mb-3">
+                  <div className="font-mono text-[7.5px] tracking-[2px] text-indigo-400/55 mb-1.5 uppercase">KLASA POSTACI</div>
+                  <div className="text-[15px] font-bold text-white mb-1">{ennL.symbol} {ennL.rpg}</div>
+                  <div className="text-[9.5px] text-indigo-400/70 italic mb-1.5">"{ennL.epithet}"</div>
+                  <div className="text-[9px] text-white/[0.32] leading-relaxed">{ennL.desc.slice(0,110)}…</div>
+                </div>
+                <SectionLabel>// PODOBNE POSTACIE</SectionLabel>
+                <div className="flex flex-col gap-0.5">
+                  {ennL.pop.slice(0,4).map((p,i) => (
+                    <div key={p} className="flex items-center gap-2 px-2 py-1.5 rounded bg-white/5 cursor-default transition-all hover:bg-white/[0.07] hover:translate-x-0.5">
+                      <span className="font-mono text-[8px] text-white/15 w-3 text-center shrink-0">{i+1}</span>
+                      <span className="text-[11px] font-semibold text-white/65 flex-1">{p}</span>
+                      <span className="font-mono text-[8px] text-white/18">{[97,85,74,64][i]}%</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : <EmptyBlock icon="⚔" text="Ukończ test Enneagram aby odblokować archetyp RPG" href="/user-profile-tests.html" btnText="Przejdź do testów →"/>}
+          </div>
+
+          {/* ── T2: MATRYCA HEXACO ── */}
+          <div className="col-span-1 lg:col-span-2 lg:row-span-2 min-h-[500px] bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-2xl p-6 relative flex flex-col transition-all hover:border-sky-500/30 overflow-hidden cs-fu2">
+            <div className="absolute top-0 inset-x-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-cyan-400 to-sky-400"/>
+            <SectionLabel>// MATRYCA · HEXACO-60</SectionLabel>
+            {raw.HEXACO ? (
+              <>
+                {/* Radar — 60% */}
+                <div className="flex justify-center">
+                  <HexRadar data={hexBars.map(h => ({k:h.k, pct:h.pct}))}/>
+                </div>
+                {/* Attribute boxes 3-col */}
+                <div className="grid grid-cols-3 gap-2 mt-3 mb-4">
+                  {hexBars.map(h => (
+                    <div key={h.k} className="p-2 rounded cursor-default transition-transform hover:-translate-y-0.5"
+                      style={{background:`rgba(${HEX_BG[h.k]},.07)`, border:`1px solid rgba(${HEX_BG[h.k]},.2)`}}>
+                      <div className="font-mono text-[7px] tracking-[1.5px] text-white/[0.26] mb-0.5 uppercase">{h.short}</div>
+                      <div className="font-['Orbitron'] text-[22px] font-bold leading-none mb-0.5" style={{color:h.color, textShadow:`0 0 12px ${h.color}99`}}>{h.pct}</div>
+                      <div className="text-[8px] font-semibold text-white/[0.28]">{h.label.slice(0,7)}</div>
+                    </div>
+                  ))}
+                </div>
+                {/* Progress bars 2-col — 40% */}
+                <div className="border-t border-sky-400/[0.07] pt-3 grid grid-cols-2 gap-x-5 gap-y-2">
+                  {hexBars.map(h => (
+                    <div key={h.k}>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-[10px] font-semibold text-white/44">{h.label}</span>
+                        <span className="font-mono text-[10px] font-bold" style={{color:h.color}}>{h.pct}%</span>
+                      </div>
+                      <div className="h-1 bg-white/[0.06] rounded-full overflow-hidden">
+                        <div className="h-full rounded-full transition-[width] duration-[1200ms]" style={{width:`${h.pct}%`, background:h.color}}/>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : <EmptyBlock icon="📊" text="Wykonaj test HEXACO-60 aby odblokować radar osobowości" href="/user-profile-tests.html" btnText="Wykonaj test HEXACO-60 →"/>}
+          </div>
+
+          {/* ── T3: ENNEAGRAM & ENGINE ── */}
+          <div className="col-span-1 lg:col-span-1 lg:row-span-2 min-h-[500px] bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-2xl p-6 relative flex flex-col transition-all hover:border-violet-500/30 overflow-hidden cs-fu3">
+            <div className="absolute top-0 inset-x-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-violet-600 to-violet-400"/>
+            <SectionLabel>// TYPOLOGIA · ENNEAGRAM</SectionLabel>
+            <div className="flex justify-center mb-2">
+              <EnnStar active={ennN} pct={ennN ? (done/6)*100 : 0}/>
+            </div>
+            <div className="text-center mb-4">
+              <div className="font-['Orbitron'] text-[2.4rem] font-black tracking-[2px] text-violet-400 [text-shadow:0_0_30px_rgba(176,143,255,.5)] leading-none">{ennN ?? '?'}</div>
+              <div className="text-[13px] font-bold text-white/80 tracking-wide mt-1">{ennP?.name ?? 'Nieznany typ'}</div>
+              <div className="font-mono text-[7px] tracking-[2px] text-violet-400/35 mt-0.5 uppercase">{ennL ? `SKRZYDŁO ${ennWing||'?'} · ENNEAGRAM` : 'WYKONAJ TEST'}</div>
+              <div className="text-[9.5px] text-white/35 leading-relaxed mt-1.5">{ennL?.desc.slice(0,110) ?? 'Wykonaj test Enneagram aby odblokować typologię motywacji.'}</div>
+            </div>
+            <div className="border-t border-violet-400/[0.07] pt-3 flex flex-col gap-3">
+              {/* Holland RIASEC */}
+              <div>
+                <div className="font-mono text-[7.5px] tracking-[2px] text-white/20 mb-2 uppercase">KOD HOLLAND (RIASEC)</div>
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {(holland ? holland.split('') : ['?','?','?']).map((c,i) => (
+                    <div key={c+i} className="font-['Orbitron'] text-[14px] font-bold w-7 h-7 rounded flex items-center justify-center"
+                      style={{background:HL_STYLES[i%4].bg, color:HL_STYLES[i%4].color, border:`1px solid ${HL_STYLES[i%4].border}`}}>{c}</div>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {topJobs.slice(0,4).map((j:any,i:number) => (
+                    <span key={i} className="font-mono text-[7.5px] px-1.5 py-0.5 rounded-sm bg-white/5 border border-white/10 text-white/38">{j.title ?? j.name ?? ''}</span>
+                  ))}
+                  {topJobs.length === 0 && <span className="font-mono text-[7.5px] px-1.5 py-0.5 rounded-sm bg-white/5 border border-white/10 text-white/38">WYKONAJ TEST KARIERY</span>}
+                </div>
+              </div>
+              {/* Values */}
+              <div>
+                <div className="font-mono text-[7.5px] tracking-[2px] text-white/20 mb-1.5 uppercase">WARTOŚCI DOMINUJĄCE</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {(topVals.length > 0 ? topVals : []).map((v:any,i:number) => {
+                    const vc = ['bg-sky-400/[0.09] border-sky-400/[0.22] text-sky-400','bg-emerald-400/[0.07] border-emerald-400/[0.2] text-emerald-400','bg-amber-400/[0.08] border-amber-400/[0.2] text-amber-400','bg-violet-400/[0.08] border-violet-400/[0.2] text-violet-300','bg-sky-400/[0.09] border-sky-400/[0.22] text-sky-400'][i];
+                    return <span key={i} className={`text-[9.5px] font-semibold px-2 py-0.5 rounded-sm border ${vc}`}>{v.name ?? v.value_name ?? String(v)}</span>;
+                  })}
+                  {topVals.length === 0 && <span className="text-[9.5px] font-semibold px-2 py-0.5 rounded-sm border bg-violet-400/[0.08] border-violet-400/[0.2] text-violet-300">Wykonaj test wartości</span>}
+                </div>
+              </div>
+              {/* DT shadow summary */}
+              <div className="font-mono text-[8.5px] text-white/18 tracking-[1px] leading-relaxed">
+                {raw.DARK_TRIAD ? `CIEŃ · ${dtTraits.map(t=>`${t.label}: ${t.pct}%`).join(' · ')}` : 'Wykonaj test Dark Triad SD3 aby zobaczyć profil cienia.'}
+              </div>
+            </div>
+          </div>
+
+          {/* ── T4: ARSENAŁ ── */}
+          <div className="col-span-1 lg:col-span-2 bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-2xl p-6 relative flex flex-col transition-all hover:border-amber-500/30 overflow-hidden cs-fu4">
+            <div className="absolute top-0 inset-x-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-amber-400 to-emerald-400"/>
+            <SectionLabel>// ARSENAŁ · TOP TALENTY</SectionLabel>
+            {top5.length > 0 ? (
+              <>
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  <div className="flex flex-col gap-1.5">
+                    {top5.slice(0,3).map((t:any,i:number) => (
+                      <div key={t.name ?? i} className="flex items-center gap-2 p-2.5 rounded bg-white/[0.03] border border-white/[0.07] cursor-default transition-all hover:bg-sky-400/5 hover:border-sky-400/18 hover:translate-x-0.5">
+                        <span className="font-mono text-[9px] text-white/18 w-3.5 shrink-0 text-center">0{i+1}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-[11px] font-bold text-white/78 truncate">{t.name ?? t.name_en}</div>
+                          <div className="font-mono text-[7px] text-white/27">{t.category ?? t.domain ?? 'TALENT'}</div>
+                        </div>
+                        <div className="w-8 h-0.5 bg-white/[0.06] rounded-full shrink-0 overflow-hidden">
+                          <div className="h-full rounded-full" style={{width:`${Math.max(65,100-i*13)}%`, background:STR_COLORS[i]}}/>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    {top5.slice(3).map((t:any,i:number) => (
+                      <div key={t.name ?? i} className="flex items-center gap-2 p-2.5 rounded bg-white/[0.03] border border-white/[0.07] cursor-default transition-all hover:bg-sky-400/5 hover:border-sky-400/18 hover:translate-x-0.5">
+                        <span className="font-mono text-[9px] text-white/18 w-3.5 shrink-0 text-center">0{i+4}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-[11px] font-bold text-white/78 truncate">{t.name ?? t.name_en}</div>
+                          <div className="font-mono text-[7px] text-white/27">{t.category ?? t.domain ?? 'TALENT'}</div>
+                        </div>
+                        <div className="w-8 h-0.5 bg-white/[0.06] rounded-full shrink-0 overflow-hidden">
+                          <div className="h-full rounded-full" style={{width:`${Math.max(50,85-(i+3)*13)}%`, background:STR_COLORS[(i+3)%5]}}/>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {ennL && (
+                  <div className="grid grid-cols-2 gap-3 mt-auto">
+                    <div className="rounded-lg p-3 bg-emerald-500/5 border border-emerald-500/15">
+                      <div className="font-mono text-[7.5px] tracking-[2px] text-emerald-400/60 mb-2 uppercase">⚡ CO CIĘ ŁADUJE</div>
+                      {ennL.charges.map(c => <div key={c} className="flex items-center gap-1.5 mb-1 text-[9.5px] text-white/55"><span className="text-emerald-400">›</span>{c}</div>)}
+                    </div>
+                    <div className="rounded-lg p-3 bg-rose-500/[0.04] border border-rose-500/12">
+                      <div className="font-mono text-[7.5px] tracking-[2px] text-rose-400/50 mb-2 uppercase">⬇ CO CIĘ DRENUJE</div>
+                      {ennL.drains.map(d => <div key={d} className="flex items-center gap-1.5 mb-1 text-[9.5px] text-white/55"><span className="text-rose-400">›</span>{d}</div>)}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : <EmptyBlock icon="⚡" text="Wykonaj test Strengths aby odkryć naturalne talenty" href="/user-profile-tests.html" btnText="Wykonaj test Strengths →"/>}
+          </div>
+
+          {/* ── T5: STREFA CIENIA ── */}
+          <div className="col-span-1 lg:col-span-2 bg-rose-950/20 border border-rose-500/20 backdrop-blur-xl rounded-2xl p-6 relative flex flex-col transition-all hover:border-rose-500/35 overflow-hidden cs-fu5">
+            <div className="absolute top-0 inset-x-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-rose-500 via-orange-400 to-amber-400"/>
+            <SectionLabel danger>// CIEMNA TRIADA · SD3 · CIEŃ</SectionLabel>
+            <div className="grid grid-cols-2 gap-4 flex-1">
+              {/* Bars */}
+              <div>
+                {raw.DARK_TRIAD ? (
+                  <div className="flex flex-col gap-4">
+                    {dtTraits.map(t => (
+                      <div key={t.k}>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <div className="flex items-center gap-1.5 text-[12.5px] font-bold" style={{color:t.color}}>
+                            <span className="w-2 h-2 rounded-full inline-block" style={{background:t.color, boxShadow:`0 0 6px ${t.color}`}}/>
+                            {t.label}
+                          </div>
+                          <div className="flex items-baseline gap-0.5">
+                            <span className="font-['Orbitron'] text-[18px] font-bold" style={{color:t.color}}>{t.pct}</span>
+                            <span className="font-mono text-[8px] text-white/28">/100</span>
+                            <span className="font-mono text-[8px] ml-1.5" style={{color:t.color}}>{t.pct>70?'HIGH':t.pct>40?'MED':'LOW'}</span>
+                          </div>
+                        </div>
+                        <div className="h-2.5 rounded-sm bg-white/[0.04] overflow-hidden">
+                          <div className="h-full rounded-sm transition-[width] duration-1000 ease-out" style={{width:`${t.pct}%`, background:`linear-gradient(90deg,${t.color}55,${t.color})`}}/>
+                        </div>
+                        <div className="flex gap-1 mt-1">
+                          {t.pct>70  && <span className="font-mono text-[7px] px-1.5 py-0.5 rounded-sm bg-white/[0.04] border border-white/[0.08] text-white/30">DOMINUJĄCY</span>}
+                          {t.pct>50 && t.pct<=70 && <span className="font-mono text-[7px] px-1.5 py-0.5 rounded-sm bg-white/[0.04] border border-white/[0.08] text-white/30">PODWYŻSZONY</span>}
+                          {t.pct<=50 && <span className="font-mono text-[7px] px-1.5 py-0.5 rounded-sm bg-white/[0.04] border border-white/[0.08] text-white/30">KONTROLOWANY</span>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : <EmptyBlock icon="🌑" text="Odblokuj test Dark Triad SD3" href="/user-profile-tests.html" btnText="Odblokuj →"/>}
+              </div>
+              {/* Shadow items */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-[8px] tracking-[2.5px] text-rose-400/35 uppercase font-mono">// OBSZARY CIENIA</span>
+                  <div className="flex-1 h-px bg-gradient-to-r from-rose-400/20 to-transparent"/>
+                </div>
+                {raw.DARK_TRIAD ? (
+                  <div className="flex flex-col gap-2">
+                    {SHADOW_ITEMS.map(s => {
+                      const td = dtTraits.find(t => t.k === s.trait);
+                      const high = (td?.pct ?? 0) > 55;
+                      return (
+                        <div key={s.trait} className="flex items-start gap-2.5 p-2.5 rounded bg-rose-500/[0.04] border border-rose-500/10 cursor-default transition-all hover:bg-rose-500/[0.08] hover:border-rose-500/20">
+                          <span className="text-[15px] shrink-0 mt-0.5">{s.icon}</span>
+                          <div>
+                            <div className="text-[11px] font-bold text-rose-400/82 mb-0.5">{high ? s.hi : s.lo.split('—')[0].trim()}</div>
+                            <div className="text-[9px] text-white/35 leading-relaxed">{high ? `Wynik ${td?.pct}% — strefa ryzyka.` : s.lo}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-4 text-center opacity-55">
+                    <div className="text-2xl mb-2">🌘</div>
+                    <div className="text-[0.78rem] text-white/30">Obszary cienia pojawią się po ukończeniu testu</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* ── T6: SYNTEZA AI ── */}
+          <div className="col-span-1 lg:col-span-4 bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-2xl p-6 relative flex flex-col transition-all hover:border-indigo-500/30 overflow-hidden cs-fu6">
+            <div className="absolute top-0 inset-x-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-indigo-500 via-sky-400 via-violet-500 to-emerald-400"/>
+            <SectionLabel>// PSYCHER AI INSIGHT · SYNTEZA PROFILU</SectionLabel>
+            {synthLines.length >= 2 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {synthLines.map((line,i) => (
+                  <div key={i} className="p-3 rounded" style={{background:SYNTH_BG[i%6], border:`1px solid ${SYNTH_BD[i%6]}`}}>
+                    <div className="text-[10.5px] text-white/42 leading-relaxed [&_strong]:text-white/80 [&_strong]:font-semibold"
+                      dangerouslySetInnerHTML={{__html:line}}/>
+                  </div>
+                ))}
+              </div>
+            ) : <EmptyBlock icon="🔮" text={`Synteza AI pojawi się po ukończeniu co najmniej 3 testów. Aktualnie ${done}/6.`} href="/user-profile-tests.html" btnText="Uzupełnij profil →"/>}
+          </div>
+
+        </div>{/* /bento grid */}
+
+        {/* TRAIT CHIPS */}
+        {chips.length > 0 && (
+          <div className="mt-4 max-w-[1400px] mx-auto">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-[8px] tracking-[2.5px] text-sky-400/40 uppercase font-mono">// CECHY DOMINUJĄCE · TRAIT CHIPS</span>
+              <div className="flex-1 h-px bg-gradient-to-r from-sky-400/20 to-transparent"/>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {chips.map((c,i) => {
+                const s = CHIP_STYLE[c.cls] ?? {bg:'rgba(255,255,255,.05)',border:'rgba(255,255,255,.1)',color:'rgba(255,255,255,.5)'};
+                return (
+                  <span key={i} className="flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] font-semibold cursor-default transition-transform hover:-translate-y-0.5"
+                    style={{background:s.bg, border:`1px solid ${s.border}`, color:s.color}}>{c.label}</span>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* FOOTER */}
+        <div className="flex items-center justify-between flex-wrap gap-2 mt-4 py-2.5 px-3.5 rounded bg-white/[0.02] border border-white/5 max-w-[1400px] mx-auto">
+          <div className="font-mono text-[8px] tracking-[2px] text-sky-400/[0.28]">CHAR-ID: {charId} · PSYCHER v2.0</div>
+          <div className="font-mono text-[7.5px] text-white/12 tracking-[0.8px]">
+            {(['HEXACO','ENNEAGRAM','STRENGTHS','CAREER','DARK_TRIAD','VALUES'] as const).map(k => raw[k] ? '■' : '□').join(' ')}
+          </div>
+          <div className="font-mono text-[8px] tracking-[2px] text-violet-400/35">BUILD {buildDate}</div>
+        </div>
+
       </div>
     </div>
   );
