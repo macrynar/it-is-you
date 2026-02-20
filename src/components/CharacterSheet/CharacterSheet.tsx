@@ -46,6 +46,40 @@ const DT_COLOR: Record<string,string> = {
   machiavellianism:'#f97316', narcissism:'#fbbf24', psychopathy:'#ef4444'
 };
 
+const CORE_TESTS = ['HEXACO','ENNEAGRAM','STRENGTHS','CAREER','DARK_TRIAD','VALUES'] as const;
+
+const ENN_TRAITS: Record<number, string[]> = {
+  1: ['Sumienny', 'Zasadniczy', 'Wymagający', 'Odpowiedzialny', 'Precyzyjny', 'Etyczny'],
+  2: ['Empatyczny', 'Opiekuńczy', 'Ciepły', 'Wspierający', 'Relacyjny', 'Wrażliwy'],
+  3: ['Ambitny', 'Skuteczny', 'Dynamiczny', 'Zorientowany na cel', 'Pewny siebie', 'Konkurencyjny'],
+  4: ['Autentyczny', 'Twórczy', 'Wrażliwy', 'Refleksyjny', 'Intensywny', 'Estetyczny'],
+  5: ['Analityczny', 'Wnikliwy', 'Samodzielny', 'Strategiczny', 'Dociekliwy', 'Zdystansowany'],
+  6: ['Lojalny', 'Ostrożny', 'Czujny', 'Odpowiedzialny', 'Sceptyczny', 'Wspólnotowy'],
+  7: ['Spontaniczny', 'Entuzjastyczny', 'Wizjonerski', 'Ciekawski', 'Pomysłowy', 'Energiczny'],
+  8: ['Bezpośredni', 'Stanowczy', 'Ochronny', 'Niezależny', 'Odważny', 'Dominujący'],
+  9: ['Spokojny', 'Harmonijny', 'Cierpliwy', 'Ugodowy', 'Stabilny', 'Wspierający'],
+};
+
+function extractDiscLabel(row: RawRow | undefined): string {
+  if (!row) return '';
+  const rep: any = row.report ?? row.raw_scores ?? {};
+  const label = rep?.label ?? rep?.class ?? rep?.type ?? rep?.profile ?? rep?.archetype ?? '';
+  const code = rep?.code ?? rep?.disc ?? rep?.style ?? rep?.combination ?? '';
+  const labelStr = typeof label === 'string' ? label : '';
+  const codeStr = typeof code === 'string' ? code : '';
+  const combined = [labelStr, codeStr ? `(${codeStr})` : ''].filter(Boolean).join(' ');
+  return combined.trim();
+}
+
+function extractMbtiLabel(row: RawRow | undefined): string {
+  if (!row) return '';
+  const rep: any = row.report ?? row.raw_scores ?? {};
+  const t = rep?.type ?? rep?.mbti ?? rep?.result ?? rep?.profile ?? rep?.code ?? '';
+  const s = typeof t === 'string' ? t : '';
+  const m = s.match(/\b([IE][NS][TF][JP])\b/i);
+  return (m?.[1] ?? '').toUpperCase();
+}
+
 interface RawRow { test_type:string; raw_scores:any; percentile_scores:any; report:any; }
 
 function EnnStar({ active, pct }: { active: number|null; pct: number }) {
@@ -95,6 +129,7 @@ export default function CharacterSheet() {
   const [loading, setLoading] = useState(true);
   const [authUser, setAuthUser] = useState<any>(null);
   const [lightMode, setLightMode] = useState(() => document.body.classList.contains('light-mode'));
+  const [byType, setByType] = useState<Record<string, RawRow>>({});
   const [raw, setRaw] = useState<Record<string,RawRow|null>>({
     HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, DARK_TRIAD:null, VALUES:null
   });
@@ -110,10 +145,15 @@ export default function CharacterSheet() {
         .eq('user_id', u.id)
         .order('created_at', { ascending: false });
       if (rows?.length) {
+        const bt: Record<string, RawRow> = {};
         const m: Record<string,RawRow|null> = {
           HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, DARK_TRIAD:null, VALUES:null
         };
-        for (const r of rows) if (m[r.test_type] === null) m[r.test_type] = r;
+        for (const r of rows) {
+          if (bt[r.test_type] == null) bt[r.test_type] = r;
+          if (m[r.test_type] === null) m[r.test_type] = r;
+        }
+        setByType(bt);
         setRaw(m);
       }
       setLoading(false);
@@ -124,7 +164,7 @@ export default function CharacterSheet() {
   const userName  = (authUser?.user_metadata?.full_name ?? authUser?.email?.split('@')[0] ?? 'Użytkownik') as string;
   const avatarUrl = (authUser?.user_metadata?.avatar_url ?? '') as string;
   const initials  = userName.split(' ').map((n:string) => n[0]).join('').toUpperCase().slice(0,2);
-  const done      = Object.values(raw).filter(Boolean).length;
+  const done      = CORE_TESTS.filter((k) => Boolean(raw[k])).length;
   const xpPct     = Math.round((done / 6) * 100);
   const charId    = authUser ? `PSY-${hashCode(authUser.id).toString(16).toUpperCase().slice(0,6)}` : 'PSY-??????';
   const now       = new Date();
@@ -215,6 +255,25 @@ export default function CharacterSheet() {
 
     return sentences.join(' ').replace(/\s+/g, ' ').trim().slice(0, 240);
   })();
+
+  const dominantTraits = (() => {
+    const traits: string[] = [];
+    if (ennN && ENN_TRAITS[ennN]) traits.push(...ENN_TRAITS[ennN]);
+
+    const hp: any = raw.HEXACO?.percentile_scores ?? {};
+    const get = (k: string) => Math.round(hp?.[k] ?? 0);
+    if (get('openness') >= 70) traits.unshift('Wizjonerski');
+    if (get('extraversion') >= 65) traits.unshift('Charyzmatyczny');
+    if (get('conscientiousness') >= 65) traits.unshift('Ambitny');
+    if (get('agreeableness') >= 65) traits.push('Dyplomatyczny');
+    if (get('honesty_humility') >= 65) traits.push('Prawy');
+
+    const uniq = Array.from(new Set(traits.map(t => t.trim()).filter(Boolean)));
+    return uniq.slice(0, 6);
+  })();
+
+  const discLabel = extractDiscLabel(byType.DISC ?? byType.DISC_TEST ?? byType.DISC_PROFILE);
+  const mbtiLabel = extractMbtiLabel(byType.MBTI ?? byType.MBTI_TEST ?? byType.MBTI_PROFILE);
 
   /* AI SYNTHESIS */
   const synthLines: string[] = [];
@@ -378,10 +437,8 @@ export default function CharacterSheet() {
                           <div className="text-white font-semibold leading-tight whitespace-normal break-words text-[15px]" title={userName}>
                             {userName}
                           </div>
-                          <div className="text-[11px] text-white/45 font-mono mt-1 whitespace-normal break-words">
-                            <span className="text-white/55">ID:</span> {charId}
-                            <span className="mx-1.5 text-white/25">•</span>
-                            <span className="text-white/55">Build:</span> {buildDate}
+                          <div className="text-[11px] text-white/35 font-mono mt-1">
+                            Profil · {done}/6 testów
                           </div>
                         </div>
                       </div>
@@ -405,6 +462,12 @@ export default function CharacterSheet() {
                         <span className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-white/60 whitespace-normal break-words">
                           {profileSignature || '—'}
                         </span>
+                        <span className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-white/45 whitespace-normal break-words">
+                          {charId}
+                        </span>
+                        <span className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-white/45 whitespace-normal break-words">
+                          Build {buildDate}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -425,23 +488,46 @@ export default function CharacterSheet() {
                   </div>
 
                   <div className="mt-5">
-                    <div className="text-[10px] tracking-[2px] font-mono text-white/35">PODOBNE POSTACIE</div>
-                    <div className="mt-3 flex flex-col gap-2">
-                      {pop.length > 0 ? (
-                        pop.map((p) => (
-                          <div key={p.name} className="bg-white/5 rounded-md p-2 flex justify-between gap-3">
-                            <span className="text-sm text-white/70 truncate">{p.name}</span>
-                            <span className="text-xs font-mono text-white/45 shrink-0">{p.pct}%</span>
-                          </div>
+                    <div className="text-[10px] tracking-[2px] font-mono text-white/35">CECHY DOMINUJĄCE</div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {dominantTraits.length > 0 ? (
+                        dominantTraits.map((t) => (
+                          <span key={t} className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-white/70">
+                            {t}
+                          </span>
                         ))
                       ) : (
                         <a
                           href="/user-profile-tests.html"
                           className="bg-white/5 rounded-md p-3 text-sm text-white/45 border border-white/10 hover:border-brand-primary/30 hover:text-white/70 transition no-underline"
                         >
-                          Ukończ Enneagram, aby odblokować archetyp i podobieństwa →
+                          Ukończ Enneagram i HEXACO, aby zobaczyć cechy dominujące →
                         </a>
                       )}
+                    </div>
+                  </div>
+
+                  <div className="mt-5">
+                    <div className="text-[10px] tracking-[2px] font-mono text-white/35">PROFIL</div>
+                    <div className="mt-3 space-y-2">
+                      {discLabel && (
+                        <div className="flex items-center justify-between gap-3 bg-white/5 border border-white/10 rounded-md px-3 py-2">
+                          <span className="text-xs text-white/50 font-mono">Klasa (DISC)</span>
+                          <span className="text-sm text-white/75">{discLabel}</span>
+                        </div>
+                      )}
+                      {mbtiLabel && (
+                        <div className="flex items-center justify-between gap-3 bg-white/5 border border-white/10 rounded-md px-3 py-2">
+                          <span className="text-xs text-white/50 font-mono">Typ (MBTI)</span>
+                          <span className="text-sm text-white/75 font-mono">{mbtiLabel}</span>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between gap-3 bg-white/5 border border-white/10 rounded-md px-3 py-2">
+                        <span className="text-xs text-white/50 font-mono">Enneagram</span>
+                        <span className="text-sm text-white/75">
+                          {ennN ? `Typ ${ennN} · ${ennL?.rpg ?? ''}` : 'Brak danych'}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
