@@ -35,8 +35,8 @@ const CSS = `
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 60% 40% at 20% 15%, rgba(162,155,254,.12) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 45% at 80% 80%, rgba(85,239,196,.09) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 40% at 20% 15%, rgba(217,70,239,.12) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 45% at 80% 80%, rgba(217,70,239,.07) 0%, transparent 65%),
     radial-gradient(ellipse 35% 30% at 50% 50%, rgba(80,40,160,.07) 0%, transparent 65%);
 }
 .en-glass {
@@ -58,7 +58,7 @@ const CSS = `
   inset: 0;
   border-radius: 20px;
   padding: 1px;
-  background: linear-gradient(145deg, rgba(255,255,255,.18) 0%, rgba(162,155,254,.2) 35%, rgba(85,239,196,.12) 70%, rgba(255,255,255,.04) 100%);
+  background: linear-gradient(145deg, rgba(255,255,255,.18) 0%, rgba(217,70,239,.2) 35%, rgba(217,70,239,.1) 65%, rgba(255,255,255,.04) 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -289,7 +289,7 @@ export default function EnneagramResults() {
     <><style>{CSS}</style>
     <div className="en-root" style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh' }}>
       <div style={{ textAlign:'center' }}>
-        <div style={{ width:44, height:44, border:'3px solid rgba(162,155,254,.25)', borderTopColor:'#a29bfe', borderRadius:'50%', animation:'spinLoader 1s linear infinite', margin:'0 auto 16px' }}/>
+        <div style={{ width:44, height:44, border:'3px solid rgba(217,70,239,.25)', borderTopColor:'#d946ef', borderRadius:'50%', animation:'spinLoader 1s linear infinite', margin:'0 auto 16px' }}/>
         <p style={{ color:'rgba(255,255,255,.4)', fontSize:13 }}>Ładowanie wyników...</p>
       </div>
     </div></>
@@ -302,7 +302,7 @@ export default function EnneagramResults() {
       <div className="en-glass" style={{ ...G, padding:40, textAlign:'center', maxWidth:380 }}>
         <div style={{ fontSize:44, marginBottom:16 }}>⚠️</div>
         <p style={{ color:'rgba(255,255,255,.7)', marginBottom:24, lineHeight:1.6 }}>{error || 'Nie znaleziono wyników testu'}</p>
-        <button onClick={() => window.location.href='/test?type=enneagram'} style={{ background:'linear-gradient(135deg,#4a28b0,#a29bfe)', color:'#fff', border:'none', borderRadius:10, padding:'12px 24px', fontWeight:700, cursor:'pointer', fontFamily:'inherit', fontSize:14 }}>Wykonaj Test</button>
+        <button onClick={() => window.location.href='/test?type=enneagram'} style={{ background:'linear-gradient(135deg,#7b1fa2,#d946ef)', color:'#fff', border:'none', borderRadius:10, padding:'12px 24px', fontWeight:700, cursor:'pointer', fontFamily:'inherit', fontSize:14 }}>Wykonaj Test</button>
       </div>
     </div></>
   );
@@ -353,11 +353,11 @@ export default function EnneagramResults() {
 
         {/* ── Header ── */}
         <header style={{ textAlign:'center', marginBottom:40 }}>
-          <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'8px 18px', borderRadius:100, background:`${ac.color}18`, border:`1px solid ${ac.color}44`, fontSize:13, fontWeight:600, color:ac.color, letterSpacing:'.5px', marginBottom:14 }}>
+          <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'8px 18px', borderRadius:100, background:'#d946ef18', border:'1px solid #d946ef44', fontSize:13, fontWeight:600, color:'#d946ef', letterSpacing:'.5px', marginBottom:14 }}>
             🔮 Soul Blueprint
           </div>
           <div style={{ fontSize:32, fontWeight:800, letterSpacing:'-.5px', margin:'0 0 8px' }}>
-            Twoje wyniki <span style={{ color:ac.color }}>Enneagram</span>
+            Twoje wyniki <span style={{ color:'#d946ef' }}>Enneagram</span>
           </div>
           <p style={{ fontSize:14, color:'rgba(255,255,255,.35)', margin:0 }}>
             <strong style={{ color:'rgba(255,255,255,.55)', fontWeight:500 }}>Test Enneagramu</strong> · Poznaj swoją głęboką motywację i wzorzec osobowości
@@ -395,7 +395,7 @@ export default function EnneagramResults() {
               <div style={{ fontSize:22, fontWeight:700, color:'#fff', marginBottom:2 }}>{primaryType.name}</div>
               <div style={{ fontSize:13, color:'rgba(255,255,255,.4)', fontStyle:'italic', marginBottom:10 }}>"{primaryType.name_en}"</div>
               {wing && (
-                <div style={{ display:'inline-flex', alignItems:'center', gap:6, fontSize:12, fontWeight:600, color:'rgba(255,255,255,.5)', background:'rgba(255,255,255,.06)', border:'1px solid rgba(255,255,255,.1)', padding:'4px 10px', borderRadius:100 }}>
+                <div style={{ display:'inline-flex', alignItems:'center', gap:6, fontSize:12, fontWeight:600, color:'#d946ef', background:'rgba(217,70,239,.1)', border:'1px solid rgba(217,70,239,.3)', padding:'4px 10px', borderRadius:100 }}>
                   🪶 Skrzydło {wing.type}
                 </div>
               )}
@@ -495,10 +495,10 @@ export default function EnneagramResults() {
         {/* ── Growth Path ── */}
         {interp?.growth_path && (
           <div className="en-glass en-card" style={{ ...G, padding:32, marginBottom:24, overflow:'hidden' }}
-            onMouseEnter={hoverOn(ac.color, ac.glow)}
+            onMouseEnter={hoverOn('#d946ef','rgba(217,70,239,.5)')}
             onMouseLeave={hoverOff}>
-            <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:400, height:200, background:`${ac.color}0a`, borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }}/>
-            <div className="en-glow-line" style={{ background:ac.color, boxShadow:`0 0 10px 2px ${ac.glow}` }}/>
+            <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:400, height:200, background:'rgba(217,70,239,.06)', borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }}/>
+            <div className="en-glow-line" style={{ background:'#d946ef', boxShadow:'0 0 10px 2px rgba(217,70,239,.5)' }}/>
             <div style={{ position:'relative' }}>
               <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:16 }}>
                 <div style={{ width:36, height:36, borderRadius:10, background:`${ac.color}20`, border:`1px solid ${ac.color}40`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18 }}>🌱</div>
@@ -511,12 +511,12 @@ export default function EnneagramResults() {
 
         {/* ── All Type Scores ── */}
         <div className="en-glass en-card" style={{ ...G, padding:32, marginBottom:24, overflow:'hidden' }}
-          onMouseEnter={hoverOn('#a29bfe','rgba(162,155,254,.4)')}
+          onMouseEnter={hoverOn('#d946ef','rgba(217,70,239,.5)')}
           onMouseLeave={hoverOff}>
           <div style={{ fontSize:11, fontWeight:600, letterSpacing:'3px', textTransform:'uppercase', color:'rgba(255,255,255,.3)', marginBottom:24, display:'flex', alignItems:'center', gap:12 }}>
-            Wszystkie Typy <span style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(162,155,254,.2),transparent)' }}/>
+            Wszystkie Typy <span style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(217,70,239,.2),transparent)' }}/>
           </div>
-          <div className="en-glow-line" style={{ background:'#a29bfe', boxShadow:'0 0 10px 2px rgba(162,155,254,.5)' }}/>
+          <div className="en-glow-line" style={{ background:'#d946ef', boxShadow:'0 0 10px 2px rgba(217,70,239,.5)' }}/>
           <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
             {sortedTypes.map(({ type, score }) => {
               const typeAc = TYPE_ACCENT[type] || TYPE_ACCENT[1];
@@ -546,10 +546,10 @@ export default function EnneagramResults() {
 
         {/* ── AI Interpretation ── */}
         <div className="en-glass en-card" style={{ ...G, padding:36, marginBottom:32, overflow:'hidden' }}
-          onMouseEnter={hoverOn('#a29bfe','rgba(162,155,254,.4)')}
+          onMouseEnter={hoverOn('#d946ef','rgba(217,70,239,.5)')}
           onMouseLeave={hoverOff}>
-          <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:400, height:180, background:'rgba(162,155,254,.06)', borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }}/>
-          <div className="en-glow-line" style={{ background:'#a29bfe', boxShadow:'0 0 10px 2px rgba(162,155,254,.5)' }}/>
+          <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:400, height:180, background:'rgba(217,70,239,.06)', borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }}/>
+          <div className="en-glow-line" style={{ background:'#d946ef', boxShadow:'0 0 10px 2px rgba(217,70,239,.5)' }}/>
           <div style={{ position:'relative' }}>
             <AiInterpretation
               interpretation={aiInterp}
@@ -557,8 +557,8 @@ export default function EnneagramResults() {
               error={aiError}
               onRegenerate={regenerate}
               onRetry={() => generateInterpretation(results)}
-              accentColor={ac.color}
-              accentGlow={ac.glow}
+              accentColor='#d946ef'
+              accentGlow='rgba(217,70,239,.5)'
               testLabel="Twojego profilu Enneagram"
             />
           </div>
@@ -567,7 +567,7 @@ export default function EnneagramResults() {
         {/* ── Footer Buttons ── */}
         <div style={{ display:'flex', justifyContent:'center', gap:12 }}>
           <button onClick={() => window.location.href='/user-profile-tests.html'}
-            style={{ background:`linear-gradient(135deg,#4a28b0,${ac.color})`, color:'#fff', border:'none', borderRadius:12, padding:'13px 28px', fontWeight:700, fontSize:14, cursor:'pointer', fontFamily:'inherit', boxShadow:`0 0 20px ${ac.glow}` }}>
+            style={{ background:'linear-gradient(135deg,#7b1fa2,#d946ef)', color:'#fff', border:'none', borderRadius:12, padding:'13px 28px', fontWeight:700, fontSize:14, cursor:'pointer', fontFamily:'inherit', boxShadow:'0 0 20px rgba(217,70,239,.5)' }}>
             Wróć do Dashboardu
           </button>
           <button onClick={handleRetake}

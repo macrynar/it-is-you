@@ -66,9 +66,9 @@ const CSS = `
   content: '';
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    radial-gradient(ellipse 55% 40% at 10% 15%, rgba(232,0,28,.14) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 40% at 10% 15%, rgba(244,63,94,.14) 0%, transparent 60%),
     radial-gradient(ellipse 45% 50% at 88% 70%, rgba(123,31,162,.16) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 35% at 55% 45%, rgba(255,45,85,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 55% 45%, rgba(244,63,94,.07) 0%, transparent 60%),
     radial-gradient(ellipse 30% 30% at 80% 15%, rgba(255,98,48,.06) 0%, transparent 55%),
     #0d0a1a;
 }
@@ -117,7 +117,7 @@ const CSS = `
   isolation: isolate;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.08),
-    0 0 0 1px rgba(255,45,85,.1),
+    0 0 0 1px rgba(251,113,133,.1),
     0 8px 32px -4px rgba(0,0,0,.7),
     0 2px 8px -2px rgba(0,0,0,.5);
 }
@@ -128,7 +128,7 @@ const CSS = `
   padding: 1px;
   background: linear-gradient(145deg,
     rgba(255,255,255,.12) 0%,
-    rgba(255,45,85,.22) 30%,
+    rgba(251,113,133,.22) 30%,
     rgba(123,31,162,.18) 70%,
     rgba(255,255,255,.03) 100%
   );
@@ -140,14 +140,14 @@ const CSS = `
 
 /* page badge pulse */
 @keyframes badgePulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(232,0,28,0); }
-  50%     { box-shadow: 0 0 16px 2px rgba(232,0,28,.25); }
+  0%,100% { box-shadow: 0 0 0 0 rgba(244,63,94,0); }
+  50%     { box-shadow: 0 0 16px 2px rgba(244,63,94,.25); }
 }
 
 /* alert glow */
 @keyframes alertGlow {
-  0%,100% { box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(232,0,28,.15), 0 0 30px -4px rgba(232,0,28,.2), 0 8px 32px -4px rgba(0,0,0,.6); }
-  50%     { box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(232,0,28,.35), 0 0 50px -4px rgba(232,0,28,.35), 0 8px 32px -4px rgba(0,0,0,.6); }
+  0%,100% { box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(244,63,94,.15), 0 0 30px -4px rgba(244,63,94,.2), 0 8px 32px -4px rgba(0,0,0,.6); }
+  50%     { box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(244,63,94,.35), 0 0 50px -4px rgba(244,63,94,.35), 0 8px 32px -4px rgba(0,0,0,.6); }
 }
 
 /* trait card */
@@ -326,7 +326,7 @@ function DarkTriadResults() {
   if (loading) return (
     <div style={{ minHeight: '100vh', background: '#0d0a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
       <style>{CSS}</style>
-      <div style={{ width: 56, height: 56, border: '3px solid rgba(255,45,85,.3)', borderTopColor: '#ff2d55', borderRadius: '50%', animation: 'spinLoader 1s linear infinite' }} />
+      <div style={{ width: 56, height: 56, border: '3px solid rgba(251,113,133,.3)', borderTopColor: '#fb7185', borderRadius: '50%', animation: 'spinLoader 1s linear infinite' }} />
       <p style={{ color: 'rgba(255,255,255,.4)', fontFamily: 'Space Grotesk', fontSize: 14 }}>Analiza Cienia…</p>
     </div>
   );
@@ -337,9 +337,9 @@ function DarkTriadResults() {
       <style>{CSS}</style>
       <div className="dt-glass" style={{ padding: 40, maxWidth: 440, textAlign: 'center' }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
-        <h2 style={{ color: '#ff2d55', marginBottom: 8, fontSize: 22, fontWeight: 700 }}>Błąd</h2>
+        <h2 style={{ color: '#fb7185', marginBottom: 8, fontSize: 22, fontWeight: 700 }}>Błąd</h2>
         <p style={{ color: 'rgba(255,255,255,.5)', marginBottom: 24 }}>{error}</p>
-        <button onClick={() => window.location.href = '/user-profile-tests.html'} style={{ background: 'rgba(255,45,85,.15)', border: '1px solid rgba(255,45,85,.4)', color: '#ff2d55', padding: '10px 24px', borderRadius: 12, cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600 }}>
+        <button onClick={() => window.location.href = '/user-profile-tests.html'} style={{ background: 'rgba(251,113,133,.15)', border: '1px solid rgba(251,113,133,.4)', color: '#fb7185', padding: '10px 24px', borderRadius: 12, cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600 }}>
           Wróć do Dashboardu
         </button>
       </div>
@@ -369,8 +369,8 @@ function DarkTriadResults() {
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           padding: '7px 18px', borderRadius: 100,
-          background: 'rgba(232,0,28,.12)', border: '1px solid rgba(232,0,28,.35)',
-          fontSize: 11, fontWeight: 700, color: '#ff2d55',
+          background: 'rgba(244,63,94,.12)', border: '1px solid rgba(244,63,94,.35)',
+          fontSize: 11, fontWeight: 700, color: '#fb7185',
           letterSpacing: 3, textTransform: 'uppercase',
           marginBottom: 18, backdropFilter: 'blur(10px)',
           animation: 'badgePulse 3s ease-in-out infinite',
@@ -379,7 +379,7 @@ function DarkTriadResults() {
         </div>
         <div style={{ fontSize: 42, fontWeight: 800, letterSpacing: -1, marginBottom: 10, lineHeight: 1.1, display: 'block', fontFamily: "'Space Grotesk', sans-serif" }}>
           <span style={{ color: '#ffffff' }}>Analiza </span>
-          <span style={{ color: '#ff2d55', textShadow: '0 0 30px rgba(255,45,85,.5), 0 0 60px rgba(255,45,85,.2)' }}>Cienia</span>
+          <span style={{ color: '#fb7185', textShadow: '0 0 30px rgba(251,113,133,.5), 0 0 60px rgba(251,113,133,.2)' }}>Cienia</span>
         </div>
         <div style={{ fontSize: 14, color: 'rgba(255,255,255,.35)', fontWeight: 400, display: 'block', marginTop: 4 }}>Dark Triad Assessment (SD3)</div>
       </header>
@@ -388,15 +388,15 @@ function DarkTriadResults() {
       {(report.overall_risk === 'high' || sortedIds.some(id => dims[id]?.level === 'high')) && (
         <div style={{
           maxWidth: 900, margin: '0 auto 28px', padding: '24px 28px', borderRadius: 16,
-          background: 'rgba(232,0,28,.08)', border: '1px solid rgba(232,0,28,.3)',
+          background: 'rgba(244,63,94,.08)', border: '1px solid rgba(244,63,94,.3)',
           backdropFilter: 'blur(16px)', display: 'flex', alignItems: 'flex-start', gap: 16,
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(232,0,28,.15), 0 0 30px -4px rgba(232,0,28,.2), 0 8px 32px -4px rgba(0,0,0,.6)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(244,63,94,.15), 0 0 30px -4px rgba(244,63,94,.2), 0 8px 32px -4px rgba(0,0,0,.6)',
           animation: 'alertGlow 3s ease-in-out infinite',
         }}>
           <div style={{ fontSize: 28, flexShrink: 0, filter: 'drop-shadow(0 0 8px rgba(255,170,0,.6))' }}>⚠️</div>
           <div>
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 6 }}>Status Ogólny</div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#ff2d55', lineHeight: 1.5, textShadow: '0 0 20px rgba(255,45,85,.3)' }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#fb7185', lineHeight: 1.5, textShadow: '0 0 20px rgba(251,113,133,.3)' }}>
               {report.risk_alert || 'Jeden lub więcej wymiarów wskazuje na podwyższone ryzyko.'}
             </div>
           </div>
@@ -521,15 +521,15 @@ function DarkTriadResults() {
           <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', color: 'rgba(255,255,255,.25)' }}>Podsumowanie</div>
 
           {/* overall score */}
-          <div style={{ background: 'rgba(232,0,28,.07)', border: '1px solid rgba(232,0,28,.2)', borderRadius: 14, padding: 20, textAlign: 'center' }}>
-            <div style={{ fontSize: 52, fontWeight: 800, letterSpacing: -2, color: '#ff2d55', textShadow: '0 0 30px rgba(255,45,85,.55), 0 0 60px rgba(255,45,85,.2)', lineHeight: 1, marginBottom: 4 }}>
+          <div style={{ background: 'rgba(244,63,94,.07)', border: '1px solid rgba(244,63,94,.2)', borderRadius: 14, padding: 20, textAlign: 'center' }}>
+            <div style={{ fontSize: 52, fontWeight: 800, letterSpacing: -2, color: '#fb7185', textShadow: '0 0 30px rgba(251,113,133,.55), 0 0 60px rgba(251,113,133,.2)', lineHeight: 1, marginBottom: 4 }}>
               {avgScore}
             </div>
             <div style={{ fontSize: 11, color: 'rgba(255,255,255,.3)', letterSpacing: 1 }}>Średni wynik Dark Triad</div>
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 12,
-              fontSize: 12, fontWeight: 700, color: '#ff2d55',
-              background: 'rgba(255,45,85,.1)', border: '1px solid rgba(255,45,85,.25)',
+              fontSize: 12, fontWeight: 700, color: '#fb7185',
+              background: 'rgba(251,113,133,.1)', border: '1px solid rgba(251,113,133,.25)',
               padding: '5px 12px', borderRadius: 100,
             }}>
               🔴 Top {maxPercentile}% populacji
@@ -595,8 +595,8 @@ function DarkTriadResults() {
             error={interpretationError}
             onRegenerate={regenerateInterpretation}
             onRetry={() => generateInterpretation(rawScores)}
-            accentColor="#ff2d55"
-            accentGlow="rgba(255,45,85,.5)"
+            accentColor="#fb7185"
+            accentGlow="rgba(251,113,133,.5)"
             testLabel="profilu Dark Triad"
           />
         </div>
@@ -612,7 +612,7 @@ function DarkTriadResults() {
         </button>
         <button
           onClick={() => { if (confirm('Powtórzyć test? Wyniki zostaną zastąpione.')) window.location.href = '/test'; }}
-          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 28px', borderRadius: 14, background: 'rgba(255,45,85,.12)', border: '1px solid rgba(255,45,85,.35)', color: '#ff2d55', cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600, fontSize: 14 }}
+          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 28px', borderRadius: 14, background: 'rgba(251,113,133,.12)', border: '1px solid rgba(251,113,133,.35)', color: '#fb7185', cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600, fontSize: 14 }}
         >
           <RefreshCw size={16} /> Wykonaj Test Ponownie
         </button>

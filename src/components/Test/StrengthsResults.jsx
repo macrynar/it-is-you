@@ -38,9 +38,9 @@ const getCategoryInfo = id => STRENGTHS_TEST.categories.find(c => c.id === id);
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 .sr-root{font-family:'Space Grotesk',sans-serif;background:#0d0f2b;color:#fff;min-height:100vh;overflow-x:hidden;}
-.sr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(52,211,153,.08) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(123,94,167,.12) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
+.sr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(251,191,36,.08) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(123,94,167,.12) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
 .sr-glass{background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:20px;position:relative;isolation:isolate;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6);}
-.sr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(52,211,153,.15) 35%,rgba(123,94,167,.12) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.sr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(251,191,36,.15) 35%,rgba(123,94,167,.12) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
 .sr-talent-card{border-radius:20px;position:relative;isolation:isolate;overflow:hidden;background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;cursor:default;}
 .sr-talent-card:hover{transform:translateY(-6px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(255,255,255,.1),0 0 40px -8px var(--cat-color,#34d399),0 20px 48px -8px rgba(0,0,0,.7);}
 .sr-talent-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
@@ -155,8 +155,8 @@ export default function StrengthsResults() {
     <div style={{ background: '#0d0f2b', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <style>{CSS}</style>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ width: 48, height: 48, border: '3px solid rgba(52,211,153,.2)', borderTopColor: '#34d399', borderRadius: '50%', margin: '0 auto 16px', animation: 'spinLoader 1s linear infinite' }} />
-        <p style={{ color: '#34d399', fontFamily: 'Space Grotesk,sans-serif', fontWeight: 600 }}>Ładowanie wyników...</p>
+        <div style={{ width: 48, height: 48, border: '3px solid rgba(251,191,36,.2)', borderTopColor: '#fbbf24', borderRadius: '50%', margin: '0 auto 16px', animation: 'spinLoader 1s linear infinite' }} />
+        <p style={{ color: '#fbbf24', fontFamily: 'Space Grotesk,sans-serif', fontWeight: 600 }}>Ładowanie wyników...</p>
       </div>
     </div>
   );
@@ -169,7 +169,7 @@ export default function StrengthsResults() {
         <h2 style={{ color: '#f87171', fontSize: '1.2rem', fontWeight: 700, marginBottom: 12 }}>Błąd</h2>
         <p style={{ color: 'rgba(255,255,255,.6)', marginBottom: 24 }}>{error}</p>
         <button onClick={() => window.location.href = '/user-profile-tests.html'}
-          style={{ padding: '10px 24px', borderRadius: 10, background: 'linear-gradient(135deg,#065f46,#34d399)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'Space Grotesk,sans-serif' }}>
+          style={{ padding: '10px 24px', borderRadius: 10, background: 'linear-gradient(135deg,#92400e,#fbbf24)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'Space Grotesk,sans-serif' }}>
           Wróć do Dashboardu
         </button>
       </div>
@@ -208,7 +208,7 @@ export default function StrengthsResults() {
 
         <div className="sr-glass sr-fadein" style={{ padding: '44px 40px', marginBottom: 32, textAlign: 'center' }}>
           <div style={{ fontSize: '3.2rem', marginBottom: 12, lineHeight: 1 }}>🎯</div>
-          <h1 style={{ fontSize: '2.1rem', fontWeight: 800, marginBottom: 8, background: 'linear-gradient(135deg,#34d399 0%,#60a5fa 50%,#b08fff 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <h1 style={{ fontSize: '2.1rem', fontWeight: 800, marginBottom: 8, background: 'linear-gradient(135deg,#fbbf24 0%,#f97316 50%,#b08fff 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             Twoje Top 5 Talentów
           </h1>
           <p style={{ color: 'rgba(255,255,255,.5)', fontSize: '.95rem' }}>Odkryj swoje naturalne mocne strony</p>
@@ -376,7 +376,7 @@ export default function StrengthsResults() {
             error={interpError}
             onRegenerate={handleRegenerate}
             onRetry={() => rawScores && generateInterpretation(rawScores)}
-            accentColor="#34d399"
+            accentColor="#fbbf24"
             accentGlow="rgba(52,211,153,.5)"
             testLabel="Test Talentów"
           />

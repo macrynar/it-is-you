@@ -45,9 +45,9 @@ const radarLabelAnchors = [
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 .cr-root{font-family:'Space Grotesk',sans-serif;background:#0d0f2b;color:#fff;min-height:100vh;overflow-x:hidden;}
-.cr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(14,165,233,.08) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(217,70,239,.1) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
+.cr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(52,211,153,.08) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(52,211,153,.06) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
 .cr-glass{background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:20px;position:relative;isolation:isolate;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6);}
-.cr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(14,165,233,.15) 35%,rgba(217,70,239,.12) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.cr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(52,211,153,.15) 35%,rgba(52,211,153,.08) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
 .cr-interest-card{border-radius:20px;position:relative;isolation:isolate;overflow:hidden;background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;cursor:default;}
 .cr-interest-card:hover{transform:translateY(-6px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(255,255,255,.1),0 0 40px -8px var(--type-color,#0ea5e9),0 20px 48px -8px rgba(0,0,0,.7);}
 .cr-interest-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
@@ -164,7 +164,7 @@ export default function CareerResults() {
       <div style={{ background: '#0d0f2b', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Space Grotesk', sans-serif" }}>
         <style>{`@keyframes spinLoader{to{transform:rotate(360deg);}}`}</style>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ width: 48, height: 48, border: '3px solid rgba(14,165,233,.3)', borderTop: '3px solid #0ea5e9', borderRadius: '50%', animation: 'spinLoader 1s linear infinite', margin: '0 auto 16px' }} />
+          <div style={{ width: 48, height: 48, border: '3px solid rgba(52,211,153,.3)', borderTop: '3px solid #34d399', borderRadius: '50%', animation: 'spinLoader 1s linear infinite', margin: '0 auto 16px' }} />
           <p style={{ color: 'rgba(255,255,255,.5)', fontSize: '.95rem' }}>Ładowanie wyników...</p>
         </div>
       </div>
@@ -259,7 +259,7 @@ export default function CareerResults() {
             <div className="cr-glass cr-fadein" style={{ padding: '28px 24px 20px', marginBottom: 24, animationDelay: '.1s' }}>
               <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 28, display: 'flex', alignItems: 'center', gap: 12 }}>
                 Profil Zainteresowań
-                <span style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,rgba(14,165,233,.2),transparent)' }} />
+                <span style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,rgba(52,211,153,.2),transparent)' }} />
               </div>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <svg viewBox="0 0 420 420" style={{ width: '100%', maxWidth: 420, height: 'auto', overflow: 'visible' }}>
