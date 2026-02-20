@@ -174,8 +174,17 @@ export default function CharacterSheet() {
 
   /* RPG meta */
   const lvlLabel = ['NOVICE','AWAKENED','SEEKER','ADEPT','INITIATE','OPERATOR'][Math.min(done,5)];
-  const rareLabel = done>=6 ? '◈ LEGENDARY' : done>=4 ? '◆ RARE' : done>=2 ? '◇ UNCOMMON' : '○ COMMON';
+  const rareLabel = done>=6 ? 'LEGENDARY' : done>=4 ? 'RARE' : done>=2 ? 'UNCOMMON' : 'COMMON';
   const codeStr = [hexTop3[0]?.short, hexTop3[1]?.short, ennN ? `E${ennN}` : null, holland||null].filter(Boolean).join(' · ');
+
+  const profileSignature = codeStr ? `Sygnatura profilu: ${codeStr}` : '';
+  const archetypeAiBlurb = (() => {
+    if (!ennL || !ennN) return '';
+    const core = hexTop3.length ? `Rdzeń: ${hexTop3.map(h => `${h.label} ${h.pct}%`).join(', ')}` : '';
+    const talents = top5?.length ? `Talenty: ${top5.slice(0,2).map((t:any) => t.name ?? t.name_en).filter(Boolean).join(' + ')}` : '';
+    const parts = [ennL.desc, core, talents].filter(Boolean);
+    return parts.join(' · ').slice(0, 180);
+  })();
 
   /* AI SYNTHESIS */
   const synthLines: string[] = [];
@@ -326,9 +335,9 @@ export default function CharacterSheet() {
                     <div aria-hidden className="absolute -top-14 -right-14 w-44 h-44 rounded-full blur-3xl opacity-25" style={{ background: 'rgba(56,182,255,.35)' }} />
                     <div aria-hidden className="absolute -bottom-16 -left-16 w-52 h-52 rounded-full blur-3xl opacity-20" style={{ background: 'rgba(176,143,255,.35)' }} />
 
-                    <div className="relative flex items-start justify-between gap-3">
+                    <div className="relative flex items-start justify-between gap-4">
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-12 h-12 rounded-full border border-white/15 bg-white/5 overflow-hidden flex items-center justify-center shrink-0" style={{ boxShadow: '0 0 0 1px rgba(56,182,255,.18), 0 0 20px rgba(56,182,255,.08)' }}>
+                        <div className="w-14 h-14 rounded-full border border-white/15 bg-white/5 overflow-hidden flex items-center justify-center shrink-0" style={{ boxShadow: '0 0 0 1px rgba(56,182,255,.18), 0 0 20px rgba(56,182,255,.08)' }}>
                           {avatarUrl ? (
                             <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
                           ) : (
@@ -336,26 +345,33 @@ export default function CharacterSheet() {
                           )}
                         </div>
                         <div className="min-w-0">
-                          <div className="text-white font-semibold truncate leading-tight">{userName}</div>
-                          <div className="text-[11px] text-white/45 font-mono mt-0.5">{charId} · build {buildDate}</div>
+                          <div className="text-white font-semibold leading-tight whitespace-normal break-words" title={userName}>
+                            {userName}
+                          </div>
+                          <div className="text-[11px] text-white/45 font-mono mt-1 whitespace-normal break-words">
+                            <span className="text-white/55">ID:</span> {charId} <span className="mx-1.5">·</span>
+                            <span className="text-white/55">Build:</span> {buildDate}
+                          </div>
                         </div>
                       </div>
 
                       <div className="shrink-0 flex flex-col items-end gap-2">
                         <span className="badge-primary">{rareLabel}</span>
-                        <span className="badge-pending">LVL {done} · {lvlLabel}</span>
+                        <span className="badge-pending">Poziom {done} · {lvlLabel}</span>
                       </div>
                     </div>
 
                     <div className="relative mt-4">
                       <div className="flex items-center justify-between text-[10px] tracking-[2px] font-mono text-white/35">
                         <span>POSTĘP PROFILU</span>
-                        <span className="text-white/50">{done}/6 · {xpPct}%</span>
+                        <span className="text-white/50">Testy: {done}/6 · {xpPct}%</span>
                       </div>
                       <div className="stat-bar-track mt-2">
                         <div className="stat-bar-fill" style={{ width: `${Math.max(0, Math.min(100, xpPct))}%` }} />
                       </div>
-                      <div className="mt-2 text-[11px] text-white/45 font-mono truncate">{codeStr || '—'}</div>
+                      <div className="mt-2 text-[11px] text-white/45 font-mono whitespace-normal break-words">
+                        {profileSignature || 'Sygnatura profilu: —'}
+                      </div>
                     </div>
                   </div>
 
@@ -363,6 +379,15 @@ export default function CharacterSheet() {
                     <div className="text-[10px] tracking-[2px] font-mono text-white/35">ARCHETYP RPG</div>
                     <div className="mt-2 text-xl font-extrabold text-brand-secondary leading-tight">{archetype}</div>
                     <div className="mt-1 text-sm text-white/55 italic">{epithet}</div>
+                    {archetypeAiBlurb ? (
+                      <div className="mt-3 text-sm text-white/60 leading-relaxed bg-white/5 border border-white/10 rounded-lg p-3">
+                        <span className="text-white/75 font-semibold">AI:</span> {archetypeAiBlurb}
+                      </div>
+                    ) : (
+                      <div className="mt-3 text-sm text-white/45">
+                        Ukończ Enneagram i HEXACO, aby wygenerować opis archetypu.
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-5">
@@ -388,30 +413,30 @@ export default function CharacterSheet() {
 
                   <div className="mt-5 grid grid-cols-2 gap-3">
                     <div className="min-w-0">
-                      <div className="text-[10px] tracking-[2px] font-mono text-white/35">CHARGES</div>
+                      <div className="text-[10px] tracking-[2px] font-mono text-emerald-200/70">CHARGES</div>
                       <div className="mt-2 space-y-1">
                         {(ennL?.charges ?? []).slice(0, 3).map((s) => (
-                          <div key={s} className="text-xs text-white/65 bg-white/5 border border-white/10 rounded-md px-2 py-1 truncate">
+                          <div key={s} className="text-xs text-emerald-100/80 bg-emerald-500/10 border border-emerald-400/20 rounded-md px-2 py-1 truncate">
                             {s}
                           </div>
                         ))}
                         {!ennL && (
-                          <div className="text-xs text-white/40 bg-white/5 border border-white/10 rounded-md px-2 py-1">
+                          <div className="text-xs text-emerald-100/50 bg-emerald-500/10 border border-emerald-400/20 rounded-md px-2 py-1">
                             Ukończ Enneagram
                           </div>
                         )}
                       </div>
                     </div>
                     <div className="min-w-0">
-                      <div className="text-[10px] tracking-[2px] font-mono text-white/35">DRAINS</div>
+                      <div className="text-[10px] tracking-[2px] font-mono text-rose-200/70">DRAINS</div>
                       <div className="mt-2 space-y-1">
                         {(ennL?.drains ?? []).slice(0, 3).map((s) => (
-                          <div key={s} className="text-xs text-white/65 bg-white/5 border border-white/10 rounded-md px-2 py-1 truncate">
+                          <div key={s} className="text-xs text-rose-100/80 bg-rose-500/10 border border-rose-400/20 rounded-md px-2 py-1 truncate">
                             {s}
                           </div>
                         ))}
                         {!ennL && (
-                          <div className="text-xs text-white/40 bg-white/5 border border-white/10 rounded-md px-2 py-1">
+                          <div className="text-xs text-rose-100/50 bg-rose-500/10 border border-rose-400/20 rounded-md px-2 py-1">
                             Ukończ Enneagram
                           </div>
                         )}
