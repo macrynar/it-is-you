@@ -887,6 +887,25 @@
         .ch-empty-text { font-size:.78rem; color:rgba(255,255,255,.3); margin-bottom:10px; }
         .ch-go-btn { display:inline-block; padding:6px 13px; border-radius:6px; border:1px solid rgba(99,102,241,.4); background:rgba(99,102,241,.12); color:#a5b4fc; font-size:.72rem; font-weight:600; cursor:pointer; transition:all .2s; font-family:inherit; }
         .ch-go-btn:hover { background:rgba(99,102,241,.22); color:#fff; }
+
+        /* ════════ BENTO GRID REDESIGN ════════ */
+        .ch-bento { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+        .ch-tile  { background:rgba(8,14,38,.88); backdrop-filter:blur(28px) saturate(160%); -webkit-backdrop-filter:blur(28px) saturate(160%); border:1px solid rgba(56,182,255,.11); border-radius:14px; position:relative; overflow:hidden; padding:20px; }
+        .ch-tile::before,.ch-tile::after { content:''; position:absolute; width:13px; height:13px; border-color:#38b6ff; border-style:solid; opacity:.22; pointer-events:none; z-index:0; }
+        .ch-tile::before { top:0; left:0; border-width:1.5px 0 0 1.5px; }
+        .ch-tile::after  { bottom:0; right:0; border-width:0 1.5px 1.5px 0; }
+        .ch-tile-accent { position:absolute; top:0; left:0; right:0; height:2px; border-radius:14px 14px 0 0; z-index:1; }
+        .ch-t-hero  { grid-column:span 2; grid-row:span 2; }
+        .ch-t-radar { grid-column:span 1; grid-row:span 2; }
+        .ch-t-enn   { grid-column:span 1; grid-row:span 2; }
+        .ch-t-str   { grid-column:span 2; }
+        .ch-t-dt    { grid-column:span 2; }
+        .ch-t-synth { grid-column:1/-1; }
+        .ch-tl { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2.5px; color:rgba(56,182,255,.38); text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+        .ch-tl::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(56,182,255,.18),transparent); }
+        @media (max-width:1100px) { .ch-bento { grid-template-columns:repeat(2,1fr); } .ch-t-hero { grid-column:1/-1; grid-row:auto; } .ch-t-str,.ch-t-dt { grid-column:span 2; } }
+        @media (max-width:680px)  { .ch-bento { grid-template-columns:1fr; } .ch-t-radar,.ch-t-enn,.ch-t-str,.ch-t-dt { grid-column:1/-1; grid-row:auto; } }
+        /* ════════ END BENTO CSS ════════ */
     </style>
 </head>
 <body class="min-h-screen text-white grid-bg">
@@ -1301,7 +1320,7 @@
         <div id="tab-character" style="display:none;">
         <div class="ch-sheet-wrapper">
 
-          <!-- TOP STATUS BAR -->
+          <!-- STATUS BAR -->
           <div class="ch-topbar">
             <div style="display:flex;align-items:center;gap:10px;">
               <div class="ch-tb-pill"><div class="ch-tb-dot"></div><span id="ch-completion-pill">ŁADOWANIE PROFILU…</span></div>
@@ -1309,13 +1328,15 @@
             <div class="ch-tb-meta" id="ch-footer-id-top">CHAR-ID: PSY----- · PSYCHER v2.0</div>
           </div>
 
-          <!-- HERO ROW -->
-          <div class="ch-hero">
+          <!-- BENTO GRID -->
+          <div class="ch-bento">
 
-            <!-- AVATAR PANEL -->
-            <div class="ch-panel ch-av-panel">
-              <div class="ch-pi">
-                <div class="ch-av-wrap">
+            <!-- ── T1: HERO CORE 2×2 ── -->
+            <div class="ch-tile ch-t-hero">
+              <div class="ch-tile-accent" style="background:linear-gradient(90deg,#38b6ff,#7b5ea7);"></div>
+              <div class="ch-tl">// IDENTYFIKACJA · HERO CORE</div>
+              <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px;">
+                <div class="ch-av-wrap" style="position:relative;width:118px;height:118px;flex-shrink:0;">
                   <img id="ch-avatar-img" src="" alt="" style="display:none;position:absolute;top:6px;left:6px;width:106px;height:106px;border-radius:50%;object-fit:cover;z-index:5;" />
                   <svg class="ch-av-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -1376,197 +1397,130 @@
                     </g>
                   </svg>
                 </div>
-                <div class="ch-lvl"><div class="ch-ldot"></div><span id="ch-lvl-text">LVL 0 · POCZĄTKUJĄCY</span></div>
-                <div class="ch-cname" id="ch-cname">---</div>
-                <div class="ch-carch" id="ch-carch">Profil w budowie</div>
-                <div class="ch-ccodes" id="ch-ccodes">UZUPEŁNIJ TESTY · BRAK DANYCH</div>
-                <div class="ch-rare" id="ch-rare">⚙ OBLICZANIE PROFILU</div>
-                <div class="ch-xp-wrap">
-                  <div class="ch-xp-lbl">
-                    <span style="color:rgba(255,255,255,.22)">PROFIL XP</span>
-                    <span style="color:rgba(56,182,255,.6)" id="ch-xp-label">0/7 TESTÓW</span>
-                  </div>
-                  <div class="ch-xp-track"><div class="ch-xp-fill" id="ch-xp-fill" style="width:0%"></div></div>
                 </div>
+                <div style="flex:1;min-width:160px;">
+                  <div class="ch-lvl"><div class="ch-ldot"></div><span id="ch-lvl-text">LVL 0 · POCZĄTKUJĄCY</span></div>
+                  <div class="ch-cname" id="ch-cname">---</div>
+                  <div class="ch-carch" id="ch-carch">Profil w budowie</div>
+                  <div class="ch-ccodes" id="ch-ccodes">UZUPEŁNIJ TESTY · BRAK DANYCH</div>
+                  <div class="ch-rare" id="ch-rare">⚙ OBLICZANIE PROFILU</div>
+                  <div class="ch-xp-wrap" style="margin-top:10px;">
+                    <div class="ch-xp-lbl">
+                      <span style="color:rgba(255,255,255,.22)">PROFIL XP</span>
+                      <span style="color:rgba(56,182,255,.6)" id="ch-xp-label">0/7 TESTÓW</span>
+                    </div>
+                    <div class="ch-xp-track"><div class="ch-xp-fill" id="ch-xp-fill" style="width:0%"></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="ch-tl" style="margin-bottom:8px;">// ⚔ ARCHETYP RPG · KLASA POSTACI</div>
+              <div id="ch-rpg-content">
+                <div class="ch-empty-block"><div class="ch-empty-icon">⚔</div><div class="ch-empty-text">Ukończ test Enneagram aby odblokować swój archetyp RPG</div><button class="ch-go-btn" onclick="switchTab('tests')">Przejdź do testów →</button></div>
+              </div>
+              <div class="ch-tl" style="margin-top:16px;margin-bottom:8px;">// 🎬 POSTACIE PODOBNE DO CIEBIE</div>
+              <div id="ch-pop-content">
+                <div class="ch-empty-block"><div class="ch-empty-icon">🎬</div><div class="ch-empty-text">Ukończ test Enneagram aby zobaczyć postacie z kultury popularnej podobne do Ciebie</div><button class="ch-go-btn" onclick="switchTab('tests')">Przejdź do testów →</button></div>
               </div>
             </div>
 
-            <!-- CENTER: HEXACO STATS -->
-            <div class="ch-panel">
-              <div class="ch-pi">
-                <div class="ch-pl">// ATRYBUTY · HEXACO-60</div>
-                <div class="ch-attr-grid" id="ch-attr-grid">
-                  <div class="ch-attr-b ch-ag"><div class="ch-a-lbl">Sumienność</div><div class="ch-a-val">—</div><div class="ch-a-nm">Conscientiousness</div></div>
-                  <div class="ch-attr-b ch-ac"><div class="ch-a-lbl">Otwartość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Openness</div></div>
-                  <div class="ch-attr-b ch-av"><div class="ch-a-lbl">Ugodowość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Agreeableness</div></div>
-                  <div class="ch-attr-b ch-at"><div class="ch-a-lbl">Szczerość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Honesty-Humility</div></div>
-                  <div class="ch-attr-b ch-ap"><div class="ch-a-lbl">Ekstrawersja</div><div class="ch-a-val">—</div><div class="ch-a-nm">Extraversion</div></div>
-                  <div class="ch-attr-b ch-ao"><div class="ch-a-lbl">Emocjonalność</div><div class="ch-a-val">—</div><div class="ch-a-nm">Emotionality</div></div>
-                </div>
-                <div class="ch-pl">// PROFIL SZCZEGÓŁOWY</div>
-                <div class="ch-hx-bars" id="ch-hx-bars">
-                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Sumienność</span><span class="ch-hb-val" style="color:#34d399">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#34d399"></div></div></div>
-                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Otwartość</span><span class="ch-hb-val" style="color:#38b6ff">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#38b6ff"></div></div></div>
-                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Ugodowość</span><span class="ch-hb-val" style="color:#b08fff">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#b08fff"></div></div></div>
-                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Szczerość-Pokora</span><span class="ch-hb-val" style="color:#40e0d0">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#40e0d0"></div></div></div>
-                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Ekstrawersja</span><span class="ch-hb-val" style="color:#e878e0">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#e878e0"></div></div></div>
-                  <div class="ch-hb"><div class="ch-hb-top"><span class="ch-hb-name">Emocjonalność</span><span class="ch-hb-val" style="color:#f97316">—</span></div><div class="ch-hb-track"><div class="ch-hb-fill" style="width:0%;background:#f97316"></div></div></div>
-                </div>
-                <div id="ch-hexaco-cta" style="margin-top:14px;text-align:center;">
-                  <button class="ch-go-btn" onclick="switchTab('tests')">Wykonaj test HEXACO-60 aby odblokować →</button>
-                </div>
+            <!-- ── T2: HEXACO RADAR 1×2 ── -->
+            <div class="ch-tile ch-t-radar">
+              <div class="ch-tile-accent" style="background:linear-gradient(90deg,#22d3ee,#38b6ff);"></div>
+              <div class="ch-tl">// ATRYBUTY · HEXACO-60</div>
+              <div style="display:flex;justify-content:center;margin-bottom:12px;">
+                <svg id="ch-hex-radar" viewBox="0 0 220 220" width="190" height="190" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="110" cy="110" r="82" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                  <circle cx="110" cy="110" r="62" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                  <circle cx="110" cy="110" r="41" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                  <circle cx="110" cy="110" r="21" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                  <text x="110" y="114" text-anchor="middle" fill="rgba(56,182,255,.2)" font-family="Share Tech Mono,monospace" font-size="8">BRAK DANYCH</text>
+                </svg>
+              </div>
+              <div id="ch-attr-grid" class="ch-attr-grid" style="grid-template-columns:repeat(2,1fr);">
+                <div class="ch-attr-b ch-ag"><div class="ch-a-lbl">Sumienność</div><div class="ch-a-val">—</div><div class="ch-a-nm">Conscientiousness</div></div>
+                <div class="ch-attr-b ch-ac"><div class="ch-a-lbl">Otwartość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Openness</div></div>
+                <div class="ch-attr-b ch-av"><div class="ch-a-lbl">Ugodowość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Agreeableness</div></div>
+                <div class="ch-attr-b ch-at"><div class="ch-a-lbl">Szczerość</div><div class="ch-a-val">—</div><div class="ch-a-nm">Honesty-Humility</div></div>
+                <div class="ch-attr-b ch-ap"><div class="ch-a-lbl">Ekstrawersja</div><div class="ch-a-val">—</div><div class="ch-a-nm">Extraversion</div></div>
+                <div class="ch-attr-b ch-ao"><div class="ch-a-lbl">Emocjonalność</div><div class="ch-a-val">—</div><div class="ch-a-nm">Emotionality</div></div>
+              </div>
+              <div class="ch-hx-bars" id="ch-hx-bars" style="margin-top:12px;display:flex;flex-direction:column;gap:5px;"></div>
+              <div id="ch-hexaco-cta" style="margin-top:14px;text-align:center;">
+                <button class="ch-go-btn" onclick="switchTab('tests')">Wykonaj test HEXACO-60 aby odblokować →</button>
               </div>
             </div>
 
-            <!-- RIGHT: TYPOLOGY -->
-            <div class="ch-panel ch-type-panel">
-              <div class="ch-pi">
-                <div class="ch-pl">// TYPOLOGIA</div>
-                <div class="ch-arch-blk ch-enn-blk">
-                  <div class="ch-arch-lbl">ENNEAGRAM</div>
-                  <div class="ch-enn-row">
-                    <div class="ch-enn-num" id="ch-enn-num">?</div>
-                    <div><div class="ch-enn-type" id="ch-enn-type">Nieznany typ</div><div class="ch-enn-sub" id="ch-enn-sub">WYKONAJ TEST</div></div>
-                  </div>
-                  <div class="ch-enn-desc" id="ch-enn-desc">Wykonaj test Enneagram aby odblokować typologię motywacji.</div>
+            <!-- ── T3: ENNEAGRAM + TYPOLOGY 1×2 ── -->
+            <div class="ch-tile ch-t-enn">
+              <div class="ch-tile-accent" style="background:linear-gradient(90deg,#7b5ea7,#b08fff);"></div>
+              <div class="ch-tl">// TYPOLOGIA · ENNEAGRAM</div>
+              <div style="display:flex;justify-content:center;margin-bottom:4px;">
+                <svg id="ch-enn-star" viewBox="0 0 200 200" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(176,143,255,.07)" stroke-width="1.5"/>
+                  <text x="100" y="104" text-anchor="middle" fill="rgba(176,143,255,.28)" font-family="Share Tech Mono,monospace" font-size="8">BRAK DANYCH</text>
+                </svg>
+              </div>
+              <div style="text-align:center;margin-bottom:10px;">
+                <div id="ch-enn-num" style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;letter-spacing:2px;color:#b08fff;text-shadow:0 0 28px #b08fff55;line-height:1;">?</div>
+                <div id="ch-enn-type" style="font-size:12px;font-weight:700;color:rgba(255,255,255,.72);letter-spacing:1px;margin-top:3px;">Nieznany typ</div>
+                <div id="ch-enn-sub" style="font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:2px;color:rgba(176,143,255,.42);margin-top:2px;text-transform:uppercase;">WYKONAJ TEST</div>
+                <div id="ch-enn-desc" style="font-size:9.5px;color:rgba(255,255,255,.24);line-height:1.6;margin-top:7px;padding:0 6px;">Wykonaj test Enneagram aby odblokować typologię motywacji.</div>
+              </div>
+              <div class="ch-tl" style="margin-bottom:8px;">// KARIERA · RIASEC</div>
+              <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+                <div class="ch-hol-ltrs" id="ch-hol-ltrs" style="display:flex;gap:5px;">
+                  <div class="ch-hl ch-hl-i">?</div><div class="ch-hl ch-hl-e">?</div><div class="ch-hl ch-hl-a">?</div>
                 </div>
-                <div class="ch-arch-blk ch-hol-blk">
-                  <div class="ch-arch-lbl">HOLLAND CODE · RIASEC</div>
-                  <div class="ch-hol-ltrs" id="ch-hol-ltrs">
-                    <div class="ch-hl ch-hl-i">?</div><div class="ch-hl ch-hl-e">?</div><div class="ch-hl ch-hl-a">?</div>
-                  </div>
-                  <div class="ch-careers" id="ch-careers"><span class="ch-ct">WYKONAJ TEST KARIERY</span></div>
-                </div>
-                <div class="ch-arch-blk ch-val-blk">
-                  <div class="ch-arch-lbl">WARTOŚCI · SCHWARTZ PVQ-40</div>
-                  <div class="ch-val-chips" id="ch-val-chips"><span class="ch-vc ch-vc4">Wykonaj test wartości</span></div>
-                </div>
-                <div class="ch-arch-blk ch-cog-blk">
-                  <div class="ch-arch-lbl">CIEMNA TRIADA · SD3 SKRÓT</div>
-                  <div id="ch-dt-summary" style="font-size:10px;color:rgba(255,255,255,.32);">Wykonaj test Dark Triad SD3 aby odblokować.</div>
-                </div>
+                <div class="ch-careers" id="ch-careers" style="flex:1;"><span class="ch-ct">WYKONAJ TEST KARIERY</span></div>
+              </div>
+              <div class="ch-tl" style="margin-bottom:8px;">// WARTOŚCI · PVQ-40</div>
+              <div class="ch-val-chips" id="ch-val-chips" style="margin-bottom:10px;"><span class="ch-vc ch-vc4">Wykonaj test wartości</span></div>
+              <div class="ch-tl" style="margin-bottom:6px;">// CIEMNA TRIADA · PODSUMOWANIE</div>
+              <div id="ch-dt-summary" style="font-size:10px;color:rgba(255,255,255,.28);">Wykonaj test Dark Triad SD3 aby odblokować.</div>
+            </div>
+
+            <!-- ── T4: ARSENAL / STRENGTHS 2×1 ── -->
+            <div class="ch-tile ch-t-str">
+              <div class="ch-tile-accent" style="background:linear-gradient(90deg,#fbbf24,#34d399);"></div>
+              <div class="ch-tl">// ⚡ ARSENAL · TOP TALENTY · STRENGTHS</div>
+              <div id="ch-str-content">
+                <div class="ch-empty-block"><div class="ch-empty-icon">⚡</div><div class="ch-empty-text">Wykonaj test Strengths aby odkryć swoje talenty</div><button class="ch-go-btn" onclick="startStrengthsTest()">Rozpocznij →</button></div>
               </div>
             </div>
 
-          </div><!-- /ch-hero -->
-
-          <!-- MID ROW -->
-          <div class="ch-mid">
-
-            <!-- DARK TRIAD -->
-            <div class="ch-panel ch-dt-panel">
-              <div class="ch-pi">
-                <div class="ch-pl" style="color:rgba(239,68,68,.45)">// ⚠ CIEMNA TRIADA · SD3</div>
+            <!-- ── T5: DARK TRIAD / SHADOW 2×1 ── -->
+            <div class="ch-tile ch-t-dt" style="border-color:rgba(239,68,68,.14);">
+              <div class="ch-tile-accent" style="background:linear-gradient(90deg,#ef4444,#f97316,#fbbf24);"></div>
+              <div class="ch-tl" style="color:rgba(239,68,68,.45);">// ⚠ CIEMNA TRIADA · SD3 · OBSZARY CIENIA</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                 <div id="ch-dt-content">
-                  <div class="ch-empty-block">
-                    <div class="ch-empty-icon">🌑</div>
-                    <div class="ch-empty-text">Odblokuj test Dark Triad SD3 Premium aby zobaczyć analizę cienia</div>
-                    <button class="ch-go-btn" onclick="startDarkTriadTest()">Odblokuj Premium →</button>
-                  </div>
+                  <div class="ch-empty-block"><div class="ch-empty-icon">🌑</div><div class="ch-empty-text">Odblokuj test Dark Triad SD3 Premium aby zobaczyć analizę cienia</div><button class="ch-go-btn" onclick="startDarkTriadTest()">Odblokuj Premium →</button></div>
                 </div>
-              </div>
-            </div>
-
-            <!-- STRENGTHS -->
-            <div class="ch-panel">
-              <div class="ch-pi">
-                <div class="ch-pl">// TOP TALENTY · STRENGTHS</div>
-                <div id="ch-str-content">
-                  <div class="ch-empty-block">
-                    <div class="ch-empty-icon">⚡</div>
-                    <div class="ch-empty-text">Wykonaj test Strengths aby odkryć swoje talenty</div>
-                    <button class="ch-go-btn" onclick="startStrengthsTest()">Rozpocznij →</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- TRAITS -->
-            <div class="ch-panel">
-              <div class="ch-pi">
-                <div class="ch-pl">// CECHY CHARAKTERU</div>
-                <div id="ch-traits-content">
-                  <div class="ch-empty-block">
-                    <div class="ch-empty-icon">🧩</div>
-                    <div class="ch-empty-text">Cechy charakteru pojawią się po ukończeniu testów</div>
-                    <button class="ch-go-btn" onclick="switchTab('tests')">Przejdź do testów →</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div><!-- /ch-mid -->
-
-          <!-- BOTTOM ROW -->
-          <div class="ch-bot">
-
-            <!-- SHADOW AREAS -->
-            <div class="ch-panel ch-shadow-panel">
-              <div class="ch-pi">
-                <div class="ch-pl" style="color:rgba(239,68,68,.42)">// 🌑 OBSZARY CIENIA</div>
                 <div id="ch-shadow-content">
-                  <div class="ch-empty-block">
-                    <div class="ch-empty-icon">🌘</div>
-                    <div class="ch-empty-text">Obszary cienia pojawią się po ukończeniu testów Dark Triad i HEXACO</div>
-                  </div>
+                  <div class="ch-empty-block"><div class="ch-empty-icon">🌘</div><div class="ch-empty-text">Obszary cienia pojawią się po ukończeniu testów Dark Triad i HEXACO</div></div>
                 </div>
               </div>
             </div>
 
-            <!-- AI INSIGHT -->
-            <div class="ch-panel">
-              <div class="ch-pi">
-                <div class="ch-pl">// 🤖 PSYCHER AI INSIGHT · SYNTEZA</div>
-                <div id="ch-insight-content">
-                  <div class="ch-empty-block">
-                    <div class="ch-empty-icon">🔮</div>
-                    <div class="ch-empty-text">Synteza AI pojawi się po ukończeniu co najmniej 3 testów</div>
-                    <button class="ch-go-btn" onclick="switchTab('tests')">Uzupełnij profil →</button>
-                  </div>
-                </div>
+            <!-- ── T6: AI SYNTHESIS 4×1 ── -->
+            <div class="ch-tile ch-t-synth">
+              <div class="ch-tile-accent" style="background:linear-gradient(90deg,#6366f1,#38b6ff,#7b5ea7,#34d399);"></div>
+              <div class="ch-tl">// 🤖 PSYCHER AI INSIGHT · SYNTEZA · PROFIL KOMPLETNY</div>
+              <div id="ch-insight-content">
+                <div class="ch-empty-block"><div class="ch-empty-icon">🔮</div><div class="ch-empty-text">Synteza AI pojawi się po ukończeniu co najmniej 3 testów</div><button class="ch-go-btn" onclick="switchTab('tests')">Uzupełnij profil →</button></div>
               </div>
             </div>
 
-          </div><!-- /ch-bot -->
+          </div><!-- /ch-bento -->
 
-          <!-- GENERATIVE ROW -->
-          <div class="ch-bot" style="margin-top:0;">
-
-            <!-- RPG ARCHETYPE -->
-            <div class="ch-panel">
-              <div class="ch-pi">
-                <div class="ch-pl">// ⚔ ARCHETYP RPG · KLASA POSTACI</div>
-                <div id="ch-rpg-content">
-                  <div class="ch-empty-block">
-                    <div class="ch-empty-icon">⚔</div>
-                    <div class="ch-empty-text">Ukończ test Enneagram aby odblokować swój archetyp RPG</div>
-                    <button class="ch-go-btn" onclick="switchTab('tests')">Przejdź do testów →</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- POP CULTURE MATCH -->
-            <div class="ch-panel">
-              <div class="ch-pi">
-                <div class="ch-pl">// 🎬 POSTACIE PODOBNE DO CIEBIE</div>
-                <div id="ch-pop-content">
-                  <div class="ch-empty-block">
-                    <div class="ch-empty-icon">🎬</div>
-                    <div class="ch-empty-text">Ukończ test Enneagram aby zobaczyć postacie z kultury popularnej podobne do Ciebie</div>
-                    <button class="ch-go-btn" onclick="switchTab('tests')">Przejdź do testów →</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div><!-- /ch-generative -->
+          <!-- TRAIT CHIPS -->
+          <div style="margin-top:13px;" id="ch-traits-content"></div>
 
           <!-- FOOTER -->
-          <div class="ch-footer">
-            <div class="ch-fid" id="ch-footer-id">CHAR-ID: PSY-0000 · PSYCHER ENGINE v2.0</div>
-            <div class="ch-ftests">HEXACO-60 · ENNEAGRAM · DARK TRIAD SD3 · STRENGTHS · CAREER RIASEC · VALUES PVQ-40</div>
-            <div class="ch-fver" id="ch-footer-date">BUILD 2026.02.19</div>
+          <div class="ch-footer" style="margin-top:13px;">
+            <div class="ch-fid" id="ch-footer-id">CHAR-ID: PSY----- · PSYCHER v2.0</div>
+            <div class="ch-ftests">PSYCHER v2.0</div>
+            <div class="ch-fver" id="ch-footer-date">BUILD DATE</div>
           </div>
 
         </div><!-- /ch-sheet-wrapper -->
@@ -2459,6 +2413,40 @@
                 // Hide CTA
                 const ctaEl = document.getElementById('ch-hexaco-cta');
                 if (ctaEl) ctaEl.style.display = 'none';
+                // ── Draw HEXACO Radar SVG ──────────────────
+                (function drawHexRadar(hexS) {
+                    const radarEl = document.getElementById('ch-hex-radar');
+                    if (!radarEl) return;
+                    const cx=110,cy=110,R=82,N=6;
+                    const dims6=[
+                        {key:'conscientiousness',lbl:'Sumienność',  col:'#34d399'},
+                        {key:'openness',         lbl:'Otwartość',   col:'#38b6ff'},
+                        {key:'agreeableness',    lbl:'Ugodowość',   col:'#b08fff'},
+                        {key:'honesty_humility', lbl:'Szczerość',   col:'#40e0d0'},
+                        {key:'extraversion',     lbl:'Ekstrawersja',col:'#e878e0'},
+                        {key:'emotionality',     lbl:'Emocjonalność',col:'#f97316'},
+                    ];
+                    let svg='';
+                    // Grid spokes + circles
+                    for(let i=0;i<N;i++){const a=(i/N)*2*Math.PI-Math.PI/2;svg+=`<line x1="${cx}" y1="${cy}" x2="${cx+R*Math.cos(a).toFixed(3)}" y2="${cy+R*Math.sin(a).toFixed(3)}" stroke="rgba(56,182,255,.1)" stroke-width="1"/>`;}
+                    [0.25,0.5,0.75,1.0].forEach(r=>{svg+=`<circle cx="${cx}" cy="${cy}" r="${R*r}" fill="none" stroke="rgba(56,182,255,.07)" stroke-width="1"/>`;});
+                    // Data polygon
+                    const pts=dims6.map((d,i)=>{const a=(i/N)*2*Math.PI-Math.PI/2;const r=R*(hexS[d.key]||0)/100;return `${(cx+r*Math.cos(a)).toFixed(2)},${(cy+r*Math.sin(a)).toFixed(2)}`;});
+                    svg+=`<polygon points="${pts.join(' ')}" fill="rgba(34,211,238,.10)" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round"/>`;
+                    // Vertex dots + labels
+                    dims6.forEach((d,i)=>{
+                        const a=(i/N)*2*Math.PI-Math.PI/2;
+                        const r=R*(hexS[d.key]||0)/100;
+                        const vx=(cx+r*Math.cos(a)).toFixed(2);const vy=(cy+r*Math.sin(a)).toFixed(2);
+                        svg+=`<circle cx="${vx}" cy="${vy}" r="3.5" fill="${d.col}" opacity=".85"/>`;
+                        const lr=R+20;const lx=(cx+lr*Math.cos(a)).toFixed(2);const ly=(cy+lr*Math.sin(a)).toFixed(2);
+                        const anc=Math.cos(a)>0.15?'start':Math.cos(a)<-0.15?'end':'middle';
+                        const val=Math.round(hexS[d.key]||0);
+                        svg+=`<text x="${lx}" y="${(parseFloat(ly)-2).toFixed(1)}" text-anchor="${anc}" fill="${d.col}" font-family="Share Tech Mono,monospace" font-size="7" opacity=".7">${d.lbl}</text>`;
+                        svg+=`<text x="${lx}" y="${(parseFloat(ly)+9).toFixed(1)}" text-anchor="${anc}" fill="${d.col}" font-family="Orbitron,monospace" font-size="9" font-weight="700">${val}</text>`;
+                    });
+                    radarEl.innerHTML=svg;
+                })(s);
                 // Derive archetype
                 const con = s.conscientiousness ?? 50, opn = s.openness ?? 50, ext = s.extraversion ?? 50;
                 let arch = 'Analityczny Badacz';
@@ -2523,6 +2511,30 @@
                     if (ennDescEl) ennDescEl.textContent = EDESCS[topType] || '';
                     window._ch_ennName = ENAMES[topType] || `Typ ${topType}`;
                     traitChips.push({label:`🌀 ${ENAMES[topType]||'Typ '+topType}`, cls:'ch-ttv'});
+                    // ── Draw Enneagram Star SVG ────────────
+                    (function drawEnnStar(tType, tCol) {
+                        const starEl = document.getElementById('ch-enn-star');
+                        if (!starEl) return;
+                        const cx=100,cy=100,R=82,N=9;
+                        const pt=i=>{const a=(i/N)*2*Math.PI-Math.PI/2;return[(cx+R*Math.cos(a)).toFixed(2),(cy+R*Math.sin(a)).toFixed(2)];};
+                        let svg=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="rgba(176,143,255,.08)" stroke-width="1.5"/>`;
+                        svg+=`<circle cx="${cx}" cy="${cy}" r="${R*0.55}" fill="none" stroke="rgba(176,143,255,.05)" stroke-width="1"/>`;
+                        // Enneagram inner lines: 1-4-2-8-5-7-1 hexad + 3-6-9 triangle
+                        [[1,4],[4,2],[2,8],[8,5],[5,7],[7,1],[3,6],[6,9],[9,3]].forEach(([a,b])=>{
+                            const [x1,y1]=pt(a-1);const [x2,y2]=pt(b-1);
+                            svg+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="rgba(176,143,255,.12)" stroke-width="1"/>`;
+                        });
+                        // Nodes
+                        for(let i=1;i<=9;i++){
+                            const [x,y]=pt(i-1);const isActive=String(i)===String(tType);
+                            const col=isActive?tCol:'rgba(255,255,255,.14)';
+                            const r=isActive?9:5;
+                            svg+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${isActive?tCol+'22':'rgba(255,255,255,.03)'}" stroke="${col}" stroke-width="${isActive?2:1}"/>`;
+                            if(isActive)svg+=`<circle cx="${x}" cy="${y}" r="${r+5}" fill="none" stroke="${tCol}" stroke-width=".7" opacity=".35"/>`;
+                            svg+=`<text x="${x}" y="${(parseFloat(y)+4).toFixed(1)}" text-anchor="middle" fill="${isActive?tCol:'rgba(255,255,255,.35)'}" font-family="Orbitron,monospace" font-size="${isActive?9:7}" font-weight="${isActive?700:400}">${i}</text>`;
+                        }
+                        starEl.innerHTML=svg;
+                    })(topType, ennCol);
 
                     // ── RPG Archetype ──────────────────────────
                     const lore = ENNLORE[parseInt(topType)];
