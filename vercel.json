@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/karta-postaci", "destination": "/karta-postaci.html" },
+    { "source": "/character-sheet", "destination": "/character-sheet.html" },
     { "source": "/auth/:path*", "destination": "/app.html" },
     { "source": "/test/:path*", "destination": "/app.html" },
     { "source": "/test", "destination": "/app.html" },

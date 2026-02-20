@@ -325,15 +325,13 @@
           <div class="ch-tile ch-t-radar" style="min-height:480px;">
             <div class="ch-tile-accent" style="background:linear-gradient(90deg,#22d3ee,#38b6ff);"></div>
             <div class="ch-tl">// ATRYBUTY · HEXACO-60</div>
-            <div style="flex:1;min-height:0;display:flex;align-items:center;justify-content:center;">
-              <svg id="ch-hex-radar" viewBox="0 0 300 300" width="100%" style="max-height:340px;" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-                <circle cx="150" cy="150" r="96" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
-                <circle cx="150" cy="150" r="72" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
-                <circle cx="150" cy="150" r="48" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
-                <circle cx="150" cy="150" r="24" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
-                <text x="150" y="154" text-anchor="middle" fill="rgba(56,182,255,.2)" font-family="Share Tech Mono,monospace" font-size="8">BRAK DANYCH</text>
+              <svg id="ch-hex-radar" viewBox="0 0 800 480" width="100%" style="display:block;" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="400" cy="240" r="130" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                <circle cx="400" cy="240" r="97"  fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                <circle cx="400" cy="240" r="65"  fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                <circle cx="400" cy="240" r="32"  fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
+                <text x="400" y="244" text-anchor="middle" fill="rgba(56,182,255,.18)" font-family="Share Tech Mono,monospace" font-size="10">BRAK DANYCH</text>
               </svg>
-            </div>
             <div id="ch-attr-grid" style="display:none;"></div>
             <div class="ch-hx-bars" id="ch-hx-bars" style="flex-shrink:0;margin-top:10px;padding-top:10px;border-top:1px solid rgba(56,182,255,.07);display:grid;grid-template-columns:repeat(2,1fr);gap:5px 20px;"></div>
             <div id="ch-hexaco-cta" style="margin-top:14px;text-align:center;">
@@ -549,34 +547,34 @@
                 }).join('');
                 const ctaEl = document.getElementById('ch-hexaco-cta');
                 if (ctaEl) ctaEl.style.display = 'none';
-                // Draw HEXACO Radar SVG
+                // Draw HEXACO Radar SVG — pill labels
                 (function drawHexRadar(hexS) {
                     const radarEl = document.getElementById('ch-hex-radar');
                     if (!radarEl) return;
-                    const cx=150,cy=150,R=96,N=6;
+                    const cx=400,cy=240,R=130,LR=202,N=6;
                     const dims6=[
-                        {key:'conscientiousness',lbl:'Sumienność',  col:'#34d399'},
-                        {key:'openness',         lbl:'Otwartość',   col:'#38b6ff'},
-                        {key:'agreeableness',    lbl:'Ugodowość',   col:'#b08fff'},
-                        {key:'honesty_humility', lbl:'Szczerość',   col:'#40e0d0'},
-                        {key:'extraversion',     lbl:'Ekstra.',     col:'#e878e0'},
-                        {key:'emotionality',     lbl:'Emocje',      col:'#f97316'},
+                        {key:'conscientiousness',lbl:'Sumienność',  col:'#34d399',bg:'rgba(52,211,153,.10)',bdr:'rgba(52,211,153,.45)'},
+                        {key:'openness',         lbl:'Otwartość',   col:'#38b6ff',bg:'rgba(56,182,255,.10)',bdr:'rgba(56,182,255,.45)'},
+                        {key:'agreeableness',    lbl:'Ugodowość',   col:'#b08fff',bg:'rgba(176,143,255,.10)',bdr:'rgba(176,143,255,.45)'},
+                        {key:'honesty_humility', lbl:'Szczerość',   col:'#40e0d0',bg:'rgba(64,224,208,.10)',bdr:'rgba(64,224,208,.45)'},
+                        {key:'extraversion',     lbl:'Ekstra.',     col:'#e878e0',bg:'rgba(232,120,224,.10)',bdr:'rgba(232,120,224,.45)'},
+                        {key:'emotionality',     lbl:'Emocje',      col:'#f97316',bg:'rgba(249,115,22,.10)',bdr:'rgba(249,115,22,.45)'},
                     ];
                     let svg='';
-                    for(let i=0;i<N;i++){const a=(i/N)*2*Math.PI-Math.PI/2;svg+=`<line x1="${cx}" y1="${cy}" x2="${cx+R*Math.cos(a).toFixed(3)}" y2="${cy+R*Math.sin(a).toFixed(3)}" stroke="rgba(56,182,255,.1)" stroke-width="1"/>`;}
-                    [0.25,0.5,0.75,1.0].forEach(r=>{svg+=`<circle cx="${cx}" cy="${cy}" r="${R*r}" fill="none" stroke="rgba(56,182,255,.07)" stroke-width="1"/>`;});
+                    for(let i=0;i<N;i++){const a=(i/N)*2*Math.PI-Math.PI/2;svg+=`<line x1="${cx}" y1="${cy}" x2="${(cx+R*Math.cos(a)).toFixed(2)}" y2="${(cy+R*Math.sin(a)).toFixed(2)}" stroke="rgba(56,182,255,.13)" stroke-width="1"/>`;}
+                    [0.25,0.5,0.75,1.0].forEach(r=>{svg+=`<circle cx="${cx}" cy="${cy}" r="${(R*r).toFixed(1)}" fill="none" stroke="rgba(56,182,255,.09)" stroke-width="1"/>`;});
                     const pts=dims6.map((d,i)=>{const a=(i/N)*2*Math.PI-Math.PI/2;const r=R*(hexS[d.key]||0)/100;return `${(cx+r*Math.cos(a)).toFixed(2)},${(cy+r*Math.sin(a)).toFixed(2)}`;});
-                    svg+=`<polygon points="${pts.join(' ')}" fill="rgba(34,211,238,.10)" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round"/>`;
+                    svg+=`<polygon points="${pts.join(' ')}" fill="rgba(34,211,238,.13)" stroke="#22d3ee" stroke-width="2.5" stroke-linejoin="round"/>`;
                     dims6.forEach((d,i)=>{
                         const a=(i/N)*2*Math.PI-Math.PI/2;
                         const r=R*(hexS[d.key]||0)/100;
-                        const vx=(cx+r*Math.cos(a)).toFixed(2);const vy=(cy+r*Math.sin(a)).toFixed(2);
-                        svg+=`<circle cx="${vx}" cy="${vy}" r="3.5" fill="${d.col}" opacity=".85"/>`;
-                        const lr=R+16;const lx=(cx+lr*Math.cos(a)).toFixed(2);const ly=(cy+lr*Math.sin(a)).toFixed(2);
-                        const anc=Math.cos(a)>0.15?'start':Math.cos(a)<-0.15?'end':'middle';
+                        const vx=(cx+r*Math.cos(a)).toFixed(2); const vy=(cy+r*Math.sin(a)).toFixed(2);
+                        svg+=`<circle cx="${vx}" cy="${vy}" r="8" fill="${d.col}1a" stroke="${d.col}" stroke-width=".7" opacity=".45"/>`;
+                        svg+=`<circle cx="${vx}" cy="${vy}" r="4.5" fill="${d.col}" opacity=".95"/>`;
+                        const lx=(cx+LR*Math.cos(a)).toFixed(2); const ly=(cy+LR*Math.sin(a)).toFixed(2);
                         const val=Math.round(hexS[d.key]||0);
-                        svg+=`<text x="${lx}" y="${(parseFloat(ly)-2).toFixed(1)}" text-anchor="${anc}" fill="${d.col}" font-family="Share Tech Mono,monospace" font-size="9" opacity=".8">${d.lbl}</text>`;
-                        svg+=`<text x="${lx}" y="${(parseFloat(ly)+9).toFixed(1)}" text-anchor="${anc}" fill="${d.col}" font-family="Orbitron,monospace" font-size="9" font-weight="700">${val}</text>`;
+                        const pw=152,ph=28;
+                        svg+=`<g transform="translate(${lx},${ly})"><rect x="${-pw/2}" y="${-ph/2}" width="${pw}" height="${ph}" rx="${ph/2}" fill="${d.bg}" stroke="${d.bdr}" stroke-width="1.1"/><text text-anchor="middle" y="4.5" fill="${d.col}" font-family="Space Grotesk,sans-serif" font-size="11.5" font-weight="600">${d.lbl} · <tspan font-family="Orbitron,monospace" font-size="11" font-weight="700">${val}</tspan></text></g>`;
                     });
                     radarEl.innerHTML=svg;
                 })(s);

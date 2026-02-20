@@ -134,7 +134,7 @@ function EnneagramDiagram({ primaryType, allScores }) {
     <svg viewBox="0 0 400 400" style={{ width: '100%', maxWidth: 380, height: 'auto', overflow: 'visible' }}>
       <defs>
         <radialGradient id="enGradBg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="rgba(162,155,254,.08)"/>
+          <stop offset="0%" stopColor="rgba(217,70,239,.08)"/>
           <stop offset="100%" stopColor="transparent"/>
         </radialGradient>
         <filter id="enGlow">

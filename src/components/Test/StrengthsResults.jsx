@@ -377,7 +377,7 @@ export default function StrengthsResults() {
             onRegenerate={handleRegenerate}
             onRetry={() => rawScores && generateInterpretation(rawScores)}
             accentColor="#fbbf24"
-            accentGlow="rgba(52,211,153,.5)"
+            accentGlow="rgba(251,191,36,.5)"
             testLabel="Test Talentów"
           />
         </div>
