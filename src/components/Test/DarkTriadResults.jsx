@@ -58,7 +58,7 @@ const CSS = `
   background: #0d0a1a;
   color: #fff;
   min-height: 100vh;
-  padding: 48px 40px 80px;
+  padding: 0;
   position: relative;
   overflow: clip;
 }
@@ -88,9 +88,9 @@ const CSS = `
   background: none !important;
 }
 .dt-root .dt-page-title .dt-title-accent {
-  color: #ff2d55 !important;
-  -webkit-text-fill-color: #ff2d55 !important;
-  text-shadow: 0 0 30px rgba(255,45,85,.5), 0 0 60px rgba(255,45,85,.2) !important;
+  color: #fb7185 !important;
+  -webkit-text-fill-color: #fb7185 !important;
+  text-shadow: 0 0 30px rgba(251,113,133,.5), 0 0 60px rgba(251,113,133,.2) !important;
 }
 .dt-root .dt-page-sub {
   font-size: 14px !important;
@@ -210,6 +210,52 @@ const CSS = `
 
 /* spin loader */
 @keyframes spinLoader { to { transform: rotate(360deg); } }
+
+/* sticky nav */
+.dt-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(13,10,26,.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(251,113,133,.12);
+}
+.dt-nav-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dt-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,.5);
+  cursor: pointer;
+  font: 500 .9rem 'Space Grotesk', sans-serif;
+  transition: color .2s;
+  padding: 0;
+}
+.dt-nav-btn:hover { color: #fff; }
+.dt-nav-retake {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: rgba(255,255,255,.55);
+  cursor: pointer;
+  font: 600 .85rem 'Space Grotesk', sans-serif;
+  transition: all .2s;
+}
+.dt-nav-retake:hover { background: rgba(255,255,255,.1); color: #fff; }
 `;
 
 /* ════════════════════════════════════════════════════════════════════
@@ -361,10 +407,23 @@ function DarkTriadResults() {
   const overallMeta = RISK_META[report.overall_risk] || RISK_META.average;
 
   return (
-    <div className="dt-root" style={{ position: 'relative', zIndex: 1 }}>
+    <div className="dt-root" style={{ position: 'relative', zIndex: 1, paddingTop: 0 }}>
       <style>{CSS}</style>
 
-      {/* ── PAGE HEADER ── */}
+      {/* ── STICKY NAV ── */}
+      <nav className="dt-nav">
+        <div className="dt-nav-inner">
+          <button className="dt-nav-btn" onClick={() => window.location.href = '/user-profile-tests.html'}>
+            <ArrowLeft size={18} /> Dashboard
+          </button>
+          <button className="dt-nav-retake" onClick={() => { if (confirm('Powtórzyć test? Wyniki zostaną zastąpione.')) window.location.href = '/test'; }}>
+            <RefreshCw size={15} /> Powtórz Test
+          </button>
+        </div>
+      </nav>
+
+      {/* ── PAGE CONTENT ── */}
+      <div style={{ padding: '48px 40px 80px' }}>
       <header style={{ textAlign: 'center', marginBottom: 44, display: 'block', position: 'relative', zIndex: 2 }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -421,9 +480,9 @@ function DarkTriadResults() {
 
             return (
               <div key={id} className="dt-glass dt-trait-card"
-                style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 1px rgba(255,45,85,.1), 0 8px 32px -4px rgba(0,0,0,.7), 0 2px 8px -2px rgba(0,0,0,.5)' }}
+                style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 1px rgba(251,113,133,.1), 0 8px 32px -4px rgba(0,0,0,.7), 0 2px 8px -2px rgba(0,0,0,.5)' }}
                 onMouseEnter={e => e.currentTarget.style.boxShadow = ac.hoverShadow}
-                onMouseLeave={e => e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 1px rgba(255,45,85,.1), 0 8px 32px -4px rgba(0,0,0,.7), 0 2px 8px -2px rgba(0,0,0,.5)'}
+                onMouseLeave={e => e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,.08), 0 0 0 1px rgba(251,113,133,.1), 0 8px 32px -4px rgba(0,0,0,.7), 0 2px 8px -2px rgba(0,0,0,.5)'}
               >
                 <div className="dt-glow-line" style={{ background: ac.color, boxShadow: ac.glowLine }} />
                 <div className="dt-blob" style={{ background: ac.blob }} />
@@ -446,10 +505,10 @@ function DarkTriadResults() {
                   <div style={{
                     display: 'inline-flex', alignItems: 'center', gap: 5,
                     padding: '6px 12px', borderRadius: 100, fontSize: 10, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase',
-                    color: riskM.isHigh ? '#ff2d55' : '#ffaa00',
-                    background: riskM.isHigh ? 'rgba(255,45,85,.1)' : 'rgba(255,170,0,.1)',
-                    border: `1px solid ${riskM.isHigh ? 'rgba(255,45,85,.3)' : 'rgba(255,170,0,.3)'}`,
-                    boxShadow: riskM.isHigh ? '0 0 12px -2px rgba(255,45,85,.25)' : '0 0 12px -2px rgba(255,170,0,.2)',
+                    color: riskM.isHigh ? '#fb7185' : '#ffaa00',
+                    background: riskM.isHigh ? 'rgba(251,113,133,.1)' : 'rgba(255,170,0,.1)',
+                    border: `1px solid ${riskM.isHigh ? 'rgba(251,113,133,.3)' : 'rgba(255,170,0,.3)'}`,
+                    boxShadow: riskM.isHigh ? '0 0 12px -2px rgba(251,113,133,.25)' : '0 0 12px -2px rgba(255,170,0,.2)',
                   }}>
                     {riskM.badge} {riskM.label}
                   </div>
@@ -618,6 +677,7 @@ function DarkTriadResults() {
         </button>
       </div>
 
+      </div>{/* /page content */}
     </div>
   );
 }
