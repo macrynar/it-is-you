@@ -991,6 +991,7 @@
                 <!-- Avatar -->
                 <div style="position:relative;flex-shrink:0;">
                     <div id="user-avatar" style="width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid rgba(99,102,241,0.4);box-shadow:0 0 24px rgba(99,102,241,0.25);background:linear-gradient(135deg,#6366f1,#0ea5e9);display:flex;align-items:center;justify-content:center;">
+                        <img id="user-avatar-img" src="" alt="avatar" style="width:100%;height:100%;object-fit:cover;display:none;" />
                         <span id="user-initials" style="font-size:28px;font-weight:700;color:#fff;font-family:'Space Grotesk',sans-serif;">?</span>
                     </div>
                     <div id="profile-level" style="position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:999px;white-space:nowrap;border:2px solid #0a0f1e;">Lvl 0</div>
@@ -1280,6 +1281,7 @@
             <div class="ch-panel ch-av-panel">
               <div class="ch-pi">
                 <div class="ch-av-wrap">
+                  <img id="ch-avatar-img" src="" alt="" style="display:none;position:absolute;top:6px;left:6px;width:106px;height:106px;border-radius:50%;object-fit:cover;z-index:5;" />
                   <svg class="ch-av-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="chG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38b6ff"/><stop offset="100%" stop-color="#7b5ea7"/></linearGradient>
@@ -2195,7 +2197,17 @@
                 
                 document.getElementById('user-name').textContent = userName;
                 document.getElementById('user-email').textContent = user.email;
-                document.getElementById('user-initials').textContent = userInitials;
+
+                // Show avatar photo if available, otherwise show initials
+                const avatarUrl = user.user_metadata?.avatar_url || null;
+                if (avatarUrl) {
+                    const img = document.getElementById('user-avatar-img');
+                    img.src = avatarUrl;
+                    img.style.display = 'block';
+                    document.getElementById('user-initials').style.display = 'none';
+                } else {
+                    document.getElementById('user-initials').textContent = userInitials;
+                }
 
                 // Update level (based on completed tests)
                 const level = completedCount;
@@ -2297,6 +2309,14 @@
                 || session.user.email?.split('@')[0]
                 || 'PSYCHER';
             document.getElementById('ch-cname').textContent = userName.toUpperCase().substring(0, 14);
+
+            // ── Avatar photo ───────────────────────────────────
+            const chAvatarUrl = session.user.user_metadata?.avatar_url || null;
+            if (chAvatarUrl) {
+                const chImg = document.getElementById('ch-avatar-img');
+                chImg.src = chAvatarUrl;
+                chImg.style.display = 'block';
+            }
             const charHash = Math.abs(userName.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % 9000 + 1000;
             const charId = `PSY-${charHash}-PSYCHER`;
             document.getElementById('ch-footer-id').textContent = `CHAR-ID: ${charId} · PSYCHER v2.0`;
