@@ -42,12 +42,16 @@ const radarLabelAnchors = [
   { id: 'conventional',  lx: 44,  ly: 100 },
 ];
 
+const EMERALD = '#34d399';
+const EMERALD_GLOW = 'rgba(52,211,153,.5)';
+const EMERALD_DIM  = 'rgba(52,211,153,.12)';
+
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 .cr-root{font-family:'Space Grotesk',sans-serif;background:#0d0f2b;color:#fff;min-height:100vh;overflow-x:hidden;}
-.cr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(52,211,153,.08) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(52,211,153,.06) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
+.cr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(52,211,153,.09) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(52,211,153,.06) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
 .cr-glass{background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:20px;position:relative;isolation:isolate;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6);}
-.cr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(52,211,153,.15) 35%,rgba(52,211,153,.08) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.cr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(52,211,153,.18) 35%,rgba(52,211,153,.08) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
 .cr-interest-card{border-radius:20px;position:relative;isolation:isolate;overflow:hidden;background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;cursor:default;}
 .cr-interest-card:hover{transform:translateY(-6px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(255,255,255,.1),0 0 40px -8px var(--type-color,#0ea5e9),0 20px 48px -8px rgba(0,0,0,.7);}
 .cr-interest-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
@@ -55,6 +59,8 @@ const CSS = `
 .cr-interest-card:hover::after{opacity:.38;transform:scale(1.25);}
 .cr-glow-line{position:absolute;bottom:0;left:12%;right:12%;height:1px;border-radius:100px;opacity:0;transition:opacity .3s;}
 .cr-interest-card:hover .cr-glow-line{opacity:1;}
+.cr-two-col{display:grid;grid-template-columns:1fr 340px;gap:20px;margin-bottom:24px;}
+@media(max-width:860px){.cr-two-col{grid-template-columns:1fr;}}
 .cr-interest-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:28px;}
 @media(max-width:640px){.cr-interest-grid{grid-template-columns:1fr;}}
 .cr-score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
@@ -199,124 +205,170 @@ export default function CareerResults() {
 
       {/* ─── Navigation ─── */}
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,.06)', background: 'rgba(13,15,43,.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '14px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <button
             onClick={() => window.location.href = '/user-profile-tests.html'}
-            style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', color: 'rgba(255,255,255,.7)', cursor: 'pointer', font: '500 .9rem "Space Grotesk",sans-serif', transition: 'color .2s' }}
+            style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', color: 'rgba(255,255,255,.5)', cursor: 'pointer', font: '500 .9rem "Space Grotesk",sans-serif', transition: 'color .2s' }}
             onMouseEnter={e => e.currentTarget.style.color = '#fff'}
-            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.7)'}>
+            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.5)'}>
             <ArrowLeft size={18} /> Dashboard
           </button>
-          <span style={{ fontSize: '.78rem', fontWeight: 600, letterSpacing: '1.2px', textTransform: 'uppercase', color: 'rgba(255,255,255,.35)' }}>
-            PROFIL ZAWODOWY
-          </span>
           <button
             onClick={handleRetakeTest}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.1)', borderRadius: 10, padding: '8px 16px', color: 'rgba(255,255,255,.7)', cursor: 'pointer', font: '500 .85rem "Space Grotesk",sans-serif', transition: 'all .2s' }}
+            style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)', borderRadius: 8, padding: '8px 16px', color: 'rgba(255,255,255,.55)', cursor: 'pointer', font: '600 .85rem "Space Grotesk",sans-serif', transition: 'all .2s' }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,.1)'; e.currentTarget.style.color = '#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,.06)'; e.currentTarget.style.color = 'rgba(255,255,255,.7)'; }}>
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,.05)'; e.currentTarget.style.color = 'rgba(255,255,255,.55)'; }}>
             <RefreshCw size={15} /> Powtórz Test
           </button>
         </div>
       </nav>
 
       {/* ─── Main content ─── */}
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '48px 24px 80px', position: 'relative', zIndex: 1 }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '48px 32px 80px', position: 'relative', zIndex: 1 }}>
 
-        {/* ─── Hero — Holland Code ─── */}
-        <div className="cr-glass cr-fadein" style={{ padding: '44px 32px', textAlign: 'center', marginBottom: 24, overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: -60, right: -60, width: 260, height: 260, borderRadius: '50%', background: domR.glow, filter: 'blur(80px)', opacity: .22, pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', bottom: -40, left: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(192,132,252,.25)', filter: 'blur(70px)', opacity: .18, pointerEvents: 'none' }} />
+        {/* ─── Clean Header ─── */}
+        <header className="cr-fadein" style={{ textAlign: 'center', marginBottom: 36 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 18px', borderRadius: 100, background: 'rgba(52,211,153,.1)', border: '1px solid rgba(52,211,153,.28)', fontSize: 13, fontWeight: 600, color: EMERALD, letterSpacing: '.5px', marginBottom: 14 }}>
+            💼 Profil Zawodowy
+          </div>
+          <h1 style={{ fontSize: 'clamp(1.8rem,4vw,2.6rem)', fontWeight: 800, letterSpacing: '-.5px', margin: '0 0 8px' }}>
+            Twój Profil <span style={{ color: EMERALD }}>Zawodowy</span>
+          </h1>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,.35)', margin: 0 }}>
+            <strong style={{ color: 'rgba(255,255,255,.55)', fontWeight: 500 }}>Test Zainteresowań Zawodowych (RIASEC)</strong>
+            {' · '}
+            {new Date(report.completed_at).toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
+        </header>
+
+        {/* ─── Holland Code — expanded card ─── */}
+        <div className="cr-glass cr-fadein" style={{ padding: '32px 36px', marginBottom: 24, animationDelay: '.05s', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: -60, right: -60, width: 220, height: 220, borderRadius: '50%', background: EMERALD_GLOW, filter: 'blur(80px)', opacity: .18, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: -40, left: -40, width: 180, height: 180, borderRadius: '50%', background: 'rgba(192,132,252,.25)', filter: 'blur(70px)', opacity: .15, pointerEvents: 'none' }} />
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ fontSize: '2.8rem', marginBottom: 10 }}>💼</div>
-            <h1 style={{ fontSize: 'clamp(1.8rem,5vw,2.8rem)', fontWeight: 800, margin: '0 0 6px', background: `linear-gradient(135deg,${domR.color},#c084fc,#60a5fa)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-              Twój Profil Zawodowy
-            </h1>
-            <p style={{ color: 'rgba(255,255,255,.45)', fontSize: '.88rem', marginBottom: 28 }}>
-              Test Zainteresowań Zawodowych (RIASEC) ·{' '}
-              {new Date(report.completed_at).toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
-            <div style={{ marginBottom: 18 }}>
-              <div style={{ fontSize: '.68rem', fontWeight: 600, letterSpacing: '1.6px', textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 8 }}>
-                Twój Kod Hollanda
-              </div>
-              <div style={{ fontSize: 'clamp(3.5rem,14vw,6rem)', fontWeight: 900, letterSpacing: '0.14em', background: `linear-gradient(135deg,${domR.color},#c084fc)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', lineHeight: 1 }}>
-                {report.holland_code}
-              </div>
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 22, textAlign: 'center' }}>
+              Twój Kod Hollanda
             </div>
-            <p style={{ color: 'rgba(255,255,255,.55)', fontSize: '.88rem', maxWidth: 520, margin: '0 auto', lineHeight: 1.75 }}>
-              {report.summary?.holland_code_explanation}
-            </p>
+            <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 24 }}>
+              {report.top_3?.map((interest, idx) => {
+                const r = getR(interest.id);
+                return (
+                  <div key={interest.id} style={{ flex: '1 1 180px', maxWidth: 240, background: `${r.color}10`, border: `1px solid ${r.color}35`, borderRadius: 18, padding: '22px 20px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', bottom: -20, right: -20, width: 100, height: 100, borderRadius: '50%', background: r.color, filter: 'blur(40px)', opacity: .12, pointerEvents: 'none' }} />
+                    <div style={{ fontSize: '1.8rem', marginBottom: 6 }}>{RIASEC_EMOJI[interest.id]}</div>
+                    <div style={{ fontSize: 'clamp(2.2rem,6vw,3.2rem)', fontWeight: 900, letterSpacing: '.05em', color: r.color, lineHeight: 1, marginBottom: 8, textShadow: `0 0 20px ${r.color}60` }}>
+                      {interest.letter}
+                    </div>
+                    <div style={{ fontSize: '.95rem', fontWeight: 700, color: '#fff', marginBottom: 3 }}>{interest.name}</div>
+                    <div style={{ fontSize: '.72rem', color: 'rgba(255,255,255,.4)', marginBottom: 6 }}>{interest.name_en}</div>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 600, color: r.color, background: `${r.color}18`, border: `1px solid ${r.color}30`, padding: '3px 10px', borderRadius: 100 }}>
+                      #{idx + 1} · {interest.score.toFixed(1)} / 5.0
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {report.summary?.holland_code_explanation && (
+              <p style={{ color: 'rgba(255,255,255,.5)', fontSize: '.87rem', lineHeight: 1.8, textAlign: 'center', maxWidth: 620, margin: '0 auto' }}>
+                {report.summary.holland_code_explanation}
+              </p>
+            )}
           </div>
         </div>
 
-        {/* ─── Radar Chart (custom SVG, HEXACO-style) ─── */}
+        {/* ─── Two-column: Radar + Sidebar ─── */}
         {(() => {
-          // rawScores is { holland_code, top_3, all_scores: { realistic: { raw_score, ... }, ... }, chart_data }
           const pctOf = id => Math.round(((rawScores?.all_scores?.[id]?.raw_score ?? 1) - 1) / 4 * 100);
           const shapePts = RIASEC_ORDER.map((id, i) => radarPt(i, pctOf(id)).join(',')).join(' ');
+          const sortedAll = RIASEC_ORDER
+            .map(id => ({ id, score: rawScores?.all_scores?.[id]?.raw_score ?? 1 }))
+            .sort((a, b) => b.score - a.score);
           return (
-            <div className="cr-glass cr-fadein" style={{ padding: '28px 24px 20px', marginBottom: 24, animationDelay: '.1s' }}>
-              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 28, display: 'flex', alignItems: 'center', gap: 12 }}>
-                Profil Zainteresowań
-                <span style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,rgba(52,211,153,.2),transparent)' }} />
+            <div className="cr-fadein cr-two-col" style={{ animationDelay: '.1s' }}>
+              {/* Radar */}
+              <div className="cr-glass" style={{ padding: '28px 24px 20px' }}>
+                <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(255,255,255,.3)', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
+                  Mapa Zainteresowań
+                  <span style={{ flex: 1, height: 1, background: `linear-gradient(90deg,${EMERALD_DIM},transparent)` }} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <svg viewBox="0 0 420 420" style={{ width: '100%', maxWidth: 420, height: 'auto', overflow: 'visible' }}>
+                    <defs>
+                      <linearGradient id="crg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor={domR.color} stopOpacity=".35" />
+                        <stop offset="100%" stopColor="#c084fc" stopOpacity=".2" />
+                      </linearGradient>
+                    </defs>
+                    {[20, 40, 60, 80, 100].map(p => (
+                      <polygon key={p} points={radarRing(p)} fill="none" stroke="rgba(255,255,255,.07)" strokeWidth="1" />
+                    ))}
+                    {RIASEC_ORDER.map((_, i) => {
+                      const [ex, ey] = radarPt(i, 100);
+                      return <line key={i} x1={R_CX} y1={R_CY} x2={ex} y2={ey} stroke="rgba(255,255,255,.1)" strokeWidth="1" />;
+                    })}
+                    <polygon className="cr-radar-shape" points={shapePts} fill="url(#crg)" stroke={domR.color} strokeWidth="2" style={{ filter: `drop-shadow(0 0 12px ${domR.glow})` }} />
+                    {RIASEC_ORDER.map((id, i) => {
+                      const [px, py] = radarPt(i, pctOf(id));
+                      const col = RIASEC[id]?.color ?? '#38b6ff';
+                      return <circle key={id} className="cr-radar-dot" cx={px} cy={py} r="5" fill={col} style={{ filter: `drop-shadow(0 0 7px ${col})` }} />;
+                    })}
+                    {radarLabelAnchors.map(({ id, lx, ly }) => {
+                      const txt = `${RIASEC_EMOJI[id]} ${RIASEC_PL[id]}`;
+                      const w = Math.max(txt.length * 6.8 + 16, 82);
+                      return (
+                        <g key={id}>
+                          <rect x={lx - w / 2} y={ly - 12} width={w} height={23} rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" strokeWidth="1" />
+                          <text x={lx} y={ly + 4} textAnchor="middle" style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: 11, fontWeight: 600, fill: 'rgba(255,255,255,.75)' }}>{txt}</text>
+                        </g>
+                      );
+                    })}
+                  </svg>
+                </div>
+                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,.22)', fontSize: '.7rem', marginTop: 6 }}>Skala: 1 (Nie lubię) → 5 (Bardzo lubię)</p>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <svg viewBox="0 0 420 420" style={{ width: '100%', maxWidth: 420, height: 'auto', overflow: 'visible' }}>
-                  <defs>
-                    <linearGradient id="crg" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor={domR.color} stopOpacity=".35" />
-                      <stop offset="100%" stopColor="#c084fc" stopOpacity=".2" />
-                    </linearGradient>
-                  </defs>
-                  {/* Grid rings */}
-                  {[20, 40, 60, 80, 100].map(p => (
-                    <polygon key={p} points={radarRing(p)} fill="none" stroke="rgba(255,255,255,.07)" strokeWidth="1" />
-                  ))}
-                  {/* Axis lines */}
-                  {RIASEC_ORDER.map((_, i) => {
-                    const [ex, ey] = radarPt(i, 100);
-                    return <line key={i} x1={R_CX} y1={R_CY} x2={ex} y2={ey} stroke="rgba(255,255,255,.1)" strokeWidth="1" />;
-                  })}
-                  {/* Data shape */}
-                  <polygon
-                    className="cr-radar-shape"
-                    points={shapePts}
-                    fill="url(#crg)"
-                    stroke={domR.color}
-                    strokeWidth="2"
-                    style={{ filter: `drop-shadow(0 0 12px ${domR.glow})` }}
-                  />
-                  {/* Dots per type with own color */}
-                  {RIASEC_ORDER.map((id, i) => {
-                    const [px, py] = radarPt(i, pctOf(id));
-                    const col = RIASEC[id]?.color ?? '#38b6ff';
+
+              {/* Sidebar — quick stats */}
+              <div className="cr-glass" style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: 18 }}>
+                <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(255,255,255,.3)' }}>Profil</div>
+                {/* Dominant type highlight */}
+                <div style={{ background: `${domR.color}10`, border: `1px solid ${domR.color}30`, borderRadius: 14, padding: 18 }}>
+                  <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '2.5px', textTransform: 'uppercase', color: domR.color, marginBottom: 6 }}>Dominujący typ</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                    <div style={{ width: 44, height: 44, borderRadius: '50%', background: `linear-gradient(135deg,${domR.color}40,${domR.color}80)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', flexShrink: 0 }}>
+                      {RIASEC_EMOJI[domType?.id]}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '1.1rem', fontWeight: 800, lineHeight: 1.2 }}>{domType?.name}</div>
+                      <div style={{ fontSize: '.72rem', color: 'rgba(255,255,255,.4)' }}>{domType?.name_en}</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 600, color: domR.color, background: `${domR.color}18`, border: `1px solid ${domR.color}30`, padding: '4px 10px', borderRadius: 100 }}>
+                    ⭐ Wynik: {domType?.score.toFixed(1)} / 5.0
+                  </div>
+                </div>
+                <div style={{ height: 1, background: 'rgba(255,255,255,.07)' }} />
+                <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(255,255,255,.3)' }}>Wszystkie wymiary</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {sortedAll.map(({ id, score }) => {
+                    const r = getR(id);
+                    const data = rawScores?.all_scores?.[id];
                     return (
-                      <circle
-                        key={id}
-                        className="cr-radar-dot"
-                        cx={px} cy={py} r="5"
-                        fill={col}
-                        style={{ filter: `drop-shadow(0 0 7px ${col})` }}
-                      />
+                      <div key={id} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,.55)', width: 100, flexShrink: 0 }}>{data?.name ?? RIASEC_PL[id]}</span>
+                        <div style={{ flex: 1, height: 4, background: 'rgba(255,255,255,.07)', borderRadius: 100, overflow: 'visible', position: 'relative' }}>
+                          <div style={{ width: `${(score / 5) * 100}%`, height: '100%', background: r.bar, boxShadow: `0 0 8px ${r.glow}`, borderRadius: 100 }} />
+                        </div>
+                        <span style={{ fontSize: 12, fontWeight: 700, minWidth: 28, textAlign: 'right', color: r.color }}>{score.toFixed(1)}</span>
+                      </div>
                     );
                   })}
-                  {/* Badge labels */}
-                  {radarLabelAnchors.map(({ id, lx, ly }) => {
-                    const txt = `${RIASEC_EMOJI[id]} ${RIASEC_PL[id]}`;
-                    const w = Math.max(txt.length * 6.8 + 16, 82);
-                    return (
-                      <g key={id}>
-                        <rect x={lx - w / 2} y={ly - 12} width={w} height={23} rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" strokeWidth="1" />
-                        <text x={lx} y={ly + 4} textAnchor="middle" style={{ fontFamily: "'Space Grotesk',sans-serif", fontSize: 11, fontWeight: 600, fill: 'rgba(255,255,255,.75)' }}>{txt}</text>
-                      </g>
-                    );
-                  })}
-                </svg>
+                </div>
+                <div style={{ height: 1, background: 'rgba(255,255,255,.07)' }} />
+                <div style={{ background: 'rgba(52,211,153,.06)', border: '1px solid rgba(52,211,153,.18)', borderRadius: 12, padding: 14, fontSize: 12, lineHeight: 1.65, color: 'rgba(255,255,255,.5)' }}>
+                  <strong style={{ color: 'rgba(255,255,255,.85)', fontWeight: 600 }}>Kod Hollanda: {report.holland_code}</strong>
+                  {' — trzy litery reprezentują Twoje najsilniejsze typy zainteresowań w kolejności dominacji.'}
+                </div>
               </div>
-              <p style={{ textAlign: 'center', color: 'rgba(255,255,255,.25)', fontSize: '.7rem', marginTop: 6 }}>
-                Skala: 1 (Nie lubię) → 5 (Bardzo lubię)
-              </p>
             </div>
           );
         })()}
