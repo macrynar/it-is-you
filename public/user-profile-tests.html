@@ -1529,6 +1529,39 @@
 
           </div><!-- /ch-bot -->
 
+          <!-- GENERATIVE ROW -->
+          <div class="ch-bot" style="margin-top:0;">
+
+            <!-- RPG ARCHETYPE -->
+            <div class="ch-panel">
+              <div class="ch-pi">
+                <div class="ch-pl">// ⚔ ARCHETYP RPG · KLASA POSTACI</div>
+                <div id="ch-rpg-content">
+                  <div class="ch-empty-block">
+                    <div class="ch-empty-icon">⚔</div>
+                    <div class="ch-empty-text">Ukończ test Enneagram aby odblokować swój archetyp RPG</div>
+                    <button class="ch-go-btn" onclick="switchTab('tests')">Przejdź do testów →</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- POP CULTURE MATCH -->
+            <div class="ch-panel">
+              <div class="ch-pi">
+                <div class="ch-pl">// 🎬 POSTACIE PODOBNE DO CIEBIE</div>
+                <div id="ch-pop-content">
+                  <div class="ch-empty-block">
+                    <div class="ch-empty-icon">🎬</div>
+                    <div class="ch-empty-text">Ukończ test Enneagram aby zobaczyć postacie z kultury popularnej podobne do Ciebie</div>
+                    <button class="ch-go-btn" onclick="switchTab('tests')">Przejdź do testów →</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /ch-generative -->
+
           <!-- FOOTER -->
           <div class="ch-footer">
             <div class="ch-fid" id="ch-footer-id">CHAR-ID: PSY-0000 · PSYCHER ENGINE v2.0</div>
@@ -2450,6 +2483,17 @@
             }
 
             // ── ENNEAGRAM ────────────────────────────────────────
+            const ENNLORE = {
+                1: { rpg: 'Praworządny Dobry Paladin',    epithet: 'Architekt Porządku',    pop: ['Hermiona Granger', 'Ned Stark', 'Chidi (The Good Place)'] },
+                2: { rpg: 'Kapłan Wsparcia',              epithet: 'Strażnik Serc',         pop: ['Leslie Knope', 'Samwise Gamgee', 'Ted Lasso'] },
+                3: { rpg: 'Bard Ambicji',                 epithet: 'Architekt Sukcesu',     pop: ['Tony Stark', 'Harvey Specter', 'Jay Gatsby'] },
+                4: { rpg: 'Mroczny Artysta',              epithet: 'Dziecko Cienia',        pop: ['Joker (2019)', 'Severus Snape', 'Don Draper'] },
+                5: { rpg: 'Mistrz Wiedzy Zakazanej',      epithet: 'Architekt Cienia',      pop: ['Sherlock Holmes', 'Dr House', 'Walter White'] },
+                6: { rpg: 'Strażnik Bractwa',             epithet: 'Bastion Lojalności',    pop: ['Captain America', 'Ron Weasley', 'Samwise Gamgee'] },
+                7: { rpg: 'Chaotyczny Dobry Awanturnik',  epithet: 'Wirtuoz Możliwości',    pop: ['Jack Sparrow', 'Tyrion Lannister', 'The Mandalorian'] },
+                8: { rpg: 'Warlord Wojenny',              epithet: 'Inkwizytor Woli',       pop: ['Walter White', 'Tony Soprano', 'Daenerys Targaryen'] },
+                9: { rpg: 'Mnich Harmonii',               epithet: 'Spokój w Oku Cyklonu',  pop: ['Frodo Baggins', 'Ted Lasso', 'The Dude (Big Lebowski)'] },
+            };
             if (latest.ENNEAGRAM) {
                 const s = latest.ENNEAGRAM.raw_scores || {};
                 let topType = null, topScore = -1;
@@ -2479,6 +2523,43 @@
                     if (ennDescEl) ennDescEl.textContent = EDESCS[topType] || '';
                     window._ch_ennName = ENAMES[topType] || `Typ ${topType}`;
                     traitChips.push({label:`🌀 ${ENAMES[topType]||'Typ '+topType}`, cls:'ch-ttv'});
+
+                    // ── RPG Archetype ──────────────────────────
+                    const lore = ENNLORE[parseInt(topType)];
+                    if (lore) {
+                        const ennCol2 = ECOLS[(parseInt(topType)-1) % ECOLS.length];
+                        const rpgEl = document.getElementById('ch-rpg-content');
+                        if (rpgEl) rpgEl.innerHTML = `
+                            <div style="padding:4px 0 8px;">
+                                <div style="font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:${ennCol2};text-shadow:0 0 20px ${ennCol2}66;letter-spacing:1px;margin-bottom:4px;">${lore.rpg}</div>
+                                <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2.5px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:12px;">"${lore.epithet}"</div>
+                                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                    <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:3px;background:rgba(${ennCol2 === '#6366f1' ? '99,102,241' : '56,182,255'},.08);border:1px solid ${ennCol2}33;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:${ennCol2};">⚔ ${ENAMES[topType]||'Typ '+topType}</span>
+                                    <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:3px;background:rgba(123,94,167,.1);border:1px solid rgba(123,94,167,.25);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:#b08fff;">TYP ${topType} · ENNEAGRAM</span>
+                                </div>
+                            </div>`;
+                        }
+
+                        // ── Pop Culture ────────────────────────
+                        const popEl = document.getElementById('ch-pop-content');
+                        if (popEl && lore.pop.length > 0) popEl.innerHTML = `
+                            <div style="margin-bottom:10px;font-size:10px;color:rgba(255,255,255,.35);line-height:1.6;">Na podstawie Twojego profilu Enneagram (Typ ${topType}) najbardziej przypominasz:</div>
+                            <div style="display:flex;flex-direction:column;gap:7px;">${
+                                lore.pop.map((char, i) => {
+                                    const colors = ['#38b6ff','#b08fff','#34d399'];
+                                    const col = colors[i % colors.length];
+                                    const ranks = ['01','02','03'];
+                                    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:4px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);">
+                                        <div style="font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:${col};min-width:22px;">${ranks[i]}</div>
+                                        <div style="flex:1;font-size:12px;font-weight:600;color:rgba(255,255,255,.85);">${char}</div>
+                                        <div style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:${col}88;">${Math.round(95 - i * 8)}% MATCH</div>
+                                    </div>`;
+                                }).join('')
+                            }</div>
+                            <div style="margin-top:10px;padding:8px 11px;border-radius:3px;background:rgba(56,182,255,.04);border:1px solid rgba(56,182,255,.12);font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:1.5px;color:rgba(56,182,255,.45);">
+                                DOPASOWANIE NA PODSTAWIE: ENNEAGRAM TYPE ${topType} · ${ENAMES[topType]||''}
+                            </div>`;
+                    }
                 }
             }
 
