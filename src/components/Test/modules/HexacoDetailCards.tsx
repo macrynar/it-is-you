@@ -91,14 +91,24 @@ export default function HexacoDetailCards({
   compact = true,
   showEnglishName = true,
   showDescription = true,
+  columns,
 }: {
   percentiles: Record<string, number>;
   compact?: boolean;
   showEnglishName?: boolean;
   showDescription?: boolean;
+  columns?: 2 | 3;
 }) {
+  const gridClass = (() => {
+    const cols = columns ?? (compact ? 3 : 3);
+    if (cols === 2) return compact ? 'grid grid-cols-1 sm:grid-cols-2 gap-4' : 'grid grid-cols-1 md:grid-cols-2 gap-5';
+    return compact
+      ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4'
+      : 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5';
+  })();
+
   return (
-    <div className={compact ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4' : 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5'}>
+    <div className={gridClass}>
       {DIM_ORDER.map((id) => {
         const ac = ACCENT[id];
         const pct = Math.round(percentiles?.[id] ?? 0);
@@ -138,7 +148,9 @@ export default function HexacoDetailCards({
             <div className={compact ? 'p-5' : 'p-6'}>
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div className="min-w-0">
-                  <div className="text-sm font-semibold text-white/85 truncate">{ac.plName}</div>
+                  <div className="text-sm font-semibold text-white/85 leading-tight whitespace-normal break-words">
+                    {ac.plName}
+                  </div>
                   {showEnglishName && (
                     <div className="text-xs text-white/45 truncate mt-0.5">{ac.name}</div>
                   )}

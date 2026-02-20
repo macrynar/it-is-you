@@ -54,8 +54,12 @@ const labelAnchors: Array<{ id: DimId; lx: number; ly: number }> = [
 
 export default function HexacoRadarChart({
   percentiles,
+  showFrame = true,
+  showHeader = true,
 }: {
   percentiles: Record<string, number>;
+  showFrame?: boolean;
+  showHeader?: boolean;
 }) {
   const shapePts = useMemo(() => {
     return DIM_ORDER
@@ -63,15 +67,9 @@ export default function HexacoRadarChart({
       .join(' ');
   }, [percentiles]);
 
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-4">
-      <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase mb-3 flex items-center gap-3">
-        <span>Mapa osobowości</span>
-        <span className="flex-1 h-px" style={{ background: 'linear-gradient(90deg,rgba(56,182,255,.2),transparent)' }} />
-      </div>
-
-      <div className="flex justify-center">
-        <svg viewBox="0 0 420 420" style={{ width: '100%', maxWidth: 420, height: 'auto', overflow: 'visible' }}>
+  const content = (
+    <div className="flex justify-center">
+      <svg viewBox="0 0 420 420" style={{ width: '100%', maxWidth: 420, height: 'auto', overflow: 'visible' }}>
           <defs>
             <linearGradient id="iiy-hexaco-rg" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#38b6ff" stopOpacity=".35" />
@@ -151,8 +149,21 @@ export default function HexacoRadarChart({
               </g>
             );
           })}
-        </svg>
-      </div>
+      </svg>
+    </div>
+  );
+
+  if (!showFrame) return content;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-4">
+      {showHeader && (
+        <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase mb-3 flex items-center gap-3">
+          <span>Mapa osobowości</span>
+          <span className="flex-1 h-px" style={{ background: 'linear-gradient(90deg,rgba(56,182,255,.2),transparent)' }} />
+        </div>
+      )}
+      {content}
     </div>
   );
 }
