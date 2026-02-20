@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient.js';
-import { generateCareerReport } from '../../utils/scoring.js';
+import { generateCareerReport, generateValuesReport } from '../../utils/scoring.js';
 
 /* ═══════════ LORE ═══════════ */
 const ENN_LORE: Record<number, {
@@ -188,9 +188,13 @@ export default function CharacterSheet() {
   /* ENNEAGRAM */
   const ennR = raw.ENNEAGRAM?.report;
   const ennP = ennR?.primary_type;
-  const ennN: number|null = ennP?.id ?? null;
+  const ennN: number|null = Number.isFinite(Number(ennP?.type ?? ennP?.id)) ? Number(ennP?.type ?? ennP?.id) : null;
   const ennL = ennN ? ENN_LORE[ennN] : null;
   const ennWing: string = ennR?.wing ? `w${ennR.wing}` : '';
+  const ennScores: Record<string, number> = raw.ENNEAGRAM?.raw_scores ?? {};
+  const ennScore = ennN ? (ennScores[String(ennN)] ?? 0) : 0;
+  const ennMax = Math.max(0, ...Object.values(ennScores).map(v => (typeof v === 'number' ? v : 0)));
+  const ennStrengthPct = ennMax > 0 ? Math.round((ennScore / ennMax) * 100) : 0;
 
   /* STRENGTHS */
   const top5: any[] = raw.STRENGTHS?.raw_scores?.top_5 ?? [];
@@ -201,7 +205,10 @@ export default function CharacterSheet() {
   const topJobs: any[] = (careerRep?.top_careers ?? careerRep?.career_clusters ?? []).slice(0,6);
 
   /* VALUES */
-  const topVals: any[] = (raw.VALUES?.raw_scores?.top_values ?? raw.VALUES?.report?.top_values ?? []).slice(0,5);
+  const valuesRep = raw.VALUES
+    ? (raw.VALUES.report ?? (raw.VALUES.raw_scores?.sorted_values ? generateValuesReport(raw.VALUES.raw_scores) : null))
+    : null;
+  const topVals: any[] = (valuesRep?.all_values ?? raw.VALUES?.raw_scores?.sorted_values ?? valuesRep?.top_3 ?? []).slice(0,5);
 
   /* DARK TRIAD */
   const dtDims = raw.DARK_TRIAD?.raw_scores?.dimensions ?? {};
@@ -237,51 +244,122 @@ export default function CharacterSheet() {
 
   return (
     <div className="min-h-screen bg-bg-main text-text-main bg-neural-gradient bg-fixed">
-      <nav className="border-b border-white/5 bg-bg-surface/70 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between gap-4">
-          <a href="/" className="font-brand font-bold tracking-[6px] text-white no-underline">PSYCHER</a>
-
-          <div className="flex items-center gap-1 rounded-xl bg-white/5 border border-white/10 p-1">
-            <button
-              className="px-4 py-2 rounded-lg text-sm font-semibold text-white/55 hover:text-white hover:bg-white/5 transition"
-              onClick={() => { window.location.href = '/user-profile-tests.html'; }}
-            >
-              🧪 Testy
-            </button>
-            <button className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-white/10 border border-white/10">
-              🃏 Karta Postaci
-            </button>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button
-              className="relative w-14 h-8 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition"
-              title="Przełącz motyw"
-              onClick={() => { const n = !lightMode; setLightMode(n); document.body.classList.toggle('light-mode', n); }}
-            >
-              <span className={`absolute top-1 left-1 w-6 h-6 rounded-full transition-transform ${lightMode ? 'translate-x-6 bg-amber-400' : 'translate-x-0 bg-brand-primary'}`}/>
-            </button>
-            <a
-              href="/settings"
-              className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm no-underline"
-              title="Ustawienia konta"
-            >
-              ⚙️ Ustawienia
+      <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between gap-4">
+            {/* Logo */}
+            <a href="/" className="iiy-logo iiy-sm">
+              <div className="iiy-signet">
+                <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="iiy-hg2" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#38b6ff" />
+                      <stop offset="50%" stopColor="#7b5ea7" />
+                      <stop offset="100%" stopColor="#38b6ff" />
+                    </linearGradient>
+                    <linearGradient id="iiy-bg2" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#38b6ff" stopOpacity="0.45" />
+                      <stop offset="100%" stopColor="#1a1d4a" stopOpacity="0.08" />
+                    </linearGradient>
+                    <filter id="iiy-glow2" x="-30%" y="-30%" width="160%" height="160%">
+                      <feGaussianBlur stdDeviation="2" result="b" />
+                      <feMerge>
+                        <feMergeNode in="b" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                    <clipPath id="iiy-clip2">
+                      <polygon points="48,5 87,27 87,69 48,91 9,69 9,27" />
+                    </clipPath>
+                  </defs>
+                  <polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="#11143a" />
+                  <g className="iiy-ring-ticks" filter="url(#iiy-glow2)">
+                    <line x1="48" y1="5" x2="48" y2="12" stroke="#38b6ff" strokeWidth="1.8" />
+                    <line x1="87" y1="27" x2="81" y2="30" stroke="#38b6ff" strokeWidth="1.8" />
+                    <line x1="87" y1="69" x2="81" y2="66" stroke="#38b6ff" strokeWidth="1.8" />
+                    <line x1="48" y1="91" x2="48" y2="84" stroke="#38b6ff" strokeWidth="1.8" />
+                    <line x1="9" y1="69" x2="15" y2="66" stroke="#38b6ff" strokeWidth="1.8" />
+                    <line x1="9" y1="27" x2="15" y2="30" stroke="#38b6ff" strokeWidth="1.8" />
+                    <line x1="68" y1="8" x2="66" y2="12" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" />
+                    <line x1="28" y1="8" x2="30" y2="12" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" />
+                    <line x1="90" y1="48" x2="84" y2="48" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" />
+                    <line x1="6" y1="48" x2="12" y2="48" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" />
+                    <line x1="68" y1="88" x2="66" y2="84" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" />
+                    <line x1="28" y1="88" x2="30" y2="84" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" />
+                  </g>
+                  <polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="none" stroke="url(#iiy-hg2)" strokeWidth="1.8" />
+                  <g clipPath="url(#iiy-clip2)">
+                    <line className="iiy-scan" x1="12" y1="48" x2="84" y2="48" stroke="#38b6ff" strokeWidth="1.2" opacity="0.5" />
+                    <circle cx="48" cy="30" r="12" fill="#11143a" stroke="#38b6ff" strokeWidth="1.2" />
+                    <rect x="37" y="26.5" width="22" height="6" rx="3" fill="#0d0f2b" stroke="#38b6ff" strokeWidth="0.7" />
+                    <ellipse className="iiy-eye-l" cx="43" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#iiy-glow2)" />
+                    <ellipse className="iiy-eye-r" cx="53" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#iiy-glow2)" />
+                    <rect x="44.5" y="42" width="7" height="6" rx="1" fill="#11143a" stroke="#38b6ff" strokeWidth="0.8" />
+                    <path d="M28 90 L31 50 Q48 44 65 50 L68 90 Z" fill="url(#iiy-bg2)" stroke="#38b6ff" strokeWidth="0.9" />
+                    <line x1="48" y1="50" x2="48" y2="74" stroke="#38b6ff" strokeWidth="0.5" opacity="0.35" />
+                    <rect x="39" y="55" width="18" height="12" rx="1.5" fill="none" stroke="#38b6ff" strokeWidth="0.6" opacity="0.5" />
+                    <line x1="31" y1="52" x2="31" y2="65" stroke="#7b5ea7" strokeWidth="1.4" opacity="0.9" />
+                    <line x1="65" y1="52" x2="65" y2="65" stroke="#7b5ea7" strokeWidth="1.4" opacity="0.9" />
+                    <circle className="iiy-core" cx="48" cy="61" r="2.8" fill="#38b6ff" filter="url(#iiy-glow2)" />
+                  </g>
+                </svg>
+              </div>
+              <div className="iiy-wordmark">
+                <div className="iiy-title">PSYCHER</div>
+                <div className="iiy-divider" />
+                <div className="iiy-sub">Psychometric AI Engine</div>
+              </div>
             </a>
-            <button
-              onClick={async () => { await supabase.auth.signOut(); window.location.href='/'; }}
-              className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm"
-            >
-              Wyloguj
-            </button>
+
+            {/* Center Nav Tabs */}
+            <div className="iiy-nav-tabs">
+              <button className="iiy-tab-btn" onClick={() => { window.location.href = '/user-profile-tests.html'; }}>
+                🧪 Testy
+              </button>
+              <button className="iiy-tab-btn active" aria-current="page">
+                🃏 Karta Postaci
+              </button>
+            </div>
+
+            {/* User Actions */}
+            <div className="flex items-center gap-4">
+              <button
+                className={`theme-toggle ${lightMode ? 'light' : ''}`}
+                onClick={() => { const n = !lightMode; setLightMode(n); document.body.classList.toggle('light-mode', n); }}
+                title="Przełącz motyw"
+              >
+                <div className="theme-toggle-slider" />
+                <svg className="theme-icon theme-icon-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+                <svg className="theme-icon theme-icon-sun" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </button>
+
+              <button
+                onClick={async () => { await supabase.auth.signOut(); window.location.href='/'; }}
+                className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm"
+              >
+                Wyloguj
+              </button>
+              <a
+                href="/settings"
+                className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}
+                title="Ustawienia konta"
+              >
+                ⚙️ Ustawienia
+              </a>
+            </div>
           </div>
         </div>
       </nav>
 
-      <main className="px-6 py-10 pb-16 font-brand">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 max-w-[1400px] mx-auto auto-rows-min">
+      <main className="px-6 py-10 pb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 max-w-7xl mx-auto auto-rows-min">
           {(() => {
-            const TILE_BASE = 'bg-slate-900/60 border border-white/10 backdrop-blur-xl rounded-2xl p-6 relative flex flex-col transition-all hover:border-brand-primary/30';
+            const TILE_BASE = 'card-neural p-6 relative flex flex-col';
             const archetype = ennL?.rpg ?? 'Archetyp nieznany';
             const epithet = ennL?.epithet ?? 'Brak danych';
             const pop = (ennL?.pop ?? []).slice(0, 6).map((name, i) => ({ name, pct: Math.max(60, 95 - i * 7) }));
@@ -309,13 +387,13 @@ export default function CharacterSheet() {
                     </div>
                   </div>
 
-                  <div className="mt-6">
+                  <div className="mt-5">
                     <div className="text-[10px] tracking-[2px] font-mono text-white/35">ARCHETYP RPG</div>
                     <div className="mt-2 text-xl font-extrabold text-brand-secondary leading-tight">{archetype}</div>
                     <div className="mt-1 text-sm text-white/55 italic">{epithet}</div>
                   </div>
 
-                  <div className="mt-6">
+                  <div className="mt-5">
                     <div className="text-[10px] tracking-[2px] font-mono text-white/35">PODOBNE POSTACIE</div>
                     <div className="mt-3 flex flex-col gap-2">
                       {pop.length > 0 ? (
@@ -335,14 +413,47 @@ export default function CharacterSheet() {
                       )}
                     </div>
                   </div>
+
+                  <div className="mt-5 grid grid-cols-2 gap-3">
+                    <div className="min-w-0">
+                      <div className="text-[10px] tracking-[2px] font-mono text-white/35">CHARGES</div>
+                      <div className="mt-2 space-y-1">
+                        {(ennL?.charges ?? []).slice(0, 3).map((s) => (
+                          <div key={s} className="text-xs text-white/65 bg-white/5 border border-white/10 rounded-md px-2 py-1 truncate">
+                            {s}
+                          </div>
+                        ))}
+                        {!ennL && (
+                          <div className="text-xs text-white/40 bg-white/5 border border-white/10 rounded-md px-2 py-1">
+                            Ukończ Enneagram
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[10px] tracking-[2px] font-mono text-white/35">DRAINS</div>
+                      <div className="mt-2 space-y-1">
+                        {(ennL?.drains ?? []).slice(0, 3).map((s) => (
+                          <div key={s} className="text-xs text-white/65 bg-white/5 border border-white/10 rounded-md px-2 py-1 truncate">
+                            {s}
+                          </div>
+                        ))}
+                        {!ennL && (
+                          <div className="text-xs text-white/40 bg-white/5 border border-white/10 rounded-md px-2 py-1">
+                            Ukończ Enneagram
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </section>
 
                 {/* TILE 2: MATRYCA HEXACO */}
-                <section className={`col-span-1 lg:col-span-2 lg:row-span-2 min-h-[500px] ${TILE_BASE}`}>
+                <section className={`col-span-1 lg:col-span-2 lg:row-span-2 ${TILE_BASE}`}>
                   <div className="text-[10px] tracking-[2px] font-mono text-white/35">MATRYCA HEXACO</div>
                   {raw.HEXACO ? (
                     <>
-                      <div className="flex items-center justify-center flex-1 mt-3">
+                      <div className="flex items-center justify-center mt-3">
                         <HexRadar data={hexBars.map(h => ({k:h.k, pct:h.pct}))}/>
                       </div>
                       <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3">
@@ -370,17 +481,17 @@ export default function CharacterSheet() {
                 </section>
 
                 {/* TILE 3: ENNEAGRAM & ENGINE */}
-                <section className={`col-span-1 lg:col-span-1 lg:row-span-2 min-h-[500px] ${TILE_BASE}`}>
+                <section className={`col-span-1 lg:col-span-1 lg:row-span-2 ${TILE_BASE}`}>
                   <div className="text-[10px] tracking-[2px] font-mono text-white/35">ENNEAGRAM & ENGINE</div>
 
                   <div className="flex items-center justify-center mt-3">
                     <div className="w-full max-w-[220px]">
-                      <EnnStar active={ennN} pct={ennN ? (done/6)*100 : 0}/>
+                      <EnnStar active={ennN} pct={ennN ? ennStrengthPct : 0}/>
                     </div>
                   </div>
 
                   <div className="mt-3 text-center">
-                    <div className="text-5xl font-extrabold text-white">{ennN ?? '—'}</div>
+                    <div className="text-4xl font-extrabold text-white">{ennN ?? '—'}</div>
                     <div className="mt-1 text-sm text-white/70 font-semibold">{ennP?.name ?? 'Wykonaj test Enneagram'}</div>
                     <div className="mt-1 text-xs font-mono text-white/35">{ennWing ? `skrzydło ${ennWing}` : ''}</div>
                   </div>
@@ -454,7 +565,7 @@ export default function CharacterSheet() {
                 </section>
 
                 {/* TILE 5: STREFA CIENIA */}
-                <section className={`col-span-1 lg:col-span-2 !bg-rose-950/20 !border-rose-500/20 ${TILE_BASE}`}>
+                <section className={`col-span-1 lg:col-span-2 card-neural card-danger p-6 relative flex flex-col`}>
                   <div className="text-[10px] tracking-[2px] font-mono text-rose-200/60">STREFA CIENIA</div>
                   <div className="mt-3 text-lg font-semibold text-rose-300">Ciemna Triada (SD3)</div>
 
