@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { generateCareerReport, generateValuesReport } from '../../utils/scoring.js';
+import HexacoDetailCards from '../Test/modules/HexacoDetailCards';
+import DarkTriadSummaryPanel from '../Test/modules/DarkTriadSummaryPanel';
+import StrengthsTopTalentsGrid from '../Test/modules/StrengthsTopTalentsGrid';
+import CareerHollandMiniCards from '../Test/modules/CareerHollandMiniCards';
+import ValuesTopChipsMini from '../Test/modules/ValuesTopChipsMini';
+import EnneagramTypeCardMini from '../Test/modules/EnneagramTypeCardMini';
 
 /* ═══════════ LORE ═══════════ */
 const ENN_LORE: Record<number, {
@@ -40,59 +46,6 @@ const DT_COLOR: Record<string,string> = {
 };
 
 interface RawRow { test_type:string; raw_scores:any; percentile_scores:any; report:any; }
-
-function HexRadar({ data }: { data: {k:string; pct:number}[] }) {
-  const cx = 150;
-  const cy = 110;
-  const r = 72;
-  const angles = data.map((_, i) => (i * 2 * Math.PI / data.length) - Math.PI / 2);
-
-  const toXY = (a: number, rad: number) => ({
-    x: cx + rad * Math.cos(a),
-    y: cy + rad * Math.sin(a),
-  });
-
-  const pts = data.map((d, i) => toXY(angles[i], (Math.max(0, Math.min(100, d.pct)) / 100) * r));
-  const polyPts = pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
-  const rings = [20, 40, 60, 80, 100].map(p => (p / 100) * r);
-
-  return (
-    <svg viewBox="0 0 300 240" style={{width:'100%',maxHeight:260,display:'block'}}>
-      <circle cx={cx} cy={cy} r={r+22} fill="rgba(56,182,255,.02)" />
-      {rings.map((rr, i) => (
-        <circle key={i} cx={cx} cy={cy} r={rr} fill="none" stroke="rgba(56,182,255,.08)" strokeWidth="1" />
-      ))}
-      {angles.map((a, i) => {
-        const lp = toXY(a, r);
-        return (
-          <line
-            key={i}
-            x1={cx}
-            y1={cy}
-            x2={lp.x.toFixed(1)}
-            y2={lp.y.toFixed(1)}
-            stroke="rgba(56,182,255,.08)"
-            strokeWidth="1"
-          />
-        );
-      })}
-
-      <polygon points={polyPts} fill="rgba(56,182,255,.10)" stroke="#38b6ff" strokeWidth="1.8" strokeLinejoin="round"/>
-      {pts.map((p,i) => (
-        <circle key={i} cx={p.x.toFixed(1)} cy={p.y.toFixed(1)} r="4" fill="#38b6ff" style={{filter:'drop-shadow(0 0 4px #38b6ff)'}}/>
-      ))}
-      {data.map((d,i) => {
-        const lp = toXY(angles[i], r + 26);
-        return (
-          <text key={i} x={lp.x.toFixed(1)} y={lp.y.toFixed(1)} textAnchor="middle" dominantBaseline="middle"
-            fill="rgba(203,213,225,.55)" fontSize="11" fontFamily="Space Grotesk,sans-serif" fontWeight="600">
-            {HEX_FULL[d.k]}
-          </text>
-        );
-      })}
-    </svg>
-  );
-}
 
 function EnnStar({ active, pct }: { active: number|null; pct: number }) {
   const N=9, cx=100, cy=100, R=80, ri=28;
@@ -368,22 +321,40 @@ export default function CharacterSheet() {
               <>
                 {/* TILE 1: HERO & AI CORE */}
                 <section className={`col-span-1 lg:col-span-1 lg:row-span-2 ${TILE_BASE}`}>
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-12 h-12 rounded-full border border-white/10 bg-white/5 overflow-hidden flex items-center justify-center shrink-0">
-                        {avatarUrl ? (
-                          <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
-                        ) : (
-                          <span className="font-semibold text-white/70">{initials}</span>
-                        )}
+                  <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-4">
+                    <div aria-hidden className="absolute -top-14 -right-14 w-44 h-44 rounded-full blur-3xl opacity-25" style={{ background: 'rgba(56,182,255,.35)' }} />
+                    <div aria-hidden className="absolute -bottom-16 -left-16 w-52 h-52 rounded-full blur-3xl opacity-20" style={{ background: 'rgba(176,143,255,.35)' }} />
+
+                    <div className="relative flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-12 h-12 rounded-full border border-white/15 bg-white/5 overflow-hidden flex items-center justify-center shrink-0" style={{ boxShadow: '0 0 0 1px rgba(56,182,255,.18), 0 0 20px rgba(56,182,255,.08)' }}>
+                          {avatarUrl ? (
+                            <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="font-semibold text-white/75">{initials}</span>
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-white font-semibold truncate leading-tight">{userName}</div>
+                          <div className="text-[11px] text-white/45 font-mono mt-0.5">{charId} · build {buildDate}</div>
+                        </div>
                       </div>
-                      <div className="min-w-0">
-                        <div className="text-white font-semibold truncate">{userName}</div>
-                        <div className="text-xs text-white/40 font-mono">LVL {done} · {lvlLabel} · {codeStr || '—'}</div>
+
+                      <div className="shrink-0 flex flex-col items-end gap-2">
+                        <span className="badge-primary">{rareLabel}</span>
+                        <span className="badge-pending">LVL {done} · {lvlLabel}</span>
                       </div>
                     </div>
-                    <div className="text-xs font-mono text-white/35 border border-white/10 bg-white/5 px-2 py-1 rounded-md shrink-0">
-                      {rareLabel}
+
+                    <div className="relative mt-4">
+                      <div className="flex items-center justify-between text-[10px] tracking-[2px] font-mono text-white/35">
+                        <span>POSTĘP PROFILU</span>
+                        <span className="text-white/50">{done}/6 · {xpPct}%</span>
+                      </div>
+                      <div className="stat-bar-track mt-2">
+                        <div className="stat-bar-fill" style={{ width: `${Math.max(0, Math.min(100, xpPct))}%` }} />
+                      </div>
+                      <div className="mt-2 text-[11px] text-white/45 font-mono truncate">{codeStr || '—'}</div>
                     </div>
                   </div>
 
@@ -453,21 +424,8 @@ export default function CharacterSheet() {
                   <div className="text-[10px] tracking-[2px] font-mono text-white/35">MATRYCA HEXACO</div>
                   {raw.HEXACO ? (
                     <>
-                      <div className="flex items-center justify-center mt-3">
-                        <HexRadar data={hexBars.map(h => ({k:h.k, pct:h.pct}))}/>
-                      </div>
-                      <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3">
-                        {hexBars.map(h => (
-                          <div key={h.k} className="min-w-0">
-                            <div className="flex items-center justify-between gap-2 mb-1">
-                              <div className="text-xs font-semibold text-white/60 truncate">{h.label}</div>
-                              <div className="text-xs font-mono text-white/45 shrink-0">{h.pct}%</div>
-                            </div>
-                            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full rounded-full" style={{ width: `${h.pct}%`, background: h.color }} />
-                            </div>
-                          </div>
-                        ))}
+                      <div className="mt-4">
+                        <HexacoDetailCards percentiles={raw.HEXACO?.percentile_scores ?? {}} />
                       </div>
                     </>
                   ) : (
@@ -490,43 +448,55 @@ export default function CharacterSheet() {
                     </div>
                   </div>
 
-                  <div className="mt-3 text-center">
-                    <div className="text-4xl font-extrabold text-white">{ennN ?? '—'}</div>
-                    <div className="mt-1 text-sm text-white/70 font-semibold">{ennP?.name ?? 'Wykonaj test Enneagram'}</div>
-                    <div className="mt-1 text-xs font-mono text-white/35">{ennWing ? `skrzydło ${ennWing}` : ''}</div>
+                  <div className="mt-4">
+                    {raw.ENNEAGRAM ? (
+                      <EnneagramTypeCardMini primaryType={ennP} wing={ennR?.wing} strengthPct={ennStrengthPct} lore={ennL} />
+                    ) : (
+                      <a
+                        href="/user-profile-tests.html"
+                        className="bg-white/5 rounded-md p-3 text-sm text-white/45 border border-white/10 hover:border-brand-primary/30 hover:text-white/70 transition no-underline block"
+                      >
+                        Wykonaj test Enneagram, aby odblokować profil typu →
+                      </a>
+                    )}
                   </div>
 
                   <div className="mt-6 space-y-4 min-w-0">
                     <div className="min-w-0">
                       <div className="text-[10px] tracking-[2px] font-mono text-white/35">RIASEC</div>
-                      <div className="mt-2 flex flex-wrap gap-2 max-w-full overflow-hidden">
-                        {(holland ? holland.split('') : []).slice(0, 3).map((c, i) => (
-                          <span key={`${c}-${i}`} className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-white/60">
-                            {c}
-                          </span>
-                        ))}
-                        {!holland && (
-                          <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-white/40">
-                            Wykonaj test kariery
-                          </span>
-                        )}
-                      </div>
+                      {careerRep?.top_3?.length ? (
+                        <div className="mt-2">
+                          <CareerHollandMiniCards report={careerRep} />
+                        </div>
+                      ) : (
+                        <div className="mt-2 flex flex-wrap gap-2 max-w-full overflow-hidden">
+                          {(holland ? holland.split('') : []).slice(0, 3).map((c, i) => (
+                            <span key={`${c}-${i}`} className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-white/60">
+                              {c}
+                            </span>
+                          ))}
+                          {!holland && (
+                            <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-white/40">
+                              Wykonaj test kariery
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     <div className="min-w-0">
                       <div className="text-[10px] tracking-[2px] font-mono text-white/35">WARTOŚCI</div>
-                      <div className="mt-2 flex flex-wrap gap-2 max-w-full overflow-hidden">
-                        {topVals.slice(0, 6).map((v:any, i:number) => (
-                          <span key={i} className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-white/65 truncate max-w-full">
-                            {v.name ?? v.value_name ?? String(v)}
-                          </span>
-                        ))}
-                        {topVals.length === 0 && (
+                      {topVals.length > 0 ? (
+                        <div className="mt-2">
+                          <ValuesTopChipsMini report={valuesRep} fallback={topVals} max={3} />
+                        </div>
+                      ) : (
+                        <div className="mt-2 flex flex-wrap gap-2 max-w-full overflow-hidden">
                           <span className="px-2 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-white/40">
                             Wykonaj test wartości
                           </span>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </section>
@@ -537,22 +507,8 @@ export default function CharacterSheet() {
                   <div className="mt-3 text-lg font-semibold text-amber-400">Top talenty</div>
 
                   {top5.length > 0 ? (
-                    <div className="mt-4 space-y-3">
-                      {top5.slice(0, 5).map((t:any, i:number) => {
-                        const label = t.name ?? t.name_en ?? `Talent ${i+1}`;
-                        const pct = Math.max(35, 100 - i * 12);
-                        return (
-                          <div key={label} className="flex items-center gap-3 min-w-0">
-                            <div className="w-7 text-xs font-mono text-amber-400/80 shrink-0">{String(i+1).padStart(2,'0')}</div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-sm font-semibold text-white/75 truncate">{label}</div>
-                              <div className="mt-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full rounded-full bg-amber-400" style={{ width: `${pct}%` }} />
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
+                    <div className="mt-4">
+                      <StrengthsTopTalentsGrid top5={top5} />
                     </div>
                   ) : (
                     <a
@@ -570,18 +526,8 @@ export default function CharacterSheet() {
                   <div className="mt-3 text-lg font-semibold text-rose-300">Ciemna Triada (SD3)</div>
 
                   {raw.DARK_TRIAD ? (
-                    <div className="mt-5 space-y-4">
-                      {dtTraits.map(t => (
-                        <div key={t.k}>
-                          <div className="flex items-center justify-between gap-2 mb-1">
-                            <div className="text-sm font-semibold text-white/75">{t.label}</div>
-                            <div className="text-xs font-mono text-white/50">{t.pct}%</div>
-                          </div>
-                          <div className="h-2 rounded-full bg-white/10 overflow-hidden">
-                            <div className="h-full rounded-full" style={{ width: `${t.pct}%`, background: t.color }} />
-                          </div>
-                        </div>
-                      ))}
+                    <div className="mt-4">
+                      <DarkTriadSummaryPanel rawScores={raw.DARK_TRIAD?.raw_scores} report={raw.DARK_TRIAD?.report} />
                     </div>
                   ) : (
                     <a
