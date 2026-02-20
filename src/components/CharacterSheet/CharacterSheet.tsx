@@ -177,13 +177,25 @@ export default function CharacterSheet() {
   const rareLabel = done>=6 ? 'LEGENDARY' : done>=4 ? 'RARE' : done>=2 ? 'UNCOMMON' : 'COMMON';
   const codeStr = [hexTop3[0]?.short, hexTop3[1]?.short, ennN ? `E${ennN}` : null, holland||null].filter(Boolean).join(' · ');
 
-  const profileSignature = codeStr ? `Sygnatura profilu: ${codeStr}` : '';
+  const profileSignature = codeStr;
   const archetypeAiBlurb = (() => {
     if (!ennL || !ennN) return '';
-    const core = hexTop3.length ? `Rdzeń: ${hexTop3.map(h => `${h.label} ${h.pct}%`).join(', ')}` : '';
-    const talents = top5?.length ? `Talenty: ${top5.slice(0,2).map((t:any) => t.name ?? t.name_en).filter(Boolean).join(' + ')}` : '';
-    const parts = [ennL.desc, core, talents].filter(Boolean);
-    return parts.join(' · ').slice(0, 180);
+    const charges = (ennL.charges ?? []).slice(0, 2);
+    const drains = (ennL.drains ?? []).slice(0, 2);
+    const tools = (top5 ?? [])
+      .slice(0, 2)
+      .map((t: any) => t?.name ?? t?.name_en)
+      .filter(Boolean);
+
+    const wingPart = ennWing ? ` (${ennWing})` : '';
+    const sentences = [
+      `${ennL.epithet}${wingPart}: ${ennL.desc.replace(/\s*\.*\s*$/, '.').trim()}`,
+      charges.length ? `Ładuje: ${charges.join(' + ')}.` : '',
+      drains.length ? `Drenuje: ${drains.join(' + ')}.` : '',
+      tools.length ? `Narzędzia: ${tools.join(' + ')}.` : '',
+    ].filter(Boolean);
+
+    return sentences.join(' ').replace(/\s+/g, ' ').trim().slice(0, 240);
   })();
 
   /* AI SYNTHESIS */
@@ -335,8 +347,8 @@ export default function CharacterSheet() {
                     <div aria-hidden className="absolute -top-14 -right-14 w-44 h-44 rounded-full blur-3xl opacity-25" style={{ background: 'rgba(56,182,255,.35)' }} />
                     <div aria-hidden className="absolute -bottom-16 -left-16 w-52 h-52 rounded-full blur-3xl opacity-20" style={{ background: 'rgba(176,143,255,.35)' }} />
 
-                    <div className="relative flex items-start justify-between gap-4">
-                      <div className="flex items-center gap-3 min-w-0">
+                    <div className="relative flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
                         <div className="w-14 h-14 rounded-full border border-white/15 bg-white/5 overflow-hidden flex items-center justify-center shrink-0" style={{ boxShadow: '0 0 0 1px rgba(56,182,255,.18), 0 0 20px rgba(56,182,255,.08)' }}>
                           {avatarUrl ? (
                             <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
@@ -345,17 +357,18 @@ export default function CharacterSheet() {
                           )}
                         </div>
                         <div className="min-w-0">
-                          <div className="text-white font-semibold leading-tight whitespace-normal break-words" title={userName}>
+                          <div className="text-white font-semibold leading-tight whitespace-normal break-words text-[15px]" title={userName}>
                             {userName}
                           </div>
                           <div className="text-[11px] text-white/45 font-mono mt-1 whitespace-normal break-words">
-                            <span className="text-white/55">ID:</span> {charId} <span className="mx-1.5">·</span>
+                            <span className="text-white/55">ID:</span> {charId}
+                            <span className="mx-1.5 text-white/25">•</span>
                             <span className="text-white/55">Build:</span> {buildDate}
                           </div>
                         </div>
                       </div>
 
-                      <div className="shrink-0 flex flex-col items-end gap-2">
+                      <div className="shrink-0 flex flex-wrap sm:flex-col items-start sm:items-end justify-start sm:justify-end gap-2">
                         <span className="badge-primary">{rareLabel}</span>
                         <span className="badge-pending">Poziom {done} · {lvlLabel}</span>
                       </div>
@@ -369,8 +382,11 @@ export default function CharacterSheet() {
                       <div className="stat-bar-track mt-2">
                         <div className="stat-bar-fill" style={{ width: `${Math.max(0, Math.min(100, xpPct))}%` }} />
                       </div>
-                      <div className="mt-2 text-[11px] text-white/45 font-mono whitespace-normal break-words">
-                        {profileSignature || 'Sygnatura profilu: —'}
+                      <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-white/45 font-mono">
+                        <span className="text-white/45">SYGNATURA</span>
+                        <span className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-white/60 whitespace-normal break-words">
+                          {profileSignature || '—'}
+                        </span>
                       </div>
                     </div>
                   </div>
