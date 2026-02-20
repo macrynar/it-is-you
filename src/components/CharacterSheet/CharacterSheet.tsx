@@ -261,6 +261,8 @@ export default function CharacterSheet() {
   );
 
   /* ─── RENDER ─────────────────────────────────────────────────────────────────── */
+  const ennTypeName = ennPrimary?.name ?? (ennTypeNum ? `Typ ${ennTypeNum}` : null);
+
   return (
     <div className="min-h-screen text-slate-200" style={{ background: '#030014', backgroundImage: 'radial-gradient(circle at 50% 0%,#1a0b4e 0%,transparent 55%),radial-gradient(circle at 90% 10%,#0d1a3a 0%,transparent 40%)', fontFamily: 'Inter, system-ui, sans-serif' }}>
       <style>{`
@@ -273,8 +275,8 @@ export default function CharacterSheet() {
       {/* NAV */}
       <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#030014]/88 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
-          <a href="/dashboard" className="btn-ghost-neural inline-flex items-center gap-2 text-sm">
-            <ArrowLeft size={14} /> Wróć
+          <a href="/user-profile-tests" className="btn-ghost-neural inline-flex items-center gap-2 text-sm">
+            <ArrowLeft size={14} /> Wróć do testów
           </a>
           <span className="font-mono text-[11px] font-bold text-purple-500/50 tracking-[2px] uppercase">
             Karta Postaci · {completedCount}/6 Testów
@@ -288,82 +290,73 @@ export default function CharacterSheet() {
         </div>
       </nav>
 
-      {/* ── BENTO GRID ─────────────────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto p-4 md:p-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-min">
+      {/* ── MAIN LAYOUT ───────────────────────────────────────────────────────────── */}
+      <div className="w-full max-w-[1600px] mx-auto p-4 md:p-6 lg:p-8">
 
-          {/* ── T1: HERO CORE  1×auto ── */}
-          <div className="card-neural col-span-1 md:col-span-1 lg:col-span-1 p-6 flex flex-col relative overflow-hidden">
-            {/* ambient glow */}
+        {/* GÓRNY RZĄD: Hero (1) – HEXACO (2) – Enneagram (1) */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+
+          {/* ── KAFELEK 1: HERO CORE ── */}
+          <div className="card-neural col-span-1 p-6 flex flex-col items-center text-center relative overflow-hidden">
             <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle,rgba(112,0,255,0.15) 0%,transparent 70%)' }} />
 
             <TileLabel color="text-violet-400/45">// PROFIL GŁÓWNY · HERO CORE</TileLabel>
 
-            {/* Avatar – centered */}
-            <div className="flex flex-col items-center text-center mb-4">
-              <div className="relative flex-shrink-0 mb-3">
-                <div className="w-28 h-28 rounded-full p-0.5"
-                  style={{ background: 'linear-gradient(135deg,#7000ff,#d946ef,#00f0ff)', boxShadow: '0 0 30px rgba(112,0,255,0.5)' }}>
-                  <div className="w-full h-full rounded-full overflow-hidden bg-[#150830] flex items-center justify-center">
-                    {avatarUrl
-                      ? <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
-                      : <span className="text-3xl font-bold text-violet-400" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{initials}</span>
-                    }
+            {/* Avatar */}
+            <div className="w-32 h-32 rounded-full border-2 border-[#7000ff]/50 shadow-[0_0_20px_rgba(112,0,255,0.3)] overflow-hidden mb-4 z-10 flex-shrink-0">
+              {avatarUrl
+                ? <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                : <div className="w-full h-full bg-[#150830] flex items-center justify-center">
+                    <span className="text-3xl font-bold text-violet-400" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{initials}</span>
                   </div>
-                </div>
-                <div className="absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-[#030014]"
-                  style={{ background: completedCount >= 4 ? '#34d399' : '#f97316', boxShadow: `0 0 8px ${completedCount >= 4 ? '#34d399' : '#f97316'}` }} />
-              </div>
-
-              <div className="w-full">
-                <div className="text-xl font-bold text-white mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                  {userName.toUpperCase()}
-                </div>
-                {ennLore ? (
-                  <>
-                    <div className="text-base font-black leading-tight mb-1" style={{ fontFamily: 'Orbitron, monospace', color: '#7000ff', textShadow: '0 0 22px rgba(112,0,255,0.7)' }}>
-                      {ennLore.rpg}
-                    </div>
-                    <div className="font-mono text-[9px] tracking-[2px] text-white/25 uppercase mb-3">
-                      &ldquo;{ennLore.epithet}&rdquo;
-                    </div>
-                  </>
-                ) : (
-                  <div className="font-mono text-[11px] text-white/18 tracking-widest mb-3">ARCHETYP NIEZDEFINIOWANY</div>
-                )}
-                {hollandCode && (
-                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-lg border text-[11px]"
-                    style={{ background: 'rgba(0,240,255,0.06)', borderColor: 'rgba(0,240,255,0.18)' }}>
-                    <span className="font-mono text-[8px] tracking-[2px] text-cyan-300/50">RIASEC</span>
-                    <span className="font-mono font-bold text-[13px] text-cyan-300 tracking-widest" style={{ fontFamily: 'Orbitron, monospace' }}>{hollandCode}</span>
-                  </span>
-                )}
-              </div>
+              }
             </div>
 
-            {/* Pop-culture pills */}
-            {ennLore && (
-              <div className="mb-5">
-                <div className="font-mono text-[8px] tracking-[2px] text-white/18 mb-2">🎬 POSTACIE PODOBNE DO CIEBIE</div>
-                <div className="flex flex-wrap gap-2">
-                  {ennLore.pop.map((p, i) => (
-                    <span key={p} className="px-3 py-1 rounded-full text-[11px] font-semibold transition-all"
-                      style={{
-                        background: i === 0 ? 'rgba(112,0,255,0.16)' : 'rgba(255,255,255,0.04)',
-                        border: i === 0 ? '1px solid rgba(112,0,255,0.4)' : '1px solid rgba(255,255,255,0.07)',
-                        color: i === 0 ? '#c4b5fd' : 'rgba(255,255,255,0.42)',
-                        fontFamily: 'Space Grotesk, sans-serif',
-                      }}>
-                      {p}
-                    </span>
-                  ))}
-                </div>
+            <h2 className="text-xl font-bold text-white mb-1 uppercase tracking-wider z-10" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              {userName}
+            </h2>
+
+            {ennLore ? (
+              <div className="text-sm font-black mb-1 z-10" style={{ fontFamily: 'Orbitron, monospace', color: '#7000ff', textShadow: '0 0 18px rgba(112,0,255,0.7)' }}>
+                {ennLore.rpg}
               </div>
+            ) : (
+              <div className="text-xs text-white/25 tracking-widest mb-1 font-mono z-10">ARCHETYP NIEZDEFINIOWANY</div>
             )}
 
+            <div className="text-xs text-slate-500 mb-5 z-10 font-mono">
+              LVL {completedCount} · {ennTypeName ?? 'ENNEAGRAM ?'}
+            </div>
+
+            {/* Pop-culture matches */}
+            <div className="w-full flex flex-col gap-2 mt-auto z-10">
+              <div className="text-[9px] text-slate-500 uppercase tracking-widest text-left mb-1 font-mono">
+                {ennLore ? '🎬 Postacie podobne do Ciebie:' : 'Architektura Umysłu:'}
+              </div>
+              {ennLore
+                ? ennLore.pop.map((p, i) => (
+                    <div key={p} className="w-full rounded-md py-2 px-3 text-sm text-left flex justify-between items-center"
+                      style={{
+                        background: i === 0 ? 'rgba(112,0,255,0.13)' : 'rgba(255,255,255,0.03)',
+                        border: i === 0 ? '1px solid rgba(112,0,255,0.35)' : '1px solid rgba(255,255,255,0.07)',
+                      }}>
+                      <span style={{ color: i === 0 ? '#c4b5fd' : 'rgba(255,255,255,0.45)' }}>{p}</span>
+                      <span className="text-[10px] font-mono" style={{ color: i === 0 ? '#7000ff' : 'rgba(255,255,255,0.15)' }}>
+                        {i === 0 ? '★ MATCH' : 'MATCH'}
+                      </span>
+                    </div>
+                  ))
+                : (
+                    <div className="w-full bg-white/[0.03] border border-white/[0.06] rounded-md py-3 px-3 text-xs text-white/25 text-center font-mono">
+                      Ukończ test Enneagram
+                    </div>
+                  )
+              }
+            </div>
+
             {/* XP bar */}
-            <div className="mt-auto">
+            <div className="w-full mt-5 z-10">
               <div className="flex justify-between mb-1.5">
                 <span className="font-mono text-[8px] tracking-[2px] text-white/20">PROFIL XP</span>
                 <span className="font-mono text-[9px] text-violet-400" style={{ fontFamily: 'Orbitron, monospace' }}>{completedCount}/6</span>
@@ -375,37 +368,37 @@ export default function CharacterSheet() {
             </div>
           </div>
 
-          {/* ── T2: HEXACO RADAR  2-col wide ── */}
-          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col relative overflow-hidden" style={{ minHeight: 480 }}>
+          {/* ── KAFELEK 2: MATRYCA HEXACO (2 kolumny) ── */}
+          <div className="card-neural col-span-1 lg:col-span-2 p-6 flex flex-col min-h-[500px] relative overflow-hidden">
             <div className="absolute -top-8 -left-8 w-36 h-36 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle,rgba(0,240,255,0.08) 0%,transparent 70%)' }} />
             <TileLabel color="text-cyan-400/45">// MATRYCA OSOBOWOŚCI · HEXACO-60</TileLabel>
 
             {raw.hexaco ? (
               <>
-                {/* Radar — fills all available flex space */}
-                <div className="flex-1 min-h-0 cs-radar">
+                {/* Radar – flex-1 forces it to fill available space */}
+                <div className="flex-1 w-full relative min-h-[250px] flex items-center justify-center cs-radar">
                   <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={radarData} outerRadius="80%" margin={{ top: 0, right: 10, bottom: 0, left: 10 }}>
+                    <RadarChart data={radarData} outerRadius="75%" margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
                       <PolarGrid stroke="rgba(0,240,255,0.07)" gridType="polygon" />
-                      <PolarAngleAxis dataKey="trait" tick={{ fill: 'rgba(0,240,255,0.55)', fontSize: 11, fontFamily: 'Share Tech Mono, monospace' }} tickLine={false} />
-                      <Radar dataKey="value" stroke="#22d3ee" strokeWidth={2} fill="#22d3ee" fillOpacity={0.13}
-                        dot={{ fill: '#22d3ee', r: 4, strokeWidth: 0 } as any} />
+                      <PolarAngleAxis dataKey="trait" tick={false} tickLine={false} />
+                      <Radar dataKey="value" stroke="#22d3ee" strokeWidth={2} fill="#22d3ee" fillOpacity={0.15}
+                        dot={{ fill: '#22d3ee', r: 5, strokeWidth: 0 } as any} />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
 
-                {/* Minimalist 2-col bars — bottom ~30% */}
-                <div className="flex-shrink-0 grid grid-cols-2 gap-x-6 gap-y-2 mt-3 pt-3 border-t border-white/[0.04]">
+                {/* Progress bars */}
+                <div className="grid grid-cols-2 gap-x-8 gap-y-4 mt-6 pt-6 border-t border-white/5">
                   {radarData.map((d) => (
                     <div key={d.trait}>
-                      <div className="flex justify-between items-center mb-0.5">
-                        <span className="font-mono text-[8px] text-white/30 tracking-wide truncate pr-2">{d.full.toUpperCase()}</span>
-                        <span className="font-mono text-[9px] font-bold text-cyan-300 flex-shrink-0" style={{ fontFamily: 'Orbitron, monospace' }}>{d.value}%</span>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="font-mono text-[9px] text-white/35 tracking-wide truncate pr-2">{d.full.toUpperCase()}</span>
+                        <span className="font-mono text-[10px] font-bold text-cyan-300 flex-shrink-0" style={{ fontFamily: 'Orbitron, monospace' }}>{d.value}%</span>
                       </div>
-                      <div className="h-[2px] rounded-full bg-white/5 overflow-hidden">
+                      <div className="h-[3px] rounded-full bg-white/5 overflow-hidden">
                         <div className="h-full rounded-full transition-all duration-700"
-                          style={{ width: `${d.value}%`, background: 'linear-gradient(90deg,rgba(0,240,255,0.4),#22d3ee)', boxShadow: '0 0 4px rgba(0,240,255,0.3)' }} />
+                          style={{ width: `${d.value}%`, background: 'linear-gradient(90deg,rgba(0,240,255,0.45),#22d3ee)', boxShadow: '0 0 5px rgba(0,240,255,0.3)' }} />
                       </div>
                     </div>
                   ))}
@@ -416,53 +409,79 @@ export default function CharacterSheet() {
             )}
           </div>
 
-          {/* ── T3: ENNEAGRAM STAR  1-col ── */}
-          <div className="card-neural col-span-1 md:col-span-1 lg:col-span-1 p-6 flex flex-col items-center" style={{ minHeight: 480 }}>
+          {/* ── KAFELEK 3: ENNEAGRAM (1 kolumna) ── */}
+          <div className="card-neural col-span-1 p-6 flex flex-col items-center justify-center min-h-[500px] relative overflow-hidden">
             <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle,rgba(217,70,239,0.1) 0%,transparent 70%)' }} />
-            <TileLabel color="text-fuchsia-400/45">// ENGINE · ENNEAGRAM</TileLabel>
-
-            {/* Star fills most of the tile */}
-            <div className="flex-1 min-h-0 w-full flex items-center justify-center py-1">
-              <EnneagramStar activeType={ennTypeNum} color="#d946ef" />
+              style={{ background: 'radial-gradient(circle,rgba(217,70,239,0.12) 0%,transparent 70%)' }} />
+            <div className="absolute top-6 left-6 text-[9px] text-fuchsia-400/35 uppercase tracking-[2.5px] font-mono z-10">
+              // Engine · Enneagram
             </div>
 
-            {ennPrimary ? (
-              <div className="flex-shrink-0 text-center pb-1 space-y-0.5">
-                <div className="text-sm font-bold text-fuchsia-400" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{ennPrimary.name}</div>
-                {ennPrimary.core_motivation && (
-                  <div className="font-mono text-[7px] text-fuchsia-400/28 tracking-[1.5px]">{ennPrimary.core_motivation.toUpperCase()}</div>
-                )}
-              </div>
+            {raw.enneagram ? (
+              <>
+                {/* Star – square container so it doesn't stretch */}
+                <div className="w-full flex-1 flex items-center justify-center" style={{ maxHeight: 340 }}>
+                  <div className="w-full" style={{ aspectRatio: '1/1', maxWidth: 280 }}>
+                    <EnneagramStar activeType={ennTypeNum} color="#d946ef" />
+                  </div>
+                </div>
+
+                <div className="mt-auto pt-4 flex flex-col items-center text-center z-10">
+                  <div className="text-4xl font-black mb-1" style={{ fontFamily: 'Orbitron, monospace', color: '#d946ef', textShadow: '0 0 20px rgba(217,70,239,0.6)' }}>
+                    {ennTypeNum}
+                  </div>
+                  <div className="text-lg text-white font-semibold" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                    {ennTypeName}
+                  </div>
+                  {ennLore && (
+                    <div className="font-mono text-[9px] text-fuchsia-400/40 tracking-[1.5px] mt-1">
+                      &ldquo;{ennLore.epithet}&rdquo;
+                    </div>
+                  )}
+                </div>
+              </>
             ) : (
-              <LockedTile icon={<span className="text-xl">★</span>} text="Wykonaj test Enneagram" href="/test?type=enneagram" color="#d946ef" />
+              <>
+                <div className="w-full flex-1 flex items-center justify-center opacity-20" style={{ maxHeight: 280 }}>
+                  <div className="w-full" style={{ aspectRatio: '1/1', maxWidth: 220 }}>
+                    <EnneagramStar activeType={null} color="#d946ef" />
+                  </div>
+                </div>
+                <LockedTile icon={<span className="text-xl">★</span>} text="Wykonaj test Enneagram" href="/test?type=enneagram" color="#d946ef" />
+              </>
             )}
           </div>
+        </div>
 
-          {/* ── T4: ARSENAL / STRENGTHS  2×1 ── */}
-          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col justify-center">
+        {/* DOLNY RZĄD: Talenty (2) – Cień (2) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+
+          {/* Arsenał / Strengths */}
+          <div className="card-neural p-6 flex flex-col relative overflow-hidden">
             <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle,rgba(251,191,36,0.08) 0%,transparent 70%)' }} />
             <TileLabel color="text-amber-400/45">// ⚡ ARSENAL · TOP TALENTY · STRENGTHS</TileLabel>
 
             {top5.length > 0 ? (
-              <div className="flex flex-col gap-3">
-                {top5.slice(0, 4).map((t: any, i: number) => {
+              <div className="flex flex-col gap-4">
+                {top5.slice(0, 5).map((t: any, i: number) => {
                   const barW = 96 - i * 10;
                   return (
                     <div key={t.name ?? t.name_en ?? i} className="flex items-center gap-3">
-                      <span className="font-mono text-[9px] text-amber-400/40 w-5 text-right" style={{ fontFamily: 'Orbitron, monospace' }}>0{i + 1}</span>
+                      <span className="font-mono text-[9px] text-amber-400/40 w-5 text-right flex-shrink-0" style={{ fontFamily: 'Orbitron, monospace' }}>
+                        0{i + 1}
+                      </span>
                       <div className="flex-1 min-w-0">
-                        <div className="text-[12px] font-semibold mb-1 truncate"
+                        <div className="text-[13px] font-semibold mb-1.5 truncate"
                           style={{ color: i === 0 ? '#fbbf24' : 'rgba(255,255,255,0.62)', fontFamily: 'Space Grotesk, sans-serif' }}>
                           {t.name ?? t.name_en}
                         </div>
                         <div className="h-[3px] rounded-full bg-white/5 overflow-hidden">
                           <div className="h-full rounded-full transition-all duration-700"
-                            style={{ width: `${barW}%`, background: i === 0 ? 'linear-gradient(90deg,#f97316,#fbbf24)' : 'rgba(251,191,36,0.28)', boxShadow: i === 0 ? '0 0 8px rgba(251,191,36,0.5)' : 'none' }} />
+                            style={{ width: `${barW}%`, background: i === 0 ? 'linear-gradient(90deg,#f97316,#fbbf24)' : 'rgba(251,191,36,0.3)', boxShadow: i === 0 ? '0 0 8px rgba(251,191,36,0.5)' : 'none' }} />
                         </div>
                       </div>
-                      <span className="font-mono text-[8px] text-amber-400/35 w-8 text-right">{barW}%</span>
+                      <span className="font-mono text-[9px] text-amber-400/40 w-8 text-right flex-shrink-0" style={{ fontFamily: 'Orbitron, monospace' }}>{barW}%</span>
                     </div>
                   );
                 })}
@@ -472,19 +491,17 @@ export default function CharacterSheet() {
             )}
           </div>
 
-          {/* ── T5: DARK TRIAD / SHADOW  2×1 ── */}
-          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col justify-center !bg-rose-950/20 !border-rose-500/30 shadow-[0_0_30px_-10px_rgba(244,63,94,0.15)]">
+          {/* Strefa Cienia / Dark Triad */}
+          <div className="card-neural p-6 flex flex-col relative overflow-hidden !bg-rose-950/20 !border-rose-500/30 shadow-[0_0_30px_-10px_rgba(244,63,94,0.15)]">
             <div className="absolute -top-5 -right-5 w-28 h-28 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle,rgba(239,68,68,0.1) 0%,transparent 70%)' }} />
-
             <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle size={12} className="text-rose-400/65" />
-              <TileLabel color="text-rose-400/45">// ⚠ WYKRYTE RYZYKA · DARK TRIAD</TileLabel>
+              <AlertTriangle size={12} className="text-rose-400/65 flex-shrink-0" />
+              <TileLabel color="text-rose-400/45">// ⚠ STREFA CIENIA · DARK TRIAD</TileLabel>
             </div>
 
             {raw.darkTriad && dtTop ? (
               <>
-                {/* Top risk */}
                 <div className="rounded-xl p-4 mb-3" style={{ background: `${dtTop.color}0b`, border: `1px solid ${dtTop.color}22` }}>
                   <div className="flex justify-between items-end mb-2">
                     <div className="text-sm font-bold" style={{ color: dtTop.color, fontFamily: 'Space Grotesk, sans-serif' }}>{dtTop.name}</div>
@@ -495,7 +512,6 @@ export default function CharacterSheet() {
                       style={{ width: `${dtTop.pct}%`, background: `linear-gradient(90deg,${dtTop.color}70,${dtTop.color})`, boxShadow: `0 0 8px ${dtTop.color}55` }} />
                   </div>
                 </div>
-                {/* Secondary risks */}
                 <div className="flex gap-2">
                   {dtTraits.slice(1).map(t => (
                     <div key={t.k} className="flex-1 p-2.5 rounded-lg bg-white/[0.02] border border-white/5">
@@ -509,28 +525,28 @@ export default function CharacterSheet() {
               <LockedTile icon={<Shield size={22} />} text="Odblokuj test Dark Triad Premium" href="/test?type=dark_triad" color="#ef4444" />
             )}
           </div>
-
-          {/* ── T6: AI SYNTHESIS  full-width ── */}
-          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-4 p-8 flex flex-col">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ background: 'rgba(112,0,255,0.14)', border: '1px solid rgba(112,0,255,0.3)' }}>
-                <Sparkles size={18} className="text-violet-400" />
-              </div>
-              <div>
-                <div className="font-mono font-bold text-[11px] tracking-[1.5px] text-violet-400" style={{ fontFamily: 'Orbitron, monospace' }}>
-                  PSYCHER AI SYNTHESIS
-                </div>
-                <div className="font-mono text-[8px] tracking-[2px] text-white/20 mt-0.5">NEURAL PROFILE ANALYSIS · AUTO-GENERATED</div>
-              </div>
-              <div className="flex-1 h-px ml-2" style={{ background: 'linear-gradient(90deg,rgba(112,0,255,0.3),transparent)' }} />
-            </div>
-            <p className="text-slate-300 leading-relaxed text-lg font-light">
-              {buildAiSummary()}
-            </p>
-          </div>
-
         </div>
+
+        {/* SYNTEZA AI – pełna szerokość */}
+        <div className="card-neural p-8 flex flex-col">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ background: 'rgba(112,0,255,0.14)', border: '1px solid rgba(112,0,255,0.3)' }}>
+              <Sparkles size={18} className="text-violet-400" />
+            </div>
+            <div>
+              <div className="font-mono font-bold text-[11px] tracking-[1.5px] text-violet-400" style={{ fontFamily: 'Orbitron, monospace' }}>
+                PSYCHER AI SYNTHESIS
+              </div>
+              <div className="font-mono text-[8px] tracking-[2px] text-white/20 mt-0.5">NEURAL PROFILE ANALYSIS · AUTO-GENERATED</div>
+            </div>
+            <div className="flex-1 h-px ml-2" style={{ background: 'linear-gradient(90deg,rgba(112,0,255,0.3),transparent)' }} />
+          </div>
+          <p className="text-slate-300 leading-relaxed text-lg font-light">
+            {buildAiSummary()}
+          </p>
+        </div>
+
       </div>
     </div>
   );
