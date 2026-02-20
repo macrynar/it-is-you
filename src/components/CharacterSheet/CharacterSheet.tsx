@@ -1,24 +1,22 @@
 import { useEffect, useState } from 'react';
-import {
-  RadarChart, Radar, PolarGrid, PolarAngleAxis,
-  ResponsiveContainer,
-} from 'recharts';
-import { Sparkles, AlertTriangle, Zap, Shield } from 'lucide-react';
+import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer } from 'recharts';
 import { supabase } from '../../lib/supabaseClient.js';
 import { generateCareerReport } from '../../utils/scoring.js';
 
-/* ─── LORE TABLES ────────────────────────────────────────────────────────────── */
-
-const HEXACO_LABELS: Record<string, string> = {
-  honesty_humility:  'Uczciw',
-  emotionality:      'Emocje',
-  extraversion:      'Ekstra',
-  agreeableness:     'Ugodow',
-  conscientiousness: 'Sumien',
-  openness:          'Otwart',
+/* ─── LORE ───────────────────────────────────────────────────── */
+const ENN_LORE: Record<number, { rpg: string; epithet: string; pop: string[]; charges: string[]; drains: string[] }> = {
+  1: { rpg: 'Praworządny Paladin',     epithet: 'Architekt Porządku',   pop: ['Hermiona Granger','Ned Stark','Chidi'],           charges: ['Precyzja i perfekcja','Wdrażanie standardów'],              drains: ['Niedokładność innych','Chaos i brak struktury'] },
+  2: { rpg: 'Kapłan Wsparcia',         epithet: 'Strażnik Serc',        pop: ['Leslie Knope','Samwise Gamgee','Ted Lasso'],       charges: ['Pomaganie i dawanie','Głębokie relacje'],                   drains: ['Bycie ignorowanym','Praca w izolacji'] },
+  3: { rpg: 'Bard Ambicji',            epithet: 'Architekt Sukcesu',    pop: ['Tony Stark','Harvey Specter','Jay Gatsby'],        charges: ['Osiąganie celów','Uznanie i sukces'],                       drains: ['Brak postępów','Anonimowość'] },
+  4: { rpg: 'Mroczny Artysta',         epithet: 'Dziecko Cienia',       pop: ['Joker (2019)','Severus Snape','Don Draper'],       charges: ['Autentyczność i ekspresja','Twórczość bez ograniczeń'],     drains: ['Bycie niezrozumianym','Szablonowe zadania'] },
+  5: { rpg: 'Mistrz Wiedzy Zakazanej', epithet: 'Architekt Cienia',     pop: ['Sherlock Holmes','Dr House','Walter White'],       charges: ['Głęboka analiza wiedzy','Praca w skupieniu'],              drains: ['Natłok ludzi','Małomówność wymuszona'] },
+  6: { rpg: 'Strażnik Bractwa',        epithet: 'Bastion Lojalności',   pop: ['Captain America','Ron Weasley','Frodo'],           charges: ['Praca w zaufanym zespole','Jasne zasady i bezpieczeństwo'],drains: ['Niepewność i ryzyko','Brak wsparcia'] },
+  7: { rpg: 'Chaotyczny Awanturnik',   epithet: 'Wirtuoz Możliwości',   pop: ['Jack Sparrow','Tyrion Lannister','The Mandalorian'],charges: ['Nowe przygody i możliwości','Wolność i spontaniczność'],   drains: ['Rutyna i powtarzalność','Ograniczenia i przymus'] },
+  8: { rpg: 'Warlord Wojenny',         epithet: 'Inkwizytor Woli',      pop: ['Walter White','Tony Soprano','Daenerys'],          charges: ['Kontrola i decyzyjność','Wyzwania i konfrontacja'],        drains: ['Zależność od innych','Słabość i niezdecydowanie'] },
+  9: { rpg: 'Mnich Harmonii',          epithet: 'Spokój w Oku Cyklonu', pop: ['Frodo Baggins','Ted Lasso','The Dude'],            charges: ['Spokój i harmonia','Mediacja konfliktów'],                 drains: ['Konflikt i spory','Presja i pośpiech'] },
 };
 
-const HEXACO_FULL: Record<string, string> = {
+const HEX_FULL: Record<string, string> = {
   honesty_humility:  'Uczciwość',
   emotionality:      'Emocjonalność',
   extraversion:      'Ekstrawersja',
@@ -26,283 +24,215 @@ const HEXACO_FULL: Record<string, string> = {
   conscientiousness: 'Sumienność',
   openness:          'Otwartość',
 };
-
-const ENNEAGRAM_LORE: Record<number, { rpg: string; epithet: string; pop: string[] }> = {
-  1: { rpg: 'Praworządny Paladin',     epithet: 'Architekt Porządku',    pop: ['Hermiona Granger', 'Ned Stark', 'Chidi'] },
-  2: { rpg: 'Kapłan Wsparcia',         epithet: 'Strażnik Serc',         pop: ['Leslie Knope', 'Samwise Gamgee', 'Ted Lasso'] },
-  3: { rpg: 'Bard Ambicji',            epithet: 'Architekt Sukcesu',     pop: ['Tony Stark', 'Harvey Specter', 'Jay Gatsby'] },
-  4: { rpg: 'Mroczny Artysta',         epithet: 'Dziecko Cienia',        pop: ['Joker (2019)', 'Severus Snape', 'Don Draper'] },
-  5: { rpg: 'Mistrz Wiedzy Zakazanej', epithet: 'Architekt Cienia',      pop: ['Sherlock Holmes', 'Dr House', 'Walter White'] },
-  6: { rpg: 'Strażnik Bractwa',        epithet: 'Bastion Lojalności',    pop: ['Captain America', 'Ron Weasley', 'Samwise'] },
-  7: { rpg: 'Chaotyczny Awanturnik',   epithet: 'Wirtuoz Możliwości',    pop: ['Jack Sparrow', 'Tyrion Lannister', 'The Mandalorian'] },
-  8: { rpg: 'Warlord Wojenny',         epithet: 'Inkwizytor Woli',       pop: ['Walter White', 'Tony Soprano', 'Daenerys'] },
-  9: { rpg: 'Mnich Harmonii',          epithet: 'Spokój w Oku Cyklonu',  pop: ['Frodo Baggins', 'Ted Lasso', 'The Dude'] },
+const HEX_COLOR: Record<string, string> = {
+  honesty_humility:  '#a78bfa',
+  emotionality:      '#f472b6',
+  extraversion:      '#fb923c',
+  agreeableness:     '#34d399',
+  conscientiousness: '#60a5fa',
+  openness:          '#fbbf24',
 };
+const DT_LABEL: Record<string, string> = { machiavellianism: 'Makiawelizm', narcissism: 'Narcyzm', psychopathy: 'Psychopatia' };
+const DT_COLOR: Record<string, string> = { machiavellianism: '#f97316', narcissism: '#fbbf24', psychopathy: '#ef4444' };
 
-const DT_NAMES: Record<string, string> = {
-  machiavellianism: 'Makiawelizm',
-  narcissism:       'Narcyzm',
-  psychopathy:      'Psychopatia',
-};
+/* ─── NAV CSS (iiy-logo + iiy-nav-tabs verbatim) ─────────────── */
+const NAV_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+  *{box-sizing:border-box}
+  .iiy-logo,.iiy-logo *{box-sizing:border-box;margin:0;padding:0}
+  .iiy-logo{display:inline-flex;align-items:center;gap:20px;text-decoration:none;user-select:none}
+  .iiy-logo .iiy-signet svg{display:block;width:80px;height:80px}
+  .iiy-logo .iiy-wordmark{display:flex;flex-direction:column}
+  .iiy-logo .iiy-title{font-family:'Orbitron',monospace;font-weight:900;font-size:34px;letter-spacing:12px;line-height:1;text-transform:uppercase;background:linear-gradient(160deg,#ffffff 0%,#a8c8ff 35%,#38b6ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 16px rgba(56,182,255,.45));animation:iiy-glitch 9s infinite}
+  @keyframes iiy-glitch{0%,87%,100%{transform:none;filter:drop-shadow(0 0 16px rgba(56,182,255,.45))}88%{transform:translate(-2px,0) skewX(-2deg);filter:drop-shadow(-3px 0 #7b5ea7) drop-shadow(3px 0 #38b6ff)}89%{transform:translate(2px,0);filter:drop-shadow(3px 0 #7b5ea7) drop-shadow(-3px 0 #38b6ff)}90%{transform:none}}
+  .iiy-logo .iiy-divider{height:1px;margin:6px 0 5px;background:linear-gradient(90deg,#38b6ff,#7b5ea7 55%,transparent);opacity:.8}
+  .iiy-logo .iiy-sub{font-family:'Share Tech Mono',monospace;font-size:8.5px;letter-spacing:3.5px;color:rgba(100,160,230,.5);text-transform:uppercase}
+  .iiy-ring-ticks{animation:iiy-spin 20s linear infinite;transform-origin:48px 48px}
+  @keyframes iiy-spin{to{transform:rotate(360deg)}}
+  .iiy-eye-l{animation:iiy-eye 3.5s ease-in-out infinite}
+  .iiy-eye-r{animation:iiy-eye 3.5s ease-in-out infinite .2s}
+  @keyframes iiy-eye{0%,70%,100%{opacity:1}76%{opacity:.05}}
+  .iiy-scan{animation:iiy-scan 2.8s ease-in-out infinite}
+  @keyframes iiy-scan{0%{transform:translateY(-22px);opacity:0}8%{opacity:.55}92%{opacity:.55}100%{transform:translateY(22px);opacity:0}}
+  .iiy-core{animation:iiy-pulse 2.2s ease-in-out infinite;transform-origin:48px 61px}
+  @keyframes iiy-pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.9);opacity:1}}
+  .iiy-logo.iiy-sm{gap:14px}
+  .iiy-logo.iiy-sm .iiy-signet svg{width:44px;height:44px}
+  .iiy-logo.iiy-sm .iiy-title{font-size:19px;letter-spacing:7px}
+  .iiy-logo.iiy-sm .iiy-sub{font-size:7px;letter-spacing:2.5px}
+  .iiy-logo.iiy-sm .iiy-divider{margin:4px 0 3px}
+  .iiy-nav-tabs{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:4px}
+  .iiy-tab-btn{padding:8px 20px;border-radius:9px;border:none;background:transparent;color:rgba(255,255,255,.45);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.2px;font-family:'Space Grotesk',-apple-system,sans-serif;white-space:nowrap}
+  .iiy-tab-btn:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.05)}
+  .iiy-tab-btn.active{background:linear-gradient(135deg,rgba(99,102,241,.3),rgba(56,182,255,.2));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 1px rgba(99,102,241,.3)}
+  .cs-radar .recharts-polar-grid line,.cs-radar .recharts-polar-grid polygon{stroke:rgba(56,182,255,.07)!important}
+  .bipolar-slider{position:relative;height:6px;background:#1e293b;border-radius:3px}
+  .bipolar-thumb{position:absolute;top:50%;width:13px;height:13px;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 12px currentColor}
+  .card-section{background:rgba(15,23,42,.55);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.07);border-radius:20px;overflow:hidden}
+  .stat-bar-bg{background:rgba(15,23,42,.8);border-radius:4px;height:10px;overflow:hidden}
+  .stat-bar-fill{height:100%;border-radius:4px;transition:width 1.2s ease-out}
+`;
 
-const DT_COLORS: Record<string, string> = {
-  machiavellianism: '#f97316',
-  narcissism:       '#fbbf24',
-  psychopathy:      '#ef4444',
-};
-
-/* ─── ENNEAGRAM SVG STAR ─────────────────────────────────────────────────────── */
-
-function EnneagramStar({ activeType, color }: { activeType: number | null; color: string }) {
-  const N = 9;
-  const cx = 100; const cy = 100; const R = 76;
-  const pts = Array.from({ length: N }, (_, i) => {
-    const a = (i * Math.PI * 2) / N - Math.PI / 2;
-    return { x: cx + R * Math.cos(a), y: cy + R * Math.sin(a), type: i + 1 };
-  });
-  const innerLines: [number, number][] = [[1,4],[4,2],[2,8],[8,5],[5,7],[7,1],[3,6],[6,9],[9,3]];
-  const getP = (n: number) => pts[n - 1];
-
-  return (
-    <svg viewBox="0 0 200 200" width="100%" height="100%">
-      <defs>
-        <filter id="enn-glow">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-      </defs>
-      <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-      {innerLines.map(([a, b], i) => {
-        const pa = getP(a); const pb = getP(b);
-        return <line key={i} x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y} stroke="rgba(168,85,247,0.2)" strokeWidth="1" />;
-      })}
-      <polygon
-        points={pts.map(p => `${p.x},${p.y}`).join(' ')}
-        fill={`${color}06`}
-        stroke={`${color}35`}
-        strokeWidth="1"
-      />
-      {pts.map((p) => (
-        <circle
-          key={p.type}
-          cx={p.x} cy={p.y}
-          r={p.type === activeType ? 7 : 3.5}
-          fill={p.type === activeType ? color : 'rgba(255,255,255,0.1)'}
-          filter={p.type === activeType ? 'url(#enn-glow)' : undefined}
-          style={{ transition: 'all .3s' }}
-        />
-      ))}
-      {pts.map((p) => {
-        const dx = p.x - cx; const dy = p.y - cy;
-        const len = Math.sqrt(dx * dx + dy * dy);
-        const lx = cx + (dx / len) * (R + 13);
-        const ly = cy + (dy / len) * (R + 13);
-        return (
-          <text
-            key={p.type} x={lx} y={ly}
-            textAnchor="middle" dominantBaseline="central"
-            fontSize={p.type === activeType ? 9 : 7.5}
-            fill={p.type === activeType ? color : 'rgba(255,255,255,0.22)'}
-            fontWeight={p.type === activeType ? '700' : '400'}
-            style={{ fontFamily: 'Orbitron, monospace' }}
-          >
-            {p.type}
-          </text>
-        );
-      })}
-      {activeType && (
-        <>
-          <text x={cx} y={cy - 5} textAnchor="middle" dominantBaseline="central"
-            fontSize="46" fontWeight="900" fill={color}
-            style={{ fontFamily: 'Orbitron, monospace', filter: `drop-shadow(0 0 20px ${color})` }}>
-            {activeType}
-          </text>
-          <text x={cx} y={cy + 18} textAnchor="middle" dominantBaseline="central"
-            fontSize="7" fill="rgba(255,255,255,0.25)"
-            style={{ fontFamily: 'Share Tech Mono, monospace', letterSpacing: 2 }}>
-            ENNEAGRAM
-          </text>
-        </>
-      )}
-    </svg>
-  );
-}
-
-/* ─── SHARED HELPERS ─────────────────────────────────────────────────────────── */
-
-function TileLabel({ children, color = 'text-cyan-500/40' }: { children: React.ReactNode; color?: string }) {
-  return (
-    <div className={`font-mono text-[9px] tracking-[2.5px] uppercase mb-3 flex items-center gap-2 ${color}`}>
-      {children}
-      <span className="flex-1 h-px bg-gradient-to-r from-current to-transparent opacity-20" />
-    </div>
-  );
-}
-
-function LockedTile({ icon, text, href, color }: {
-  icon: React.ReactNode; text: string; href: string; color: string;
-}) {
-  return (
-    <div className="flex-1 flex flex-col items-center justify-center gap-3 py-4 opacity-40">
-      <div style={{ color }}>{icon}</div>
-      <p className="font-mono text-[9px] tracking-widest text-white/30 text-center">{text}</p>
-      <a href={href} style={{ borderColor: `${color}30`, color: `${color}88`, background: `${color}09` }}
-        className="px-3 py-1.5 rounded-lg border text-[11px] font-semibold no-underline transition-all hover:opacity-80">
-        Rozpocznij →
-      </a>
-    </div>
-  );
-}
-
-/* ─── MAIN COMPONENT ─────────────────────────────────────────────────────────── */
-
+/* ─── RAW ROW TYPE ───────────────────────────────────────────── */
 interface RawRow { test_type: string; raw_scores: any; percentile_scores: any; report: any; }
-interface ParsedData {
-  hexaco: RawRow | null; enneagram: RawRow | null; strengths: RawRow | null;
-  career: RawRow | null; darkTriad: RawRow | null; values: RawRow | null;
+
+/* ─── HELPERS ────────────────────────────────────────────────── */
+function Slab({ label, value, color = '#a78bfa' }: { label: string; value: string; color?: string }) {
+  return (
+    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', background:'rgba(15,23,42,.6)', padding:'9px 12px', borderRadius:8, border:'1px solid rgba(255,255,255,.05)', cursor:'default' }}>
+      <span style={{ fontSize:10, fontWeight:700, color:'rgba(148,163,184,.7)', textTransform:'uppercase', letterSpacing:'1.5px', fontFamily:'Space Grotesk,sans-serif' }}>{label}</span>
+      <span style={{ fontSize:13, fontWeight:700, color:'#fff', fontFamily:'Space Grotesk,sans-serif' }}>{value}</span>
+    </div>
+  );
+}
+function Tag({ children, color }: { children: React.ReactNode; color: string }) {
+  return (
+    <span style={{ padding:'3px 8px', borderRadius:6, fontSize:10, fontWeight:700, border:`1px solid ${color}30`, color, background:`${color}10`, fontFamily:'Space Grotesk,sans-serif' }}>
+      {children}
+    </span>
+  );
+}
+function SecLabel({ children }: { children: React.ReactNode }) {
+  return <div style={{ fontSize:10, fontWeight:700, color:'rgba(148,163,184,.5)', textTransform:'uppercase', letterSpacing:'2px', marginBottom:16, fontFamily:'Space Grotesk,sans-serif', display:'flex', alignItems:'center', gap:8 }}>{children}<span style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(255,255,255,.06),transparent)' }}/></div>;
+}
+function BipolarSlider({ left, right, label, pct, color }: { left: string; right: string; label: string; pct: number; color: string }) {
+  return (
+    <div>
+      <div style={{ display:'flex', justifyContent:'space-between', fontSize:10, fontWeight:700, color:'rgba(203,213,225,.7)', marginBottom:6, fontFamily:'Space Grotesk,sans-serif' }}>
+        <span>{left}</span>
+        <span style={{ color:'#818cf8' }}>{label}</span>
+        <span>{right}</span>
+      </div>
+      <div className="bipolar-slider">
+        <div className="bipolar-thumb" style={{ left:`${pct}%`, background:color, color }} />
+      </div>
+    </div>
+  );
+}
+function StatBar({ label, pct, color }: { label: string; pct: number; color: string }) {
+  return (
+    <div style={{ marginBottom:16 }}>
+      <div style={{ display:'flex', justifyContent:'space-between', fontSize:12, fontWeight:700, color:'#fff', marginBottom:4, fontFamily:'Space Grotesk,sans-serif' }}>
+        <span style={{ color: `${color}` }}>{label}</span>
+        <span style={{ color }}>{pct}%</span>
+      </div>
+      <div className="stat-bar-bg"><div className="stat-bar-fill" style={{ width:`${pct}%`, background:color }} /></div>
+    </div>
+  );
+}
+function Lock({ text, href, color }: { text: string; href: string; color: string }) {
+  return (
+    <div style={{ padding:'24px 0', textAlign:'center', opacity:.45 }}>
+      <div style={{ fontSize:11, color:'rgba(255,255,255,.3)', marginBottom:12, letterSpacing:'2px', fontFamily:'Space Grotesk,sans-serif' }}>{text}</div>
+      <a href={href} style={{ padding:'6px 16px', borderRadius:8, border:`1px solid ${color}30`, color:`${color}88`, background:`${color}09`, fontSize:11, fontWeight:600, textDecoration:'none', fontFamily:'Space Grotesk,sans-serif' }}>Rozpocznij →</a>
+    </div>
+  );
 }
 
+/* ─── MAIN COMPONENT ─────────────────────────────────────────── */
 export default function CharacterSheet() {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
-  const [raw, setRaw] = useState<ParsedData>({
-    hexaco: null, enneagram: null, strengths: null,
-    career: null, darkTriad: null, values: null,
+  const [loading, setLoading]   = useState(true);
+  const [authUser, setAuthUser] = useState<any>(null);
+  const [raw, setRaw] = useState<Record<string, RawRow | null>>({
+    HEXACO: null, ENNEAGRAM: null, STRENGTHS: null, CAREER: null, DARK_TRIAD: null, VALUES: null,
   });
 
   useEffect(() => {
     (async () => {
       const { data: { user: u } } = await supabase.auth.getUser();
       if (!u) { window.location.href = '/auth'; return; }
-      setUser(u);
-      const { data: rows } = await supabase
+      setAuthUser(u);
+
+      const { data: rows, error } = await supabase
         .from('user_psychometrics')
         .select('test_type, raw_scores, percentile_scores, report')
         .eq('user_id', u.id)
-        .in('test_type', ['HEXACO', 'ENNEAGRAM', 'STRENGTHS', 'CAREER', 'DARK_TRIAD', 'VALUES'])
         .order('created_at', { ascending: false });
-      if (rows) {
-        const m: any = {};
-        for (const r of rows) if (!m[r.test_type]) m[r.test_type] = r;
-        setRaw({
-          hexaco:    m['HEXACO']     ?? null,
-          enneagram: m['ENNEAGRAM']  ?? null,
-          strengths: m['STRENGTHS']  ?? null,
-          career:    m['CAREER']     ?? null,
-          darkTriad: m['DARK_TRIAD'] ?? null,
-          values:    m['VALUES']     ?? null,
-        });
+
+      if (error) console.error('[CS] supabase error:', error);
+      console.log('[CS] raw rows:', rows);
+
+      if (rows?.length) {
+        const m: Record<string, RawRow | null> = { HEXACO: null, ENNEAGRAM: null, STRENGTHS: null, CAREER: null, DARK_TRIAD: null, VALUES: null };
+        for (const r of rows) if (m[r.test_type] === null) m[r.test_type] = r;
+        setRaw(m);
       }
       setLoading(false);
     })();
   }, []);
 
-  /* ── derived ── */
-  const userName  = user?.user_metadata?.full_name ?? user?.email?.split('@')[0] ?? 'Użytkownik';
-  const avatarUrl = user?.user_metadata?.avatar_url ?? '';
+  /* ── derived values ── */
+  const userName  = authUser?.user_metadata?.full_name ?? authUser?.email?.split('@')[0] ?? 'Użytkownik';
+  const avatarUrl = authUser?.user_metadata?.avatar_url ?? '';
   const initials  = userName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
+  const done = Object.values(raw).filter(Boolean).length;
 
-  const ennReport  = raw.enneagram?.report;
-  const ennPrimary = ennReport?.primary_type;
-  const ennTypeNum: number | null = ennPrimary?.id ?? null;
-  const ennLore    = ennTypeNum ? ENNEAGRAM_LORE[ennTypeNum] : null;
+  /* HEXACO */
+  const hexPct: Record<string, number> = raw.HEXACO?.percentile_scores ?? {};
+  const hexDims = ['honesty_humility','emotionality','extraversion','agreeableness','conscientiousness','openness'] as const;
+  const hexBars = hexDims.map(k => ({ k, label: HEX_FULL[k], pct: Math.round(hexPct[k] ?? 0), color: HEX_COLOR[k] }));
+  const hexRadar = hexBars.map(h => ({ trait: h.label.slice(0,6), full: h.label, value: h.pct }));
+  const hexTop3  = [...hexBars].sort((a,b) => b.pct - a.pct).slice(0,3);
 
-  const hexPct: Record<string, number> = raw.hexaco?.percentile_scores ?? {};
-  const hexDims = ['honesty_humility', 'emotionality', 'extraversion', 'agreeableness', 'conscientiousness', 'openness'];
-  const radarData = hexDims.map(k => ({
-    trait: HEXACO_LABELS[k] ?? k,
-    full:  HEXACO_FULL[k]   ?? k,
-    value: Math.round(hexPct[k] ?? 0),
-  }));
-  const hexTopDim = [...radarData].sort((a, b) => b.value - a.value)[0];
+  /* ENNEAGRAM */
+  const ennR  = raw.ENNEAGRAM?.report;
+  const ennP  = ennR?.primary_type;
+  const ennN: number | null = ennP?.id ?? null;
+  const ennL  = ennN ? ENN_LORE[ennN] : null;
 
-  const top5: any[] = raw.strengths?.raw_scores?.top_5 ?? [];
+  /* STRENGTHS */
+  const top5: any[] = raw.STRENGTHS?.raw_scores?.top_5 ?? [];
 
-  const dtDims = raw.darkTriad?.raw_scores?.dimensions ?? {};
-  const dtTraits = ['machiavellianism', 'narcissism', 'psychopathy'].map(k => {
+  /* DARK TRIAD */
+  const dtDims = raw.DARK_TRIAD?.raw_scores?.dimensions ?? {};
+  const dtTraits = ['machiavellianism','narcissism','psychopathy'].map(k => {
     const v = dtDims[k]?.raw_score ?? 0;
-    const pct = v <= 5 ? Math.round(((v - 1) / 4) * 100) : Math.round(v);
-    return { k, name: DT_NAMES[k], pct, color: DT_COLORS[k] };
-  }).sort((a, b) => b.pct - a.pct);
-  const dtTop = dtTraits[0];
+    const pct = v <= 5 ? Math.round(((v-1)/4)*100) : Math.round(v);
+    return { k, label: DT_LABEL[k], pct, color: DT_COLOR[k] };
+  }).sort((a,b) => b.pct - a.pct);
 
-  const careerReport = raw.career
-    ? (raw.career.report ?? generateCareerReport(raw.career.raw_scores))
-    : null;
-  const hollandCode = careerReport?.holland_code ?? null;
+  /* CAREER */
+  const careerRep = raw.CAREER ? (raw.CAREER.report ?? generateCareerReport(raw.CAREER.raw_scores)) : null;
+  const holland   = careerRep?.holland_code ?? '';
+  const topJobs: any[] = careerRep?.top_careers ?? careerRep?.career_clusters ?? [];
 
-  const completedCount = [raw.hexaco, raw.enneagram, raw.strengths, raw.career, raw.darkTriad, raw.values].filter(Boolean).length;
+  /* VALUES */
+  const topVals: any[] = (raw.VALUES?.raw_scores?.top_values ?? raw.VALUES?.report?.top_values ?? []).slice(0,5);
 
-  /* ── AI synthesis ── */
-  function buildAiSummary(): string {
-    if (completedCount < 2) return 'Uzupełnij przynajmniej 2 testy, aby odblokować syntezę AI.';
-    const parts: string[] = [];
-    if (ennLore && ennPrimary)
-      parts.push(`Twój profil Enneagram (Typ ${ennTypeNum} · ${ennPrimary.name}) identyfikuje Cię jako ${ennLore.rpg} — ${ennLore.epithet}.`);
-    const hexSorted = Object.entries(hexPct).sort(([, a], [, b]) => b - a);
-    if (hexSorted.length)
-      parts.push(`Dominanta HEXACO w ${HEXACO_FULL[hexSorted[0][0]]} (${Math.round(hexSorted[0][1])}%) tworzy spójną kombinację z profilem silnych stron.`);
-    if (dtTop && dtTop.pct > 45)
-      parts.push(`Podwyższony wskaźnik ${dtTop.name} (${dtTop.pct}%) sugeruje skłonność do strategicznego myślenia — zarządzaj tym świadomie.`);
-    if (parts.length === 0)
-      parts.push('Profil psychometryczny w budowie. Ukończ kolejne testy, aby odblokować pełną syntezę AI.');
-    return parts.join(' ');
-  }
+  /* BIPOLAR SLIDERS (derived from HEXACO) */
+  const H = hexPct;
+  const sliders = [
+    { left:'Ostrożny',   right:'Ryzykant',      label:'Tolerancja Ryzyka',  pct: Math.round(((H.openness??50)+(100-(H.conscientiousness??50)))/2), color:'#fbbf24' },
+    { left:'Ufny',       right:'Sceptyczny',    label:'Zaufanie',           pct: Math.round(H.agreeableness??50), color:'#34d399' },
+    { left:'Rozważny',   right:'Szybki',        label:'Tempo Decyzji',      pct: Math.round(100-(H.conscientiousness??50)), color:'#f472b6' },
+    { left:'Powściągliwy',right:'Ekspresyjny',  label:'Ekspresja',          pct: Math.round(H.extraversion??50), color:'#fb923c' },
+    { left:'Niezależny', right:'Kooperatywny',  label:'Styl Pracy',         pct: Math.round(H.agreeableness??50), color:'#60a5fa' },
+    { left:'Wspierający',right:'Dominujący',    label:'Wpływ',              pct: Math.round(Math.max(0,100-(H.agreeableness??50)+((H.extraversion??50)-50)/2)), color:'#ef4444' },
+  ];
 
-  /* ── loading state ── */
+  /* ─── LOADING ──────────────────────────────────────────── */
   if (loading) return (
-    <div className="min-h-screen bg-[#030014] flex items-center justify-center">
-      <style>{`@keyframes _cs_spin{to{transform:rotate(360deg)}}`}</style>
-      <div className="text-center">
-        <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid rgba(112,0,255,.25)', borderTopColor: '#7000ff', animation: '_cs_spin .8s linear infinite', margin: '0 auto 16px' }} />
-        <div className="font-mono text-white/30 text-[13px] tracking-[3px]">ŁADOWANIE...</div>
+    <div style={{ minHeight:'100vh', background:'#020617', display:'flex', alignItems:'center', justifyContent:'center' }}>
+      <style>{NAV_CSS}</style>
+      <style>{`@keyframes spin_{to{transform:rotate(360deg)}}`}</style>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ width:40,height:40,borderRadius:'50%',border:'3px solid rgba(99,102,241,.2)',borderTopColor:'#6366f1',animation:'spin_ .8s linear infinite',margin:'0 auto 16px' }}/>
+        <div style={{ fontFamily:'Share Tech Mono,monospace', color:'rgba(148,163,184,.4)', fontSize:12, letterSpacing:'3px' }}>ŁADOWANIE PROFILU...</div>
       </div>
     </div>
   );
 
-  /* ─── RENDER ─────────────────────────────────────────────────────────────────── */
+  /* ─── RENDER ───────────────────────────────────────────── */
+  const bg = { background:'#020617', backgroundImage:'radial-gradient(circle at 50% 0%,rgba(79,70,229,.12) 0%,transparent 50%)', fontFamily:'Inter,system-ui,sans-serif', minHeight:'100vh', color:'#e2e8f0' };
+
   return (
-    <div className="min-h-screen text-slate-200" style={{ background: '#030014', backgroundImage: 'radial-gradient(circle at 50% 0%,#1a0b4e 0%,transparent 55%),radial-gradient(circle at 90% 10%,#0d1a3a 0%,transparent 40%)', fontFamily: 'Inter, system-ui, sans-serif' }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Space+Grotesk:wght@500;700&display=swap');
-        *{box-sizing:border-box}
-        .cs-radar .recharts-polar-grid line,
-        .cs-radar .recharts-polar-grid polygon{stroke:rgba(0,240,255,0.07)!important}
-        .iiy-logo,.iiy-logo *{box-sizing:border-box;margin:0;padding:0}
-        .iiy-logo{display:inline-flex;align-items:center;gap:20px;text-decoration:none;user-select:none}
-        .iiy-logo .iiy-signet svg{display:block;width:80px;height:80px}
-        .iiy-logo .iiy-wordmark{display:flex;flex-direction:column}
-        .iiy-logo .iiy-title{font-family:'Orbitron',monospace;font-weight:900;font-size:34px;letter-spacing:12px;line-height:1;text-transform:uppercase;background:linear-gradient(160deg,#ffffff 0%,#a8c8ff 35%,#38b6ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 16px rgba(56,182,255,0.45));animation:iiy-glitch 9s infinite}
-        @keyframes iiy-glitch{0%,87%,100%{transform:none;filter:drop-shadow(0 0 16px rgba(56,182,255,0.45))}88%{transform:translate(-2px,0) skewX(-2deg);filter:drop-shadow(-3px 0 #7b5ea7) drop-shadow(3px 0 #38b6ff)}89%{transform:translate(2px,0);filter:drop-shadow(3px 0 #7b5ea7) drop-shadow(-3px 0 #38b6ff)}90%{transform:none;filter:drop-shadow(0 0 16px rgba(56,182,255,0.45))}}
-        .iiy-logo .iiy-divider{height:1px;margin:6px 0 5px;background:linear-gradient(90deg,#38b6ff 0%,#7b5ea7 55%,transparent 100%);opacity:0.8}
-        .iiy-logo .iiy-sub{font-family:'Share Tech Mono',monospace;font-size:8.5px;letter-spacing:3.5px;color:rgba(100,160,230,0.5);text-transform:uppercase}
-        .iiy-ring-ticks{animation:iiy-spin 20s linear infinite;transform-origin:48px 48px}
-        @keyframes iiy-spin{to{transform:rotate(360deg)}}
-        .iiy-eye-l{animation:iiy-eye 3.5s ease-in-out infinite}
-        .iiy-eye-r{animation:iiy-eye 3.5s ease-in-out infinite 0.2s}
-        @keyframes iiy-eye{0%,70%,100%{opacity:1}76%{opacity:0.05}}
-        .iiy-scan{animation:iiy-scan 2.8s ease-in-out infinite}
-        @keyframes iiy-scan{0%{transform:translateY(-22px);opacity:0}8%{opacity:0.55}92%{opacity:0.55}100%{transform:translateY(22px);opacity:0}}
-        .iiy-core{animation:iiy-pulse 2.2s ease-in-out infinite;transform-origin:48px 61px}
-        @keyframes iiy-pulse{0%,100%{transform:scale(1);opacity:0.6}50%{transform:scale(1.9);opacity:1}}
-        .iiy-logo.iiy-sm{gap:14px}
-        .iiy-logo.iiy-sm .iiy-signet svg{width:44px;height:44px}
-        .iiy-logo.iiy-sm .iiy-title{font-size:19px;letter-spacing:7px}
-        .iiy-logo.iiy-sm .iiy-sub{font-size:7px;letter-spacing:2.5px}
-        .iiy-logo.iiy-sm .iiy-divider{margin:4px 0 3px}
-        .iiy-nav-tabs{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:4px}
-        .iiy-tab-btn{padding:8px 20px;border-radius:9px;border:none;background:transparent;color:rgba(255,255,255,.45);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.2px;font-family:'Space Grotesk',-apple-system,sans-serif;white-space:nowrap}
-        .iiy-tab-btn:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.05)}
-        .iiy-tab-btn.active{background:linear-gradient(135deg,rgba(99,102,241,.3),rgba(56,182,255,.2));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 1px rgba(99,102,241,.3)}
-      `}</style>
+    <div style={bg}>
+      <style>{NAV_CSS}</style>
 
-      {/* NAV — exact iiy-logo iiy-sm + iiy-nav-tabs from user-profile-tests.html */}
-      <nav className="border-b border-white/5 sticky top-0 z-50"
-        style={{ background: 'rgba(3,0,20,0.88)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-
-            {/* iiy-logo iiy-sm */}
+      {/* ── NAV ── */}
+      <nav style={{ background:'rgba(2,6,23,.9)', backdropFilter:'blur(20px)', borderBottom:'1px solid rgba(255,255,255,.05)', position:'sticky', top:0, zIndex:50 }}>
+        <div style={{ maxWidth:1280, margin:'0 auto', padding:'0 24px' }}>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', height:72 }}>
             <a href="/user-profile-tests.html" className="iiy-logo iiy-sm">
               <div className="iiy-signet">
                 <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
@@ -318,22 +248,20 @@ export default function CharacterSheet() {
                       <feGaussianBlur stdDeviation="2" result="b"/>
                       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
                     </filter>
-                    <clipPath id="iiy-clip-cs">
-                      <polygon points="48,5 87,27 87,69 48,91 9,69 9,27"/>
-                    </clipPath>
+                    <clipPath id="iiy-clip-cs"><polygon points="48,5 87,27 87,69 48,91 9,69 9,27"/></clipPath>
                   </defs>
                   <polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="#11143a"/>
                   <g className="iiy-ring-ticks" filter="url(#iiy-glow-cs)">
-                    <line x1="48" y1="5"  x2="48" y2="12" stroke="#38b6ff" strokeWidth="1.8"/>
+                    <line x1="48" y1="5" x2="48" y2="12" stroke="#38b6ff" strokeWidth="1.8"/>
                     <line x1="87" y1="27" x2="81" y2="30" stroke="#38b6ff" strokeWidth="1.8"/>
                     <line x1="87" y1="69" x2="81" y2="66" stroke="#38b6ff" strokeWidth="1.8"/>
                     <line x1="48" y1="91" x2="48" y2="84" stroke="#38b6ff" strokeWidth="1.8"/>
-                    <line x1="9"  y1="69" x2="15" y2="66" stroke="#38b6ff" strokeWidth="1.8"/>
-                    <line x1="9"  y1="27" x2="15" y2="30" stroke="#38b6ff" strokeWidth="1.8"/>
-                    <line x1="68" y1="8"  x2="66" y2="12" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
-                    <line x1="28" y1="8"  x2="30" y2="12" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
+                    <line x1="9" y1="69" x2="15" y2="66" stroke="#38b6ff" strokeWidth="1.8"/>
+                    <line x1="9" y1="27" x2="15" y2="30" stroke="#38b6ff" strokeWidth="1.8"/>
+                    <line x1="68" y1="8" x2="66" y2="12" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
+                    <line x1="28" y1="8" x2="30" y2="12" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
                     <line x1="90" y1="48" x2="84" y2="48" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
-                    <line x1="6"  y1="48" x2="12" y2="48" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
+                    <line x1="6" y1="48" x2="12" y2="48" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
                     <line x1="68" y1="88" x2="66" y2="84" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
                     <line x1="28" y1="88" x2="30" y2="84" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
                   </g>
@@ -360,279 +288,317 @@ export default function CharacterSheet() {
                 <div className="iiy-sub">Psychometric AI Engine</div>
               </div>
             </a>
-
-            {/* iiy-nav-tabs */}
             <div className="iiy-nav-tabs">
-              <button className="iiy-tab-btn" onClick={() => { window.location.href = '/user-profile-tests.html'; }}>🧪 Testy</button>
+              <button className="iiy-tab-btn" onClick={() => { window.location.href='/user-profile-tests.html'; }}>🧪 Testy</button>
               <button className="iiy-tab-btn active">🃏 Karta Postaci</button>
             </div>
-
-            {/* Right */}
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-1.5">
-                {([raw.hexaco, raw.enneagram, raw.strengths, raw.career, raw.darkTriad, raw.values] as any[]).map((r, i) => (
-                  <div key={i} className="w-2 h-2 rounded-full transition-all"
-                    style={{ background: r ? '#7000ff' : 'rgba(255,255,255,0.1)', boxShadow: r ? '0 0 6px #7000ff' : 'none' }} />
+            <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+              <div style={{ display:'flex', gap:5 }}>
+                {['HEXACO','ENNEAGRAM','STRENGTHS','CAREER','DARK_TRIAD','VALUES'].map(k => (
+                  <div key={k} style={{ width:8,height:8,borderRadius:'50%', background:raw[k]?'#6366f1':'rgba(255,255,255,.1)', boxShadow:raw[k]?'0 0 6px #6366f1':'none', transition:'all .3s' }}/>
                 ))}
               </div>
-              <button onClick={async () => { await supabase.auth.signOut(); window.location.href = '/'; }}
-                className="px-4 py-2 rounded-lg border border-white/10 text-white text-sm bg-white/5 hover:bg-white/10 transition-all">
-                Wyloguj
-              </button>
-              <a href="/settings"
-                className="px-4 py-2 rounded-lg border border-white/10 text-white text-sm bg-white/5 hover:bg-white/10 transition-all no-underline"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                ⚙️ Ustawienia
-              </a>
+              <button onClick={async()=>{await supabase.auth.signOut();window.location.href='/';}} style={{ padding:'7px 16px', borderRadius:8, border:'1px solid rgba(255,255,255,.1)', background:'rgba(255,255,255,.04)', color:'#e2e8f0', fontSize:13, cursor:'pointer', fontFamily:'Space Grotesk,sans-serif' }}>Wyloguj</button>
+              <a href="/settings" style={{ padding:'7px 16px', borderRadius:8, border:'1px solid rgba(255,255,255,.1)', background:'rgba(255,255,255,.04)', color:'#e2e8f0', fontSize:13, textDecoration:'none', fontFamily:'Space Grotesk,sans-serif' }}>⚙️</a>
             </div>
-
           </div>
         </div>
       </nav>
 
-      {/* ── BENTO GRID ─────────────────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto p-4 md:p-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {/* ── PAGE ── */}
+      <div style={{ maxWidth:1280, margin:'0 auto', padding:'32px 24px' }}>
 
-          {/* ── T1: HERO CORE — col-span-full lg:col-span-2 row-span-2 ── */}
-          <div className="card-neural col-span-full md:col-span-1 lg:col-span-2 lg:row-span-2 p-6 flex flex-col relative overflow-hidden">
-            {/* ambient glow */}
-            <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle,rgba(112,0,255,0.15) 0%,transparent 70%)' }} />
+        {/* XP Meter */}
+        <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:32 }}>
+          <div style={{ flex:1, height:4, background:'rgba(255,255,255,.05)', borderRadius:999, overflow:'hidden' }}>
+            <div style={{ height:'100%', width:`${(done/6)*100}%`, background:'linear-gradient(90deg,#6366f1,#a855f7)', borderRadius:999, transition:'width 1s ease' }}/>
+          </div>
+          <span style={{ fontSize:11, color:'rgba(148,163,184,.5)', fontFamily:'Share Tech Mono,monospace', letterSpacing:'2px' }}>{done}/6 TESTÓW</span>
+        </div>
 
-            <TileLabel color="text-violet-400/45">// PROFIL GŁÓWNY · HERO CORE</TileLabel>
+        {/* ══════════════════════════════════════
+            GŁÓWNA KARTA RPG (3 kolumny)
+        ══════════════════════════════════════ */}
+        <div className="card-section" style={{ marginBottom:24, boxShadow:'0 0 60px rgba(79,70,229,.12)' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:0 }}>
 
-            {/* Avatar – centered */}
-            <div className="flex flex-col items-center text-center mb-4">
-              <div className="relative flex-shrink-0 mb-3">
-                <div className="w-28 h-28 rounded-full p-0.5"
-                  style={{ background: 'linear-gradient(135deg,#7000ff,#d946ef,#00f0ff)', boxShadow: '0 0 30px rgba(112,0,255,0.5)' }}>
-                  <div className="w-full h-full rounded-full overflow-hidden bg-[#150830] flex items-center justify-center">
+            {/* ─ KOLUMNA 1: Tożsamość i klasa ─ */}
+            <div style={{ background:'rgba(15,23,42,.7)', padding:28, borderRight:'1px solid rgba(255,255,255,.05)', display:'flex', flexDirection:'column', gap:0 }}>
+
+              {/* Avatar + Imię */}
+              <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:24 }}>
+                <div style={{ width:80,height:80, borderRadius:'50%', padding:2, background:'linear-gradient(135deg,#6366f1,#a855f7,#ec4899)', flexShrink:0, position:'relative' }}>
+                  <div style={{ width:'100%',height:'100%',borderRadius:'50%',overflow:'hidden',background:'#0f172a',display:'flex',alignItems:'center',justifyContent:'center' }}>
                     {avatarUrl
-                      ? <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
-                      : <span className="text-3xl font-bold text-violet-400" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{initials}</span>
+                      ? <img src={avatarUrl} alt="avatar" style={{ width:'100%',height:'100%',objectFit:'cover' }}/>
+                      : <span style={{ fontFamily:'Space Grotesk,sans-serif', fontWeight:700, fontSize:24, color:'#a5b4fc' }}>{initials}</span>
                     }
                   </div>
+                  <div style={{ position:'absolute',bottom:2,right:2,width:14,height:14,borderRadius:'50%',background:done>=4?'#34d399':'#f97316',border:'2px solid #0f172a',boxShadow:`0 0 8px ${done>=4?'#34d399':'#f97316'}` }}/>
                 </div>
-                <div className="absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-[#030014]"
-                  style={{ background: completedCount >= 4 ? '#34d399' : '#f97316', boxShadow: `0 0 8px ${completedCount >= 4 ? '#34d399' : '#f97316'}` }} />
-              </div>
-
-              <div className="w-full">
-                <div className="text-xl font-bold text-white mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                  {userName.toUpperCase()}
-                </div>
-                {ennLore ? (
-                  <>
-                    <div className="text-base font-black leading-tight mb-1" style={{ fontFamily: 'Orbitron, monospace', color: '#7000ff', textShadow: '0 0 22px rgba(112,0,255,0.7)' }}>
-                      {ennLore.rpg}
-                    </div>
-                    <div className="font-mono text-[9px] tracking-[2px] text-white/25 uppercase mb-3">
-                      &ldquo;{ennLore.epithet}&rdquo;
-                    </div>
-                  </>
-                ) : (
-                  <div className="font-mono text-[11px] text-white/18 tracking-widest mb-3">ARCHETYP NIEZDEFINIOWANY</div>
-                )}
-                {hollandCode && (
-                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-lg border text-[11px]"
-                    style={{ background: 'rgba(0,240,255,0.06)', borderColor: 'rgba(0,240,255,0.18)' }}>
-                    <span className="font-mono text-[8px] tracking-[2px] text-cyan-300/50">RIASEC</span>
-                    <span className="font-mono font-bold text-[13px] text-cyan-300 tracking-widest" style={{ fontFamily: 'Orbitron, monospace' }}>{hollandCode}</span>
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Pop-culture pills */}
-            {ennLore && (
-              <div className="mb-5">
-                <div className="font-mono text-[8px] tracking-[2px] text-white/18 mb-2">🎬 POSTACIE PODOBNE DO CIEBIE</div>
-                <div className="flex flex-wrap gap-2">
-                  {ennLore.pop.map((p, i) => (
-                    <span key={p} className="px-3 py-1 rounded-full text-[11px] font-semibold transition-all"
-                      style={{
-                        background: i === 0 ? 'rgba(112,0,255,0.16)' : 'rgba(255,255,255,0.04)',
-                        border: i === 0 ? '1px solid rgba(112,0,255,0.4)' : '1px solid rgba(255,255,255,0.07)',
-                        color: i === 0 ? '#c4b5fd' : 'rgba(255,255,255,0.42)',
-                        fontFamily: 'Space Grotesk, sans-serif',
-                      }}>
-                      {p}
-                    </span>
-                  ))}
+                <div>
+                  <div style={{ fontFamily:'Space Grotesk,sans-serif', fontWeight:700, fontSize:18, color:'#fff', marginBottom:4 }}>{userName}</div>
+                  {ennL
+                    ? <div style={{ fontFamily:'Space Grotesk,sans-serif', fontWeight:700, fontSize:11, color:'#818cf8', textTransform:'uppercase', letterSpacing:'1px', marginBottom:6 }}>{ennL.rpg}</div>
+                    : <div style={{ fontSize:10, color:'rgba(148,163,184,.4)', fontFamily:'Share Tech Mono,monospace', letterSpacing:'2px' }}>ARCHETYP NIEZDEFINIOWANY</div>
+                  }
+                  <div style={{ display:'inline-block', background:'rgba(30,41,59,.8)', color:'rgba(203,213,225,.7)', fontSize:10, fontWeight:700, padding:'2px 8px', borderRadius:6, border:'1px solid rgba(255,255,255,.08)', fontFamily:'Space Grotesk,sans-serif' }}>Level {done}</div>
                 </div>
               </div>
-            )}
 
-            {/* XP bar */}
-            <div className="mt-auto">
-              <div className="flex justify-between mb-1.5">
-                <span className="font-mono text-[8px] tracking-[2px] text-white/20">PROFIL XP</span>
-                <span className="font-mono text-[9px] text-violet-400" style={{ fontFamily: 'Orbitron, monospace' }}>{completedCount}/6</span>
-              </div>
-              <div className="h-1 rounded-full bg-white/5 overflow-hidden">
-                <div className="h-full rounded-full transition-all duration-700"
-                  style={{ width: `${(completedCount / 6) * 100}%`, background: 'linear-gradient(90deg,#7000ff,#d946ef)', boxShadow: '0 0 8px rgba(112,0,255,0.7)' }} />
-              </div>
-            </div>
-          </div>
-
-          {/* ── T2: HARDWARE / HEXACO — col-span-1 row-span-2 ── */}
-          <div className="card-neural col-span-1 lg:col-span-1 lg:row-span-2 p-6 flex flex-col relative overflow-hidden" style={{ minHeight: 400 }}>
-            <div className="absolute -top-8 -left-8 w-36 h-36 rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle,rgba(0,240,255,0.08) 0%,transparent 70%)' }} />
-            <TileLabel color="text-cyan-400/45">// MATRYCA OSOBOWOŚCI · HEXACO-60</TileLabel>
-
-            {raw.hexaco ? (
-              <>
-                {/* Radar — fills all available flex space */}
-                <div className="flex-1 min-h-0 cs-radar">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart data={radarData} outerRadius="80%" margin={{ top: 0, right: 10, bottom: 0, left: 10 }}>
-                      <PolarGrid stroke="rgba(0,240,255,0.07)" gridType="polygon" />
-                      <PolarAngleAxis dataKey="trait" tick={{ fill: 'rgba(0,240,255,0.55)', fontSize: 11, fontFamily: 'Share Tech Mono, monospace' }} tickLine={false} />
-                      <Radar dataKey="value" stroke="#22d3ee" strokeWidth={2} fill="#22d3ee" fillOpacity={0.13}
-                        dot={{ fill: '#22d3ee', r: 4, strokeWidth: 0 } as any} />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </div>
-
-                {/* Minimalist 2-col bars — bottom ~30% */}
-                <div className="flex-shrink-0 grid grid-cols-2 gap-x-6 gap-y-2 mt-3 pt-3 border-t border-white/[0.04]">
-                  {radarData.map((d) => (
-                    <div key={d.trait}>
-                      <div className="flex justify-between items-center mb-0.5">
-                        <span className="font-mono text-[8px] text-white/30 tracking-wide truncate pr-2">{d.full.toUpperCase()}</span>
-                        <span className="font-mono text-[9px] font-bold text-cyan-300 flex-shrink-0" style={{ fontFamily: 'Orbitron, monospace' }}>{d.value}%</span>
-                      </div>
-                      <div className="h-[2px] rounded-full bg-white/5 overflow-hidden">
-                        <div className="h-full rounded-full transition-all duration-700"
-                          style={{ width: `${d.value}%`, background: 'linear-gradient(90deg,rgba(0,240,255,0.4),#22d3ee)', boxShadow: '0 0 4px rgba(0,240,255,0.3)' }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <LockedTile icon={<Zap size={22} />} text="Wykonaj test HEXACO-60" href="/test?type=hexaco" color="#00f0ff" />
-            )}
-          </div>
-
-          {/* ── T3: ENGINE / ENNEAGRAM — col-span-1 row-span-2 ── */}
-          <div className="card-neural col-span-1 lg:col-span-1 lg:row-span-2 p-6 flex flex-col items-center" style={{ minHeight: 400 }}>
-            <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle,rgba(217,70,239,0.1) 0%,transparent 70%)' }} />
-            <TileLabel color="text-fuchsia-400/45">// ENGINE · ENNEAGRAM</TileLabel>
-
-            {/* Star fills most of the tile */}
-            <div className="flex-1 min-h-0 w-full flex items-center justify-center py-1">
-              <EnneagramStar activeType={ennTypeNum} color="#d946ef" />
-            </div>
-
-            {ennPrimary ? (
-              <div className="flex-shrink-0 text-center pb-1 space-y-0.5">
-                <div className="text-sm font-bold text-fuchsia-400" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{ennPrimary.name}</div>
-                {ennPrimary.core_motivation && (
-                  <div className="font-mono text-[7px] text-fuchsia-400/28 tracking-[1.5px]">{ennPrimary.core_motivation.toUpperCase()}</div>
-                )}
-              </div>
-            ) : (
-              <LockedTile icon={<span className="text-xl">★</span>} text="Wykonaj test Enneagram" href="/test?type=enneagram" color="#d946ef" />
-            )}
-          </div>
-
-          {/* ── T4: ARSENAL / TALENTY ── */}
-          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col justify-center">
-            <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle,rgba(251,191,36,0.08) 0%,transparent 70%)' }} />
-            <TileLabel color="text-amber-400/45">// ⚡ ARSENAL · TOP TALENTY · STRENGTHS</TileLabel>
-
-            {top5.length > 0 ? (
-              <div className="flex flex-col gap-3">
-                {top5.slice(0, 4).map((t: any, i: number) => {
-                  const barW = 96 - i * 10;
-                  return (
-                    <div key={t.name ?? t.name_en ?? i} className="flex items-center gap-3">
-                      <span className="font-mono text-[9px] text-amber-400/40 w-5 text-right" style={{ fontFamily: 'Orbitron, monospace' }}>0{i + 1}</span>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-[12px] font-semibold mb-1 truncate"
-                          style={{ color: i === 0 ? '#fbbf24' : 'rgba(255,255,255,0.62)', fontFamily: 'Space Grotesk, sans-serif' }}>
-                          {t.name ?? t.name_en}
-                        </div>
-                        <div className="h-[3px] rounded-full bg-white/5 overflow-hidden">
-                          <div className="h-full rounded-full transition-all duration-700"
-                            style={{ width: `${barW}%`, background: i === 0 ? 'linear-gradient(90deg,#f97316,#fbbf24)' : 'rgba(251,191,36,0.28)', boxShadow: i === 0 ? '0 0 8px rgba(251,191,36,0.5)' : 'none' }} />
-                        </div>
-                      </div>
-                      <span className="font-mono text-[8px] text-amber-400/35 w-8 text-right">{barW}%</span>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <LockedTile icon={<span className="text-xl">⭐</span>} text="Wykonaj test Strengths" href="/test?type=strengths" color="#fbbf24" />
-            )}
-          </div>
-
-          {/* ── T5: SHADOW / DARK TRIAD ── */}
-          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col justify-center !bg-rose-950/20 !border-rose-500/30 shadow-[0_0_30px_-10px_rgba(244,63,94,0.15)]">
-            <div className="absolute -top-5 -right-5 w-28 h-28 rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle,rgba(239,68,68,0.1) 0%,transparent 70%)' }} />
-
-            <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle size={12} className="text-rose-400/65" />
-              <TileLabel color="text-rose-400/45">// ⚠ WYKRYTE RYZYKA · DARK TRIAD</TileLabel>
-            </div>
-
-            {raw.darkTriad && dtTop ? (
-              <>
-                {/* Top risk */}
-                <div className="rounded-xl p-4 mb-3" style={{ background: `${dtTop.color}0b`, border: `1px solid ${dtTop.color}22` }}>
-                  <div className="flex justify-between items-end mb-2">
-                    <div className="text-sm font-bold" style={{ color: dtTop.color, fontFamily: 'Space Grotesk, sans-serif' }}>{dtTop.name}</div>
-                    <div className="text-[28px] font-black leading-none" style={{ fontFamily: 'Orbitron, monospace', color: dtTop.color, textShadow: `0 0 16px ${dtTop.color}70` }}>{dtTop.pct}%</div>
-                  </div>
-                  <div className="h-[3px] rounded-full bg-white/5 overflow-hidden">
-                    <div className="h-full rounded-full transition-all duration-700"
-                      style={{ width: `${dtTop.pct}%`, background: `linear-gradient(90deg,${dtTop.color}70,${dtTop.color})`, boxShadow: `0 0 8px ${dtTop.color}55` }} />
+              {/* Cechy dominujące */}
+              {hexTop3.length > 0 && (
+                <div style={{ marginBottom:20 }}>
+                  <SecLabel>Cechy Dominujące</SecLabel>
+                  <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
+                    {hexTop3.map(h => <Tag key={h.k} color={h.color}>{h.label}</Tag>)}
+                    {ennP?.name && <Tag color="#818cf8">{ennP.name.split(' ')[0]}</Tag>}
                   </div>
                 </div>
-                {/* Secondary risks */}
-                <div className="flex gap-2">
-                  {dtTraits.slice(1).map(t => (
-                    <div key={t.k} className="flex-1 p-2.5 rounded-lg bg-white/[0.02] border border-white/5">
-                      <div className="font-mono text-[8px] text-white/28 tracking-wide">{t.name}</div>
-                      <div className="text-lg font-bold mt-0.5" style={{ fontFamily: 'Orbitron, monospace', color: t.color }}>{t.pct}%</div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <LockedTile icon={<Shield size={22} />} text="Odblokuj test Dark Triad Premium" href="/test?type=dark_triad" color="#ef4444" />
-            )}
-          </div>
+              )}
 
-          {/* ── T6: AI SYNTHESIS — col-span-full ── */}
-          <div className="card-neural col-span-full p-8 flex flex-col">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ background: 'rgba(112,0,255,0.14)', border: '1px solid rgba(112,0,255,0.3)' }}>
-                <Sparkles size={18} className="text-violet-400" />
+              {/* Enneagram + Holland slab badges */}
+              <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:20 }}>
+                {ennN && <Slab label="Enneagram" value={`Typ ${ennN}${ennR?.wing ? ` w${ennR.wing}` : ''} · ${ennP?.name ?? ''}`}/>}
+                {holland && <Slab label="RIASEC (Holland)" value={holland}/>}
+                {raw.HEXACO && hexTop3[0] && <Slab label="Dominanta HEXACO" value={`${hexTop3[0].label} (${hexTop3[0].pct}%)`}/>}
               </div>
+
+              {/* Archetyp operacyjny */}
+              {ennL && (
+                <div style={{ background:'rgba(79,70,229,.1)', border:'1px solid rgba(99,102,241,.3)', borderRadius:12, padding:16, marginBottom:20 }}>
+                  <div style={{ fontSize:9, fontWeight:700, color:'#a5b4fc', textTransform:'uppercase', letterSpacing:'2px', marginBottom:8, fontFamily:'Space Grotesk,sans-serif' }}>Archetyp Operacyjny</div>
+                  <div style={{ fontFamily:'Space Grotesk,sans-serif', fontWeight:700, fontSize:15, color:'#fff', marginBottom:8 }}>✦ {ennL.rpg}</div>
+                  <div style={{ fontSize:10, color:'rgba(148,163,184,.6)', lineHeight:1.7, fontFamily:'Inter,sans-serif' }}>
+                    &ldquo;{ennL.epithet}&rdquo; — Twój profil psychometryczny łączy cechy {hexTop3.map(h=>h.label).join(', ')}.
+                  </div>
+                </div>
+              )}
+
+              {/* Wartości */}
+              {topVals.length > 0 && (
+                <div style={{ marginTop:'auto' }}>
+                  <SecLabel>Kompas Wartości</SecLabel>
+                  <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
+                    {topVals.map((v:any) => <Tag key={v.name??v.value_name??v} color="#fbbf24">{v.name??v.value_name??String(v)}</Tag>)}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ─ KOLUMNA 2: Statystyki i spektrum ─ */}
+            <div style={{ padding:28, borderRight:'1px solid rgba(255,255,255,.05)', background:'rgba(15,23,42,.5)' }}>
+              <SecLabel>Statystyki HEXACO</SecLabel>
+
+              {raw.HEXACO ? (
+                <>
+                  {/* Radar mini */}
+                  <div className="cs-radar" style={{ height:200, marginBottom:20 }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart data={hexRadar} outerRadius="75%" margin={{ top:4,right:10,bottom:4,left:10 }}>
+                        <PolarGrid stroke="rgba(56,182,255,.07)" gridType="polygon"/>
+                        <PolarAngleAxis dataKey="full" tick={{ fill:'rgba(148,163,184,.55)', fontSize:10, fontFamily:'Space Grotesk,sans-serif' }} tickLine={false}/>
+                        <Radar dataKey="value" stroke="#6366f1" strokeWidth={2} fill="#6366f1" fillOpacity={0.15} dot={{ fill:'#6366f1', r:3, strokeWidth:0 } as any}/>
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  {/* Bars */}
+                  {hexBars.map(h => <StatBar key={h.k} label={h.label} pct={h.pct} color={h.color}/>)}
+                </>
+              ) : (
+                <Lock text="WYKONAJ TEST HEXACO-60" href="/test?type=hexaco" color="#6366f1"/>
+              )}
+
+              {/* Spektrum osobowości */}
+              {raw.HEXACO && (
+                <div style={{ marginTop:24, paddingTop:24, borderTop:'1px solid rgba(99,102,241,.15)' }}>
+                  <SecLabel>Spektrum Osobowości</SecLabel>
+                  <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+                    {sliders.map(s => <BipolarSlider key={s.label} left={s.left} right={s.right} label={s.label} pct={s.pct} color={s.color}/>)}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ─ KOLUMNA 3: Talenty, energia, pop culture ─ */}
+            <div style={{ padding:28, background:'rgba(15,23,42,.3)', display:'flex', flexDirection:'column', gap:24 }}>
+
+              {/* Talenty */}
               <div>
-                <div className="font-mono font-bold text-[11px] tracking-[1.5px] text-violet-400" style={{ fontFamily: 'Orbitron, monospace' }}>
-                  PSYCHER AI SYNTHESIS
-                </div>
-                <div className="font-mono text-[8px] tracking-[2px] text-white/20 mt-0.5">NEURAL PROFILE ANALYSIS · AUTO-GENERATED</div>
+                <SecLabel>Talenty (Strengths)</SecLabel>
+                {top5.length > 0 ? (
+                  <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+                    {top5.slice(0,5).map((t:any, i:number) => (
+                      <div key={t.name??t.name_en??i} style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
+                        <div style={{ width:32,height:32,borderRadius:8,background:'rgba(30,41,59,.9)',border:'1px solid rgba(255,255,255,.07)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,color:['#fbbf24','#a78bfa','#34d399','#60a5fa','#f472b6'][i%5],fontSize:14 }}>✦</div>
+                        <div>
+                          <div style={{ fontFamily:'Space Grotesk,sans-serif', fontWeight:700, fontSize:13, color:'#fff', marginBottom:2 }}>{t.name ?? t.name_en}</div>
+                          {t.description && <div style={{ fontSize:10, color:'rgba(148,163,184,.5)', lineHeight:1.5 }}>{String(t.description).slice(0,70)}{t.description?.length>70?'…':''}</div>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : <Lock text="WYKONAJ TEST STRENGTHS" href="/test?type=strengths" color="#fbbf24"/>}
               </div>
-              <div className="flex-1 h-px ml-2" style={{ background: 'linear-gradient(90deg,rgba(112,0,255,0.3),transparent)' }} />
+
+              {/* Energia – zasilacze / dreny */}
+              {ennL && (
+                <div>
+                  <SecLabel>Zarządzanie Energią</SecLabel>
+                  <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
+                    <div style={{ background:'rgba(16,185,129,.08)', border:'1px solid rgba(16,185,129,.18)', borderRadius:10, padding:12 }}>
+                      <div style={{ fontSize:9, fontWeight:700, color:'#34d399', textTransform:'uppercase', letterSpacing:'1.5px', marginBottom:8, fontFamily:'Space Grotesk,sans-serif' }}>⚡ Co Cię Ładuje</div>
+                      {ennL.charges.map(c => <div key={c} style={{ fontSize:10, color:'rgba(203,213,225,.7)', marginBottom:4, paddingLeft:12, position:'relative', fontFamily:'Inter,sans-serif' }}><span style={{ position:'absolute',left:0,color:'#34d399' }}>·</span>{c}</div>)}
+                    </div>
+                    <div style={{ background:'rgba(239,68,68,.06)', border:'1px solid rgba(239,68,68,.18)', borderRadius:10, padding:12 }}>
+                      <div style={{ fontSize:9, fontWeight:700, color:'#f87171', textTransform:'uppercase', letterSpacing:'1.5px', marginBottom:8, fontFamily:'Space Grotesk,sans-serif' }}>⬇ Co Cię Drenuje</div>
+                      {ennL.drains.map(d => <div key={d} style={{ fontSize:10, color:'rgba(203,213,225,.7)', marginBottom:4, paddingLeft:12, position:'relative', fontFamily:'Inter,sans-serif' }}><span style={{ position:'absolute',left:0,color:'#f87171' }}>·</span>{d}</div>)}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Pop culture */}
+              {ennL && (
+                <div style={{ paddingTop:16, borderTop:'1px solid rgba(255,255,255,.05)' }}>
+                  <SecLabel>Kompatybilne Jednostki</SecLabel>
+                  <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+                    {ennL.pop.map((p,i) => (
+                      <div key={p} style={{ display:'flex', alignItems:'center', gap:12 }}>
+                        <div style={{ width:36,height:36,borderRadius:'50%',background:`linear-gradient(135deg,${['#6366f1','#f472b6','#34d399'][i%3]}22,rgba(15,23,42,.8))`,border:`1px solid ${['#6366f1','#f472b6','#34d399'][i%3]}40`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,flexShrink:0 }}>✦</div>
+                        <div>
+                          <div style={{ fontFamily:'Space Grotesk,sans-serif', fontWeight:700, fontSize:12, color:i===0?'#a5b4fc':'rgba(203,213,225,.7)' }}>{p}</div>
+                          <div style={{ fontSize:10, color:'rgba(100,116,139,.7)', fontFamily:'Inter,sans-serif' }}>Neural Match {[95,82,71][i]??60}%</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-            <p className="text-slate-300 leading-relaxed text-lg font-light">
-              {buildAiSummary()}
-            </p>
           </div>
 
+          {/* ── ROW 2: Kariera + Dark Triad ── */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderTop:'1px solid rgba(255,255,255,.05)' }}>
+
+            {/* KARIERA */}
+            <div style={{ padding:28, background:'rgba(79,70,229,.06)', borderRight:'1px solid rgba(255,255,255,.05)' }}>
+              <SecLabel>Optymalne Ścieżki Kariery</SecLabel>
+              {careerRep ? (
+                <>
+                  {holland && (
+                    <div style={{ display:'flex', gap:8, marginBottom:16, flexWrap:'wrap' }}>
+                      {holland.split('').map((c:string) => (
+                        <span key={c} style={{ padding:'4px 14px', borderRadius:8, background:'rgba(99,102,241,.12)', border:'1px solid rgba(99,102,241,.25)', color:'#a5b4fc', fontSize:13, fontWeight:700, fontFamily:'Share Tech Mono,monospace' }}>{c}</span>
+                      ))}
+                      <span style={{ fontSize:11, color:'rgba(148,163,184,.5)', alignSelf:'center', fontFamily:'Space Grotesk,sans-serif' }}>kod Holland</span>
+                    </div>
+                  )}
+                  {topJobs.length > 0 ? (
+                    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
+                      {topJobs.slice(0,4).map((j:any,i:number) => (
+                        <div key={j.title??j.name??i} style={{ padding:12, background:'rgba(30,41,59,.8)', borderRadius:10, border:'1px solid rgba(255,255,255,.07)', transition:'border-color .2s' }}>
+                          <div style={{ fontFamily:'Space Grotesk,sans-serif', fontWeight:700, fontSize:13, color:'#fff', marginBottom:4 }}>{j.title??j.name}</div>
+                          {j.description && <div style={{ fontSize:10, color:'rgba(148,163,184,.5)' }}>{String(j.description).slice(0,50)}</div>}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ fontSize:11, color:'rgba(148,163,184,.4)', fontFamily:'Space Grotesk,sans-serif' }}>Brak danych o zawodach. Kod Holland: {holland || '—'}</div>
+                  )}
+                </>
+              ) : <Lock text="WYKONAJ TEST KARIERY (O*NET)" href="/test?type=career" color="#6366f1"/>}
+            </div>
+
+            {/* DARK TRIAD */}
+            <div style={{ padding:28, background:'rgba(239,68,68,.04)', position:'relative' }}>
+              <div style={{ position:'absolute', top:16, right:16, padding:'3px 10px', borderRadius:99, background:'rgba(245,158,11,.12)', border:'1px solid rgba(245,158,11,.35)', fontSize:10, fontWeight:700, color:'#fcd34d', fontFamily:'Space Grotesk,sans-serif' }}>PRO Insight</div>
+              <SecLabel>Cień · Ryzyka Dark Triad</SecLabel>
+              {raw.DARK_TRIAD ? (
+                <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+                  {dtTraits.map(t => (
+                    <div key={t.k}>
+                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:6 }}>
+                        <span style={{ fontSize:12, color:'rgba(203,213,225,.8)', fontFamily:'Space Grotesk,sans-serif', fontWeight:600 }}>{t.label}</span>
+                        <span style={{ fontSize:13, fontWeight:700, color:t.color, fontFamily:'Share Tech Mono,monospace' }}>{t.pct}%</span>
+                      </div>
+                      <div style={{ background:'rgba(15,23,42,.8)', borderRadius:4, height:8, overflow:'hidden' }}>
+                        <div style={{ height:'100%', width:`${t.pct}%`, background:`linear-gradient(90deg,${t.color}55,${t.color})`, borderRadius:4, transition:'width 1s ease' }}/>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : <Lock text="ODBLOKUJ TEST DARK TRIAD" href="/test?type=dark_triad" color="#ef4444"/>}
+            </div>
+          </div>
         </div>
+
+        {/* ══════════════════════════════════════
+            SEKCJE ROZSZERZONE
+        ══════════════════════════════════════ */}
+
+        {/* Talenty (rozszerzone) */}
+        {top5.length > 0 && (
+          <div className="card-section" style={{ marginBottom:24, padding:32 }}>
+            <div style={{ fontSize:20, fontWeight:700, color:'#fff', fontFamily:'Space Grotesk,sans-serif', marginBottom:20, display:'flex', alignItems:'center', gap:10 }}>
+              <span style={{ color:'#fbbf24' }}>⚡</span> Zdolności (Strengths)
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
+              {top5.map((t:any, i:number) => (
+                <div key={t.name??t.name_en??i} style={{ padding:16, background:'rgba(16,185,129,.08)', borderRadius:12, border:'1px solid rgba(16,185,129,.2)' }}>
+                  <div style={{ fontFamily:'Space Grotesk,sans-serif', fontWeight:700, fontSize:14, color:'#6ee7b7', marginBottom:6 }}>{t.name ?? t.name_en}</div>
+                  <div style={{ fontSize:11, color:'rgba(203,213,225,.65)', lineHeight:1.7, fontFamily:'Inter,sans-serif' }}>{t.description ?? t.desc ?? `Talent #${i+1} — pełny opis dostępny w raporcie.`}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Enneagram (rozszerzony) */}
+        {ennN && ennL && (
+          <div className="card-section" style={{ marginBottom:24, padding:32 }}>
+            <div style={{ fontSize:20, fontWeight:700, color:'#fff', fontFamily:'Space Grotesk,sans-serif', marginBottom:20, display:'flex', alignItems:'center', gap:10 }}>
+              <span style={{ color:'#a78bfa' }}>★</span> Archetyp Enneagram
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
+              <div style={{ padding:16, background:'rgba(99,102,241,.1)', borderRadius:12, border:'1px solid rgba(99,102,241,.25)' }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
+                  <span style={{ fontSize:10, fontWeight:700, color:'#a5b4fc', textTransform:'uppercase', letterSpacing:'2px', fontFamily:'Space Grotesk,sans-serif' }}>Enneagram</span>
+                  <span style={{ fontSize:32, fontWeight:900, color:'#818cf8', fontFamily:'Space Grotesk,sans-serif' }}>{ennN}</span>
+                </div>
+                <div style={{ fontFamily:'Space Grotesk,sans-serif', fontWeight:700, fontSize:14, color:'#fff', marginBottom:6 }}>{ennP?.name ?? ''}</div>
+                <div style={{ fontSize:11, color:'rgba(203,213,225,.6)', lineHeight:1.7, fontFamily:'Inter,sans-serif' }}>{ennP?.description ?? ennP?.core_motivation ?? 'Kompletny opis dostępny po raportowaniu.'}</div>
+              </div>
+              <div style={{ padding:16, background:'rgba(168,85,247,.07)', borderRadius:12, border:'1px solid rgba(168,85,247,.2)' }}>
+                <div style={{ fontSize:10, fontWeight:700, color:'#c4b5fd', textTransform:'uppercase', letterSpacing:'2px', marginBottom:8, fontFamily:'Space Grotesk,sans-serif' }}>Klasa RPG</div>
+                <div style={{ fontFamily:'Space Grotesk,sans-serif', fontWeight:700, fontSize:15, color:'#fff', marginBottom:8 }}>✦ {ennL.rpg}</div>
+                <div style={{ fontSize:10, fontWeight:700, color:'rgba(196,181,253,.5)', fontStyle:'italic', marginBottom:10, fontFamily:'Space Grotesk,sans-serif' }}>&ldquo;{ennL.epithet}&rdquo;</div>
+                <div style={{ fontSize:9, fontWeight:700, color:'rgba(148,163,184,.4)', textTransform:'uppercase', letterSpacing:'2px', marginBottom:6, fontFamily:'Space Grotesk,sans-serif' }}>Postacie podobne:</div>
+                <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+                  {ennL.pop.map(p => <Tag key={p} color="#a78bfa">{p}</Tag>)}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Wartości (rozszerzone) */}
+        {topVals.length > 0 && (
+          <div className="card-section" style={{ marginBottom:24, padding:32 }}>
+            <div style={{ fontSize:20, fontWeight:700, color:'#fff', fontFamily:'Space Grotesk,sans-serif', marginBottom:20, display:'flex', alignItems:'center', gap:10 }}>
+              <span style={{ color:'#fbbf24' }}>🧭</span> Kompas Wartości (Schwartz PVQ)
+            </div>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:10 }}>
+              {topVals.map((v:any) => (
+                <div key={v.name??v.value_name??v} style={{ padding:'10px 18px', borderRadius:10, background:'rgba(245,158,11,.08)', border:'1px solid rgba(245,158,11,.2)', fontFamily:'Space Grotesk,sans-serif', fontWeight:600, fontSize:13, color:'#fcd34d' }}>
+                  {v.name ?? v.value_name ?? String(v)}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
