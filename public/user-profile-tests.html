@@ -2362,7 +2362,7 @@
             // ── Fetch all test results ─────────────────────────
             const { data, error } = await supabase
                 .from('user_psychometrics')
-                .select('test_type, raw_scores, completed_at')
+                .select('test_type, raw_scores, percentile_scores, completed_at')
                 .eq('user_id', session.user.id)
                 .in('test_type', ['HEXACO', 'ENNEAGRAM', 'DARK_TRIAD', 'STRENGTHS', 'CAREER', 'VALUES'])
                 .order('completed_at', { ascending: false });
@@ -2398,7 +2398,11 @@
 
             // ── HEXACO ──────────────────────────────────────────
             if (latest.HEXACO) {
-                const s = latest.HEXACO.raw_scores || {};
+                // Use percentile_scores (0-100); fall back to converting raw (1-5) if percentile absent
+                const raw = latest.HEXACO.raw_scores || {};
+                const pct = latest.HEXACO.percentile_scores || {};
+                const s = Object.keys(pct).length > 0 ? pct
+                    : Object.fromEntries(Object.entries(raw).map(([k,v]) => [k, Math.round(((v-1)/4)*100)]));
                 const traits = [
                     { key:'conscientiousness', label:'Sumienność',   color:'#34d399', cls:'ch-ag', en:'Conscientiousness',  grad:'#007a50,#34d399' },
                     { key:'openness',           label:'Otwartość',    color:'#38b6ff', cls:'ch-ac', en:'Openness',           grad:'#1a6aff,#38b6ff' },
@@ -2505,8 +2509,10 @@
             // ── DARK TRIAD ───────────────────────────────────────
             if (latest.DARK_TRIAD) {
                 const s = latest.DARK_TRIAD.raw_scores || {};
-                const toV = raw => raw <= 5 ? Math.round((raw/5)*100) : Math.round(raw);
-                const getRaw = (k) => s[k] ?? s[k.charAt(0).toUpperCase()+k.slice(1)] ?? 0;
+                // raw_scores = { dimensions: { psychopathy: { raw_score: 1-5 }, ... } }
+                const dtDims = s.dimensions || {};
+                const toV = raw => raw <= 5 ? Math.round(((raw - 1) / 4) * 100) : Math.round(raw);
+                const getRaw = (k) => dtDims[k]?.raw_score ?? dtDims[k.charAt(0).toUpperCase()+k.slice(1)]?.raw_score ?? 0;
                 const dtDefs = [
                     { key:'psychopathy',      label:'Psychopatia',  ico:'⚡', color:'#ef4444', grad:'#6b0012,#e8001c,#ff2d55', tags:['tolerancja ryzyka','impulsywność','brak empatii'] },
                     { key:'machiavellianism', label:'Makiawelizm',  ico:'🎭', color:'#f97316', grad:'#7a1a00,#ff6230,#ff9060',  tags:['myślenie strategiczne','cynizm','manipulacja'] },
@@ -2609,8 +2615,9 @@
                 }
                 if (latest.DARK_TRIAD) {
                     const s2 = latest.DARK_TRIAD.raw_scores || {};
-                    const toV2 = raw => raw <= 5 ? Math.round((raw/5)*100) : Math.round(raw);
-                    const getR = k => s2[k] ?? s2[k.charAt(0).toUpperCase()+k.slice(1)] ?? 0;
+                    const dtDims2 = s2.dimensions || {};
+                    const toV2 = raw => raw <= 5 ? Math.round(((raw - 1) / 4) * 100) : Math.round(raw);
+                    const getR = k => dtDims2[k]?.raw_score ?? dtDims2[k.charAt(0).toUpperCase()+k.slice(1)]?.raw_score ?? 0;
                     const pP = toV2(getR('psychopathy')), mP = toV2(getR('machiavellianism'));
                     if (pP > 60 || mP > 60) insights.push({ color:'#ef4444', title:'PUNKT KRYTYCZNY',
                         text:`Podwyższona Ciemna Triada (<strong>Psychopatia ${pP}% + Makiawelizm ${mP}%</strong>) w połączeniu z analitycznym profilem tworzy osobę o wyjątkowej skuteczności. Świadome zarządzanie relacjami jest kluczem.`
