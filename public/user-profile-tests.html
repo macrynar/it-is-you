@@ -2529,7 +2529,7 @@
                     if (lore) {
                         const ennCol2 = ECOLS[(parseInt(topType)-1) % ECOLS.length];
                         const rpgEl = document.getElementById('ch-rpg-content');
-                        if (rpgEl) rpgEl.innerHTML = `
+                        if (rpgEl) { rpgEl.innerHTML = `
                             <div style="padding:4px 0 8px;">
                                 <div style="font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:${ennCol2};text-shadow:0 0 20px ${ennCol2}66;letter-spacing:1px;margin-bottom:4px;">${lore.rpg}</div>
                                 <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2.5px;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:12px;">"${lore.epithet}"</div>
@@ -2537,8 +2537,7 @@
                                     <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:3px;background:rgba(${ennCol2 === '#6366f1' ? '99,102,241' : '56,182,255'},.08);border:1px solid ${ennCol2}33;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:${ennCol2};">⚔ ${ENAMES[topType]||'Typ '+topType}</span>
                                     <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:3px;background:rgba(123,94,167,.1);border:1px solid rgba(123,94,167,.25);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:#b08fff;">TYP ${topType} · ENNEAGRAM</span>
                                 </div>
-                            </div>`;
-                        }
+                            </div>`; }
 
                         // ── Pop Culture ────────────────────────
                         const popEl = document.getElementById('ch-pop-content');
@@ -2719,8 +2718,7 @@
                 }
             }
         }
-
-        // Wait for DOM to be ready
+        
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initialize);
         } else {
