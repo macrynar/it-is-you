@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { generateCareerReport, generateValuesReport } from '../../utils/scoring.js';
 import HexacoDetailCards from '../Test/modules/HexacoDetailCards';
+import HexacoRadarChart from '../Test/modules/HexacoRadarChart';
 import DarkTriadSummaryPanel from '../Test/modules/DarkTriadSummaryPanel';
 import StrengthsTopTalentsGrid from '../Test/modules/StrengthsTopTalentsGrid';
 import CareerHollandMiniCards from '../Test/modules/CareerHollandMiniCards';
@@ -424,6 +425,10 @@ export default function CharacterSheet() {
                   <div className="text-[10px] tracking-[2px] font-mono text-white/35">MATRYCA HEXACO</div>
                   {raw.HEXACO ? (
                     <>
+                      <div className="mt-4">
+                        <HexacoRadarChart percentiles={raw.HEXACO?.percentile_scores ?? {}} />
+                      </div>
+
                       <div className="mt-4">
                         <HexacoDetailCards percentiles={raw.HEXACO?.percentile_scores ?? {}} />
                       </div>
