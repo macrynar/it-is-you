@@ -268,101 +268,122 @@ export default function CharacterSheet() {
         *{box-sizing:border-box}
         .cs-radar .recharts-polar-grid line,
         .cs-radar .recharts-polar-grid polygon{stroke:rgba(0,240,255,0.07)!important}
+        .iiy-logo,.iiy-logo *{box-sizing:border-box;margin:0;padding:0}
+        .iiy-logo{display:inline-flex;align-items:center;gap:20px;text-decoration:none;user-select:none}
+        .iiy-logo .iiy-signet svg{display:block;width:80px;height:80px}
+        .iiy-logo .iiy-wordmark{display:flex;flex-direction:column}
+        .iiy-logo .iiy-title{font-family:'Orbitron',monospace;font-weight:900;font-size:34px;letter-spacing:12px;line-height:1;text-transform:uppercase;background:linear-gradient(160deg,#ffffff 0%,#a8c8ff 35%,#38b6ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 16px rgba(56,182,255,0.45));animation:iiy-glitch 9s infinite}
+        @keyframes iiy-glitch{0%,87%,100%{transform:none;filter:drop-shadow(0 0 16px rgba(56,182,255,0.45))}88%{transform:translate(-2px,0) skewX(-2deg);filter:drop-shadow(-3px 0 #7b5ea7) drop-shadow(3px 0 #38b6ff)}89%{transform:translate(2px,0);filter:drop-shadow(3px 0 #7b5ea7) drop-shadow(-3px 0 #38b6ff)}90%{transform:none;filter:drop-shadow(0 0 16px rgba(56,182,255,0.45))}}
+        .iiy-logo .iiy-divider{height:1px;margin:6px 0 5px;background:linear-gradient(90deg,#38b6ff 0%,#7b5ea7 55%,transparent 100%);opacity:0.8}
+        .iiy-logo .iiy-sub{font-family:'Share Tech Mono',monospace;font-size:8.5px;letter-spacing:3.5px;color:rgba(100,160,230,0.5);text-transform:uppercase}
+        .iiy-ring-ticks{animation:iiy-spin 20s linear infinite;transform-origin:48px 48px}
+        @keyframes iiy-spin{to{transform:rotate(360deg)}}
+        .iiy-eye-l{animation:iiy-eye 3.5s ease-in-out infinite}
+        .iiy-eye-r{animation:iiy-eye 3.5s ease-in-out infinite 0.2s}
+        @keyframes iiy-eye{0%,70%,100%{opacity:1}76%{opacity:0.05}}
+        .iiy-scan{animation:iiy-scan 2.8s ease-in-out infinite}
+        @keyframes iiy-scan{0%{transform:translateY(-22px);opacity:0}8%{opacity:0.55}92%{opacity:0.55}100%{transform:translateY(22px);opacity:0}}
+        .iiy-core{animation:iiy-pulse 2.2s ease-in-out infinite;transform-origin:48px 61px}
+        @keyframes iiy-pulse{0%,100%{transform:scale(1);opacity:0.6}50%{transform:scale(1.9);opacity:1}}
+        .iiy-logo.iiy-sm{gap:14px}
+        .iiy-logo.iiy-sm .iiy-signet svg{width:44px;height:44px}
+        .iiy-logo.iiy-sm .iiy-title{font-size:19px;letter-spacing:7px}
+        .iiy-logo.iiy-sm .iiy-sub{font-size:7px;letter-spacing:2.5px}
+        .iiy-logo.iiy-sm .iiy-divider{margin:4px 0 3px}
+        .iiy-nav-tabs{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:4px}
+        .iiy-tab-btn{padding:8px 20px;border-radius:9px;border:none;background:transparent;color:rgba(255,255,255,.45);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.2px;font-family:'Space Grotesk',-apple-system,sans-serif;white-space:nowrap}
+        .iiy-tab-btn:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.05)}
+        .iiy-tab-btn.active{background:linear-gradient(135deg,rgba(99,102,241,.3),rgba(56,182,255,.2));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 1px rgba(99,102,241,.3)}
       `}</style>
 
-      {/* NAV — identical to user-profile */}
-      <nav className="sticky top-0 z-50 border-b border-white/5 bg-slate-950/80 backdrop-blur-md">
+      {/* NAV — exact iiy-logo iiy-sm + iiy-nav-tabs from user-profile-tests.html */}
+      <nav className="border-b border-white/5 sticky top-0 z-50"
+        style={{ background: 'rgba(3,0,20,0.88)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
 
-            {/* Logo */}
-            <a href="/user-profile-tests.html" className="flex items-center gap-3 no-underline group" style={{ textDecoration: 'none' }}>
-              <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" width="36" height="36" style={{ flexShrink: 0 }}>
-                <defs>
-                  <linearGradient id="cs-hg" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#38b6ff"/>
-                    <stop offset="50%" stopColor="#7b5ea7"/>
-                    <stop offset="100%" stopColor="#38b6ff"/>
-                  </linearGradient>
-                  <linearGradient id="cs-bg2" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#38b6ff" stopOpacity="0.45"/>
-                    <stop offset="100%" stopColor="#1a1d4a" stopOpacity="0.08"/>
-                  </linearGradient>
-                  <filter id="cs-glow" x="-30%" y="-30%" width="160%" height="160%">
-                    <feGaussianBlur stdDeviation="2" result="b"/>
-                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                  </filter>
-                  <clipPath id="cs-clip"><polygon points="48,5 87,27 87,69 48,91 9,69 9,27"/></clipPath>
-                </defs>
-                <polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="#11143a"/>
-                <polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="none" stroke="url(#cs-hg)" strokeWidth="1.8"/>
-                <g clipPath="url(#cs-clip)">
-                  <circle cx="48" cy="30" r="12" fill="#11143a" stroke="#38b6ff" strokeWidth="1.2"/>
-                  <ellipse cx="43" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#cs-glow)"/>
-                  <ellipse cx="53" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#cs-glow)"/>
-                  <rect x="44.5" y="42" width="7" height="6" rx="1" fill="#11143a" stroke="#38b6ff" strokeWidth="0.8"/>
-                  <path d="M28 90 L31 50 Q48 44 65 50 L68 90 Z" fill="url(#cs-bg2)" stroke="#38b6ff" strokeWidth="0.9"/>
-                  <circle cx="48" cy="61" r="2.8" fill="#38b6ff" filter="url(#cs-glow)"/>
-                </g>
-              </svg>
-              <div>
-                <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 13, fontWeight: 900, letterSpacing: '3px', color: '#e2e8f0' }}>PSYCHER</div>
-                <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: 8, letterSpacing: '2px', color: 'rgba(255,255,255,0.3)', marginTop: 1 }}>Psychometric AI Engine</div>
+            {/* iiy-logo iiy-sm */}
+            <a href="/user-profile-tests.html" className="iiy-logo iiy-sm">
+              <div className="iiy-signet">
+                <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="iiy-hg-cs" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#38b6ff"/><stop offset="50%" stopColor="#7b5ea7"/><stop offset="100%" stopColor="#38b6ff"/>
+                    </linearGradient>
+                    <linearGradient id="iiy-bg-cs" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#38b6ff" stopOpacity="0.45"/>
+                      <stop offset="100%" stopColor="#1a1d4a" stopOpacity="0.08"/>
+                    </linearGradient>
+                    <filter id="iiy-glow-cs" x="-30%" y="-30%" width="160%" height="160%">
+                      <feGaussianBlur stdDeviation="2" result="b"/>
+                      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                    <clipPath id="iiy-clip-cs">
+                      <polygon points="48,5 87,27 87,69 48,91 9,69 9,27"/>
+                    </clipPath>
+                  </defs>
+                  <polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="#11143a"/>
+                  <g className="iiy-ring-ticks" filter="url(#iiy-glow-cs)">
+                    <line x1="48" y1="5"  x2="48" y2="12" stroke="#38b6ff" strokeWidth="1.8"/>
+                    <line x1="87" y1="27" x2="81" y2="30" stroke="#38b6ff" strokeWidth="1.8"/>
+                    <line x1="87" y1="69" x2="81" y2="66" stroke="#38b6ff" strokeWidth="1.8"/>
+                    <line x1="48" y1="91" x2="48" y2="84" stroke="#38b6ff" strokeWidth="1.8"/>
+                    <line x1="9"  y1="69" x2="15" y2="66" stroke="#38b6ff" strokeWidth="1.8"/>
+                    <line x1="9"  y1="27" x2="15" y2="30" stroke="#38b6ff" strokeWidth="1.8"/>
+                    <line x1="68" y1="8"  x2="66" y2="12" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
+                    <line x1="28" y1="8"  x2="30" y2="12" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
+                    <line x1="90" y1="48" x2="84" y2="48" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
+                    <line x1="6"  y1="48" x2="12" y2="48" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
+                    <line x1="68" y1="88" x2="66" y2="84" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
+                    <line x1="28" y1="88" x2="30" y2="84" stroke="#7b5ea7" strokeWidth="1" opacity="0.6"/>
+                  </g>
+                  <polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="none" stroke="url(#iiy-hg-cs)" strokeWidth="1.8"/>
+                  <g clipPath="url(#iiy-clip-cs)">
+                    <line className="iiy-scan" x1="12" y1="48" x2="84" y2="48" stroke="#38b6ff" strokeWidth="1.2" opacity="0.5"/>
+                    <circle cx="48" cy="30" r="12" fill="#11143a" stroke="#38b6ff" strokeWidth="1.2"/>
+                    <rect x="37" y="26.5" width="22" height="6" rx="3" fill="#0d0f2b" stroke="#38b6ff" strokeWidth="0.7"/>
+                    <ellipse className="iiy-eye-l" cx="43" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#iiy-glow-cs)"/>
+                    <ellipse className="iiy-eye-r" cx="53" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#iiy-glow-cs)"/>
+                    <rect x="44.5" y="42" width="7" height="6" rx="1" fill="#11143a" stroke="#38b6ff" strokeWidth="0.8"/>
+                    <path d="M28 90 L31 50 Q48 44 65 50 L68 90 Z" fill="url(#iiy-bg-cs)" stroke="#38b6ff" strokeWidth="0.9"/>
+                    <line x1="48" y1="50" x2="48" y2="74" stroke="#38b6ff" strokeWidth="0.5" opacity="0.35"/>
+                    <rect x="39" y="55" width="18" height="12" rx="1.5" fill="none" stroke="#38b6ff" strokeWidth="0.6" opacity="0.5"/>
+                    <line x1="31" y1="52" x2="31" y2="65" stroke="#7b5ea7" strokeWidth="1.4" opacity="0.9"/>
+                    <line x1="65" y1="52" x2="65" y2="65" stroke="#7b5ea7" strokeWidth="1.4" opacity="0.9"/>
+                    <circle className="iiy-core" cx="48" cy="61" r="2.8" fill="#38b6ff" filter="url(#iiy-glow-cs)"/>
+                  </g>
+                </svg>
+              </div>
+              <div className="iiy-wordmark">
+                <div className="iiy-title">PSYCHER</div>
+                <div className="iiy-divider"/>
+                <div className="iiy-sub">Psychometric AI Engine</div>
               </div>
             </a>
 
-            {/* Tabs — same as user-profile nav */}
-            <div className="hidden sm:flex items-center gap-0">
-              {([
-                { label: 'Przegląd',      href: '/user-profile-tests.html', active: false },
-                { label: 'Karta Postaci', href: '/character',               active: true  },
-                { label: 'Analityka',     href: '/user-profile.html',       active: false },
-                { label: 'Ustawienia',    href: '/settings',                active: false },
-              ] as { label: string; href: string; active: boolean }[]).map(({ label, href, active }) => (
-                <a
-                  key={label}
-                  href={href}
-                  style={{
-                    position: 'relative',
-                    display: 'block',
-                    padding: '0.5rem 1rem',
-                    fontSize: '0.875rem',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                    color: active ? '#6366f1' : '#cbd5e1',
-                    transition: 'color .3s',
-                  }}
-                >
-                  {label}
-                  {active && (
-                    <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: '#6366f1', borderRadius: '1px 1px 0 0' }} />
-                  )}
-                </a>
-              ))}
+            {/* iiy-nav-tabs */}
+            <div className="iiy-nav-tabs">
+              <button className="iiy-tab-btn" onClick={() => { window.location.href = '/user-profile-tests.html'; }}>🧪 Testy</button>
+              <button className="iiy-tab-btn active">🃏 Karta Postaci</button>
             </div>
 
-            {/* Right side — notifications + avatar */}
+            {/* Right */}
             <div className="flex items-center gap-3">
-              {/* completion dots */}
-              <div className="hidden lg:flex items-center gap-1">
+              <div className="hidden sm:flex items-center gap-1.5">
                 {([raw.hexaco, raw.enneagram, raw.strengths, raw.career, raw.darkTriad, raw.values] as any[]).map((r, i) => (
-                  <div key={i} className="w-1.5 h-1.5 rounded-full transition-all"
-                    style={{ background: r ? '#7000ff' : 'rgba(255,255,255,0.1)', boxShadow: r ? '0 0 5px #7000ff' : 'none' }} />
+                  <div key={i} className="w-2 h-2 rounded-full transition-all"
+                    style={{ background: r ? '#7000ff' : 'rgba(255,255,255,0.1)', boxShadow: r ? '0 0 6px #7000ff' : 'none' }} />
                 ))}
               </div>
-              {/* bell */}
-              <button className="w-8 h-8 rounded-lg flex items-center justify-center border border-white/10 bg-slate-900/50 hover:bg-slate-800 transition">
-                <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                </svg>
+              <button onClick={async () => { await supabase.auth.signOut(); window.location.href = '/'; }}
+                className="px-4 py-2 rounded-lg border border-white/10 text-white text-sm bg-white/5 hover:bg-white/10 transition-all">
+                Wyloguj
               </button>
-              {/* avatar */}
-              <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0"
-                style={{ background: 'linear-gradient(135deg,#6366f1,#a855f7)', fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, color: '#fff', fontSize: 13 }}>
-                {avatarUrl
-                  ? <img src={avatarUrl} alt="" className="w-full h-full object-cover" />
-                  : <span>{initials}</span>}
-              </div>
+              <a href="/settings"
+                className="px-4 py-2 rounded-lg border border-white/10 text-white text-sm bg-white/5 hover:bg-white/10 transition-all no-underline"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                ⚙️ Ustawienia
+              </a>
             </div>
 
           </div>
