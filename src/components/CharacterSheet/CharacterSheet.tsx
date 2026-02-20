@@ -113,8 +113,8 @@ function EnneagramStar({ activeType, color }: { activeType: number | null; color
       {activeType && (
         <>
           <text x={cx} y={cy - 5} textAnchor="middle" dominantBaseline="central"
-            fontSize="34" fontWeight="900" fill={color}
-            style={{ fontFamily: 'Orbitron, monospace', filter: `drop-shadow(0 0 14px ${color})` }}>
+            fontSize="46" fontWeight="900" fill={color}
+            style={{ fontFamily: 'Orbitron, monospace', filter: `drop-shadow(0 0 20px ${color})` }}>
             {activeType}
           </text>
           <text x={cx} y={cy + 18} textAnchor="middle" dominantBaseline="central"
@@ -376,36 +376,36 @@ export default function CharacterSheet() {
           </div>
 
           {/* ── T2: HEXACO RADAR  2-col wide ── */}
-          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col relative overflow-hidden">
+          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col relative overflow-hidden" style={{ minHeight: 480 }}>
             <div className="absolute -top-8 -left-8 w-36 h-36 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle,rgba(0,240,255,0.08) 0%,transparent 70%)' }} />
             <TileLabel color="text-cyan-400/45">// MATRYCA OSOBOWOŚCI · HEXACO-60</TileLabel>
 
             {raw.hexaco ? (
               <>
-                {/* Radar — fixed height so Recharts never collapses to 0 */}
-                <div className="w-full min-h-[250px] cs-radar">
-                  <ResponsiveContainer width="100%" height={280}>
-                    <RadarChart data={radarData} margin={{ top: 14, right: 30, bottom: 14, left: 30 }}>
+                {/* Radar — fills all available flex space */}
+                <div className="flex-1 min-h-0 cs-radar">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart data={radarData} outerRadius="80%" margin={{ top: 0, right: 10, bottom: 0, left: 10 }}>
                       <PolarGrid stroke="rgba(0,240,255,0.07)" gridType="polygon" />
-                      <PolarAngleAxis dataKey="trait" tick={{ fill: 'rgba(0,240,255,0.5)', fontSize: 10, fontFamily: 'Share Tech Mono, monospace' }} tickLine={false} />
-                      <Radar dataKey="value" stroke="#22d3ee" strokeWidth={2} fill="#22d3ee" fillOpacity={0.12}
-                        dot={{ fill: '#22d3ee', r: 3.5, strokeWidth: 0 } as any} />
+                      <PolarAngleAxis dataKey="trait" tick={{ fill: 'rgba(0,240,255,0.55)', fontSize: 11, fontFamily: 'Share Tech Mono, monospace' }} tickLine={false} />
+                      <Radar dataKey="value" stroke="#22d3ee" strokeWidth={2} fill="#22d3ee" fillOpacity={0.13}
+                        dot={{ fill: '#22d3ee', r: 4, strokeWidth: 0 } as any} />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
 
-                {/* 2-column bars grid */}
-                <div className="grid grid-cols-2 gap-x-8 gap-y-3 mt-4">
+                {/* Minimalist 2-col bars — bottom ~30% */}
+                <div className="flex-shrink-0 grid grid-cols-2 gap-x-6 gap-y-2 mt-3 pt-3 border-t border-white/[0.04]">
                   {radarData.map((d) => (
                     <div key={d.trait}>
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="font-mono text-[9px] text-white/35 tracking-wide truncate pr-2">{d.full.toUpperCase()}</span>
-                        <span className="font-mono text-[10px] font-bold text-cyan-300 flex-shrink-0" style={{ fontFamily: 'Orbitron, monospace' }}>{d.value}%</span>
+                      <div className="flex justify-between items-center mb-0.5">
+                        <span className="font-mono text-[8px] text-white/30 tracking-wide truncate pr-2">{d.full.toUpperCase()}</span>
+                        <span className="font-mono text-[9px] font-bold text-cyan-300 flex-shrink-0" style={{ fontFamily: 'Orbitron, monospace' }}>{d.value}%</span>
                       </div>
-                      <div className="h-[3px] rounded-full bg-white/5 overflow-hidden">
+                      <div className="h-[2px] rounded-full bg-white/5 overflow-hidden">
                         <div className="h-full rounded-full transition-all duration-700"
-                          style={{ width: `${d.value}%`, background: 'linear-gradient(90deg,rgba(0,240,255,0.4),#22d3ee)', boxShadow: '0 0 6px rgba(0,240,255,0.35)' }} />
+                          style={{ width: `${d.value}%`, background: 'linear-gradient(90deg,rgba(0,240,255,0.4),#22d3ee)', boxShadow: '0 0 4px rgba(0,240,255,0.3)' }} />
                       </div>
                     </div>
                   ))}
@@ -417,22 +417,21 @@ export default function CharacterSheet() {
           </div>
 
           {/* ── T3: ENNEAGRAM STAR  1-col ── */}
-          <div className="card-neural col-span-1 md:col-span-1 lg:col-span-1 p-6 flex flex-col items-center justify-center">
+          <div className="card-neural col-span-1 md:col-span-1 lg:col-span-1 p-6 flex flex-col items-center" style={{ minHeight: 480 }}>
             <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle,rgba(217,70,239,0.1) 0%,transparent 70%)' }} />
             <TileLabel color="text-fuchsia-400/45">// ENGINE · ENNEAGRAM</TileLabel>
 
-            <div className="flex-1 min-h-0 w-full flex items-center justify-center">
-              <div className="w-full max-w-[200px] aspect-square">
-                <EnneagramStar activeType={ennTypeNum} color="#d946ef" />
-              </div>
+            {/* Star fills most of the tile */}
+            <div className="flex-1 min-h-0 w-full flex items-center justify-center py-1">
+              <EnneagramStar activeType={ennTypeNum} color="#d946ef" />
             </div>
 
             {ennPrimary ? (
-              <div className="text-center mt-2 space-y-1">
+              <div className="flex-shrink-0 text-center pb-1 space-y-0.5">
                 <div className="text-sm font-bold text-fuchsia-400" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{ennPrimary.name}</div>
                 {ennPrimary.core_motivation && (
-                  <div className="font-mono text-[8px] text-fuchsia-400/38 tracking-[1.5px]">{ennPrimary.core_motivation}</div>
+                  <div className="font-mono text-[7px] text-fuchsia-400/28 tracking-[1.5px]">{ennPrimary.core_motivation.toUpperCase()}</div>
                 )}
               </div>
             ) : (
