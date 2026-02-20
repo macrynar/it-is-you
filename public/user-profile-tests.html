@@ -1339,24 +1339,23 @@
               <!-- Avatar + identity col (centered, narrow tile) -->
               <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:18px;">
                 <!-- Avatar -->
-                <div class="ch-av-wrap" style="position:relative;width:110px;height:110px;flex-shrink:0;">
-                  <div style="position:absolute;top:5px;left:5px;width:100px;height:100px;border-radius:50%;overflow:hidden;z-index:5;"><img id="ch-avatar-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;" /></div>
-                  <svg class="ch-av-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                <div class="ch-av-wrap" style="position:relative;width:120px;height:120px;flex-shrink:0;">
+                  <svg class="ch-av-svg" viewBox="0 0 120 120" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="chG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38b6ff"/><stop offset="100%" stop-color="#7b5ea7"/></linearGradient>
                       <linearGradient id="chN" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38b6ff" stop-opacity=".8"/><stop offset="100%" stop-color="#7b5ea7" stop-opacity=".8"/></linearGradient>
                       <linearGradient id="chSc" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="transparent"/><stop offset="25%" stop-color="#38b6ff" stop-opacity=".7"/><stop offset="75%" stop-color="#38b6ff" stop-opacity=".7"/><stop offset="100%" stop-color="transparent"/></linearGradient>
                       <linearGradient id="chBd" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#38b6ff" stop-opacity=".18"/><stop offset="100%" stop-color="#7b5ea7" stop-opacity=".03"/></linearGradient>
                       <filter id="chF" x="-45%" y="-45%" width="190%" height="190%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                      <clipPath id="chC"><circle cx="60" cy="60" r="54"/></clipPath>
+                      <clipPath id="chC"><circle cx="60" cy="60" r="53"/></clipPath>
                     </defs>
                     <circle cx="60" cy="60" r="56" fill="#030014"/>
+                    <!-- Avatar image clipped to circle via SVG clipPath — guaranteed circle crop -->
+                    <image id="ch-avatar-img" href="" x="7" y="7" width="106" height="106" clip-path="url(#chC)" preserveAspectRatio="xMidYMid slice" style="display:none;"/>
                     <circle cx="60" cy="60" r="56" fill="none" stroke="url(#chG)" stroke-width=".8" stroke-dasharray="4 7" opacity=".4"/>
                     <circle cx="60" cy="60" r="54" fill="none" stroke="url(#chG)" stroke-width="1.6"/>
-                    <g clip-path="url(#chC)">
-                      <path d="M60,18 C78,18 90,30 90,46 C90,57 85,65 78,70 L78,79 L42,79 L42,70 C35,65 30,57 30,46 C30,30 42,18 60,18Z" fill="url(#chBd)" stroke="url(#chG)" stroke-width="1.6" filter="url(#chF)"/>
-                      <rect class="ch-asc" x="6" y="59" width="108" height="2" fill="url(#chSc)" rx="1"/>
-                    </g>
+                    <path d="M60,18 C78,18 90,30 90,46 C90,57 85,65 78,70 L78,79 L42,79 L42,70 C35,65 30,57 30,46 C30,30 42,18 60,18Z" fill="url(#chBd)" stroke="url(#chG)" stroke-width="1.6" filter="url(#chF)" opacity=".5"/>
+                    <rect class="ch-asc" x="6" y="59" width="108" height="2" fill="url(#chSc)" rx="1"/>
                     <line x1="60" y1="4" x2="60" y2="11" stroke="#38b6ff" stroke-width="2" stroke-linecap="round"/>
                     <line x1="60" y1="109" x2="60" y2="116" stroke="#38b6ff" stroke-width="2" stroke-linecap="round"/>
                     <line x1="4" y1="60" x2="11" y2="60" stroke="#38b6ff" stroke-width="2" stroke-linecap="round"/>
@@ -2309,8 +2308,8 @@
             const chAvatarUrl = session.user.user_metadata?.avatar_url || null;
             if (chAvatarUrl) {
                 const chImg = document.getElementById('ch-avatar-img');
-                chImg.src = chAvatarUrl;
-                chImg.style.display = 'block';
+                chImg.setAttribute('href', chAvatarUrl);
+                chImg.style.display = '';  // SVG image element — remove display:none
             }
             const charHash = Math.abs(userName.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % 9000 + 1000;
             const charId = `PSY-${charHash}-PSYCHER`;
