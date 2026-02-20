@@ -144,7 +144,25 @@ export default function CharacterSheet() {
   const ennP = ennR?.primary_type;
   const ennN: number|null = Number.isFinite(Number(ennP?.type ?? ennP?.id)) ? Number(ennP?.type ?? ennP?.id) : null;
   const ennL = ennN ? ENN_LORE[ennN] : null;
-  const ennWing: string = ennR?.wing ? `w${ennR.wing}` : '';
+  const ennWing: string = (() => {
+    const w: any = ennR?.wing;
+    if (w == null) return '';
+    if (typeof w === 'number' && Number.isFinite(w)) return `w${w}`;
+    if (typeof w === 'string') {
+      const m = w.match(/(\d+)/);
+      if (m?.[1]) return `w${m[1]}`;
+      return w.startsWith('w') ? w : '';
+    }
+    if (typeof w === 'object') {
+      const candidate = (w.wing ?? w.id ?? w.type ?? w.number ?? w.value) as any;
+      const n = Number(candidate);
+      if (Number.isFinite(n)) return `w${n}`;
+      const s = typeof candidate === 'string' ? candidate : '';
+      const m = s.match(/(\d+)/);
+      if (m?.[1]) return `w${m[1]}`;
+    }
+    return '';
+  })();
   const ennScores: Record<string, number> = raw.ENNEAGRAM?.raw_scores ?? {};
   const ennScore = ennN ? (ennScores[String(ennN)] ?? 0) : 0;
   const ennMax = Math.max(0, ...Object.values(ennScores).map(v => (typeof v === 'number' ? v : 0)));
@@ -347,8 +365,8 @@ export default function CharacterSheet() {
                     <div aria-hidden className="absolute -top-14 -right-14 w-44 h-44 rounded-full blur-3xl opacity-25" style={{ background: 'rgba(56,182,255,.35)' }} />
                     <div aria-hidden className="absolute -bottom-16 -left-16 w-52 h-52 rounded-full blur-3xl opacity-20" style={{ background: 'rgba(176,143,255,.35)' }} />
 
-                    <div className="relative flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className="relative">
+                      <div className="flex items-center gap-3 min-w-0">
                         <div className="w-14 h-14 rounded-full border border-white/15 bg-white/5 overflow-hidden flex items-center justify-center shrink-0" style={{ boxShadow: '0 0 0 1px rgba(56,182,255,.18), 0 0 20px rgba(56,182,255,.08)' }}>
                           {avatarUrl ? (
                             <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
@@ -356,7 +374,7 @@ export default function CharacterSheet() {
                             <span className="font-semibold text-white/75">{initials}</span>
                           )}
                         </div>
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <div className="text-white font-semibold leading-tight whitespace-normal break-words text-[15px]" title={userName}>
                             {userName}
                           </div>
@@ -368,7 +386,7 @@ export default function CharacterSheet() {
                         </div>
                       </div>
 
-                      <div className="shrink-0 flex flex-wrap sm:flex-col items-start sm:items-end justify-start sm:justify-end gap-2">
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
                         <span className="badge-primary">{rareLabel}</span>
                         <span className="badge-pending">Poziom {done} · {lvlLabel}</span>
                       </div>
