@@ -216,8 +216,8 @@ function App() {
     return <ValuesResults />
   }
 
-  // Handle /character route
-  if (currentRoute === '/character' || currentRoute === '/character/') {
+  // Handle /character and /character-sheet routes
+  if (currentRoute === '/character' || currentRoute === '/character/' || currentRoute === '/character-sheet' || currentRoute === '/character-sheet/') {
     if (loading) {
       return (
         <div className="min-h-screen bg-bg-main flex items-center justify-center">
