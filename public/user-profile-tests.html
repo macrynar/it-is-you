@@ -1340,7 +1340,7 @@
               <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:18px;">
                 <!-- Avatar -->
                 <div class="ch-av-wrap" style="position:relative;width:110px;height:110px;flex-shrink:0;">
-                  <img id="ch-avatar-img" src="" alt="" style="display:none;position:absolute;top:4px;left:4px;width:102px;height:102px;border-radius:50%;object-fit:cover;z-index:5;" />
+                  <div style="position:absolute;top:5px;left:5px;width:100px;height:100px;border-radius:50%;overflow:hidden;z-index:5;"><img id="ch-avatar-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;" /></div>
                   <svg class="ch-av-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="chG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38b6ff"/><stop offset="100%" stop-color="#7b5ea7"/></linearGradient>
@@ -1401,7 +1401,7 @@
               <div class="ch-tile-accent" style="background:linear-gradient(90deg,#22d3ee,#38b6ff);"></div>
               <div class="ch-tl">// ATRYBUTY · HEXACO-60</div>
               <div style="display:flex;justify-content:center;margin-bottom:12px;">
-                <svg id="ch-hex-radar" viewBox="0 0 220 220" width="260" height="260" xmlns="http://www.w3.org/2000/svg">
+                <svg id="ch-hex-radar" viewBox="0 0 300 300" width="260" height="260" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="110" cy="110" r="82" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
                   <circle cx="110" cy="110" r="62" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
                   <circle cx="110" cy="110" r="41" fill="none" stroke="rgba(56,182,255,.06)" stroke-width="1"/>
@@ -2390,7 +2390,7 @@
                 (function drawHexRadar(hexS) {
                     const radarEl = document.getElementById('ch-hex-radar');
                     if (!radarEl) return;
-                    const cx=110,cy=110,R=82,N=6;
+                    const cx=150,cy=150,R=96,N=6;
                     const dims6=[
                         {key:'conscientiousness',lbl:'Sumienność',  col:'#34d399'},
                         {key:'openness',         lbl:'Otwartość',   col:'#38b6ff'},
@@ -2412,10 +2412,10 @@
                         const r=R*(hexS[d.key]||0)/100;
                         const vx=(cx+r*Math.cos(a)).toFixed(2);const vy=(cy+r*Math.sin(a)).toFixed(2);
                         svg+=`<circle cx="${vx}" cy="${vy}" r="3.5" fill="${d.col}" opacity=".85"/>`;
-                        const lr=R+20;const lx=(cx+lr*Math.cos(a)).toFixed(2);const ly=(cy+lr*Math.sin(a)).toFixed(2);
+                        const lr=R+32;const lx=(cx+lr*Math.cos(a)).toFixed(2);const ly=(cy+lr*Math.sin(a)).toFixed(2);
                         const anc=Math.cos(a)>0.15?'start':Math.cos(a)<-0.15?'end':'middle';
                         const val=Math.round(hexS[d.key]||0);
-                        svg+=`<text x="${lx}" y="${(parseFloat(ly)-2).toFixed(1)}" text-anchor="${anc}" fill="${d.col}" font-family="Share Tech Mono,monospace" font-size="7" opacity=".7">${d.lbl}</text>`;
+                        svg+=`<text x="${lx}" y="${(parseFloat(ly)-2).toFixed(1)}" text-anchor="${anc}" fill="${d.col}" font-family="Share Tech Mono,monospace" font-size="9" opacity=".8">${d.lbl}</text>`;
                         svg+=`<text x="${lx}" y="${(parseFloat(ly)+9).toFixed(1)}" text-anchor="${anc}" fill="${d.col}" font-family="Orbitron,monospace" font-size="9" font-weight="700">${val}</text>`;
                     });
                     radarEl.innerHTML=svg;
