@@ -98,6 +98,13 @@ const STYLES = [
 '.iiy-tab-btn{padding:8px 20px;border-radius:9px;border:none;background:transparent;color:rgba(255,255,255,.45);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:"Space Grotesk",-apple-system,sans-serif;white-space:nowrap}',
 '.iiy-tab-btn:hover{color:rgba(255,255,255,.8);background:rgba(255,255,255,.05)}',
 '.iiy-tab-btn.active{background:linear-gradient(135deg,rgba(99,102,241,.3),rgba(56,182,255,.2));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 1px rgba(99,102,241,.3)}',
+'.theme-toggle{position:relative;width:60px;height:32px;background:rgba(30,41,59,.6);border-radius:16px;border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .3s ease;flex-shrink:0}',
+'.theme-toggle:hover{background:rgba(15,7,40,.9);border-color:rgba(112,0,255,.5)}',
+'.theme-toggle-slider{position:absolute;top:3px;left:3px;width:24px;height:24px;background:linear-gradient(135deg,#7000ff,#00f0ff);border-radius:50%;transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:0 2px 8px rgba(112,0,255,.5)}',
+'.theme-toggle.light .theme-toggle-slider{transform:translateX(28px);background:linear-gradient(135deg,#F59E0B,#EAB308);box-shadow:0 2px 8px rgba(245,158,11,.4)}',
+'.theme-icon{position:absolute;top:50%;transform:translateY(-50%);width:16px;height:16px;transition:opacity .3s ease}',
+'.theme-icon-moon{left:8px;opacity:1}.theme-icon-sun{right:8px;opacity:.4}',
+'.theme-toggle.light .theme-icon-moon{opacity:.4}.theme-toggle.light .theme-icon-sun{opacity:1}',
 '.ch-sheet-wrapper{font-family:"Space Grotesk",sans-serif;padding-bottom:48px}',
 '.ch-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:9px 16px;background:rgba(8,14,40,.72);border:1px solid rgba(56,182,255,.10);border-radius:8px;backdrop-filter:blur(14px);flex-wrap:wrap;gap:8px}',
 '.ch-tb-pill{display:inline-flex;align-items:center;gap:7px;padding:4px 12px;border-radius:3px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.22);font-family:"Share Tech Mono",monospace;font-size:9.5px;letter-spacing:2px;color:#34d399}',
@@ -314,33 +321,33 @@ function hashCode(s: string) {
 /* ══ LOGO HTML ══ */
 const LOGO_HTML = [
 '<div class="iiy-signet">',
-'<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" width="44" height="44">',
+'<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">',
 '<defs>',
-'<linearGradient id="cs-hg" x1="0%" y1="0%" x2="100%" y2="100%">',
-'<stop offset="0%" stop-color="#38b6ff"/><stop offset="50%" stop-color="#7b5ea7"/><stop offset="100%" stop-color="#38b6ff"/></linearGradient>',
-'<linearGradient id="cs-bg" x1="0%" y1="0%" x2="0%" y2="100%">',
-'<stop offset="0%" stop-color="#38b6ff" stop-opacity="0.45"/>',
-'<stop offset="100%" stop-color="#1a1d4a" stop-opacity="0.08"/></linearGradient>',
-'<filter id="cs-gl" x="-30%" y="-30%" width="160%" height="160%">',
-'<feGaussianBlur stdDeviation="2" result="b"/><feMerge>',
-'<feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>',
-'<clipPath id="cs-cp"><polygon points="48,5 87,27 87,69 48,91 9,69 9,27"/></clipPath></defs>',
+'<linearGradient id="iiy-hg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38b6ff"/><stop offset="50%" stop-color="#7b5ea7"/><stop offset="100%" stop-color="#38b6ff"/></linearGradient>',
+'<linearGradient id="iiy-bg2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#38b6ff" stop-opacity="0.45"/><stop offset="100%" stop-color="#1a1d4a" stop-opacity="0.08"/></linearGradient>',
+'<filter id="iiy-glow2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>',
+'<clipPath id="iiy-clip2"><polygon points="48,5 87,27 87,69 48,91 9,69 9,27"/></clipPath>',
+'</defs>',
 '<polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="#11143a"/>',
-'<g class="iiy-ring-ticks" filter="url(#cs-gl)">',
-'<line x1="48" y1="5" x2="48" y2="12" stroke="#38b6ff" stroke-width="1.8"/>',
-'<line x1="87" y1="27" x2="81" y2="30" stroke="#38b6ff" stroke-width="1.8"/>',
-'<line x1="87" y1="69" x2="81" y2="66" stroke="#38b6ff" stroke-width="1.8"/>',
-'<line x1="48" y1="91" x2="48" y2="84" stroke="#38b6ff" stroke-width="1.8"/>',
-'<line x1="9" y1="69" x2="15" y2="66" stroke="#38b6ff" stroke-width="1.8"/>',
-'<line x1="9" y1="27" x2="15" y2="30" stroke="#38b6ff" stroke-width="1.8"/></g>',
-'<polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="none" stroke="url(#cs-hg)" stroke-width="1.8"/>',
-'<g clip-path="url(#cs-cp)">',
+'<g class="iiy-ring-ticks" filter="url(#iiy-glow2)">',
+'<line x1="48" y1="5" x2="48" y2="12" stroke="#38b6ff" stroke-width="1.8"/><line x1="87" y1="27" x2="81" y2="30" stroke="#38b6ff" stroke-width="1.8"/><line x1="87" y1="69" x2="81" y2="66" stroke="#38b6ff" stroke-width="1.8"/><line x1="48" y1="91" x2="48" y2="84" stroke="#38b6ff" stroke-width="1.8"/><line x1="9" y1="69" x2="15" y2="66" stroke="#38b6ff" stroke-width="1.8"/><line x1="9" y1="27" x2="15" y2="30" stroke="#38b6ff" stroke-width="1.8"/>',
+'<line x1="68" y1="8" x2="66" y2="12" stroke="#7b5ea7" stroke-width="1" opacity="0.6"/><line x1="28" y1="8" x2="30" y2="12" stroke="#7b5ea7" stroke-width="1" opacity="0.6"/><line x1="90" y1="48" x2="84" y2="48" stroke="#7b5ea7" stroke-width="1" opacity="0.6"/><line x1="6" y1="48" x2="12" y2="48" stroke="#7b5ea7" stroke-width="1" opacity="0.6"/><line x1="68" y1="88" x2="66" y2="84" stroke="#7b5ea7" stroke-width="1" opacity="0.6"/><line x1="28" y1="88" x2="30" y2="84" stroke="#7b5ea7" stroke-width="1" opacity="0.6"/>',
+'</g>',
+'<polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="none" stroke="url(#iiy-hg2)" stroke-width="1.8"/>',
+'<g clip-path="url(#iiy-clip2)">',
 '<line class="iiy-scan" x1="12" y1="48" x2="84" y2="48" stroke="#38b6ff" stroke-width="1.2" opacity="0.5"/>',
 '<circle cx="48" cy="30" r="12" fill="#11143a" stroke="#38b6ff" stroke-width="1.2"/>',
-'<ellipse class="iiy-eye-l" cx="43" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#cs-gl)"/>',
-'<ellipse class="iiy-eye-r" cx="53" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#cs-gl)"/>',
-'<path d="M28 90 L31 50 Q48 44 65 50 L68 90 Z" fill="url(#cs-bg)" stroke="#38b6ff" stroke-width="0.9"/>',
-'<circle class="iiy-core" cx="48" cy="61" r="2.8" fill="#38b6ff" filter="url(#cs-gl)"/></g></svg>',
+'<rect x="37" y="26.5" width="22" height="6" rx="3" fill="#0d0f2b" stroke="#38b6ff" stroke-width="0.7"/>',
+'<ellipse class="iiy-eye-l" cx="43" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#iiy-glow2)"/>',
+'<ellipse class="iiy-eye-r" cx="53" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#iiy-glow2)"/>',
+'<rect x="44.5" y="42" width="7" height="6" rx="1" fill="#11143a" stroke="#38b6ff" stroke-width="0.8"/>',
+'<path d="M28 90 L31 50 Q48 44 65 50 L68 90 Z" fill="url(#iiy-bg2)" stroke="#38b6ff" stroke-width="0.9"/>',
+'<line x1="48" y1="50" x2="48" y2="74" stroke="#38b6ff" stroke-width="0.5" opacity="0.35"/>',
+'<rect x="39" y="55" width="18" height="12" rx="1.5" fill="none" stroke="#38b6ff" stroke-width="0.6" opacity="0.5"/>',
+'<line x1="31" y1="52" x2="31" y2="65" stroke="#7b5ea7" stroke-width="1.4" opacity="0.9"/>',
+'<line x1="65" y1="52" x2="65" y2="65" stroke="#7b5ea7" stroke-width="1.4" opacity="0.9"/>',
+'<circle class="iiy-core" cx="48" cy="61" r="2.8" fill="#38b6ff" filter="url(#iiy-glow2)"/>',
+'</g></svg>',
 '</div>',
 '<div class="iiy-wordmark">',
 '<div class="iiy-title">PSYCHER</div>',
@@ -353,6 +360,7 @@ const LOGO_HTML = [
 export default function CharacterSheet() {
   const [loading, setLoading] = useState(true);
   const [authUser, setAuthUser] = useState<any>(null);
+  const [lightMode, setLightMode] = useState(() => document.body.classList.contains('light-mode'));
   const [raw, setRaw] = useState<Record<string,RawRow|null>>({
     HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, DARK_TRIAD:null, VALUES:null
   });
@@ -461,24 +469,45 @@ export default function CharacterSheet() {
       <style dangerouslySetInnerHTML={{__html:STYLES}}/>
       <style dangerouslySetInnerHTML={{__html:"@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');"}}/>
 
-      {/* NAV */}
-      <nav style={{background:'rgba(3,0,20,.9)',backdropFilter:'blur(20px)',borderBottom:'1px solid rgba(255,255,255,.05)',position:'sticky',top:0,zIndex:50}}>
-        <div style={{maxWidth:1400,margin:'0 auto',padding:'0 24px',display:'flex',alignItems:'center',justifyContent:'space-between',height:72}}>
-          <a href="/user-profile-tests.html" className="iiy-logo iiy-sm" dangerouslySetInnerHTML={{__html:LOGO_HTML}}/>
-          <div className="iiy-nav-tabs">
-            <button className="iiy-tab-btn" onClick={() => { window.location.href='/user-profile-tests.html'; }}>🧪 Testy</button>
-            <button className="iiy-tab-btn active">🃏 Karta Postaci</button>
-          </div>
-          <div style={{display:'flex',alignItems:'center',gap:10}}>
-            <div style={{display:'flex',gap:4}}>
-              {(['HEXACO','ENNEAGRAM','STRENGTHS','CAREER','DARK_TRIAD','VALUES'] as const).map(k => (
-                <div key={k} title={k} style={{width:7,height:7,borderRadius:'50%',background:raw[k]?'#38b6ff':'rgba(255,255,255,.1)',boxShadow:raw[k]?'0 0 6px #38b6ff':'none',transition:'all .3s'}}/>
-              ))}
+      {/* NAV — identyczna struktura jak user-profile-tests.html */}
+      <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <a href="https://it-is-you1.vercel.app/" className="iiy-logo iiy-sm" dangerouslySetInnerHTML={{__html:LOGO_HTML}}/>
+            <div className="iiy-nav-tabs">
+              <button className="iiy-tab-btn" onClick={() => { window.location.href='/user-profile-tests.html'; }}>🧪 Testy</button>
+              <button className="iiy-tab-btn active">🃏 Karta Postaci</button>
             </div>
-            <button onClick={async () => { await supabase.auth.signOut(); window.location.href='/'; }}
-              style={{padding:'7px 16px',borderRadius:8,border:'1px solid rgba(255,255,255,.1)',background:'rgba(255,255,255,.04)',color:'#e2e8f0',fontSize:12,cursor:'pointer',fontFamily:"'Space Grotesk',sans-serif"}}>
-              Wyloguj
-            </button>
+            <div className="flex items-center gap-4">
+              <button
+                className={`theme-toggle${lightMode ? ' light' : ''}`}
+                title="Przełącz motyw"
+                onClick={() => {
+                  const next = !lightMode;
+                  setLightMode(next);
+                  document.body.classList.toggle('light-mode', next);
+                }}
+              >
+                <div className="theme-toggle-slider"/>
+                <svg className="theme-icon theme-icon-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                </svg>
+                <svg className="theme-icon theme-icon-sun" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+              </button>
+              <button
+                onClick={async () => { await supabase.auth.signOut(); window.location.href='/'; }}
+                className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm">
+                Wyloguj
+              </button>
+              <a href="/settings"
+                className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm"
+                style={{display:'inline-flex',alignItems:'center',gap:6,textDecoration:'none'}}
+                title="Ustawienia konta">
+                ⚙️ Ustawienia
+              </a>
+            </div>
           </div>
         </div>
       </nav>
