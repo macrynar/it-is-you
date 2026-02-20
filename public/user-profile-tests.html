@@ -890,7 +890,7 @@
 
         /* ════════ BENTO GRID REDESIGN ════════ */
         .ch-bento { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
-        .ch-tile  { background:rgba(8,14,38,.88); backdrop-filter:blur(28px) saturate(160%); -webkit-backdrop-filter:blur(28px) saturate(160%); border:1px solid rgba(56,182,255,.11); border-radius:14px; position:relative; overflow:hidden; padding:20px; }
+        .ch-tile  { background:rgba(8,14,38,.88); backdrop-filter:blur(28px) saturate(160%); -webkit-backdrop-filter:blur(28px) saturate(160%); border:1px solid rgba(56,182,255,.11); border-radius:14px; position:relative; overflow:hidden; padding:20px; display:flex; flex-direction:column; }
         .ch-tile::before,.ch-tile::after { content:''; position:absolute; width:13px; height:13px; border-color:#38b6ff; border-style:solid; opacity:.22; pointer-events:none; z-index:0; }
         .ch-tile::before { top:0; left:0; border-width:1.5px 0 0 1.5px; }
         .ch-tile::after  { bottom:0; right:0; border-width:0 1.5px 1.5px 0; }
@@ -1333,11 +1333,14 @@
 
             <!-- ── T1: HERO CORE 2×2 ── -->
             <div class="ch-tile ch-t-hero">
-              <div class="ch-tile-accent" style="background:linear-gradient(90deg,#38b6ff,#7b5ea7);"></div>
+              <div class="ch-tile-accent" style="background:linear-gradient(90deg,#38b6ff,#7b5ea7,#d946ef);"></div>
               <div class="ch-tl">// IDENTYFIKACJA · HERO CORE</div>
-              <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px;">
-                <div class="ch-av-wrap" style="position:relative;width:118px;height:118px;flex-shrink:0;">
-                  <img id="ch-avatar-img" src="" alt="" style="display:none;position:absolute;top:6px;left:6px;width:106px;height:106px;border-radius:50%;object-fit:cover;z-index:5;" />
+
+              <!-- Avatar + identity row -->
+              <div style="display:flex;gap:20px;align-items:flex-start;margin-bottom:18px;">
+                <!-- Avatar -->
+                <div class="ch-av-wrap" style="position:relative;width:110px;height:110px;flex-shrink:0;">
+                  <img id="ch-avatar-img" src="" alt="" style="display:none;position:absolute;top:4px;left:4px;width:102px;height:102px;border-radius:50%;object-fit:cover;z-index:5;" />
                   <svg class="ch-av-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <linearGradient id="chG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38b6ff"/><stop offset="100%" stop-color="#7b5ea7"/></linearGradient>
@@ -1348,75 +1351,45 @@
                       <clipPath id="chC"><circle cx="60" cy="60" r="54"/></clipPath>
                     </defs>
                     <circle cx="60" cy="60" r="56" fill="#030014"/>
-                    <g class="ch-sp"><circle cx="60" cy="60" r="56" fill="none" stroke="url(#chG)" stroke-width=".8" stroke-dasharray="4 7" opacity=".4"/></g>
-                    <g class="ch-spr">
-                      <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(56,182,255,.08)" stroke-width=".8" stroke-dasharray="2 9"/>
-                      <line x1="60" y1="8"   x2="60" y2="14"  stroke="#38b6ff" stroke-width="1.3" stroke-linecap="round" filter="url(#chF)" opacity=".6"/>
-                      <line x1="60" y1="106" x2="60" y2="112" stroke="#38b6ff" stroke-width="1.3" stroke-linecap="round" filter="url(#chF)" opacity=".6"/>
-                      <line x1="8"   y1="60" x2="14"  y2="60" stroke="#7b5ea7" stroke-width="1.3" stroke-linecap="round" filter="url(#chF)" opacity=".6"/>
-                      <line x1="106" y1="60" x2="112" y2="60" stroke="#7b5ea7" stroke-width="1.3" stroke-linecap="round" filter="url(#chF)" opacity=".6"/>
-                    </g>
+                    <circle cx="60" cy="60" r="56" fill="none" stroke="url(#chG)" stroke-width=".8" stroke-dasharray="4 7" opacity=".4"/>
                     <circle cx="60" cy="60" r="54" fill="none" stroke="url(#chG)" stroke-width="1.6"/>
-                    <line x1="60" y1="4"   x2="60" y2="11"  stroke="#38b6ff" stroke-width="2" stroke-linecap="round" filter="url(#chF)"/>
-                    <line x1="60" y1="109" x2="60" y2="116" stroke="#38b6ff" stroke-width="2" stroke-linecap="round" filter="url(#chF)"/>
-                    <line x1="4"   y1="60" x2="11"  y2="60" stroke="#38b6ff" stroke-width="2" stroke-linecap="round" filter="url(#chF)"/>
-                    <line x1="109" y1="60" x2="116" y2="60" stroke="#38b6ff" stroke-width="2" stroke-linecap="round" filter="url(#chF)"/>
-                    <line x1="17" y1="17"   x2="24" y2="24"  stroke="#7b5ea7" stroke-width="1.1" stroke-linecap="round" opacity=".5" filter="url(#chF)"/>
-                    <line x1="103" y1="17"  x2="96" y2="24"  stroke="#7b5ea7" stroke-width="1.1" stroke-linecap="round" opacity=".5" filter="url(#chF)"/>
-                    <line x1="17" y1="103"  x2="24" y2="96"  stroke="#7b5ea7" stroke-width="1.1" stroke-linecap="round" opacity=".5" filter="url(#chF)"/>
-                    <line x1="103" y1="103" x2="96" y2="96"  stroke="#7b5ea7" stroke-width="1.1" stroke-linecap="round" opacity=".5" filter="url(#chF)"/>
                     <g clip-path="url(#chC)">
                       <path d="M60,18 C78,18 90,30 90,46 C90,57 85,65 78,70 L78,79 L42,79 L42,70 C35,65 30,57 30,46 C30,30 42,18 60,18Z" fill="url(#chBd)" stroke="url(#chG)" stroke-width="1.6" filter="url(#chF)"/>
-                      <line x1="42" y1="79" x2="35" y2="93" stroke="url(#chG)" stroke-width="1.2" stroke-linecap="round" opacity=".38"/>
-                      <line x1="78" y1="79" x2="85" y2="93" stroke="url(#chG)" stroke-width="1.2" stroke-linecap="round" opacity=".38"/>
-                      <line x1="35" y1="93" x2="85" y2="93" stroke="url(#chG)" stroke-width="1.2" stroke-linecap="round" opacity=".38"/>
-                      <line class="ch-al" x1="60" y1="28" x2="50" y2="38" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="60" y1="28" x2="70" y2="38" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="50" y1="38" x2="60" y2="48" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="70" y1="38" x2="60" y2="48" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="50" y1="38" x2="40" y2="51" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="70" y1="38" x2="80" y2="51" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="60" y1="48" x2="50" y2="60" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="60" y1="48" x2="70" y2="60" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="40" y1="51" x2="50" y2="60" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="80" y1="51" x2="70" y2="60" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="50" y1="60" x2="60" y2="72" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="70" y1="60" x2="60" y2="72" stroke="url(#chN)" stroke-width="1"/>
-                      <line class="ch-al" x1="50" y1="38" x2="70" y2="38" stroke="url(#chN)" stroke-width=".7" opacity=".5"/>
-                      <line class="ch-al" x1="50" y1="60" x2="70" y2="60" stroke="url(#chN)" stroke-width=".7" opacity=".5"/>
-                      <circle class="ch-an" cx="60" cy="28" r="2.2" fill="#38b6ff" filter="url(#chF)"/>
-                      <circle class="ch-an" cx="50" cy="38" r="1.9" fill="#38b6ff" filter="url(#chF)"/>
-                      <circle class="ch-an" cx="70" cy="38" r="1.9" fill="#7b5ea7" filter="url(#chF)"/>
-                      <circle class="ch-an" cx="60" cy="48" r="2.4" fill="#38b6ff" filter="url(#chF)"/>
-                      <circle class="ch-an" cx="40" cy="51" r="1.9" fill="#7b5ea7" filter="url(#chF)"/>
-                      <circle class="ch-an" cx="80" cy="51" r="1.9" fill="#7b5ea7" filter="url(#chF)"/>
-                      <circle class="ch-an" cx="50" cy="60" r="1.9" fill="#38b6ff" filter="url(#chF)"/>
-                      <circle class="ch-an" cx="70" cy="60" r="1.9" fill="#7b5ea7" filter="url(#chF)"/>
-                      <circle class="ch-an" cx="60" cy="72" r="1.9" fill="#38b6ff" filter="url(#chF)"/>
                       <rect class="ch-asc" x="6" y="59" width="108" height="2" fill="url(#chSc)" rx="1"/>
                     </g>
+                    <line x1="60" y1="4" x2="60" y2="11" stroke="#38b6ff" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="60" y1="109" x2="60" y2="116" stroke="#38b6ff" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="4" y1="60" x2="11" y2="60" stroke="#38b6ff" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="109" y1="60" x2="116" y2="60" stroke="#38b6ff" stroke-width="2" stroke-linecap="round"/>
                   </svg>
                 </div>
-                </div>
-                <div style="flex:1;min-width:160px;">
+
+                <!-- Identity info -->
+                <div style="flex:1;min-width:0;">
                   <div class="ch-lvl"><div class="ch-ldot"></div><span id="ch-lvl-text">LVL 0 · POCZĄTKUJĄCY</span></div>
                   <div class="ch-cname" id="ch-cname">---</div>
                   <div class="ch-carch" id="ch-carch">Profil w budowie</div>
                   <div class="ch-ccodes" id="ch-ccodes">UZUPEŁNIJ TESTY · BRAK DANYCH</div>
                   <div class="ch-rare" id="ch-rare">⚙ OBLICZANIE PROFILU</div>
-                  <div class="ch-xp-wrap" style="margin-top:10px;">
-                    <div class="ch-xp-lbl">
-                      <span style="color:rgba(255,255,255,.22)">PROFIL XP</span>
-                      <span style="color:rgba(56,182,255,.6)" id="ch-xp-label">0/7 TESTÓW</span>
-                    </div>
-                    <div class="ch-xp-track"><div class="ch-xp-fill" id="ch-xp-fill" style="width:0%"></div></div>
-                  </div>
                 </div>
               </div>
+
+              <!-- XP bar -->
+              <div class="ch-xp-wrap" style="margin-bottom:18px;">
+                <div class="ch-xp-lbl">
+                  <span style="color:rgba(255,255,255,.22)">PROFIL XP</span>
+                  <span style="color:rgba(56,182,255,.6)" id="ch-xp-label">0/7 TESTÓW</span>
+                </div>
+                <div class="ch-xp-track"><div class="ch-xp-fill" id="ch-xp-fill" style="width:0%"></div></div>
+              </div>
+
+              <!-- RPG Archetype -->
               <div class="ch-tl" style="margin-bottom:8px;">// ⚔ ARCHETYP RPG · KLASA POSTACI</div>
               <div id="ch-rpg-content">
                 <div class="ch-empty-block"><div class="ch-empty-icon">⚔</div><div class="ch-empty-text">Ukończ test Enneagram aby odblokować swój archetyp RPG</div><button class="ch-go-btn" onclick="switchTab('tests')">Przejdź do testów →</button></div>
               </div>
+
+              <!-- Pop culture matches -->
               <div class="ch-tl" style="margin-top:16px;margin-bottom:8px;">// 🎬 POSTACIE PODOBNE DO CIEBIE</div>
               <div id="ch-pop-content">
                 <div class="ch-empty-block"><div class="ch-empty-icon">🎬</div><div class="ch-empty-text">Ukończ test Enneagram aby zobaczyć postacie z kultury popularnej podobne do Ciebie</div><button class="ch-go-btn" onclick="switchTab('tests')">Przejdź do testów →</button></div>
