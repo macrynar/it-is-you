@@ -3,7 +3,7 @@ import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis,
   ResponsiveContainer,
 } from 'recharts';
-import { ArrowLeft, Sparkles, AlertTriangle, Zap } from 'lucide-react';
+import { ArrowLeft, Sparkles, AlertTriangle, Zap, Shield } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { generateCareerReport } from '../../utils/scoring.js';
 
@@ -128,55 +128,13 @@ function EnneagramStar({ activeType, color }: { activeType: number | null; color
   );
 }
 
-/* ─── SHARED CARD ────────────────────────────────────────────────────────────── */
+/* ─── SHARED HELPERS ─────────────────────────────────────────────────────────── */
 
-function Card({
-  children, style = {}, accent, warning,
-}: {
-  children: React.ReactNode; style?: React.CSSProperties;
-  accent?: string; warning?: boolean;
-}) {
-  const base: React.CSSProperties = {
-    background: warning ? 'rgba(239,68,68,0.04)' : 'rgba(255,255,255,0.025)',
-    backdropFilter: 'blur(20px)',
-    WebkitBackdropFilter: 'blur(20px)',
-    border: warning
-      ? '1px solid rgba(239,68,68,0.28)'
-      : `1px solid ${accent ? `${accent}20` : 'rgba(255,255,255,0.07)'}`,
-    borderRadius: 16,
-    padding: 20,
-    position: 'relative',
-    overflow: 'hidden',
-    ...style,
-  };
-  if (accent && !warning) {
-    (base as any).boxShadow = `inset 0 1px 0 ${accent}14, 0 0 0 1px ${accent}07`;
-  }
-  if (warning) {
-    (base as any).boxShadow = 'inset 0 1px 0 rgba(239,68,68,0.1), 0 0 20px rgba(239,68,68,0.04)';
-  }
+function TileLabel({ children, color = 'text-cyan-500/40' }: { children: React.ReactNode; color?: string }) {
   return (
-    <div style={base}>
-      {accent && !warning && (
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 1,
-          background: `linear-gradient(90deg,transparent,${accent}50,transparent)`,
-          pointerEvents: 'none',
-        }} />
-      )}
+    <div className={`font-mono text-[9px] tracking-[2.5px] uppercase mb-3 flex items-center gap-2 ${color}`}>
       {children}
-    </div>
-  );
-}
-
-function TileLabel({ children, color }: { children: React.ReactNode; color?: string }) {
-  return (
-    <div style={{
-      fontFamily: 'Share Tech Mono, monospace', fontSize: 9, letterSpacing: 2.5,
-      color: color ?? 'rgba(255,255,255,0.25)', textTransform: 'uppercase',
-      marginBottom: 12,
-    }}>
-      {children}
+      <span className="flex-1 h-px bg-gradient-to-r from-current to-transparent opacity-20" />
     </div>
   );
 }
@@ -185,10 +143,11 @@ function LockedTile({ icon, text, href, color }: {
   icon: React.ReactNode; text: string; href: string; color: string;
 }) {
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, padding: '12px 0' }}>
-      <div style={{ color: `${color}55`, opacity: 0.6 }}>{icon}</div>
-      <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: 9, letterSpacing: 1.5, color: 'rgba(255,255,255,0.2)', textAlign: 'center' }}>{text}</div>
-      <a href={href} style={{ padding: '5px 14px', borderRadius: 6, border: `1px solid ${color}30`, background: `${color}09`, fontFamily: 'Space Grotesk, sans-serif', fontSize: 11, fontWeight: 600, color: `${color}99`, textDecoration: 'none' }}>
+    <div className="flex-1 flex flex-col items-center justify-center gap-3 py-4 opacity-40">
+      <div style={{ color }}>{icon}</div>
+      <p className="font-mono text-[9px] tracking-widest text-white/30 text-center">{text}</p>
+      <a href={href} style={{ borderColor: `${color}30`, color: `${color}88`, background: `${color}09` }}
+        className="px-3 py-1.5 rounded-lg border text-[11px] font-semibold no-underline transition-all hover:opacity-80">
         Rozpocznij →
       </a>
     </div>
@@ -292,18 +251,18 @@ export default function CharacterSheet() {
 
   /* ── loading state ── */
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#030014', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="min-h-screen bg-[#030014] flex items-center justify-center">
       <style>{`@keyframes _cs_spin{to{transform:rotate(360deg)}}`}</style>
-      <div style={{ textAlign: 'center' }}>
+      <div className="text-center">
         <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid rgba(112,0,255,.25)', borderTopColor: '#7000ff', animation: '_cs_spin .8s linear infinite', margin: '0 auto 16px' }} />
-        <div style={{ fontFamily: 'Space Grotesk, sans-serif', color: 'rgba(255,255,255,0.35)', fontSize: 13, letterSpacing: 2 }}>ŁADOWANIE...</div>
+        <div className="font-mono text-white/30 text-[13px] tracking-[3px]">ŁADOWANIE...</div>
       </div>
     </div>
   );
 
   /* ─── RENDER ─────────────────────────────────────────────────────────────────── */
   return (
-    <div style={{ minHeight: '100vh', background: '#030014', backgroundImage: 'radial-gradient(circle at 50% 0%,#1a0b4e 0%,transparent 55%),radial-gradient(circle at 90% 10%,#0d1a3a 0%,transparent 40%)', color: '#e2e8f0', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div className="min-h-screen text-slate-200" style={{ background: '#030014', backgroundImage: 'radial-gradient(circle at 50% 0%,#1a0b4e 0%,transparent 55%),radial-gradient(circle at 90% 10%,#0d1a3a 0%,transparent 40%)', fontFamily: 'Inter, system-ui, sans-serif' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Space+Grotesk:wght@500;700&display=swap');
         *{box-sizing:border-box}
@@ -312,218 +271,259 @@ export default function CharacterSheet() {
       `}</style>
 
       {/* NAV */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(3,0,20,0.88)', backdropFilter: 'blur(18px)', borderBottom: '1px solid rgba(112,0,255,0.1)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          <a href="/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '7px 14px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: '#94a3b8', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>
+      <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#030014]/88 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
+          <a href="/dashboard" className="btn-ghost-neural inline-flex items-center gap-2 text-sm">
             <ArrowLeft size={14} /> Wróć
           </a>
-          <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 11, fontWeight: 700, color: 'rgba(112,0,255,0.5)', letterSpacing: 2, textTransform: 'uppercase' }}>
+          <span className="font-mono text-[11px] font-bold text-purple-500/50 tracking-[2px] uppercase">
             Karta Postaci · {completedCount}/6 Testów
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+          </span>
+          <div className="flex items-center gap-1.5">
             {([raw.hexaco, raw.enneagram, raw.strengths, raw.career, raw.darkTriad, raw.values] as any[]).map((r, i) => (
-              <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: r ? '#7000ff' : 'rgba(255,255,255,0.1)', boxShadow: r ? '0 0 6px #7000ff' : 'none', transition: 'all .3s' }} />
+              <div key={i} className="w-2 h-2 rounded-full transition-all"
+                style={{ background: r ? '#7000ff' : 'rgba(255,255,255,0.1)', boxShadow: r ? '0 0 6px #7000ff' : 'none' }} />
             ))}
           </div>
         </div>
       </nav>
 
-      {/* BENTO GRID */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '28px 20px 60px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
+      {/* ── BENTO GRID ─────────────────────────────────────────────────────────────── */}
+      <div className="max-w-7xl mx-auto p-4 md:p-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-min">
 
-        {/* T1: HERO CORE — col-span-2, row-span-2 */}
-        <Card accent="#7000ff" style={{ gridColumn: 'span 2', gridRow: 'span 2', minHeight: 320, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ position: 'absolute', top: -50, right: -50, width: 240, height: 240, borderRadius: '50%', background: 'radial-gradient(circle,rgba(112,0,255,0.13) 0%,transparent 70%)', pointerEvents: 'none' }} />
-          <TileLabel color="rgba(112,0,255,0.45)">// PROFIL GŁÓWNY · HERO CORE</TileLabel>
+          {/* ── T1: HERO CORE  2×2 ── */}
+          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 lg:row-span-2 p-8 flex flex-col justify-center relative overflow-hidden">
+            {/* ambient glow */}
+            <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle,rgba(112,0,255,0.15) 0%,transparent 70%)' }} />
 
-          <div style={{ display: 'flex', gap: 18, alignItems: 'flex-start', flex: 1 }}>
-            {/* Avatar */}
-            <div style={{ position: 'relative', flexShrink: 0 }}>
-              <div style={{ width: 96, height: 96, borderRadius: '50%', padding: 2, background: 'linear-gradient(135deg,#7000ff,#d946ef,#00f0ff)', boxShadow: '0 0 24px rgba(112,0,255,0.45)' }}>
-                {avatarUrl
-                  ? <img src={avatarUrl} alt="" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-                  : <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#150830', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, fontWeight: 700, color: '#7000ff', fontFamily: 'Space Grotesk, sans-serif' }}>{initials}</div>
-                }
-              </div>
-              <div style={{ position: 'absolute', bottom: 2, right: 2, width: 15, height: 15, borderRadius: '50%', background: completedCount >= 4 ? '#34d399' : '#f97316', border: '2px solid #030014', boxShadow: `0 0 6px ${completedCount >= 4 ? '#34d399' : '#f97316'}` }} />
-            </div>
+            <TileLabel color="text-violet-400/45">// PROFIL GŁÓWNY · HERO CORE</TileLabel>
 
-            {/* Identity */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 2, lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {userName.toUpperCase()}
-              </div>
-              {ennLore ? (
-                <>
-                  <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 14, fontWeight: 900, color: '#7000ff', textShadow: '0 0 20px rgba(112,0,255,0.6)', marginBottom: 3, lineHeight: 1.3 }}>
-                    {ennLore.rpg}
-                  </div>
-                  <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: 9, color: 'rgba(255,255,255,0.28)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10 }}>
-                    &ldquo;{ennLore.epithet}&rdquo;
-                  </div>
-                </>
-              ) : (
-                <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, color: 'rgba(255,255,255,0.18)', letterSpacing: 2, marginBottom: 10 }}>ARCHETYP NIEZDEFINIOWANY</div>
-              )}
-
-              {hollandCode && (
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 6, background: 'rgba(0,240,255,0.06)', border: '1px solid rgba(0,240,255,0.18)', marginBottom: 10 }}>
-                  <span style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: 8, letterSpacing: 2, color: 'rgba(0,240,255,0.55)' }}>RIASEC</span>
-                  <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 13, fontWeight: 700, color: '#00f0ff', letterSpacing: 3 }}>{hollandCode}</span>
+            {/* Avatar + identity */}
+            <div className="flex gap-6 items-start mb-6 flex-wrap">
+              <div className="relative flex-shrink-0">
+                <div className="w-28 h-28 rounded-full p-0.5 flex-shrink-0"
+                  style={{ background: 'linear-gradient(135deg,#7000ff,#d946ef,#00f0ff)', boxShadow: '0 0 30px rgba(112,0,255,0.5)' }}>
+                  {avatarUrl
+                    ? <img src={avatarUrl} alt="" className="w-full h-full rounded-full object-cover" />
+                    : <div className="w-full h-full rounded-full bg-[#150830] flex items-center justify-center text-3xl font-bold text-violet-400" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{initials}</div>
+                  }
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* Pop culture chips */}
-          {ennLore && (
-            <div style={{ marginTop: 14 }}>
-              <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: 8, letterSpacing: 2, color: 'rgba(255,255,255,0.18)', marginBottom: 8 }}>🎬 POSTACIE PODOBNE DO CIEBIE</div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                {ennLore.pop.map((p, i) => (
-                  <div key={p} style={{ padding: '4px 12px', borderRadius: 20, background: i === 0 ? 'rgba(112,0,255,0.14)' : 'rgba(255,255,255,0.04)', border: i === 0 ? '1px solid rgba(112,0,255,0.38)' : '1px solid rgba(255,255,255,0.07)', fontFamily: 'Space Grotesk, sans-serif', fontSize: 11, fontWeight: 600, color: i === 0 ? '#c4b5fd' : 'rgba(255,255,255,0.45)' }}>
-                    {p}
-                  </div>
-                ))}
+                <div className="absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-[#030014]"
+                  style={{ background: completedCount >= 4 ? '#34d399' : '#f97316', boxShadow: `0 0 8px ${completedCount >= 4 ? '#34d399' : '#f97316'}` }} />
               </div>
-            </div>
-          )}
 
-          {/* XP Progress */}
-          <div style={{ marginTop: 18 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-              <span style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: 8, letterSpacing: 2, color: 'rgba(255,255,255,0.18)' }}>PROFIL XP</span>
-              <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 9, color: '#7000ff' }}>{completedCount}/6</span>
-            </div>
-            <div style={{ height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.05)', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${(completedCount / 6) * 100}%`, background: 'linear-gradient(90deg,#7000ff,#d946ef)', boxShadow: '0 0 8px rgba(112,0,255,0.7)', transition: 'width .8s ease', borderRadius: 2 }} />
-            </div>
-          </div>
-        </Card>
-
-        {/* T2: HEXACO RADAR — col-span-1, row-span-2 */}
-        <Card accent="#00f0ff" style={{ gridColumn: 'span 1', gridRow: 'span 2', minHeight: 280, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ position: 'absolute', top: -30, left: -30, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,240,255,0.07) 0%,transparent 70%)', pointerEvents: 'none' }} />
-          <TileLabel color="rgba(0,240,255,0.4)">// MATRYCA OSOBOWOŚCI · HEXACO</TileLabel>
-          {raw.hexaco ? (
-            <>
-              <div style={{ flex: 1, minHeight: 0, marginBottom: 4 }} className="cs-radar">
-                <ResponsiveContainer width="100%" height={180}>
-                  <RadarChart data={radarData} margin={{ top: 10, right: 22, bottom: 10, left: 22 }}>
-                    <PolarGrid stroke="rgba(0,240,255,0.07)" gridType="polygon" />
-                    <PolarAngleAxis dataKey="trait" tick={{ fill: 'rgba(0,240,255,0.4)', fontSize: 8, fontFamily: 'Share Tech Mono, monospace' }} tickLine={false} />
-                    <Radar dataKey="value" stroke="#22d3ee" strokeWidth={2} fill="#22d3ee" fillOpacity={0.1} dot={{ fill: '#22d3ee', r: 3, strokeWidth: 0 } as any} />
-                  </RadarChart>
-                </ResponsiveContainer>
-              </div>
-              {hexTopDim && (
-                <div style={{ textAlign: 'center', paddingTop: 4 }}>
-                  <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 26, fontWeight: 900, color: '#00f0ff', textShadow: '0 0 16px rgba(0,240,255,0.65)', lineHeight: 1 }}>{hexTopDim.value}%</div>
-                  <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: 8, color: 'rgba(0,240,255,0.38)', letterSpacing: 2, marginTop: 3 }}>{hexTopDim.full.toUpperCase()}</div>
+              <div className="flex-1 min-w-0">
+                <div className="text-2xl font-bold text-white truncate mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                  {userName.toUpperCase()}
                 </div>
-              )}
-            </>
-          ) : (
-            <LockedTile icon={<Zap size={22} />} text="Wykonaj test HEXACO-60" href="/test?type=hexaco" color="#00f0ff" />
-          )}
-        </Card>
-
-        {/* T3: ENNEAGRAM STAR — col-span-1, row-span-2 */}
-        <Card accent="#d946ef" style={{ gridColumn: 'span 1', gridRow: 'span 2', minHeight: 280, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle,rgba(217,70,239,0.09) 0%,transparent 70%)', pointerEvents: 'none' }} />
-          <TileLabel color="rgba(217,70,239,0.4)">// ENGINE · ENNEAGRAM</TileLabel>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: '100%', maxWidth: 200, aspectRatio: '1' }}>
-              <EnneagramStar activeType={ennTypeNum} color="#d946ef" />
-            </div>
-          </div>
-          {ennPrimary && (
-            <div style={{ textAlign: 'center', marginTop: 8 }}>
-              <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13, fontWeight: 700, color: '#e879f9' }}>{ennPrimary.name}</div>
-              {ennPrimary.core_motivation && (
-                <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: 8, color: 'rgba(217,70,239,0.38)', letterSpacing: 1.5, marginTop: 3 }}>{ennPrimary.core_motivation}</div>
-              )}
-            </div>
-          )}
-          {!raw.enneagram && (
-            <LockedTile icon={<span style={{ fontSize: 20 }}>★</span>} text="Wykonaj test Enneagram" href="/test?type=enneagram" color="#d946ef" />
-          )}
-        </Card>
-
-        {/* T4: STRENGTHS ARSENAL — col-span-2 */}
-        <Card accent="#fbbf24" style={{ gridColumn: 'span 2', display: 'flex', flexDirection: 'column' }}>
-          <TileLabel color="rgba(251,191,36,0.4)">// ARSENAL · TOP TALENTY</TileLabel>
-          {top5.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {top5.slice(0, 4).map((t: any, i: number) => {
-                const barW = 96 - i * 10;
-                return (
-                  <div key={t.name ?? t.name_en ?? i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 9, color: 'rgba(251,191,36,0.45)', minWidth: 20, textAlign: 'right' }}>0{i + 1}</div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 12, fontWeight: 600, color: i === 0 ? '#fbbf24' : 'rgba(255,255,255,0.65)', marginBottom: 4 }}>{t.name ?? t.name_en}</div>
-                      <div style={{ height: 3, borderRadius: 2, background: 'rgba(255,255,255,0.05)', overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${barW}%`, background: i === 0 ? 'linear-gradient(90deg,#f97316,#fbbf24)' : 'rgba(251,191,36,0.3)', boxShadow: i === 0 ? '0 0 8px rgba(251,191,36,0.5)' : 'none', transition: 'width 1s ease', borderRadius: 2 }} />
-                      </div>
+                {ennLore ? (
+                  <>
+                    <div className="text-base font-black leading-tight mb-1" style={{ fontFamily: 'Orbitron, monospace', color: '#7000ff', textShadow: '0 0 22px rgba(112,0,255,0.7)' }}>
+                      {ennLore.rpg}
                     </div>
-                    <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: 8, color: 'rgba(251,191,36,0.38)', minWidth: 28, textAlign: 'right' }}>{barW}%</div>
-                  </div>
-                );
-              })}
+                    <div className="font-mono text-[9px] tracking-[2px] text-white/25 uppercase mb-3">
+                      &ldquo;{ennLore.epithet}&rdquo;
+                    </div>
+                  </>
+                ) : (
+                  <div className="font-mono text-[11px] text-white/18 tracking-widest mb-3">ARCHETYP NIEZDEFINIOWANY</div>
+                )}
+                {hollandCode && (
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-lg border text-[11px]"
+                    style={{ background: 'rgba(0,240,255,0.06)', borderColor: 'rgba(0,240,255,0.18)' }}>
+                    <span className="font-mono text-[8px] tracking-[2px] text-cyan-300/50">RIASEC</span>
+                    <span className="font-mono font-bold text-[13px] text-cyan-300 tracking-widest" style={{ fontFamily: 'Orbitron, monospace' }}>{hollandCode}</span>
+                  </span>
+                )}
+              </div>
             </div>
-          ) : (
-            <LockedTile icon={<span style={{ fontSize: 20 }}>⭐</span>} text="Wykonaj test Strengths" href="/test?type=strengths" color="#fbbf24" />
-          )}
-        </Card>
 
-        {/* T5: DARK TRIAD — col-span-2 */}
-        <Card warning style={{ gridColumn: 'span 2', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ position: 'absolute', top: -20, right: -20, width: 110, height: 110, borderRadius: '50%', background: 'radial-gradient(circle,rgba(239,68,68,0.09) 0%,transparent 70%)', pointerEvents: 'none' }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <AlertTriangle size={12} style={{ color: 'rgba(239,68,68,0.65)' }} />
-            <span style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: 9, letterSpacing: 2, color: 'rgba(239,68,68,0.45)', textTransform: 'uppercase' }}>// WYKRYTE RYZYKA · DARK TRIAD</span>
-          </div>
-          {raw.darkTriad && dtTop ? (
-            <>
-              <div style={{ padding: '12px 14px', borderRadius: 10, background: `${dtTop.color}0a`, border: `1px solid ${dtTop.color}20`, marginBottom: 10 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 6 }}>
-                  <div style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 14, fontWeight: 700, color: dtTop.color }}>{dtTop.name}</div>
-                  <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 22, fontWeight: 900, color: dtTop.color, textShadow: `0 0 14px ${dtTop.color}70`, lineHeight: 1 }}>{dtTop.pct}%</div>
-                </div>
-                <div style={{ height: 3, borderRadius: 2, background: 'rgba(255,255,255,0.05)', overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: `${dtTop.pct}%`, background: `linear-gradient(90deg,${dtTop.color}80,${dtTop.color})`, boxShadow: `0 0 8px ${dtTop.color}55`, transition: 'width 1s', borderRadius: 2 }} />
+            {/* Pop-culture pills */}
+            {ennLore && (
+              <div className="mb-5">
+                <div className="font-mono text-[8px] tracking-[2px] text-white/18 mb-2">🎬 POSTACIE PODOBNE DO CIEBIE</div>
+                <div className="flex flex-wrap gap-2">
+                  {ennLore.pop.map((p, i) => (
+                    <span key={p} className="px-3 py-1 rounded-full text-[11px] font-semibold transition-all"
+                      style={{
+                        background: i === 0 ? 'rgba(112,0,255,0.16)' : 'rgba(255,255,255,0.04)',
+                        border: i === 0 ? '1px solid rgba(112,0,255,0.4)' : '1px solid rgba(255,255,255,0.07)',
+                        color: i === 0 ? '#c4b5fd' : 'rgba(255,255,255,0.42)',
+                        fontFamily: 'Space Grotesk, sans-serif',
+                      }}>
+                      {p}
+                    </span>
+                  ))}
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                {dtTraits.slice(1).map(t => (
-                  <div key={t.k} style={{ flex: 1, padding: '8px 10px', borderRadius: 8, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: 8, color: 'rgba(255,255,255,0.28)', letterSpacing: 1 }}>{t.name}</div>
-                    <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 16, fontWeight: 700, color: t.color, marginTop: 2 }}>{t.pct}%</div>
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : (
-            <LockedTile icon={<AlertTriangle size={20} />} text="Odblokuj test Dark Triad" href="/test?type=dark_triad" color="#ef4444" />
-          )}
-        </Card>
+            )}
 
-        {/* T6: AI SYNTHESIS — full width */}
-        <Card accent="#7000ff" style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-          <div style={{ flexShrink: 0, width: 38, height: 38, borderRadius: 10, background: 'rgba(112,0,255,0.13)', border: '1px solid rgba(112,0,255,0.28)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Sparkles size={17} style={{ color: '#a855f7' }} />
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-              <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, fontWeight: 700, color: '#a855f7', letterSpacing: 1 }}>PSYCHER AI SYNTHESIS</span>
-              <div style={{ height: 1, flex: 1, background: 'linear-gradient(90deg,rgba(112,0,255,0.28),transparent)' }} />
+            {/* XP bar */}
+            <div className="mt-auto">
+              <div className="flex justify-between mb-1.5">
+                <span className="font-mono text-[8px] tracking-[2px] text-white/20">PROFIL XP</span>
+                <span className="font-mono text-[9px] text-violet-400" style={{ fontFamily: 'Orbitron, monospace' }}>{completedCount}/6</span>
+              </div>
+              <div className="h-1 rounded-full bg-white/5 overflow-hidden">
+                <div className="h-full rounded-full transition-all duration-700"
+                  style={{ width: `${(completedCount / 6) * 100}%`, background: 'linear-gradient(90deg,#7000ff,#d946ef)', boxShadow: '0 0 8px rgba(112,0,255,0.7)' }} />
+              </div>
             </div>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 13, color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, margin: 0 }}>
+          </div>
+
+          {/* ── T2: HEXACO RADAR  1×2 ── */}
+          <div className="card-neural col-span-1 lg:col-span-1 lg:row-span-2 p-6 flex flex-col items-center min-h-[350px]">
+            <div className="absolute -top-8 -left-8 w-36 h-36 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle,rgba(0,240,255,0.08) 0%,transparent 70%)' }} />
+            <TileLabel color="text-cyan-400/45">// MATRYCA OSOBOWOŚCI · HEXACO-60</TileLabel>
+
+            {raw.hexaco ? (
+              <>
+                {/* Chart fills remaining flex space */}
+                <div className="flex-1 min-h-0 w-full cs-radar">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart data={radarData} margin={{ top: 14, right: 26, bottom: 14, left: 26 }}>
+                      <PolarGrid stroke="rgba(0,240,255,0.07)" gridType="polygon" />
+                      <PolarAngleAxis dataKey="trait" tick={{ fill: 'rgba(0,240,255,0.5)', fontSize: 9, fontFamily: 'Share Tech Mono, monospace' }} tickLine={false} />
+                      <Radar dataKey="value" stroke="#22d3ee" strokeWidth={2} fill="#22d3ee" fillOpacity={0.12}
+                        dot={{ fill: '#22d3ee', r: 3.5, strokeWidth: 0 } as any} />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </div>
+                {hexTopDim && (
+                  <div className="text-center mt-2 pb-1">
+                    <div className="text-3xl font-black leading-none" style={{ fontFamily: 'Orbitron, monospace', color: '#00f0ff', textShadow: '0 0 20px rgba(0,240,255,0.6)' }}>
+                      {hexTopDim.value}%
+                    </div>
+                    <div className="font-mono text-[8px] text-cyan-400/40 tracking-[2px] mt-1">
+                      {hexTopDim.full.toUpperCase()}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <LockedTile icon={<Zap size={22} />} text="Wykonaj test HEXACO-60" href="/test?type=hexaco" color="#00f0ff" />
+            )}
+          </div>
+
+          {/* ── T3: ENNEAGRAM STAR  1×2 ── */}
+          <div className="card-neural col-span-1 lg:col-span-1 lg:row-span-2 p-6 flex flex-col items-center justify-center min-h-[350px]">
+            <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle,rgba(217,70,239,0.1) 0%,transparent 70%)' }} />
+            <TileLabel color="text-fuchsia-400/45">// ENGINE · ENNEAGRAM</TileLabel>
+
+            <div className="flex-1 min-h-0 w-full flex items-center justify-center">
+              <div className="w-full max-w-[200px] aspect-square">
+                <EnneagramStar activeType={ennTypeNum} color="#d946ef" />
+              </div>
+            </div>
+
+            {ennPrimary ? (
+              <div className="text-center mt-2 space-y-1">
+                <div className="text-sm font-bold text-fuchsia-400" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{ennPrimary.name}</div>
+                {ennPrimary.core_motivation && (
+                  <div className="font-mono text-[8px] text-fuchsia-400/38 tracking-[1.5px]">{ennPrimary.core_motivation}</div>
+                )}
+              </div>
+            ) : (
+              <LockedTile icon={<span className="text-xl">★</span>} text="Wykonaj test Enneagram" href="/test?type=enneagram" color="#d946ef" />
+            )}
+          </div>
+
+          {/* ── T4: ARSENAL / STRENGTHS  2×1 ── */}
+          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col justify-center">
+            <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle,rgba(251,191,36,0.08) 0%,transparent 70%)' }} />
+            <TileLabel color="text-amber-400/45">// ⚡ ARSENAL · TOP TALENTY · STRENGTHS</TileLabel>
+
+            {top5.length > 0 ? (
+              <div className="flex flex-col gap-3">
+                {top5.slice(0, 4).map((t: any, i: number) => {
+                  const barW = 96 - i * 10;
+                  return (
+                    <div key={t.name ?? t.name_en ?? i} className="flex items-center gap-3">
+                      <span className="font-mono text-[9px] text-amber-400/40 w-5 text-right" style={{ fontFamily: 'Orbitron, monospace' }}>0{i + 1}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[12px] font-semibold mb-1 truncate"
+                          style={{ color: i === 0 ? '#fbbf24' : 'rgba(255,255,255,0.62)', fontFamily: 'Space Grotesk, sans-serif' }}>
+                          {t.name ?? t.name_en}
+                        </div>
+                        <div className="h-[3px] rounded-full bg-white/5 overflow-hidden">
+                          <div className="h-full rounded-full transition-all duration-700"
+                            style={{ width: `${barW}%`, background: i === 0 ? 'linear-gradient(90deg,#f97316,#fbbf24)' : 'rgba(251,191,36,0.28)', boxShadow: i === 0 ? '0 0 8px rgba(251,191,36,0.5)' : 'none' }} />
+                        </div>
+                      </div>
+                      <span className="font-mono text-[8px] text-amber-400/35 w-8 text-right">{barW}%</span>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <LockedTile icon={<span className="text-xl">⭐</span>} text="Wykonaj test Strengths" href="/test?type=strengths" color="#fbbf24" />
+            )}
+          </div>
+
+          {/* ── T5: DARK TRIAD / SHADOW  2×1 ── */}
+          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-2 p-6 flex flex-col justify-center !bg-rose-950/20 !border-rose-500/30 shadow-[0_0_30px_-10px_rgba(244,63,94,0.15)]">
+            <div className="absolute -top-5 -right-5 w-28 h-28 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle,rgba(239,68,68,0.1) 0%,transparent 70%)' }} />
+
+            <div className="flex items-center gap-2 mb-3">
+              <AlertTriangle size={12} className="text-rose-400/65" />
+              <TileLabel color="text-rose-400/45">// ⚠ WYKRYTE RYZYKA · DARK TRIAD</TileLabel>
+            </div>
+
+            {raw.darkTriad && dtTop ? (
+              <>
+                {/* Top risk */}
+                <div className="rounded-xl p-4 mb-3" style={{ background: `${dtTop.color}0b`, border: `1px solid ${dtTop.color}22` }}>
+                  <div className="flex justify-between items-end mb-2">
+                    <div className="text-sm font-bold" style={{ color: dtTop.color, fontFamily: 'Space Grotesk, sans-serif' }}>{dtTop.name}</div>
+                    <div className="text-[28px] font-black leading-none" style={{ fontFamily: 'Orbitron, monospace', color: dtTop.color, textShadow: `0 0 16px ${dtTop.color}70` }}>{dtTop.pct}%</div>
+                  </div>
+                  <div className="h-[3px] rounded-full bg-white/5 overflow-hidden">
+                    <div className="h-full rounded-full transition-all duration-700"
+                      style={{ width: `${dtTop.pct}%`, background: `linear-gradient(90deg,${dtTop.color}70,${dtTop.color})`, boxShadow: `0 0 8px ${dtTop.color}55` }} />
+                  </div>
+                </div>
+                {/* Secondary risks */}
+                <div className="flex gap-2">
+                  {dtTraits.slice(1).map(t => (
+                    <div key={t.k} className="flex-1 p-2.5 rounded-lg bg-white/[0.02] border border-white/5">
+                      <div className="font-mono text-[8px] text-white/28 tracking-wide">{t.name}</div>
+                      <div className="text-lg font-bold mt-0.5" style={{ fontFamily: 'Orbitron, monospace', color: t.color }}>{t.pct}%</div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <LockedTile icon={<Shield size={22} />} text="Odblokuj test Dark Triad Premium" href="/test?type=dark_triad" color="#ef4444" />
+            )}
+          </div>
+
+          {/* ── T6: AI SYNTHESIS  full-width ── */}
+          <div className="card-neural col-span-1 md:col-span-2 lg:col-span-4 p-8 flex flex-col">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background: 'rgba(112,0,255,0.14)', border: '1px solid rgba(112,0,255,0.3)' }}>
+                <Sparkles size={18} className="text-violet-400" />
+              </div>
+              <div>
+                <div className="font-mono font-bold text-[11px] tracking-[1.5px] text-violet-400" style={{ fontFamily: 'Orbitron, monospace' }}>
+                  PSYCHER AI SYNTHESIS
+                </div>
+                <div className="font-mono text-[8px] tracking-[2px] text-white/20 mt-0.5">NEURAL PROFILE ANALYSIS · AUTO-GENERATED</div>
+              </div>
+              <div className="flex-1 h-px ml-2" style={{ background: 'linear-gradient(90deg,rgba(112,0,255,0.3),transparent)' }} />
+            </div>
+            <p className="text-slate-300 leading-relaxed text-lg font-light">
               {buildAiSummary()}
             </p>
           </div>
-        </Card>
 
+        </div>
       </div>
     </div>
   );
