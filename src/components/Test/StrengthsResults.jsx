@@ -207,18 +207,18 @@ export default function StrengthsResults() {
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 900, margin: '0 auto', padding: '48px 28px 80px' }}>
 
-        <div className="sr-glass sr-fadein" style={{ padding: '44px 40px', marginBottom: 32, textAlign: 'center' }}>
+        <header className="sr-fadein" style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: '3.2rem', marginBottom: 12, lineHeight: 1 }}>🎯</div>
-          <h1 style={{ fontSize: '2.1rem', fontWeight: 800, marginBottom: 8, background: 'linear-gradient(135deg,#fbbf24 0%,#f97316 50%,#b08fff 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <h1 style={{ fontSize: '2.1rem', fontWeight: 800, margin: '0 0 8px', background: 'linear-gradient(135deg,#fbbf24 0%,#f97316 50%,#b08fff 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             Twoje Top 5 Talentów
           </h1>
-          <p style={{ color: 'rgba(255,255,255,.5)', fontSize: '.95rem' }}>Odkryj swoje naturalne mocne strony</p>
+          <p style={{ color: 'rgba(255,255,255,.5)', fontSize: '.95rem', margin: 0 }}>Odkryj swoje naturalne mocne strony</p>
           {report.completed_at && (
             <p style={{ color: 'rgba(255,255,255,.3)', fontSize: '.78rem', marginTop: 8 }}>
               Ukończono: {new Date(report.completed_at).toLocaleDateString('pl-PL')}
             </p>
           )}
-        </div>
+        </header>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 36, justifyContent: 'center' }}>
           {STRENGTHS_TEST.categories.map(cat => {

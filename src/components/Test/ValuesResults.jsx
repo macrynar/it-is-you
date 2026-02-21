@@ -206,20 +206,19 @@ export default function ValuesResults() {
       {/* ─── Content ─── */}
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '48px 24px 80px', position: 'relative', zIndex: 1 }}>
 
-        {/* ─── Hero ─── */}
-        <div className="vr-glass vr-fadein" style={{ padding: '44px 32px', textAlign: 'center', marginBottom: 24, overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: -60, right: -60, width: 260, height: 260, borderRadius: '50%', background: `rgba(20,184,166,.35)`, filter: 'blur(80px)', opacity: .22, pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', bottom: -40, left: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(59,130,246,.3)', filter: 'blur(70px)', opacity: .18, pointerEvents: 'none' }} />
+        <header className="vr-fadein" style={{ textAlign: 'center', marginBottom: 24, position: 'relative' }}>
+          <div aria-hidden style={{ position: 'absolute', top: -60, right: -60, width: 260, height: 260, borderRadius: '50%', background: `rgba(20,184,166,.35)`, filter: 'blur(80px)', opacity: .22, pointerEvents: 'none' }} />
+          <div aria-hidden style={{ position: 'absolute', bottom: -40, left: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(59,130,246,.3)', filter: 'blur(70px)', opacity: .18, pointerEvents: 'none' }} />
+
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div style={{ fontSize: '2.8rem', marginBottom: 10 }}>🧭</div>
             <h1 style={{ fontSize: 'clamp(1.8rem,5vw,2.8rem)', fontWeight: 800, margin: '0 0 6px', background: `linear-gradient(135deg,#14b8a6,#60a5fa,#c084fc)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               Twój Kompas Wartości
             </h1>
-            <p style={{ color: 'rgba(255,255,255,.45)', fontSize: '.88rem', marginBottom: 24 }}>
+            <p style={{ color: 'rgba(255,255,255,.45)', fontSize: '.88rem', margin: '0 0 24px' }}>
               Test Wartości Osobistych (Schwartz PVQ) ·{' '}
               {new Date(report.completed_at).toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
-            {/* Top 3 chips */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
               {report.top_3?.map((v, i) => (
                 <span key={v.id} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 100, fontSize: '.78rem', fontWeight: 600, background: `${v.color}22`, border: `1px solid ${v.color}50`, color: v.color }}>
@@ -229,7 +228,7 @@ export default function ValuesResults() {
               ))}
             </div>
           </div>
-        </div>
+        </header>
 
         {/* ─── MRAT explanation ─── */}
         <div className="vr-glass vr-fadein" style={{ padding: '22px 26px', marginBottom: 24, animationDelay: '.08s' }}>
