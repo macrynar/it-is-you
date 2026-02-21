@@ -255,13 +255,13 @@ export default function EnneagramResults() {
     }
   };
 
-  const generateInterpretation = async (r) => {
+  const generateInterpretation = async (r, { force = false } = {}) => {
     setAiLoading(true); setAiError(null);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('Brak sesji');
       const { data: d, error: fnErr } = await supabase.functions.invoke('interpret-test', {
-        body: { test_type: 'ENNEAGRAM', raw_scores: r.raw_scores, report: r.report },
+        body: { test_type: 'ENNEAGRAM', raw_scores: r.raw_scores, report: r.report, force },
         headers: { Authorization: `Bearer ${session.access_token}` },
       });
       if (fnErr) throw fnErr;
@@ -275,10 +275,8 @@ export default function EnneagramResults() {
 
   const regenerate = async () => {
     if (!results) return;
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) await supabase.from('ai_interpretations').delete().eq('user_id', user.id).eq('test_type', 'ENNEAGRAM');
     setAiInterp(null);
-    generateInterpretation(results);
+    generateInterpretation(results, { force: true });
   };
 
   const handleRetake = () => {

@@ -96,13 +96,13 @@ export default function HexacoResults() {
     } catch (err) { setError(err.message); setLoading(false); }
   };
 
-  const generateInterpretation = async (r) => {
+  const generateInterpretation = async (r, { force = false } = {}) => {
     setInterpLoading(true); setInterpError(null);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('Brak sesji');
       const { data: d, error: fnErr } = await supabase.functions.invoke('interpret-test', {
-        body: { test_type: 'HEXACO', percentile_scores: r.percentile_scores, raw_scores: r.raw_scores },
+        body: { test_type: 'HEXACO', percentile_scores: r.percentile_scores, raw_scores: r.raw_scores, force },
         headers: { Authorization: `Bearer ${session.access_token}` },
       });
       if (fnErr) throw fnErr;
@@ -113,10 +113,8 @@ export default function HexacoResults() {
 
   const regenerate = async () => {
     if (!results) return;
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) await supabase.from('ai_interpretations').delete().eq('user_id', user.id).eq('test_type','HEXACO');
     setInterpretation(null);
-    generateInterpretation(results);
+    generateInterpretation(results, { force: true });
   };
 
   const handleRetake = () => {

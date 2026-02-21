@@ -337,7 +337,7 @@ function DarkTriadResults() {
     }
   }
 
-  async function generateInterpretation(rawScores) {
+  async function generateInterpretation(rawScores, { force = false } = {}) {
     setInterpretationLoading(true);
     setInterpretationError(null);
     try {
@@ -349,7 +349,7 @@ function DarkTriadResults() {
       Object.entries(dims).forEach(([k, v]) => { percentile_scores[k] = v.percentile || 0; });
 
       const { data, error: fnErr } = await supabase.functions.invoke('interpret-test', {
-        body: { test_type: 'DARK_TRIAD', percentile_scores },
+        body: { test_type: 'DARK_TRIAD', percentile_scores, force },
         headers: { Authorization: `Bearer ${session.access_token}` },
       });
       if (fnErr) throw fnErr;
@@ -364,11 +364,9 @@ function DarkTriadResults() {
 
   async function regenerateInterpretation() {
     if (!report) return;
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) await supabase.from('ai_interpretations').delete().eq('user_id', user.id).eq('test_type', 'DARK_TRIAD');
     setInterpretation(null);
     const { data } = await supabase.from('user_psychometrics').select('raw_scores').eq('test_type', 'DARK_TRIAD').order('completed_at', { ascending: false }).limit(1);
-    if (data?.[0]) generateInterpretation(data[0].raw_scores);
+    if (data?.[0]) generateInterpretation(data[0].raw_scores, { force: true });
   }
 
   /* ── LOADING ── */

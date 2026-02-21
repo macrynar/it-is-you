@@ -101,13 +101,13 @@ export default function ValuesResults() {
     }
   };
 
-  const generateInterpretation = async (scores, reportData) => {
+  const generateInterpretation = async (scores, reportData, { force = false } = {}) => {
     try {
       setInterpLoading(true);
       setInterpError(null);
       const { data: { session } } = await supabase.auth.getSession();
       const { data, error } = await supabase.functions.invoke('interpret-test', {
-        body: { test_type: 'VALUES', raw_scores: scores, report: reportData },
+        body: { test_type: 'VALUES', raw_scores: scores, report: reportData, force },
         headers: { Authorization: `Bearer ${session.access_token}` },
       });
       if (error) throw error;
@@ -122,7 +122,7 @@ export default function ValuesResults() {
 
   const handleRegenerate = async () => {
     setInterpretation(null);
-    await generateInterpretation(rawScores, report);
+    await generateInterpretation(rawScores, report, { force: true });
   };
 
   const handleRetakeTest = () => {

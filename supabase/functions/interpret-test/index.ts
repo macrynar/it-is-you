@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { test_type, percentile_scores, raw_scores, report } = await req.json()
+    const { test_type, percentile_scores, raw_scores, report, force } = await req.json()
 
     // Auth: get user from JWT
     const authHeader = req.headers.get('Authorization')
@@ -41,18 +41,20 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // Check interpretation cache
-    const { data: cached } = await supabaseAdmin
-      .from('ai_interpretations')
-      .select('interpretation')
-      .eq('user_id', user.id)
-      .eq('test_type', test_type)
-      .single()
+    // Check interpretation cache (unless force regeneration requested)
+    if (!force) {
+      const { data: cached } = await supabaseAdmin
+        .from('ai_interpretations')
+        .select('interpretation')
+        .eq('user_id', user.id)
+        .eq('test_type', test_type)
+        .single()
 
-    if (cached?.interpretation) {
-      return new Response(JSON.stringify({ interpretation: cached.interpretation, cached: true }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
+      if (cached?.interpretation) {
+        return new Response(JSON.stringify({ interpretation: cached.interpretation, cached: true }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+      }
     }
 
     // Build prompt

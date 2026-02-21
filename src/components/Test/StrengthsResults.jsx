@@ -127,14 +127,14 @@ export default function StrengthsResults() {
     }
   };
 
-  const generateInterpretation = async (scores) => {
+  const generateInterpretation = async (scores, { force = false } = {}) => {
     setInterpLoading(true);
     setInterpError(null);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('Brak sesji');
       const { data, error: fe } = await supabase.functions.invoke('interpret-test', {
-        body: { test_type: 'STRENGTHS', raw_scores: scores, report: scores },
+        body: { test_type: 'STRENGTHS', raw_scores: scores, report: scores, force },
         headers: { Authorization: `Bearer ${session.access_token}` },
       });
       if (fe) throw fe;
@@ -148,10 +148,8 @@ export default function StrengthsResults() {
 
   const handleRegenerate = async () => {
     if (!rawScores) return;
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) await supabase.from('ai_interpretations').delete().eq('user_id', user.id).eq('test_type', 'STRENGTHS');
     setInterpretation(null);
-    generateInterpretation(rawScores);
+    generateInterpretation(rawScores, { force: true });
   };
 
   if (loading) return (
