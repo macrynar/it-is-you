@@ -42,7 +42,7 @@ const CSS = `
 .sr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(251,191,36,.08) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(123,94,167,.12) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
 .sr-glass{background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:20px;position:relative;isolation:isolate;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6);}
 .sr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(251,191,36,.15) 35%,rgba(123,94,167,.12) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
-.sr-talent-card{border-radius:20px;position:relative;isolation:isolate;overflow:hidden;background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;cursor:default;}
+.sr-talent-card{border-radius:20px;position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.04) 0%,rgba(16,20,56,.6) 45%,rgba(16,20,56,.6) 100%);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;cursor:default;}
 .sr-talent-card:hover{transform:translateY(-6px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(255,255,255,.1),0 0 40px -8px var(--cat-color,#34d399),0 20px 48px -8px rgba(0,0,0,.7);}
 .sr-talent-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
 .sr-talent-card::after{content:'';position:absolute;width:140px;height:140px;border-radius:50%;filter:blur(50px);bottom:-50px;right:-40px;opacity:.14;pointer-events:none;z-index:0;transition:opacity .35s,transform .35s;background:var(--cat-color,#34d399);}
@@ -54,9 +54,9 @@ const CSS = `
 .sr-bar-track{height:6px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden;}
 .sr-bar-fill{height:100%;border-radius:100px;position:relative;transition:width 1s cubic-bezier(.22,.68,0,1.1);}
 .sr-bar-fill::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.6);}
-.sr-rank-badge{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#fff;flex-shrink:0;}
-.sr-cat-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600;letter-spacing:.3px;}
-.sr-keyword{padding:3px 10px;border-radius:100px;font-size:.7rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);}
+.sr-rank-badge{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:750;color:#fff;flex-shrink:0;}
+.sr-cat-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:100px;font-size:.66rem;font-weight:650;letter-spacing:.35px;}
+.sr-keyword{padding:3px 9px;border-radius:100px;font-size:.66rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.58);}
 .sr-cat-mini{border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);padding:16px;transition:border-color .2s;}
 .sr-cat-mini:hover{border-color:rgba(255,255,255,.14);}
 @keyframes spinLoader{to{transform:rotate(360deg);}}
@@ -240,19 +240,20 @@ export default function StrengthsResults() {
               <div
                 key={talent.id}
                 className="sr-talent-card sr-fadein"
-                style={{ padding: 20, '--cat-color': c.color, boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08),' + c.shadow + ',0 8px 32px -4px rgba(0,0,0,.6)', animationDelay: (idx * 90) + 'ms' }}
+                style={{ padding: 18, '--cat-color': c.color, boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08),' + c.shadow + ',0 8px 32px -4px rgba(0,0,0,.6)', animationDelay: (idx * 90) + 'ms' }}
               >
                 {/* glow line (hover) */}
                 <div className="sr-glow-line" style={{ background: 'linear-gradient(90deg,transparent,' + c.color + ',' + c.color + ',transparent)' }} />
+                <div aria-hidden style={{ position: 'absolute', top: 10, left: 16, right: 16, height: 2, borderRadius: 999, background: 'linear-gradient(90deg,' + c.color + '00,' + c.color + '90,' + c.color + '00)', opacity: .9 }} />
                 {/* ::after glow blob handled via CSS var + pseudo-element */}
                 <div style={{ position: 'relative', zIndex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20, gap: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14, gap: 12 }}>
                     <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-                        <span style={{ fontSize: '1.5rem' }}>{catInfo?.icon || '⭐'}</span>
-                        <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff', lineHeight: 1.1 }}>{talent.name}</h3>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+                        <span style={{ fontSize: '1.35rem' }}>{catInfo?.icon || '⭐'}</span>
+                        <h3 style={{ fontSize: '1.12rem', fontWeight: 850, color: '#fff', lineHeight: 1.15 }}>{talent.name}</h3>
                       </div>
-                      <p style={{ color: 'rgba(255,255,255,.38)', fontSize: '.8rem', fontWeight: 500, marginBottom: 10 }}>{talent.name_en}</p>
+                      <p style={{ color: 'rgba(255,255,255,.36)', fontSize: '.76rem', fontWeight: 550, marginBottom: 8 }}>{talent.name_en}</p>
                       <span className="sr-cat-chip" style={{ background: c.color + '20', border: '1px solid ' + c.color + '45', color: c.color }}>
                         {catInfo?.name || talent.category}
                       </span>
@@ -262,7 +263,7 @@ export default function StrengthsResults() {
                     </div>
                   </div>
 
-                  <div style={{ marginBottom: 20 }}>
+                  <div style={{ marginBottom: 14 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', color: 'rgba(255,255,255,.35)', fontSize: '.72rem', marginBottom: 6 }}>
                       <span>Wynik</span>
                       <span style={{ color: c.color, fontWeight: 700 }}>{talent.score.toFixed(2)} / 5.00</span>
@@ -272,35 +273,35 @@ export default function StrengthsResults() {
                     </div>
                   </div>
 
-                  <p style={{ color: 'rgba(255,255,255,.65)', fontSize: '.9rem', lineHeight: 1.65, marginBottom: 16 }}>{talent.description}</p>
+                  <p style={{ color: 'rgba(255,255,255,.65)', fontSize: '.86rem', lineHeight: 1.6, marginBottom: 12 }}>{talent.description}</p>
 
                   {talent.keywords?.length > 0 && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
                       {talent.keywords.map((kw, i) => <span key={i} className="sr-keyword">{kw}</span>)}
                     </div>
                   )}
 
                   {talent.interpretation && (
-                    <div style={{ borderTop: '1px solid rgba(255,255,255,.06)', paddingTop: 20, marginTop: 4, display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    <div style={{ borderTop: '1px solid rgba(255,255,255,.06)', paddingTop: 16, marginTop: 2, display: 'flex', flexDirection: 'column', gap: 12 }}>
                       {talent.interpretation.overview && (
-                        <p style={{ color: 'rgba(255,255,255,.58)', fontSize: '.88rem', lineHeight: 1.65 }}>{talent.interpretation.overview}</p>
+                        <p style={{ color: 'rgba(255,255,255,.58)', fontSize: '.84rem', lineHeight: 1.65 }}>{talent.interpretation.overview}</p>
                       )}
                       {talent.interpretation.how_to_use?.length > 0 && (
                         <div>
-                          <p style={{ color: c.color, fontSize: '.8rem', fontWeight: 700, marginBottom: 8 }}>✦ Jak wykorzystać ten talent:</p>
-                          <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 5 }}>
+                          <p style={{ color: c.color, fontSize: '.78rem', fontWeight: 750, marginBottom: 6 }}>✦ Jak wykorzystać ten talent:</p>
+                          <ul style={{ paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
                             {talent.interpretation.how_to_use.map((tip, i) => (
-                              <li key={i} style={{ color: 'rgba(255,255,255,.58)', fontSize: '.85rem', lineHeight: 1.55 }}>{tip}</li>
+                              <li key={i} style={{ color: 'rgba(255,255,255,.58)', fontSize: '.82rem', lineHeight: 1.55 }}>{tip}</li>
                             ))}
                           </ul>
                         </div>
                       )}
                       {talent.interpretation.watch_out?.length > 0 && (
                         <div>
-                          <p style={{ color: '#fbbf24', fontSize: '.8rem', fontWeight: 700, marginBottom: 8 }}>⚠️ Na co uważać:</p>
-                          <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 5 }}>
+                          <p style={{ color: '#fbbf24', fontSize: '.78rem', fontWeight: 750, marginBottom: 6 }}>⚠️ Na co uważać:</p>
+                          <ul style={{ paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
                             {talent.interpretation.watch_out.map((w, i) => (
-                              <li key={i} style={{ color: 'rgba(255,255,255,.58)', fontSize: '.85rem', lineHeight: 1.55 }}>{w}</li>
+                              <li key={i} style={{ color: 'rgba(255,255,255,.58)', fontSize: '.82rem', lineHeight: 1.55 }}>{w}</li>
                             ))}
                           </ul>
                         </div>
