@@ -173,15 +173,15 @@ export default function HexacoResults() {
             <div style={{display:'flex',justifyContent:'center'}}>
               <svg viewBox="0 0 420 420" style={{width:'100%',maxWidth:420,height:'auto',overflow:'visible'}}>
                 <defs>
-                  <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor={PAGE_ACCENT} stopOpacity=".35"/>
-                    <stop offset="100%" stopColor="#7b5ea7" stopOpacity=".25"/>
+                  <linearGradient id="iiy-hexaco-rg" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#38b6ff" stopOpacity=".35" />
+                    <stop offset="100%" stopColor="#7b5ea7" stopOpacity=".25" />
                   </linearGradient>
                 </defs>
                 {[20,40,60,80,100].map(p => <polygon key={p} points={ringPts(p)} fill="none" stroke="rgba(255,255,255,.07)" strokeWidth="1"/>)}
                 {DIM_ORDER.map((_,i) => { const [ex,ey]=pt(i,100); return <line key={i} x1={CX} y1={CY} x2={ex} y2={ey} stroke="rgba(255,255,255,.1)" strokeWidth="1"/>; })}
-                <polygon className="hr-radar-shape" points={shapePts} fill="url(#rg)" stroke={PAGE_ACCENT} strokeWidth="2" style={{filter:`drop-shadow(0 0 12px ${PAGE_ACCENT}66)`}}/>
-                {DIM_ORDER.map((id,i) => { const [px,py]=pt(i,results.percentile_scores[id]??0); return <circle key={id} className="hr-radar-dot" cx={px} cy={py} r="4" fill={PAGE_ACCENT} style={{filter:`drop-shadow(0 0 6px ${PAGE_ACCENT})`}}/>; })}
+                <polygon className="hr-radar-shape" points={shapePts} fill="url(#iiy-hexaco-rg)" stroke="#38b6ff" strokeWidth="2" style={{ filter: 'drop-shadow(0 0 12px rgba(56,182,255,.45))' }} />
+                {DIM_ORDER.map((id,i) => { const [px,py]=pt(i,results.percentile_scores[id]??0); return <circle key={id} className="hr-radar-dot" cx={px} cy={py} r="4" fill="#38b6ff" style={{ filter: 'drop-shadow(0 0 6px #38b6ff)' }} />; })}
                 {labelAnchors.map(({id,lx,ly}) => {
                   const txt=`${DIM_EMOJI[id]} ${DIM_LABEL[id]}`;
                   const w=Math.max(txt.length*7.2+16,82);
