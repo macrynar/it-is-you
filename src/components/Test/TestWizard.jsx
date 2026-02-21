@@ -22,7 +22,36 @@ import {
 } from '../../utils/scoring.js';
 import { supabase } from '../../lib/supabaseClient.js';
 
+function hexToRgb(hex) {
+  const s = String(hex || '').trim();
+  const m = s.match(/^#?([0-9a-f]{6})$/i);
+  if (!m) return null;
+  const int = parseInt(m[1], 16);
+  return {
+    r: (int >> 16) & 255,
+    g: (int >> 8) & 255,
+    b: int & 255,
+  };
+}
+
+const TEST_META = {
+  hexaco: { title: 'Rdzeń Osobowości (HEXACO)', accent: '#1F3C88' },
+  enneagram: { title: 'Silnik Motywacji (Enneagram)', accent: '#6A1B9A' },
+  dark_triad: { title: 'Analiza Cienia (Dark Triad)', accent: '#8B0000' },
+  strengths: { title: 'Mocne Strony', accent: '#FFB300' },
+  career: { title: 'Profil Kariery (RIASEC)', accent: '#009688' },
+  values: { title: 'Kompas Wartości (PVQ)', accent: '#00B8D4' },
+};
+
 export default function TestWizard({ testType = 'hexaco' }) {
+  const meta = TEST_META[testType] ?? TEST_META.hexaco;
+  const accent = meta.accent;
+  const accentRgb = hexToRgb(accent);
+  const accentRgba = (a) => {
+    if (!accentRgb) return `rgba(56,182,255,${a})`;
+    return `rgba(${accentRgb.r},${accentRgb.g},${accentRgb.b},${a})`;
+  };
+
   // Select test data based on testType prop
   const TEST_DATA = testType === 'dark_triad' 
     ? DARK_TRIAD_TEST 
@@ -41,6 +70,8 @@ export default function TestWizard({ testType = 'hexaco' }) {
   const isCareer = testType === 'career';
   const isValues = testType === 'values';
   const isLikert6 = TEST_DATA.scale_type === 'likert_6';
+
+  const layoutMaxWidth = 'max-w-[1100px]';
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [responses, setResponses] = useState({});
@@ -248,61 +279,46 @@ export default function TestWizard({ testType = 'hexaco' }) {
     if (isDarkTriad) {
       const dimensionInfo = TEST_DATA.dimensions.find(d => d.id === currentQuestion.dimension);
       return {
-        label: dimensionInfo?.name || 'Dark Triad',
-        color: 'from-rose-600 to-red-600'
+        label: dimensionInfo?.name || 'Dark Triad'
       };
     } else if (isEnneagram) {
       return {
-        label: 'Enneagram Type',
-        color: 'from-purple-500 to-violet-500'
+        label: 'Enneagram'
       };
     } else if (isStrengths) {
       const strengthInfo = TEST_DATA.strengths.find(s => s.id === currentQuestion.strength);
       return {
-        label: strengthInfo?.name || 'Talenty',
-        color: 'from-cyan-500 to-indigo-500'
+        label: strengthInfo?.name || 'Talenty'
       };
     } else if (isCareer) {
       const interestInfo = TEST_DATA.interest_types.find(t => t.id === currentQuestion.interest);
       return {
-        label: interestInfo?.name || 'Zainteresowania',
-        color: 'from-indigo-500 to-purple-500'
+        label: interestInfo?.name || 'Zainteresowania'
       };
     } else if (isValues) {
       const valueInfo = TEST_DATA.values.find(v => v.id === currentQuestion.value);
       return {
-        label: valueInfo?.name || 'Wartości',
-        color: 'from-teal-500 to-cyan-500'
+        label: valueInfo?.name || 'Wartości'
       };
     } else {
       const dimensionInfo = TEST_DATA.dimensions.find(d => d.id === currentQuestion.dimension);
       return {
-        label: dimensionInfo?.name || 'Test',
-        color: 'from-cyan-500 to-blue-500'
+        label: dimensionInfo?.name || 'Test'
       };
     }
   };
 
   const badgeInfo = getBadgeInfo();
 
-  const accentText = isDarkTriad ? 'text-rose-400' : isStrengths ? 'text-indigo-400' : isCareer ? 'text-purple-400' : isValues ? 'text-teal-400' : 'text-cyan-400';
-  const accentBorder = isDarkTriad ? 'border-rose-500/30' : isStrengths ? 'border-indigo-500/30' : isValues ? 'border-teal-500/30' : 'border-cyan-500/30';
-  const gradientBar = isDarkTriad ? 'from-rose-600 to-red-600' : isStrengths ? 'from-cyan-500 to-indigo-500' : isCareer ? 'from-indigo-500 to-purple-500' : isValues ? 'from-teal-500 to-cyan-500' : 'from-cyan-500 to-blue-500';
-  const selectedOption = isDarkTriad ? 'border-rose-400 bg-rose-900/50 shadow-[0_0_20px_rgba(244,63,94,0.35)]' : isStrengths ? 'border-indigo-400 bg-indigo-900/50 shadow-[0_0_20px_rgba(99,102,241,0.35)]' : isValues ? 'border-teal-400 bg-teal-900/50 shadow-[0_0_20px_rgba(20,184,166,0.35)]' : 'border-cyan-400 bg-cyan-900/50 shadow-[0_0_20px_rgba(34,211,238,0.35)]';
-  const hoverOption = isDarkTriad ? 'hover:border-rose-500/50 hover:bg-rose-950/30' : isStrengths ? 'hover:border-indigo-500/50 hover:bg-indigo-950/30' : isValues ? 'hover:border-teal-500/50 hover:bg-teal-950/30' : 'hover:border-cyan-500/50 hover:bg-cyan-950/30';
-  const selectedDot = isDarkTriad ? 'border-rose-400 bg-rose-500' : isStrengths ? 'border-indigo-400 bg-indigo-500' : isValues ? 'border-teal-400 bg-teal-500' : 'border-cyan-400 bg-cyan-500';
-  const hoverDot = isDarkTriad ? 'group-hover:border-rose-500/50' : isStrengths ? 'group-hover:border-indigo-500/50' : isValues ? 'group-hover:border-teal-500/50' : 'group-hover:border-cyan-500/50';
-  const nextGradient = isDarkTriad ? 'from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 shadow-rose-500/30 hover:shadow-rose-500/50' : isStrengths ? 'from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 shadow-indigo-500/30 hover:shadow-indigo-500/50' : isCareer ? 'from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-purple-500/30 hover:shadow-purple-500/50' : isValues ? 'from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 shadow-teal-500/30 hover:shadow-teal-500/50' : 'from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 shadow-cyan-500/30 hover:shadow-cyan-500/50';
-
   return (
     <div className="h-screen flex flex-col bg-slate-950 text-white overflow-hidden">
 
       {/* Header */}
       <div className="shrink-0 border-b border-white/5 bg-black/40 backdrop-blur-sm">
-        <div className="max-w-3xl mx-auto px-6 py-3 flex items-center justify-between">
-          <h1 className="text-base font-semibold text-white">{TEST_DATA.test_name}</h1>
+        <div className={`${layoutMaxWidth} mx-auto px-6 py-3 flex items-center justify-between`}>
+          <h1 className="text-base font-semibold text-white">{meta.title}</h1>
           <div className="text-sm font-medium text-slate-400">
-            Pytanie <span className={`font-bold ${accentText}`}>{currentQuestionIndex + 1}</span>
+            Pytanie <span className="font-bold" style={{ color: accent }}>{currentQuestionIndex + 1}</span>
             <span className="text-slate-600"> / {totalQuestions}</span>
           </div>
         </div>
@@ -311,19 +327,27 @@ export default function TestWizard({ testType = 'hexaco' }) {
       {/* Progress Bar */}
       <div className="shrink-0 h-1 bg-slate-800">
         <div
-          className={`h-full bg-gradient-to-r ${gradientBar} transition-all duration-500 ease-out`}
-          style={{ width: `${progress}%` }}
+          className="h-full transition-all duration-500 ease-out"
+          style={{ width: `${progress}%`, backgroundColor: accent, boxShadow: `0 0 18px ${accentRgba(0.18)}` }}
         />
       </div>
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-3xl mx-auto px-6 py-4">
+        <div className={`${layoutMaxWidth} mx-auto px-6 py-4`}>
 
           {/* Dimension Badge */}
           <div className="flex justify-center mb-3">
-            <div className={`px-4 py-1 rounded-full bg-slate-800/50 border ${accentBorder} backdrop-blur-sm`}>
-              <span className={`text-xs font-semibold ${accentText} uppercase tracking-wider`}>{badgeInfo.label}</span>
+            <div
+              className="px-4 py-1 rounded-full bg-slate-800/50 border backdrop-blur-sm"
+              style={{ borderColor: accentRgba(0.28) }}
+            >
+              <span
+                className="text-xs font-semibold uppercase tracking-wider"
+                style={{ color: accent }}
+              >
+                {badgeInfo.label}
+              </span>
             </div>
           </div>
 
@@ -339,16 +363,30 @@ export default function TestWizard({ testType = 'hexaco' }) {
                   onClick={() => handleAnswer('a')}
                   className={`group p-5 rounded-xl transition-all duration-300 min-h-[140px] flex flex-row items-start gap-4 text-left ${
                     responses[currentQuestion.id] === 'a'
-                      ? 'border-2 border-cyan-400 bg-cyan-900/50 shadow-[0_0_30px_rgba(34,211,238,0.35)] scale-[1.02]'
-                      : 'border-2 border-slate-700 bg-slate-900/50 hover:border-cyan-500/50 hover:bg-cyan-950/20'
+                      ? 'border-2 bg-slate-900/50 scale-[1.02]'
+                      : 'border-2 border-slate-700 bg-slate-900/50 hover:border-slate-600 hover:bg-slate-900/70'
                   }`}
+                  style={
+                    responses[currentQuestion.id] === 'a'
+                      ? {
+                          borderColor: accent,
+                          backgroundColor: accentRgba(0.14),
+                          boxShadow: `0 0 28px ${accentRgba(0.22)}`,
+                        }
+                      : undefined
+                  }
                 >
                   <div className="shrink-0 mt-0.5">
-                    <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all duration-300 ${
-                      responses[currentQuestion.id] === 'a'
-                        ? 'border-cyan-400 bg-cyan-500 text-white'
-                        : 'border-slate-600 text-slate-500 group-hover:border-cyan-500/50 group-hover:text-cyan-400'
-                    }`}>A</div>
+                    <div
+                      className="w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all duration-300"
+                      style={
+                        responses[currentQuestion.id] === 'a'
+                          ? { borderColor: accent, backgroundColor: accent, color: '#fff' }
+                          : { borderColor: 'rgba(148,163,184,0.55)', color: 'rgba(148,163,184,0.75)' }
+                      }
+                    >
+                      A
+                    </div>
                   </div>
                   <p className={`text-sm leading-relaxed transition-colors duration-300 ${
                     responses[currentQuestion.id] === 'a' ? 'text-white font-medium' : 'text-slate-300 group-hover:text-white'
@@ -362,16 +400,30 @@ export default function TestWizard({ testType = 'hexaco' }) {
                   onClick={() => handleAnswer('b')}
                   className={`group p-5 rounded-xl transition-all duration-300 min-h-[140px] flex flex-row items-start gap-4 text-left ${
                     responses[currentQuestion.id] === 'b'
-                      ? 'border-2 border-purple-400 bg-purple-900/50 shadow-[0_0_30px_rgba(168,85,247,0.35)] scale-[1.02]'
-                      : 'border-2 border-slate-700 bg-slate-900/50 hover:border-purple-500/50 hover:bg-purple-950/20'
+                      ? 'border-2 bg-slate-900/50 scale-[1.02]'
+                      : 'border-2 border-slate-700 bg-slate-900/50 hover:border-slate-600 hover:bg-slate-900/70'
                   }`}
+                  style={
+                    responses[currentQuestion.id] === 'b'
+                      ? {
+                          borderColor: accent,
+                          backgroundColor: accentRgba(0.14),
+                          boxShadow: `0 0 28px ${accentRgba(0.22)}`,
+                        }
+                      : undefined
+                  }
                 >
                   <div className="shrink-0 mt-0.5">
-                    <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all duration-300 ${
-                      responses[currentQuestion.id] === 'b'
-                        ? 'border-purple-400 bg-purple-500 text-white'
-                        : 'border-slate-600 text-slate-500 group-hover:border-purple-500/50 group-hover:text-purple-400'
-                    }`}>B</div>
+                    <div
+                      className="w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all duration-300"
+                      style={
+                        responses[currentQuestion.id] === 'b'
+                          ? { borderColor: accent, backgroundColor: accent, color: '#fff' }
+                          : { borderColor: 'rgba(148,163,184,0.55)', color: 'rgba(148,163,184,0.75)' }
+                      }
+                    >
+                      B
+                    </div>
                   </div>
                   <p className={`text-sm leading-relaxed transition-colors duration-300 ${
                     responses[currentQuestion.id] === 'b' ? 'text-white font-medium' : 'text-slate-300 group-hover:text-white'
@@ -398,17 +450,29 @@ export default function TestWizard({ testType = 'hexaco' }) {
                     onClick={() => handleAnswer(value)}
                     className={`group w-full px-4 py-3 rounded-xl transition-all duration-200 border ${
                       responses[currentQuestion.id] === value
-                        ? selectedOption
-                        : `border-slate-700 bg-slate-900/50 ${hoverOption}`
+                        ? 'bg-slate-900/50'
+                        : 'border-slate-700 bg-slate-900/50 hover:border-slate-600 hover:bg-slate-900/70'
                     }`}
+                    style={
+                      responses[currentQuestion.id] === value
+                        ? {
+                            borderColor: accent,
+                            backgroundColor: accentRgba(0.14),
+                            boxShadow: `0 0 18px ${accentRgba(0.18)}`,
+                          }
+                        : undefined
+                    }
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                          responses[currentQuestion.id] === value
-                            ? selectedDot
-                            : `border-slate-600 ${hoverDot}`
-                        }`}>
+                        <div
+                          className="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200"
+                          style={
+                            responses[currentQuestion.id] === value
+                              ? { borderColor: accent, backgroundColor: accent }
+                              : { borderColor: 'rgba(148,163,184,0.55)' }
+                          }
+                        >
                           {responses[currentQuestion.id] === value && (
                             <div className="w-2.5 h-2.5 rounded-full bg-white" />
                           )}
@@ -419,9 +483,12 @@ export default function TestWizard({ testType = 'hexaco' }) {
                           {TEST_DATA.scale_labels[value]}
                         </span>
                       </div>
-                      <span className={`text-xl font-bold transition-colors duration-200 ${
-                        responses[currentQuestion.id] === value ? accentText : 'text-slate-700 group-hover:text-slate-500'
-                      }`}>
+                      <span
+                        className={`text-xl font-bold transition-colors duration-200 ${
+                          responses[currentQuestion.id] === value ? '' : 'text-slate-700 group-hover:text-slate-500'
+                        }`}
+                        style={responses[currentQuestion.id] === value ? { color: accent } : undefined}
+                      >
                         {value}
                       </span>
                     </div>
@@ -477,9 +544,14 @@ export default function TestWizard({ testType = 'hexaco' }) {
                 disabled={!canGoNext}
                 className={`flex items-center space-x-2 px-7 py-2.5 rounded-xl font-semibold transition-all duration-200 ${
                   canGoNext
-                    ? `bg-gradient-to-r ${nextGradient} shadow-lg text-white`
+                    ? 'shadow-lg text-white hover:brightness-110'
                     : 'bg-slate-900/30 border border-slate-800 text-slate-700 cursor-not-allowed'
                 }`}
+                style={
+                  canGoNext
+                    ? { backgroundColor: accent, boxShadow: `0 12px 30px ${accentRgba(0.22)}` }
+                    : undefined
+                }
               >
                 <span>Dalej</span>
                 <ChevronRight size={18} />
@@ -490,9 +562,14 @@ export default function TestWizard({ testType = 'hexaco' }) {
                 disabled={!canGoNext || isSubmitting}
                 className={`flex items-center space-x-2 px-7 py-2.5 rounded-xl font-semibold transition-all duration-200 ${
                   canGoNext && !isSubmitting
-                    ? 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 shadow-lg shadow-emerald-500/30 text-white'
+                    ? 'shadow-lg text-white hover:brightness-110'
                     : 'bg-slate-900/30 border border-slate-800 text-slate-700 cursor-not-allowed'
                 }`}
+                style={
+                  canGoNext && !isSubmitting
+                    ? { backgroundColor: accent, boxShadow: `0 12px 30px ${accentRgba(0.22)}` }
+                    : undefined
+                }
               >
                 {isSubmitting ? (
                   <>
@@ -510,18 +587,25 @@ export default function TestWizard({ testType = 'hexaco' }) {
           </div>
 
           {/* Question Indicator Dots */}
-          <div className="mt-4 flex justify-center gap-1 flex-wrap max-w-2xl mx-auto">
+          <div className={`mt-4 flex justify-center gap-1 flex-wrap ${layoutMaxWidth} mx-auto`}>
             {TEST_DATA.questions.map((q, idx) => (
               <button
                 key={q.id}
                 onClick={() => setCurrentQuestionIndex(idx)}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
                   idx === currentQuestionIndex
-                    ? `${accentText.replace('text-', 'bg-')} w-10 shadow-sm`
+                    ? 'w-10 shadow-sm'
                     : responses[q.id] !== undefined
-                    ? 'bg-emerald-500/60 w-1.5'
-                    : 'bg-slate-700 w-1.5 hover:bg-slate-600'
+                    ? 'w-1.5'
+                    : 'w-1.5 hover:brightness-110'
                 }`}
+                style={
+                  idx === currentQuestionIndex
+                    ? { backgroundColor: accent, boxShadow: `0 0 10px ${accentRgba(0.22)}` }
+                    : responses[q.id] !== undefined
+                      ? { backgroundColor: accentRgba(0.45) }
+                      : { backgroundColor: 'rgba(148,163,184,0.25)' }
+                }
                 title={`Pytanie ${idx + 1}${responses[q.id] ? ' (odpowiedziano)' : ''}`}
               />
             ))}
