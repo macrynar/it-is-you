@@ -3,6 +3,7 @@ import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { ENNEAGRAM_TEST } from '../../data/tests/enneagram.js';
 import AiInterpretation from './AiInterpretation.jsx';
+import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 
 /* ─────────────── Per-type accent palette ─────────────── */
 const TYPE_ACCENT = {
@@ -564,17 +565,7 @@ export default function EnneagramResults() {
           </div>
         </div>
 
-        {/* ── Footer Buttons ── */}
-        <div style={{ display:'flex', justifyContent:'center', gap:12 }}>
-          <button onClick={() => window.location.href='/user-profile-tests.html'}
-            style={{ background:'linear-gradient(135deg,#7b1fa2,#d946ef)', color:'#fff', border:'none', borderRadius:12, padding:'13px 28px', fontWeight:700, fontSize:14, cursor:'pointer', fontFamily:'inherit', boxShadow:'0 0 20px rgba(217,70,239,.5)' }}>
-            Wróć do Dashboardu
-          </button>
-          <button onClick={handleRetake}
-            style={{ display:'flex', alignItems:'center', gap:8, background:'rgba(255,255,255,.05)', color:'rgba(255,255,255,.65)', border:'1px solid rgba(255,255,255,.1)', borderRadius:12, padding:'13px 28px', fontWeight:600, fontSize:14, cursor:'pointer', fontFamily:'inherit' }}>
-            <RefreshCw size={16}/> Wykonaj Test Ponownie
-          </button>
-        </div>
+        <ResultsFooterActions retakeHref="/test?type=enneagram" confirmMessage="Czy na pewno chcesz wykonać test ponownie? Obecne wyniki zostaną zastąpione." />
 
       </div>
     </div></>

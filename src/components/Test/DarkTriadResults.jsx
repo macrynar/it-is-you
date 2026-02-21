@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabaseClient.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import { DARK_TRIAD_TEST } from '../../data/tests/darkTriad.js';
 import { generateDarkTriadReport } from '../../utils/scoring.js';
+import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 
 /* ════════════════════════════════════════════════════════════════════
    ACCENT & META
@@ -661,20 +662,11 @@ function DarkTriadResults() {
         </div>
       </div>
 
-      {/* ── ACTIONS ── */}
-      <div style={{ maxWidth: 900, margin: '32px auto 0', display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
-        <button
-          onClick={() => window.location.href = '/user-profile-tests.html'}
-          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 28px', borderRadius: 14, background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.12)', color: 'rgba(255,255,255,.7)', cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600, fontSize: 14 }}
-        >
-          <ArrowLeft size={16} /> Wróć do Dashboardu
-        </button>
-        <button
-          onClick={() => { if (confirm('Powtórzyć test? Wyniki zostaną zastąpione.')) window.location.href = '/test'; }}
-          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 28px', borderRadius: 14, background: 'rgba(251,113,133,.12)', border: '1px solid rgba(251,113,133,.35)', color: '#fb7185', cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600, fontSize: 14 }}
-        >
-          <RefreshCw size={16} /> Wykonaj Test Ponownie
-        </button>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <ResultsFooterActions
+          retakeHref="/test"
+          confirmMessage="Powtórzyć test? Wyniki zostaną zastąpione."
+        />
       </div>
 
       </div>{/* /page content */}

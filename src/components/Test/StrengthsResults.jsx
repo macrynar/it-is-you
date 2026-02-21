@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabaseClient.js';
 import { STRENGTHS_TEST } from '../../data/tests/strengths.js';
 import { generateStrengthsReport } from '../../utils/scoring.js';
 import AiInterpretation from './AiInterpretation.jsx';
+import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 
 const CAT = {
   strategic_thinking: {
@@ -381,6 +382,8 @@ export default function StrengthsResults() {
             testLabel="Test Talentów"
           />
         </div>
+
+        <ResultsFooterActions retakeHref="/test?type=strengths" />
 
       </div>
     </div>

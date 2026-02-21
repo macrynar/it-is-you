@@ -3,6 +3,7 @@ import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { HEXACO_TEST } from '../../data/tests/hexaco.js';
 import AiInterpretation from './AiInterpretation.jsx';
+import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 
 const ACCENT = {
   honesty_humility: { plName:'Szczerość', name:'Honesty-Humility', color:'#38b6ff', gradient:'linear-gradient(90deg,#1a6aff,#38b6ff)', glow:'rgba(56,182,255,.5)', blob:'#38b6ff', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(56,182,255,.35),0 0 30px -4px rgba(56,182,255,.3),0 16px 48px -6px rgba(0,0,0,.7)' },
@@ -271,12 +272,7 @@ export default function HexacoResults() {
           </div>
         </div>
 
-        <div style={{display:'flex',justifyContent:'center',gap:12}}>
-          <button onClick={()=>window.location.href='/user-profile-tests.html'} style={{background:'linear-gradient(135deg,#1a6aff,#38b6ff)',color:'#fff',border:'none',borderRadius:12,padding:'13px 28px',fontWeight:700,fontSize:14,cursor:'pointer',fontFamily:'inherit',boxShadow:'0 0 20px rgba(56,182,255,.3)'}}>Wróć do Dashboardu</button>
-          <button onClick={handleRetake} style={{display:'flex',alignItems:'center',gap:8,background:'rgba(255,255,255,.05)',color:'rgba(255,255,255,.65)',border:'1px solid rgba(255,255,255,.1)',borderRadius:12,padding:'13px 28px',fontWeight:600,fontSize:14,cursor:'pointer',fontFamily:'inherit'}}>
-            <RefreshCw size={16}/> Wykonaj Test Ponownie
-          </button>
-        </div>
+        <ResultsFooterActions retakeHref="/test" />
 
       </div>
     </div></>

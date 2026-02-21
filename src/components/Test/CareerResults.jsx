@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabaseClient.js';
 import { CAREER_TEST } from '../../data/tests/career.js';
 import { generateCareerReport } from '../../utils/scoring.js';
 import AiInterpretation from './AiInterpretation.jsx';
+import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 
 /**
  * Career Interests (RIASEC) Results — Neural Glass redesign
@@ -510,6 +511,8 @@ export default function CareerResults() {
             testLabel="PROFIL ZAWODOWY"
           />
         </div>
+
+        <ResultsFooterActions retakeHref="/test?type=career" />
 
       </div>
     </div>

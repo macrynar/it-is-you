@@ -7,6 +7,7 @@ import {
 import { supabase } from '../../lib/supabaseClient.js';
 import { generateValuesReport } from '../../utils/scoring.js';
 import AiInterpretation from './AiInterpretation.jsx';
+import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 
 /**
  * Personal Values (Schwartz PVQ) Results — Neural Glass redesign
@@ -446,6 +447,8 @@ export default function ValuesResults() {
             testLabel="KOMPAS WARTOŚCI"
           />
         </div>
+
+        <ResultsFooterActions retakeHref="/test?type=values" />
 
       </div>
     </div>
