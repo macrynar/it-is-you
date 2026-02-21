@@ -49,7 +49,7 @@ const CSS = `
 .sr-talent-card:hover::after{opacity:.38;transform:scale(1.25);}
 .sr-glow-line{position:absolute;bottom:0;left:12%;right:12%;height:1px;border-radius:100px;opacity:0;transition:opacity .3s;}
 .sr-talent-card:hover .sr-glow-line{opacity:1;}
-.sr-talent-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:36px;}
+.sr-talent-grid{display:grid;grid-template-columns:1fr;gap:20px;margin-bottom:36px;}
 @media(max-width:640px){.sr-talent-grid{grid-template-columns:1fr;}}
 .sr-bar-track{height:6px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden;}
 .sr-bar-fill{height:100%;border-radius:100px;position:relative;transition:width 1s cubic-bezier(.22,.68,0,1.1);}
