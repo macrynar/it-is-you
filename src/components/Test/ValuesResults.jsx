@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, RefreshCw } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ReferenceLine, Cell, ResponsiveContainer
@@ -8,6 +7,9 @@ import { supabase } from '../../lib/supabaseClient.js';
 import { generateValuesReport } from '../../utils/scoring.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
+import ResultsScaffold from './modules/ResultsScaffold.jsx';
+
+const PAGE_ACCENT = '#00B8D4';
 
 /**
  * Personal Values (Schwartz PVQ) Results — Neural Glass redesign
@@ -148,7 +150,7 @@ export default function ValuesResults() {
       <div style={{ background: '#0d0f2b', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Space Grotesk',sans-serif" }}>
         <style>{`@keyframes spinLoader{to{transform:rotate(360deg);}}`}</style>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ width: 48, height: 48, border: '3px solid rgba(20,184,166,.3)', borderTop: '3px solid #14b8a6', borderRadius: '50%', animation: 'spinLoader 1s linear infinite', margin: '0 auto 16px' }} />
+          <div style={{ width: 48, height: 48, border: '3px solid rgba(0,184,212,.28)', borderTop: `3px solid ${PAGE_ACCENT}`, borderRadius: '50%', animation: 'spinLoader 1s linear infinite', margin: '0 auto 16px' }} />
           <p style={{ color: 'rgba(255,255,255,.5)', fontSize: '.95rem' }}>Ładowanie wyników...</p>
         </div>
       </div>
@@ -164,7 +166,7 @@ export default function ValuesResults() {
           <p style={{ color: 'rgba(255,255,255,.5)', marginBottom: 24 }}>{error}</p>
           <button
             onClick={() => window.location.href = '/user-profile-tests.html'}
-            style={{ background: 'linear-gradient(135deg,#0d4f4a,#14b8a6)', border: 'none', borderRadius: 12, padding: '12px 28px', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: "'Space Grotesk',sans-serif" }}>
+            style={{ background: `linear-gradient(135deg,${PAGE_ACCENT}cc,${PAGE_ACCENT})`, border: 'none', borderRadius: 12, padding: '12px 28px', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: "'Space Grotesk',sans-serif" }}>
             Wróć do Dashboard
           </button>
         </div>
@@ -180,55 +182,26 @@ export default function ValuesResults() {
     <div className="vr-root">
       <style>{CSS}</style>
 
-      {/* ─── Navigation ─── */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,.06)', background: 'rgba(13,15,43,.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <button
-            onClick={() => window.location.href = '/user-profile-tests.html'}
-            style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', color: 'rgba(255,255,255,.7)', cursor: 'pointer', font: '500 .9rem "Space Grotesk",sans-serif', transition: 'color .2s' }}
-            onMouseEnter={e => e.currentTarget.style.color = '#fff'}
-            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.7)'}>
-            <ArrowLeft size={18} /> Dashboard
-          </button>
-          <span style={{ fontSize: '.78rem', fontWeight: 600, letterSpacing: '1.2px', textTransform: 'uppercase', color: 'rgba(255,255,255,.35)' }}>
-            KOMPAS WARTOŚCI
-          </span>
-          <button
-            onClick={handleRetakeTest}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.06)', border: '1px solid rgba(255,255,255,.1)', borderRadius: 10, padding: '8px 16px', color: 'rgba(255,255,255,.7)', cursor: 'pointer', font: '500 .85rem "Space Grotesk",sans-serif', transition: 'all .2s' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,.1)'; e.currentTarget.style.color = '#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,.06)'; e.currentTarget.style.color = 'rgba(255,255,255,.7)'; }}>
-            <RefreshCw size={15} /> Powtórz Test
-          </button>
-        </div>
-      </nav>
+      <ResultsScaffold
+        accent={PAGE_ACCENT}
+        navLabel="KOMPAS WARTOŚCI"
+        badge="🧭 Kompas Wartości (PVQ)"
+        title={<>Twój <span style={{ color: PAGE_ACCENT, textShadow: `0 0 24px ${PAGE_ACCENT}66` }}>Kompas Wartości</span></>}
+        subtitle={<>Test Wartości Osobistych (Schwartz PVQ)</>}
+        completedAt={report?.completed_at}
+        retakeHref="/test?type=values"
+      >
 
-      {/* ─── Content ─── */}
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '48px 24px 80px', position: 'relative', zIndex: 1 }}>
-
-        <header className="vr-fadein" style={{ textAlign: 'center', marginBottom: 24, position: 'relative' }}>
-          <div aria-hidden style={{ position: 'absolute', top: -60, right: -60, width: 260, height: 260, borderRadius: '50%', background: `rgba(20,184,166,.35)`, filter: 'blur(80px)', opacity: .22, pointerEvents: 'none' }} />
-          <div aria-hidden style={{ position: 'absolute', bottom: -40, left: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(59,130,246,.3)', filter: 'blur(70px)', opacity: .18, pointerEvents: 'none' }} />
-
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ fontSize: '2.8rem', marginBottom: 10 }}>🧭</div>
-            <h1 style={{ fontSize: 'clamp(1.8rem,5vw,2.8rem)', fontWeight: 800, margin: '0 0 6px', background: `linear-gradient(135deg,#14b8a6,#60a5fa,#c084fc)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-              Twój Kompas Wartości
-            </h1>
-            <p style={{ color: 'rgba(255,255,255,.45)', fontSize: '.88rem', margin: '0 0 24px' }}>
-              Test Wartości Osobistych (Schwartz PVQ) ·{' '}
-              {new Date(report.completed_at).toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
-              {report.top_3?.map((v, i) => (
-                <span key={v.id} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 100, fontSize: '.78rem', fontWeight: 600, background: `${v.color}22`, border: `1px solid ${v.color}50`, color: v.color }}>
-                  <span style={{ width: 18, height: 18, borderRadius: '50%', background: v.color, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '.62rem', fontWeight: 800, color: '#000' }}>{i + 1}</span>
-                  {v.name}
-                </span>
-              ))}
-            </div>
+        {report.top_3?.length ? (
+          <div className="vr-fadein" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginBottom: 24 }}>
+            {report.top_3.map((v, i) => (
+              <span key={v.id} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 100, fontSize: '.78rem', fontWeight: 600, background: `${v.color}22`, border: `1px solid ${v.color}50`, color: v.color }}>
+                <span style={{ width: 18, height: 18, borderRadius: '50%', background: v.color, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '.62rem', fontWeight: 800, color: '#000' }}>{i + 1}</span>
+                {v.name}
+              </span>
+            ))}
           </div>
-        </header>
+        ) : null}
 
         {/* ─── MRAT explanation ─── */}
         <div className="vr-glass vr-fadein" style={{ padding: '22px 26px', marginBottom: 24, animationDelay: '.08s' }}>
@@ -449,7 +422,7 @@ export default function ValuesResults() {
 
         <ResultsFooterActions retakeHref="/test?type=values" />
 
-      </div>
+      </ResultsScaffold>
     </div>
   );
 }

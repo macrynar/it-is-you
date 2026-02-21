@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { CAREER_TEST } from '../../data/tests/career.js';
 import { generateCareerReport } from '../../utils/scoring.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
+import ResultsScaffold from './modules/ResultsScaffold.jsx';
+
+const PAGE_ACCENT = '#009688';
 
 /**
  * Career Interests (RIASEC) Results — Neural Glass redesign
@@ -43,16 +45,16 @@ const radarLabelAnchors = [
   { id: 'conventional',  lx: 44,  ly: 100 },
 ];
 
-const EMERALD = '#34d399';
-const EMERALD_GLOW = 'rgba(52,211,153,.5)';
-const EMERALD_DIM  = 'rgba(52,211,153,.12)';
+const EMERALD = PAGE_ACCENT;
+const EMERALD_GLOW = 'rgba(0,150,136,.5)';
+const EMERALD_DIM  = 'rgba(0,150,136,.12)';
 
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 .cr-root{font-family:'Space Grotesk',sans-serif;background:#0d0f2b;color:#fff;min-height:100vh;overflow-x:hidden;}
-.cr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(52,211,153,.09) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(52,211,153,.06) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
+.cr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(0,150,136,.09) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(0,150,136,.06) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
 .cr-glass{background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:20px;position:relative;isolation:isolate;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6);}
-.cr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(52,211,153,.18) 35%,rgba(52,211,153,.08) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.cr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(0,150,136,.18) 35%,rgba(0,150,136,.08) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
 .cr-interest-card{border-radius:20px;position:relative;isolation:isolate;overflow:hidden;background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;cursor:default;}
 .cr-interest-card:hover{transform:translateY(-6px);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(255,255,255,.1),0 0 40px -8px var(--type-color,#0ea5e9),0 20px 48px -8px rgba(0,0,0,.7);}
 .cr-interest-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
@@ -160,18 +162,12 @@ export default function CareerResults() {
     await generateInterpretation(rawScores, report);
   };
 
-  const handleRetakeTest = () => {
-    if (confirm('Czy na pewno chcesz wykonać test ponownie?')) {
-      window.location.href = '/test?type=career';
-    }
-  };
-
   if (loading) {
     return (
       <div style={{ background: '#0d0f2b', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Space Grotesk', sans-serif" }}>
         <style>{`@keyframes spinLoader{to{transform:rotate(360deg);}}`}</style>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ width: 48, height: 48, border: '3px solid rgba(52,211,153,.3)', borderTop: '3px solid #34d399', borderRadius: '50%', animation: 'spinLoader 1s linear infinite', margin: '0 auto 16px' }} />
+          <div style={{ width: 48, height: 48, border: '3px solid rgba(0,150,136,.24)', borderTop: `3px solid ${PAGE_ACCENT}`, borderRadius: '50%', animation: 'spinLoader 1s linear infinite', margin: '0 auto 16px' }} />
           <p style={{ color: 'rgba(255,255,255,.5)', fontSize: '.95rem' }}>Ładowanie wyników...</p>
         </div>
       </div>
@@ -187,7 +183,7 @@ export default function CareerResults() {
           <p style={{ color: 'rgba(255,255,255,.5)', marginBottom: 24 }}>{error}</p>
           <button
             onClick={() => window.location.href = '/user-profile-tests.html'}
-            style={{ background: 'linear-gradient(135deg,#0c4a6e,#0ea5e9)', border: 'none', borderRadius: 12, padding: '12px 28px', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: "'Space Grotesk', sans-serif" }}>
+            style={{ background: `linear-gradient(135deg,${PAGE_ACCENT}cc,${PAGE_ACCENT})`, border: 'none', borderRadius: 12, padding: '12px 28px', color: '#fff', fontWeight: 600, cursor: 'pointer', fontFamily: "'Space Grotesk', sans-serif" }}>
             Wróć do Dashboard
           </button>
         </div>
@@ -204,43 +200,16 @@ export default function CareerResults() {
     <div className="cr-root">
       <style>{CSS}</style>
 
-      {/* ─── Navigation ─── */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid rgba(255,255,255,.06)', background: 'rgba(13,15,43,.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '14px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <button
-            onClick={() => window.location.href = '/user-profile-tests.html'}
-            style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', color: 'rgba(255,255,255,.5)', cursor: 'pointer', font: '500 .9rem "Space Grotesk",sans-serif', transition: 'color .2s' }}
-            onMouseEnter={e => e.currentTarget.style.color = '#fff'}
-            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.5)'}>
-            <ArrowLeft size={18} /> Dashboard
-          </button>
-          <button
-            onClick={handleRetakeTest}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)', borderRadius: 8, padding: '8px 16px', color: 'rgba(255,255,255,.55)', cursor: 'pointer', font: '600 .85rem "Space Grotesk",sans-serif', transition: 'all .2s' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,.1)'; e.currentTarget.style.color = '#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,.05)'; e.currentTarget.style.color = 'rgba(255,255,255,.55)'; }}>
-            <RefreshCw size={15} /> Powtórz Test
-          </button>
-        </div>
-      </nav>
-
-      {/* ─── Main content ─── */}
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '48px 32px 80px', position: 'relative', zIndex: 1 }}>
-
-        {/* ─── Clean Header ─── */}
-        <header className="cr-fadein" style={{ textAlign: 'center', marginBottom: 36 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 18px', borderRadius: 100, background: 'rgba(52,211,153,.1)', border: '1px solid rgba(52,211,153,.28)', fontSize: 13, fontWeight: 600, color: EMERALD, letterSpacing: '.5px', marginBottom: 14 }}>
-            💼 Profil Zawodowy
-          </div>
-          <h1 style={{ fontSize: 'clamp(1.8rem,4vw,2.6rem)', fontWeight: 800, letterSpacing: '-.5px', margin: '0 0 8px' }}>
-            Twój Profil <span style={{ color: EMERALD }}>Zawodowy</span>
-          </h1>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,.35)', margin: 0 }}>
-            <strong style={{ color: 'rgba(255,255,255,.55)', fontWeight: 500 }}>Test Zainteresowań Zawodowych (RIASEC)</strong>
-            {' · '}
-            {new Date(report.completed_at).toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' })}
-          </p>
-        </header>
+      <ResultsScaffold
+        accent={PAGE_ACCENT}
+        navLabel="PROFIL ZAWODOWY"
+        badge="💼 Profil Zawodowy (RIASEC)"
+        title={<>Twój Profil <span style={{ color: PAGE_ACCENT, textShadow: `0 0 24px ${PAGE_ACCENT}66` }}>Zawodowy</span></>}
+        subtitle={<>Test Zainteresowań Zawodowych (RIASEC)</>}
+        completedAt={report?.completed_at}
+        retakeHref="/test?type=career"
+        confirmMessage="Czy na pewno chcesz wykonać test ponownie?"
+      >
 
         {/* ─── Holland Code — expanded card ─── */}
         <div className="cr-glass cr-fadein" style={{ padding: '32px 36px', marginBottom: 24, animationDelay: '.05s', overflow: 'hidden' }}>
@@ -365,7 +334,7 @@ export default function CareerResults() {
                   })}
                 </div>
                 <div style={{ height: 1, background: 'rgba(255,255,255,.07)' }} />
-                <div style={{ background: 'rgba(52,211,153,.06)', border: '1px solid rgba(52,211,153,.18)', borderRadius: 12, padding: 14, fontSize: 12, lineHeight: 1.65, color: 'rgba(255,255,255,.5)' }}>
+                <div style={{ background: 'rgba(0,150,136,.06)', border: '1px solid rgba(0,150,136,.18)', borderRadius: 12, padding: 14, fontSize: 12, lineHeight: 1.65, color: 'rgba(255,255,255,.5)' }}>
                   <strong style={{ color: 'rgba(255,255,255,.85)', fontWeight: 600 }}>Kod Hollanda: {report.holland_code}</strong>
                   {' — trzy litery reprezentują Twoje najsilniejsze typy zainteresowań w kolejności dominacji.'}
                 </div>
@@ -506,15 +475,15 @@ export default function CareerResults() {
             error={interpError}
             onRegenerate={handleRegenerate}
             onRetry={() => generateInterpretation(rawScores, report)}
-            accentColor={domR.color}
-            accentGlow={domR.glow}
+            accentColor={PAGE_ACCENT}
+            accentGlow="rgba(0,150,136,.45)"
             testLabel="PROFIL ZAWODOWY"
           />
         </div>
 
         <ResultsFooterActions retakeHref="/test?type=career" />
 
-      </div>
+      </ResultsScaffold>
     </div>
   );
 }

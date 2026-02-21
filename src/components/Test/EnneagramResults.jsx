@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { ENNEAGRAM_TEST } from '../../data/tests/enneagram.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
+import ResultsScaffold from './modules/ResultsScaffold.jsx';
+
+const PAGE_ACCENT = '#6A1B9A';
 
 /* ─────────────── Per-type accent palette ─────────────── */
 const TYPE_ACCENT = {
@@ -290,7 +292,7 @@ export default function EnneagramResults() {
     <><style>{CSS}</style>
     <div className="en-root" style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh' }}>
       <div style={{ textAlign:'center' }}>
-        <div style={{ width:44, height:44, border:'3px solid rgba(217,70,239,.25)', borderTopColor:'#d946ef', borderRadius:'50%', animation:'spinLoader 1s linear infinite', margin:'0 auto 16px' }}/>
+        <div style={{ width:44, height:44, border:'3px solid rgba(106,27,154,.25)', borderTopColor:PAGE_ACCENT, borderRadius:'50%', animation:'spinLoader 1s linear infinite', margin:'0 auto 16px' }}/>
         <p style={{ color:'rgba(255,255,255,.4)', fontSize:13 }}>Ładowanie wyników...</p>
       </div>
     </div></>
@@ -303,7 +305,7 @@ export default function EnneagramResults() {
       <div className="en-glass" style={{ ...G, padding:40, textAlign:'center', maxWidth:380 }}>
         <div style={{ fontSize:44, marginBottom:16 }}>⚠️</div>
         <p style={{ color:'rgba(255,255,255,.7)', marginBottom:24, lineHeight:1.6 }}>{error || 'Nie znaleziono wyników testu'}</p>
-        <button onClick={() => window.location.href='/test?type=enneagram'} style={{ background:'linear-gradient(135deg,#7b1fa2,#d946ef)', color:'#fff', border:'none', borderRadius:10, padding:'12px 24px', fontWeight:700, cursor:'pointer', fontFamily:'inherit', fontSize:14 }}>Wykonaj Test</button>
+        <button onClick={() => window.location.href='/test?type=enneagram'} style={{ background:`linear-gradient(135deg,${PAGE_ACCENT}cc,${PAGE_ACCENT})`, color:'#fff', border:'none', borderRadius:10, padding:'12px 24px', fontWeight:700, cursor:'pointer', fontFamily:'inherit', fontSize:14 }}>Wykonaj Test</button>
       </div>
     </div></>
   );
@@ -334,36 +336,16 @@ export default function EnneagramResults() {
     <><style>{CSS}</style>
     <div className="en-root">
 
-      {/* ── Nav ── */}
-      <nav style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 40px', borderBottom:'1px solid rgba(255,255,255,.05)', backdropFilter:'blur(20px)', position:'sticky', top:0, zIndex:100, background:'rgba(13,15,43,.88)' }}>
-        <button onClick={() => window.location.href='/user-profile-tests.html'}
-          style={{ display:'flex', alignItems:'center', gap:8, background:'none', border:'none', color:'rgba(255,255,255,.5)', cursor:'pointer', fontFamily:'inherit', fontSize:14, fontWeight:500, padding:0 }}
-          onMouseEnter={e => e.currentTarget.style.color='#fff'}
-          onMouseLeave={e => e.currentTarget.style.color='rgba(255,255,255,.5)'}>
-          <ArrowLeft size={18}/> Dashboard
-        </button>
-        <button onClick={handleRetake}
-          style={{ display:'flex', alignItems:'center', gap:8, background:'rgba(255,255,255,.05)', border:'1px solid rgba(255,255,255,.1)', color:'rgba(255,255,255,.55)', cursor:'pointer', fontFamily:'inherit', fontSize:13, fontWeight:600, borderRadius:8, padding:'8px 16px' }}
-          onMouseEnter={e => { e.currentTarget.style.background='rgba(255,255,255,.1)'; e.currentTarget.style.color='#fff'; }}
-          onMouseLeave={e => { e.currentTarget.style.background='rgba(255,255,255,.05)'; e.currentTarget.style.color='rgba(255,255,255,.55)'; }}>
-          <RefreshCw size={14}/> Powtórz Test
-        </button>
-      </nav>
-
-      <div style={{ maxWidth:1160, margin:'0 auto', padding:'48px 40px 80px', position:'relative', zIndex:1 }}>
-
-        {/* ── Header ── */}
-        <header style={{ textAlign:'center', marginBottom:40 }}>
-          <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'8px 18px', borderRadius:100, background:'#d946ef18', border:'1px solid #d946ef44', fontSize:13, fontWeight:600, color:'#d946ef', letterSpacing:'.5px', marginBottom:14 }}>
-            🔮 Soul Blueprint
-          </div>
-          <div style={{ fontSize:32, fontWeight:800, letterSpacing:'-.5px', margin:'0 0 8px' }}>
-            Twoje wyniki <span style={{ color:'#d946ef' }}>Enneagram</span>
-          </div>
-          <p style={{ fontSize:14, color:'rgba(255,255,255,.35)', margin:0 }}>
-            <strong style={{ color:'rgba(255,255,255,.55)', fontWeight:500 }}>Test Enneagramu</strong> · Poznaj swoją głęboką motywację i wzorzec osobowości
-          </p>
-        </header>
+      <ResultsScaffold
+        accent={PAGE_ACCENT}
+        navLabel="SILNIK MOTYWACJI"
+        badge="🔮 Silnik Motywacji (Enneagram)"
+        title={<>Twoje wyniki <span style={{ color: PAGE_ACCENT, textShadow: `0 0 24px ${PAGE_ACCENT}66` }}>Enneagram</span></>}
+        subtitle={<>Test Enneagramu · Poznaj swoją głęboką motywację i wzorzec osobowości</>}
+        completedAt={results?.completed_at}
+        retakeHref="/test?type=enneagram"
+        confirmMessage="Czy na pewno chcesz wykonać test ponownie? Obecne wyniki zostaną zastąpione."
+      >
 
         {/* ── Main 2-column: Diagram + Type Card ── */}
         <div style={{ display:'grid', gridTemplateColumns:'1fr 380px', gap:24, marginBottom:24 }}>
@@ -396,7 +378,7 @@ export default function EnneagramResults() {
               <div style={{ fontSize:22, fontWeight:700, color:'#fff', marginBottom:2 }}>{primaryType.name}</div>
               <div style={{ fontSize:13, color:'rgba(255,255,255,.4)', fontStyle:'italic', marginBottom:10 }}>"{primaryType.name_en}"</div>
               {wing && (
-                <div style={{ display:'inline-flex', alignItems:'center', gap:6, fontSize:12, fontWeight:600, color:'#d946ef', background:'rgba(217,70,239,.1)', border:'1px solid rgba(217,70,239,.3)', padding:'4px 10px', borderRadius:100 }}>
+                <div style={{ display:'inline-flex', alignItems:'center', gap:6, fontSize:12, fontWeight:600, color:PAGE_ACCENT, background:'rgba(106,27,154,.1)', border:'1px solid rgba(106,27,154,.3)', padding:'4px 10px', borderRadius:100 }}>
                   🪶 Skrzydło {wing.type}
                 </div>
               )}
@@ -496,10 +478,10 @@ export default function EnneagramResults() {
         {/* ── Growth Path ── */}
         {interp?.growth_path && (
           <div className="en-glass en-card" style={{ ...G, padding:32, marginBottom:24, overflow:'hidden' }}
-            onMouseEnter={hoverOn('#d946ef','rgba(217,70,239,.5)')}
+            onMouseEnter={hoverOn(PAGE_ACCENT,'rgba(106,27,154,.5)')}
             onMouseLeave={hoverOff}>
-            <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:400, height:200, background:'rgba(217,70,239,.06)', borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }}/>
-            <div className="en-glow-line" style={{ background:'#d946ef', boxShadow:'0 0 10px 2px rgba(217,70,239,.5)' }}/>
+            <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:400, height:200, background:'rgba(106,27,154,.06)', borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }}/>
+            <div className="en-glow-line" style={{ background:PAGE_ACCENT, boxShadow:'0 0 10px 2px rgba(106,27,154,.5)' }}/>
             <div style={{ position:'relative' }}>
               <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:16 }}>
                 <div style={{ width:36, height:36, borderRadius:10, background:`${ac.color}20`, border:`1px solid ${ac.color}40`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:18 }}>🌱</div>
@@ -512,12 +494,12 @@ export default function EnneagramResults() {
 
         {/* ── All Type Scores ── */}
         <div className="en-glass en-card" style={{ ...G, padding:32, marginBottom:24, overflow:'hidden' }}
-          onMouseEnter={hoverOn('#d946ef','rgba(217,70,239,.5)')}
+          onMouseEnter={hoverOn(PAGE_ACCENT,'rgba(106,27,154,.5)')}
           onMouseLeave={hoverOff}>
           <div style={{ fontSize:11, fontWeight:600, letterSpacing:'3px', textTransform:'uppercase', color:'rgba(255,255,255,.3)', marginBottom:24, display:'flex', alignItems:'center', gap:12 }}>
-            Wszystkie Typy <span style={{ flex:1, height:1, background:'linear-gradient(90deg,rgba(217,70,239,.2),transparent)' }}/>
+            Wszystkie Typy <span style={{ flex:1, height:1, background:`linear-gradient(90deg,${PAGE_ACCENT}55,transparent)` }}/>
           </div>
-          <div className="en-glow-line" style={{ background:'#d946ef', boxShadow:'0 0 10px 2px rgba(217,70,239,.5)' }}/>
+          <div className="en-glow-line" style={{ background:PAGE_ACCENT, boxShadow:'0 0 10px 2px rgba(106,27,154,.5)' }}/>
           <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
             {sortedTypes.map(({ type, score }) => {
               const typeAc = TYPE_ACCENT[type] || TYPE_ACCENT[1];
@@ -547,10 +529,10 @@ export default function EnneagramResults() {
 
         {/* ── AI Interpretation ── */}
         <div className="en-glass en-card" style={{ ...G, padding:36, marginBottom:32, overflow:'hidden' }}
-          onMouseEnter={hoverOn('#d946ef','rgba(217,70,239,.5)')}
+          onMouseEnter={hoverOn(PAGE_ACCENT,'rgba(106,27,154,.5)')}
           onMouseLeave={hoverOff}>
-          <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:400, height:180, background:'rgba(217,70,239,.06)', borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }}/>
-          <div className="en-glow-line" style={{ background:'#d946ef', boxShadow:'0 0 10px 2px rgba(217,70,239,.5)' }}/>
+          <div style={{ position:'absolute', top:0, left:'50%', transform:'translateX(-50%)', width:400, height:200, background:'rgba(106,27,154,.06)', borderRadius:'50%', filter:'blur(60px)', pointerEvents:'none' }}/>
+          <div className="en-glow-line" style={{ background:PAGE_ACCENT, boxShadow:'0 0 10px 2px rgba(106,27,154,.5)' }}/>
           <div style={{ position:'relative' }}>
             <AiInterpretation
               interpretation={aiInterp}
@@ -558,8 +540,8 @@ export default function EnneagramResults() {
               error={aiError}
               onRegenerate={regenerate}
               onRetry={() => generateInterpretation(results)}
-              accentColor='#d946ef'
-              accentGlow='rgba(217,70,239,.5)'
+              accentColor={PAGE_ACCENT}
+              accentGlow='rgba(106,27,154,.5)'
               testLabel="Twojego profilu Enneagram"
             />
           </div>
@@ -567,7 +549,7 @@ export default function EnneagramResults() {
 
         <ResultsFooterActions retakeHref="/test?type=enneagram" confirmMessage="Czy na pewno chcesz wykonać test ponownie? Obecne wyniki zostaną zastąpione." />
 
-      </div>
+      </ResultsScaffold>
     </div></>
   );
 }

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { STRENGTHS_TEST } from '../../data/tests/strengths.js';
 import { generateStrengthsReport } from '../../utils/scoring.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
+import ResultsScaffold from './modules/ResultsScaffold.jsx';
+
+const PAGE_ACCENT = '#FFB300';
 
 const CAT = {
   strategic_thinking: {
@@ -156,8 +158,8 @@ export default function StrengthsResults() {
     <div style={{ background: '#0d0f2b', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <style>{CSS}</style>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ width: 48, height: 48, border: '3px solid rgba(251,191,36,.2)', borderTopColor: '#fbbf24', borderRadius: '50%', margin: '0 auto 16px', animation: 'spinLoader 1s linear infinite' }} />
-        <p style={{ color: '#fbbf24', fontFamily: 'Space Grotesk,sans-serif', fontWeight: 600 }}>Ładowanie wyników...</p>
+        <div style={{ width: 48, height: 48, border: '3px solid rgba(255,179,0,.2)', borderTopColor: PAGE_ACCENT, borderRadius: '50%', margin: '0 auto 16px', animation: 'spinLoader 1s linear infinite' }} />
+        <p style={{ color: PAGE_ACCENT, fontFamily: 'Space Grotesk,sans-serif', fontWeight: 600 }}>Ładowanie wyników...</p>
       </div>
     </div>
   );
@@ -170,7 +172,7 @@ export default function StrengthsResults() {
         <h2 style={{ color: '#f87171', fontSize: '1.2rem', fontWeight: 700, marginBottom: 12 }}>Błąd</h2>
         <p style={{ color: 'rgba(255,255,255,.6)', marginBottom: 24 }}>{error}</p>
         <button onClick={() => window.location.href = '/user-profile-tests.html'}
-          style={{ padding: '10px 24px', borderRadius: 10, background: 'linear-gradient(135deg,#92400e,#fbbf24)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'Space Grotesk,sans-serif' }}>
+          style={{ padding: '10px 24px', borderRadius: 10, background: `linear-gradient(135deg,${PAGE_ACCENT}cc,${PAGE_ACCENT})`, color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontFamily: 'Space Grotesk,sans-serif' }}>
           Wróć do Dashboardu
         </button>
       </div>
@@ -183,42 +185,15 @@ export default function StrengthsResults() {
     <div className="sr-root">
       <style>{CSS}</style>
 
-      <div style={{ position: 'relative', zIndex: 10, borderBottom: '1px solid rgba(255,255,255,.06)', background: 'rgba(13,15,43,.8)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', padding: '14px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button
-            onClick={() => window.location.href = '/user-profile-tests.html'}
-            style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,.5)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Space Grotesk,sans-serif', fontSize: '.9rem' }}
-            onMouseEnter={e => e.currentTarget.style.color = '#fff'}
-            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.5)'}
-          >
-            <ArrowLeft size={18} /> Dashboard
-          </button>
-          <span style={{ color: 'rgba(255,255,255,.25)', fontSize: '.8rem', fontWeight: 500, letterSpacing: 1 }}>TEST TALENTÓW</span>
-          <button
-            onClick={() => { if (window.confirm('Czy na pewno chcesz wykonać test ponownie?')) window.location.href = '/test?type=strengths'; }}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,.45)', background: 'none', border: '1px solid rgba(255,255,255,.1)', borderRadius: 8, padding: '6px 14px', cursor: 'pointer', fontFamily: 'Space Grotesk,sans-serif', fontSize: '.82rem' }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.25)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,.45)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.1)'; }}
-          >
-            <RefreshCw size={14} /> Powtórz Test
-          </button>
-        </div>
-      </div>
-
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 900, margin: '0 auto', padding: '48px 28px 80px' }}>
-
-        <header className="sr-fadein" style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ fontSize: '3.2rem', marginBottom: 12, lineHeight: 1 }}>🎯</div>
-          <h1 style={{ fontSize: '2.1rem', fontWeight: 800, margin: '0 0 8px', background: 'linear-gradient(135deg,#fbbf24 0%,#f97316 50%,#b08fff 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            Twoje Top 5 Talentów
-          </h1>
-          <p style={{ color: 'rgba(255,255,255,.5)', fontSize: '.95rem', margin: 0 }}>Odkryj swoje naturalne mocne strony</p>
-          {report.completed_at && (
-            <p style={{ color: 'rgba(255,255,255,.3)', fontSize: '.78rem', marginTop: 8 }}>
-              Ukończono: {new Date(report.completed_at).toLocaleDateString('pl-PL')}
-            </p>
-          )}
-        </header>
+      <ResultsScaffold
+        accent={PAGE_ACCENT}
+        navLabel="MOCNE STRONY"
+        badge="💪 Mocne Strony (Strengths)"
+        title={<>Twoje <span style={{ color: PAGE_ACCENT, textShadow: `0 0 24px ${PAGE_ACCENT}66` }}>Top 5 Talentów</span></>}
+        subtitle={<>Odkryj swoje naturalne mocne strony</>}
+        completedAt={report?.completed_at}
+        retakeHref="/test?type=strengths"
+      >
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 36, justifyContent: 'center' }}>
           {STRENGTHS_TEST.categories.map(cat => {
@@ -298,7 +273,7 @@ export default function StrengthsResults() {
                       )}
                       {talent.interpretation.watch_out?.length > 0 && (
                         <div>
-                          <p style={{ color: '#fbbf24', fontSize: '.78rem', fontWeight: 750, marginBottom: 6 }}>⚠️ Na co uważać:</p>
+                          <p style={{ color: PAGE_ACCENT, fontSize: '.78rem', fontWeight: 750, marginBottom: 6 }}>⚠️ Na co uważać:</p>
                           <ul style={{ paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
                             {talent.interpretation.watch_out.map((w, i) => (
                               <li key={i} style={{ color: 'rgba(255,255,255,.58)', fontSize: '.82rem', lineHeight: 1.55 }}>{w}</li>
@@ -378,15 +353,15 @@ export default function StrengthsResults() {
             error={interpError}
             onRegenerate={handleRegenerate}
             onRetry={() => rawScores && generateInterpretation(rawScores)}
-            accentColor="#fbbf24"
-            accentGlow="rgba(251,191,36,.5)"
+            accentColor={PAGE_ACCENT}
+            accentGlow="rgba(255,179,0,.5)"
             testLabel="Test Talentów"
           />
         </div>
 
         <ResultsFooterActions retakeHref="/test?type=strengths" />
 
-      </div>
+      </ResultsScaffold>
     </div>
   );
 }

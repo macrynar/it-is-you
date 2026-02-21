@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import { HEXACO_TEST } from '../../data/tests/hexaco.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
+import ResultsScaffold from './modules/ResultsScaffold.jsx';
+
+const PAGE_ACCENT = '#1F3C88';
 
 const ACCENT = {
   honesty_humility: { plName:'Szczerość', name:'Honesty-Humility', color:'#38b6ff', gradient:'linear-gradient(90deg,#1a6aff,#38b6ff)', glow:'rgba(56,182,255,.5)', blob:'#38b6ff', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(56,182,255,.35),0 0 30px -4px rgba(56,182,255,.3),0 16px 48px -6px rgba(0,0,0,.7)' },
@@ -25,9 +27,9 @@ function ringPts(pct) { return DIM_ORDER.map((_, i) => pt(i, pct).join(',')).joi
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 .hr-root{font-family:'Space Grotesk',sans-serif;background:#0d0f2b;color:#fff;min-height:100vh;overflow-x:hidden;}
-.hr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(56,182,255,.1) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(123,94,167,.14) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
+.hr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(31,60,136,.14) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(31,60,136,.09) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
 .hr-glass{background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:20px;position:relative;isolation:isolate;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6),0 2px 8px -2px rgba(0,0,0,.4);}
-.hr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(56,182,255,.2) 35%,rgba(123,94,167,.15) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.hr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(31,60,136,.22) 35%,rgba(31,60,136,.12) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
 .hr-stat-card{border-radius:16px;cursor:pointer;overflow:hidden;position:relative;isolation:isolate;transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;}
 .hr-stat-card::after{content:'';position:absolute;width:120px;height:120px;border-radius:50%;filter:blur(45px);bottom:-40px;right:-30px;opacity:.18;pointer-events:none;z-index:-1;transition:opacity .3s,transform .3s;}
 .hr-stat-card:hover::after{opacity:.35;transform:scale(1.2);}
@@ -125,7 +127,7 @@ export default function HexacoResults() {
     <><style>{CSS}</style>
     <div className="hr-root" style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'100vh'}}>
       <div style={{textAlign:'center'}}>
-        <div style={{width:44,height:44,border:'3px solid rgba(56,182,255,.25)',borderTopColor:'#38b6ff',borderRadius:'50%',animation:'spinLoader 1s linear infinite',margin:'0 auto 16px'}}/>
+        <div style={{width:44,height:44,border:'3px solid rgba(31,60,136,.25)',borderTopColor:PAGE_ACCENT,borderRadius:'50%',animation:'spinLoader 1s linear infinite',margin:'0 auto 16px'}}/>
         <p style={{color:'rgba(255,255,255,.4)',fontSize:13}}>Ładowanie wyników...</p>
       </div>
     </div></>
@@ -137,7 +139,7 @@ export default function HexacoResults() {
       <div className="hr-glass" style={{...G,padding:40,textAlign:'center',maxWidth:380}}>
         <div style={{fontSize:44,marginBottom:16}}>⚠️</div>
         <p style={{color:'rgba(255,255,255,.7)',marginBottom:24,lineHeight:1.6}}>{error}</p>
-        <button onClick={()=>window.location.href='/user-profile-tests.html'} style={{background:'linear-gradient(135deg,#1a6aff,#38b6ff)',color:'#fff',border:'none',borderRadius:10,padding:'12px 24px',fontWeight:700,cursor:'pointer',fontFamily:'inherit',fontSize:14}}>Wróć do Dashboardu</button>
+        <button onClick={()=>window.location.href='/user-profile-tests.html'} style={{background:`linear-gradient(135deg,${PAGE_ACCENT}cc,${PAGE_ACCENT})`,color:'#fff',border:'none',borderRadius:10,padding:'12px 24px',fontWeight:700,cursor:'pointer',fontFamily:'inherit',fontSize:14}}>Wróć do Dashboardu</button>
       </div>
     </div></>
   );
@@ -152,41 +154,34 @@ export default function HexacoResults() {
     <><style>{CSS}</style>
     <div className="hr-root">
 
-      <nav style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 40px',borderBottom:'1px solid rgba(255,255,255,.05)',backdropFilter:'blur(20px)',position:'sticky',top:0,zIndex:100,background:'rgba(13,15,43,.88)'}}>
-        <button onClick={()=>window.location.href='/user-profile-tests.html'} style={{display:'flex',alignItems:'center',gap:8,background:'none',border:'none',color:'rgba(255,255,255,.5)',cursor:'pointer',fontFamily:'inherit',fontSize:14,fontWeight:500,padding:0}} onMouseEnter={e=>e.currentTarget.style.color='#fff'} onMouseLeave={e=>e.currentTarget.style.color='rgba(255,255,255,.5)'}>
-          <ArrowLeft size={18}/> Dashboard
-        </button>
-        <button onClick={handleRetake} style={{display:'flex',alignItems:'center',gap:8,background:'rgba(255,255,255,.05)',border:'1px solid rgba(255,255,255,.1)',color:'rgba(255,255,255,.55)',cursor:'pointer',fontFamily:'inherit',fontSize:13,fontWeight:600,borderRadius:8,padding:'8px 16px'}} onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,.1)';e.currentTarget.style.color='#fff';}} onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,.05)';e.currentTarget.style.color='rgba(255,255,255,.55)';}}>
-          <RefreshCw size={14}/> Powtórz Test
-        </button>
-      </nav>
-
-      <div style={{maxWidth:1160,margin:'0 auto',padding:'48px 40px 80px',position:'relative',zIndex:1}}>
-
-        <header style={{textAlign:'center',marginBottom:40}}>
-          <div style={{display:'inline-flex',alignItems:'center',gap:8,padding:'8px 18px',borderRadius:100,background:'rgba(56,182,255,.1)',border:'1px solid rgba(56,182,255,.25)',fontSize:13,fontWeight:600,color:'#38b6ff',letterSpacing:'.5px',marginBottom:14}}>🧠 Personality Radar</div>
-          <h1 style={{fontSize:32,fontWeight:800,letterSpacing:'-.5px',margin:'0 0 8px'}}>Twoje wyniki <span style={{color:'#38b6ff'}}>HEXACO-60</span></h1>
-          <p style={{fontSize:14,color:'rgba(255,255,255,.35)',margin:0}}><strong style={{color:'rgba(255,255,255,.55)',fontWeight:500}}>HEXACO / Big Five Test</strong> · Pokazuje jak reagujesz, pracujesz i radzisz sobie z konfliktami</p>
-        </header>
+      <ResultsScaffold
+        accent={PAGE_ACCENT}
+        navLabel="RDZEŃ OSOBOWOŚCI"
+        badge="🧠 Rdzeń Osobowości (HEXACO)"
+        title={<>Twoje wyniki <span style={{ color: PAGE_ACCENT, textShadow: `0 0 24px ${PAGE_ACCENT}66` }}>HEXACO-60</span></>}
+        subtitle={<>HEXACO / Big Five · Pokazuje jak reagujesz, pracujesz i radzisz sobie z konfliktami</>}
+        completedAt={results?.completed_at}
+        retakeHref="/test"
+      >
 
         <div style={{display:'grid',gridTemplateColumns:'1fr 360px',gap:24,marginBottom:24}}>
 
           <div className="hr-glass" style={{...G,padding:36}}>
             <div style={{fontSize:11,fontWeight:600,letterSpacing:'3px',textTransform:'uppercase',color:'rgba(255,255,255,.3)',marginBottom:28,display:'flex',alignItems:'center',gap:12}}>
-              Mapa Osobowości <span style={{flex:1,height:1,background:'linear-gradient(90deg,rgba(56,182,255,.2),transparent)'}}/>
+              Mapa Osobowości <span style={{flex:1,height:1,background:`linear-gradient(90deg,${PAGE_ACCENT}66,transparent)`}}/>
             </div>
             <div style={{display:'flex',justifyContent:'center'}}>
               <svg viewBox="0 0 420 420" style={{width:'100%',maxWidth:420,height:'auto',overflow:'visible'}}>
                 <defs>
                   <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#38b6ff" stopOpacity=".35"/>
+                    <stop offset="0%" stopColor={PAGE_ACCENT} stopOpacity=".35"/>
                     <stop offset="100%" stopColor="#7b5ea7" stopOpacity=".25"/>
                   </linearGradient>
                 </defs>
                 {[20,40,60,80,100].map(p => <polygon key={p} points={ringPts(p)} fill="none" stroke="rgba(255,255,255,.07)" strokeWidth="1"/>)}
                 {DIM_ORDER.map((_,i) => { const [ex,ey]=pt(i,100); return <line key={i} x1={CX} y1={CY} x2={ex} y2={ey} stroke="rgba(255,255,255,.1)" strokeWidth="1"/>; })}
-                <polygon className="hr-radar-shape" points={shapePts} fill="url(#rg)" stroke="#38b6ff" strokeWidth="2" style={{filter:'drop-shadow(0 0 12px rgba(56,182,255,.45))'}}/>
-                {DIM_ORDER.map((id,i) => { const [px,py]=pt(i,results.percentile_scores[id]??0); return <circle key={id} className="hr-radar-dot" cx={px} cy={py} r="4" fill="#38b6ff" style={{filter:'drop-shadow(0 0 6px #38b6ff)'}}/>; })}
+                <polygon className="hr-radar-shape" points={shapePts} fill="url(#rg)" stroke={PAGE_ACCENT} strokeWidth="2" style={{filter:`drop-shadow(0 0 12px ${PAGE_ACCENT}66)`}}/>
+                {DIM_ORDER.map((id,i) => { const [px,py]=pt(i,results.percentile_scores[id]??0); return <circle key={id} className="hr-radar-dot" cx={px} cy={py} r="4" fill={PAGE_ACCENT} style={{filter:`drop-shadow(0 0 6px ${PAGE_ACCENT})`}}/>; })}
                 {labelAnchors.map(({id,lx,ly}) => {
                   const txt=`${DIM_EMOJI[id]} ${DIM_LABEL[id]}`;
                   const w=Math.max(txt.length*7.2+16,82);
@@ -228,7 +223,7 @@ export default function HexacoResults() {
         <div style={{marginBottom:24}}>
           <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:20}}>
             <span style={{fontSize:11,fontWeight:600,letterSpacing:'3px',textTransform:'uppercase',color:'rgba(255,255,255,.3)'}}>Szczegółowe wyniki</span>
-            <span style={{flex:1,height:1,background:'linear-gradient(90deg,rgba(56,182,255,.2),transparent)'}}/>
+              <span style={{flex:1,height:1,background:`linear-gradient(90deg,${PAGE_ACCENT}66,transparent)`}}/>
           </div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16}}>
             {DIM_ORDER.map(id => {
@@ -265,8 +260,8 @@ export default function HexacoResults() {
               error={interpError}
               onRegenerate={regenerate}
               onRetry={() => generateInterpretation(results)}
-              accentColor="#b08fff"
-              accentGlow="rgba(123,94,167,.5)"
+              accentColor={PAGE_ACCENT}
+              accentGlow="rgba(31,60,136,.5)"
               testLabel="Twojego profilu HEXACO"
             />
           </div>
@@ -274,7 +269,7 @@ export default function HexacoResults() {
 
         <ResultsFooterActions retakeHref="/test" />
 
-      </div>
+      </ResultsScaffold>
     </div></>
   );
 }

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import { DARK_TRIAD_TEST } from '../../data/tests/darkTriad.js';
 import { generateDarkTriadReport } from '../../utils/scoring.js';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
+import ResultsScaffold from './modules/ResultsScaffold.jsx';
+
+const PAGE_ACCENT = '#8B0000';
 
 /* ════════════════════════════════════════════════════════════════════
    ACCENT & META
@@ -373,7 +375,7 @@ function DarkTriadResults() {
   if (loading) return (
     <div style={{ minHeight: '100vh', background: '#0d0a1a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
       <style>{CSS}</style>
-      <div style={{ width: 56, height: 56, border: '3px solid rgba(251,113,133,.3)', borderTopColor: '#fb7185', borderRadius: '50%', animation: 'spinLoader 1s linear infinite' }} />
+      <div style={{ width: 56, height: 56, border: '3px solid rgba(139,0,0,.22)', borderTopColor: PAGE_ACCENT, borderRadius: '50%', animation: 'spinLoader 1s linear infinite' }} />
       <p style={{ color: 'rgba(255,255,255,.4)', fontFamily: 'Space Grotesk', fontSize: 14 }}>Analiza Cienia…</p>
     </div>
   );
@@ -384,9 +386,9 @@ function DarkTriadResults() {
       <style>{CSS}</style>
       <div className="dt-glass" style={{ padding: 40, maxWidth: 440, textAlign: 'center' }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>⚠️</div>
-        <h2 style={{ color: '#fb7185', marginBottom: 8, fontSize: 22, fontWeight: 700 }}>Błąd</h2>
+        <h2 style={{ color: PAGE_ACCENT, marginBottom: 8, fontSize: 22, fontWeight: 700 }}>Błąd</h2>
         <p style={{ color: 'rgba(255,255,255,.5)', marginBottom: 24 }}>{error}</p>
-        <button onClick={() => window.location.href = '/user-profile-tests.html'} style={{ background: 'rgba(251,113,133,.15)', border: '1px solid rgba(251,113,133,.4)', color: '#fb7185', padding: '10px 24px', borderRadius: 12, cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600 }}>
+        <button onClick={() => window.location.href = '/user-profile-tests.html'} style={{ background: 'rgba(139,0,0,.14)', border: '1px solid rgba(139,0,0,.35)', color: '#fff', padding: '10px 24px', borderRadius: 12, cursor: 'pointer', fontFamily: 'Space Grotesk', fontWeight: 600 }}>
           Wróć do Dashboardu
         </button>
       </div>
@@ -411,43 +413,21 @@ function DarkTriadResults() {
     <div className="dt-root" style={{ position: 'relative', zIndex: 1, paddingTop: 0 }}>
       <style>{CSS}</style>
 
-      {/* ── STICKY NAV ── */}
-      <nav className="dt-nav">
-        <div className="dt-nav-inner">
-          <button className="dt-nav-btn" onClick={() => window.location.href = '/user-profile-tests.html'}>
-            <ArrowLeft size={18} /> Dashboard
-          </button>
-          <button className="dt-nav-retake" onClick={() => { if (confirm('Powtórzyć test? Wyniki zostaną zastąpione.')) window.location.href = '/test'; }}>
-            <RefreshCw size={15} /> Powtórz Test
-          </button>
-        </div>
-      </nav>
-
-      {/* ── PAGE CONTENT ── */}
-      <div style={{ padding: '48px 40px 80px' }}>
-      <header style={{ textAlign: 'center', marginBottom: 44, display: 'block', position: 'relative', zIndex: 2 }}>
-        <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: 8,
-          padding: '7px 18px', borderRadius: 100,
-          background: 'rgba(244,63,94,.12)', border: '1px solid rgba(244,63,94,.35)',
-          fontSize: 11, fontWeight: 700, color: '#fb7185',
-          letterSpacing: 3, textTransform: 'uppercase',
-          marginBottom: 18, backdropFilter: 'blur(10px)',
-          animation: 'badgePulse 3s ease-in-out infinite',
-        }}>
-          ⚠ System Alert: Personality Analysis
-        </div>
-        <div style={{ fontSize: 42, fontWeight: 800, letterSpacing: -1, marginBottom: 10, lineHeight: 1.1, display: 'block', fontFamily: "'Space Grotesk', sans-serif" }}>
-          <span style={{ color: '#ffffff' }}>Analiza </span>
-          <span style={{ color: '#fb7185', textShadow: '0 0 30px rgba(251,113,133,.5), 0 0 60px rgba(251,113,133,.2)' }}>Cienia</span>
-        </div>
-        <div style={{ fontSize: 14, color: 'rgba(255,255,255,.35)', fontWeight: 400, display: 'block', marginTop: 4 }}>Dark Triad Assessment (SD3)</div>
-      </header>
+      <ResultsScaffold
+        accent={PAGE_ACCENT}
+        navLabel="CIEMNA TRIADA"
+        badge="⚠ Ciemna Triada (SD3)"
+        title={<>Analiza <span style={{ color: PAGE_ACCENT, textShadow: `0 0 24px ${PAGE_ACCENT}66` }}>Cienia</span></>}
+        subtitle={<>Dark Triad Assessment (SD3)</>}
+        completedAt={report?.completed_at}
+        retakeHref="/test?type=dark_triad"
+        confirmMessage="Powtórzyć test? Wyniki zostaną zastąpione."
+      >
 
       {/* ── ALERT BANNER ── */}
       {(report.overall_risk === 'high' || sortedIds.some(id => dims[id]?.level === 'high')) && (
         <div style={{
-          maxWidth: 900, margin: '0 auto 28px', padding: '24px 28px', borderRadius: 16,
+          maxWidth: 1100, margin: '0 auto 28px', padding: '24px 28px', borderRadius: 16,
           background: 'rgba(244,63,94,.08)', border: '1px solid rgba(244,63,94,.3)',
           backdropFilter: 'blur(16px)', display: 'flex', alignItems: 'flex-start', gap: 16,
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px rgba(244,63,94,.15), 0 0 30px -4px rgba(244,63,94,.2), 0 8px 32px -4px rgba(0,0,0,.6)',
@@ -464,7 +444,7 @@ function DarkTriadResults() {
       )}
 
       {/* ── MAIN LAYOUT ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 20, maxWidth: 900, margin: '0 auto' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 20, maxWidth: 1100, margin: '0 auto' }}>
 
         {/* LEFT — trait cards */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -647,7 +627,7 @@ function DarkTriadResults() {
       </div>
 
       {/* ── AI INTERPRETATION ── */}
-      <div style={{ maxWidth: 900, margin: '28px auto 0' }}>
+      <div style={{ maxWidth: 1100, margin: '28px auto 0' }}>
         <div className="dt-glass" style={{ padding: 36, background: 'rgba(20,6,16,.7)' }}>
           <AiInterpretation
             interpretation={interpretation}
@@ -655,21 +635,19 @@ function DarkTriadResults() {
             error={interpretationError}
             onRegenerate={regenerateInterpretation}
             onRetry={() => generateInterpretation(rawScores)}
-            accentColor="#fb7185"
-            accentGlow="rgba(251,113,133,.5)"
+            accentColor={PAGE_ACCENT}
+            accentGlow="rgba(139,0,0,.45)"
             testLabel="profilu Dark Triad"
           />
         </div>
       </div>
 
-      <div style={{ maxWidth: 900, margin: '0 auto' }}>
-        <ResultsFooterActions
-          retakeHref="/test"
-          confirmMessage="Powtórzyć test? Wyniki zostaną zastąpione."
-        />
-      </div>
+      <ResultsFooterActions
+        retakeHref="/test?type=dark_triad"
+        confirmMessage="Powtórzyć test? Wyniki zostaną zastąpione."
+      />
 
-      </div>{/* /page content */}
+      </ResultsScaffold>
     </div>
   );
 }
