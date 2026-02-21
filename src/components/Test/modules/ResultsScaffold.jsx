@@ -165,13 +165,13 @@ export default function ResultsScaffold({
       <nav style={navShell}>
         <div style={navInner}>
           <button type="button" onClick={onBack} style={navLeft} onMouseEnter={onEnterLeft} onMouseLeave={onLeaveLeft}>
-            <ArrowLeft size={18} /> ← Wróć do dashboardu
+            <ArrowLeft size={18} /> Wróć do dashboardu
           </button>
 
           <span style={navMid}>{navLabel}</span>
 
           <button type="button" onClick={onRetake} style={navRight} onMouseEnter={onEnterRight} onMouseLeave={onLeaveRight}>
-            <RefreshCw size={15} /> ↻ Ponów test
+            <RefreshCw size={15} /> Ponów test
           </button>
         </div>
       </nav>
