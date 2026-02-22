@@ -751,7 +751,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
   return (
     <div className="min-h-screen bg-bg-main text-text-main bg-neural-gradient bg-fixed">
-      {/* TOP NAV (like user-profile-tests.html) */}
+      {/* TOP NAV */}
       {!isPublic ? (
       <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50 nav-neural">
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -805,7 +805,27 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
           </div>
         </div>
       </nav>
-      ) : null}
+      ) : (
+      <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50 nav-neural">
+        <div className="max-w-7xl mx-auto px-6 py-3">
+          <div className="flex items-center justify-between gap-4">
+            <AlchemeLogo href="/" size={36} />
+            <a
+              href="/auth"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all"
+              style={{
+                background: 'linear-gradient(120deg, rgba(112,0,255,.75) 0%, rgba(0,200,220,.8) 100%)',
+                boxShadow: '0 0 18px -4px rgba(0,240,255,.35)',
+                textDecoration: 'none',
+              }}
+            >
+              Stwórz swoją kartę
+              <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </nav>
+      )}
 
       <main className="max-w-7xl mx-auto px-6 py-10">
         {isPublic ? (
@@ -1459,6 +1479,42 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
       </main>
 
       {!isPublic ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} /> : null}
+
+      {/* Spacer for sticky CTA bar */}
+      {isPublic ? <div className="h-24" /> : null}
+
+      {/* Public share CTA sticky bar */}
+      {isPublic ? (
+        <div
+          className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-4 px-6 py-4"
+          style={{
+            background: 'linear-gradient(90deg, rgba(10,4,40,.97) 0%, rgba(20,10,60,.97) 100%)',
+            borderTop: '1px solid rgba(0,240,255,.15)',
+            backdropFilter: 'blur(20px)',
+            boxShadow: '0 -8px 32px -8px rgba(0,240,255,.12)',
+          }}
+        >
+          <div className="flex flex-col gap-0.5">
+            <div className="text-sm font-semibold text-white/90">
+              Przeglądasz kartę postaci <span className="text-cyan-300">{userName}</span>
+            </div>
+            <div className="text-xs text-white/40">Poznaj siebie — 7 testów psychometrycznych w jednym miejscu</div>
+          </div>
+          <a
+            href="/auth"
+            className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all"
+            style={{
+              background: 'linear-gradient(120deg, rgba(112,0,255,.9) 0%, rgba(0,200,220,.9) 100%)',
+              boxShadow: '0 0 24px -4px rgba(0,240,255,.5)',
+              textDecoration: 'none',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Stwórz swoją kartę
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      ) : null}
 
       {/* Footer */}
       <footer className="border-t border-white/5 bg-slate-950/80 py-10 text-slate-500 text-sm mt-8">
