@@ -14,7 +14,39 @@ type IncomingMessage = {
   content: string
 }
 
-serve(async (req) => {
+function enforceAlexFormat(raw: string, maxSentences = 3): string {
+  const text = String(raw ?? '')
+    .replace(/\r\n?/g, '\n')
+    .replace(/^\s*#{1,6}\s+/gm, '')
+    .replace(/^\s*[-*•]+\s+/gm, '')
+    .replace(/\n+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+  if (!text) return ''
+
+  let endIndex = text.length
+  let sentenceCount = 0
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i]
+    if (ch === '.' || ch === '!' || ch === '?') {
+      const next = text[i + 1]
+      const boundary = next === undefined || next === ' ' || next === '"' || next === ')' || next === '”'
+      if (boundary) {
+        sentenceCount += 1
+        if (sentenceCount >= maxSentences) {
+          endIndex = i + 1
+          break
+        }
+      }
+    }
+  }
+
+  return text.slice(0, endIndex).trim()
+}
+
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -72,7 +104,7 @@ serve(async (req) => {
       {
         role: 'system',
         content:
-          'Dostaniesz też PROFILE_CONTEXT (wyniki i metadane profilu) — to jest źródło prawdy o rezultatach użytkownika. Używaj go do personalizacji i do odpowiadania na pytania o wyniki (podawaj konkretne liczby/pozycje, jeśli są w kontekście). Jeśli w kontekście brakuje danych, powiedz wprost czego brakuje i zadaj jedno pytanie doprecyzowujące. Nie stawiaj diagnoz. Nie dawaj gotowych porad. Zawsze zadawaj dokładnie jedno pytanie w odpowiedzi.',
+          'Dostaniesz też PROFILE_CONTEXT (wyniki i metadane profilu) — to jest źródło prawdy o rezultatach użytkownika. Używaj go do personalizacji i do odpowiadania na pytania o wyniki (podawaj konkretne liczby/pozycje, jeśli są w kontekście). Jeśli w kontekście brakuje danych, powiedz wprost czego brakuje i zadaj jedno konkretne pytanie tylko jeśli jest to konieczne do dalszej analizy. Format odpowiedzi nadal obowiązuje: maksymalnie 3 zdania, bez list, bez nagłówków, jeden akapit.',
       },
     ]
 
@@ -102,7 +134,7 @@ serve(async (req) => {
         model: 'gpt-4o-mini',
         messages: openaiMessages,
         temperature: 0.6,
-        max_tokens: 500,
+        max_tokens: 220,
       }),
     })
 
@@ -116,14 +148,15 @@ serve(async (req) => {
     }
 
     const openaiData = await openaiRes.json()
-    const reply = openaiData.choices?.[0]?.message?.content ?? ''
+    const reply = enforceAlexFormat(openaiData.choices?.[0]?.message?.content ?? '')
 
     return new Response(JSON.stringify({ reply }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (err) {
     console.error('Edge function error:', err)
-    return new Response(JSON.stringify({ error: err.message ?? String(err) }), {
+    const message = err instanceof Error ? err.message : String(err)
+    return new Response(JSON.stringify({ error: message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
