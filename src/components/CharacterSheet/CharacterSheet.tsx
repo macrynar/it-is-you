@@ -689,16 +689,12 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
       const payload = { force, input: characterCardInput };
 
-      // Always call Supabase Edge Function directly (works in both dev and prod)
+      // Always call Supabase Edge Function directly (works in both dev and prod).
+      // supabase.functions.invoke automatically attaches the session JWT.
       const { data, error } = await supabase.functions.invoke('character-card-generate', {
         body: payload,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          apikey: SUPABASE_ANON_KEY,
-          'Content-Type': 'application/json',
-        },
       });
-      if (error) throw error;
+      if (error) throw new Error((error as any)?.message ?? JSON.stringify(error));
       setLlmContent((data?.content ?? null) as CharacterCardContent | null);
       setLlmGeneratedAt(String(data?.generated_at ?? ''));
     } catch (_e: any) {
