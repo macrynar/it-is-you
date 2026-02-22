@@ -147,6 +147,17 @@ function hashCode(s: string) {
   return Math.abs(h);
 }
 
+function safeJson(obj: unknown, maxLen: number) {
+  try {
+    const s = JSON.stringify(obj);
+    if (!s) return '';
+    if (s.length <= maxLen) return s;
+    return s.slice(0, maxLen) + '…[truncated]';
+  } catch {
+    return '';
+  }
+}
+
 /* ══ MAIN ══ */
 export default function CharacterSheet() {
   const [loading, setLoading] = useState(true);
@@ -360,6 +371,23 @@ export default function CharacterSheet() {
 
     if (dominantTraits?.length) lines.push(`Cechy (tagi): ${dominantTraits.join(', ')}`);
     if (archetypeAiBlurb) lines.push(`Archetyp (skrót): ${archetypeAiBlurb}`);
+
+    // Include structured raw data so the assistant can answer detailed, numeric questions.
+    // Keep it compact and let the edge function apply final truncation.
+    const rawBundle: Record<string, unknown> = {
+      HEXACO: raw.HEXACO ? { percentile_scores: raw.HEXACO.percentile_scores, raw_scores: raw.HEXACO.raw_scores, report: raw.HEXACO.report } : null,
+      ENNEAGRAM: raw.ENNEAGRAM ? { percentile_scores: raw.ENNEAGRAM.percentile_scores, raw_scores: raw.ENNEAGRAM.raw_scores, report: raw.ENNEAGRAM.report } : null,
+      STRENGTHS: raw.STRENGTHS ? { percentile_scores: raw.STRENGTHS.percentile_scores, raw_scores: raw.STRENGTHS.raw_scores, report: raw.STRENGTHS.report } : null,
+      CAREER: raw.CAREER ? { percentile_scores: raw.CAREER.percentile_scores, raw_scores: raw.CAREER.raw_scores, report: careerRep ?? raw.CAREER.report } : null,
+      DARK_TRIAD: raw.DARK_TRIAD ? { percentile_scores: raw.DARK_TRIAD.percentile_scores, raw_scores: raw.DARK_TRIAD.raw_scores, report: raw.DARK_TRIAD.report } : null,
+      VALUES: raw.VALUES ? { percentile_scores: raw.VALUES.percentile_scores, raw_scores: raw.VALUES.raw_scores, report: valuesRep ?? raw.VALUES.report } : null,
+    };
+    const rawJson = safeJson(rawBundle, 12000);
+    if (rawJson) {
+      lines.push('---');
+      lines.push('RAW_TEST_DATA_JSON:');
+      lines.push(rawJson);
+    }
     return lines.join('\n');
   })();
 

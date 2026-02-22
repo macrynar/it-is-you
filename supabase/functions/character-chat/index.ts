@@ -72,7 +72,7 @@ serve(async (req) => {
       {
         role: 'system',
         content:
-          'Dostaniesz też PROFILE_CONTEXT (wyniki i metadane profilu). Użyj go do personalizacji i trafnego doboru jednego pytania. Nie stawiaj diagnoz. Nie dawaj gotowych porad. Zawsze zadawaj dokładnie jedno pytanie w odpowiedzi.',
+          'Dostaniesz też PROFILE_CONTEXT (wyniki i metadane profilu) — to jest źródło prawdy o rezultatach użytkownika. Używaj go do personalizacji i do odpowiadania na pytania o wyniki (podawaj konkretne liczby/pozycje, jeśli są w kontekście). Jeśli w kontekście brakuje danych, powiedz wprost czego brakuje i zadaj jedno pytanie doprecyzowujące. Nie stawiaj diagnoz. Nie dawaj gotowych porad. Zawsze zadawaj dokładnie jedno pytanie w odpowiedzi.',
       },
     ]
 
