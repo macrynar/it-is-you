@@ -6,6 +6,7 @@ import HexacoDetailCards from '../Test/modules/HexacoDetailCards';
 import CharacterChatBubble from './CharacterChatBubble';
 import { getUserPremiumStatus, type UserPremiumStatus } from '../../lib/stripeService';
 import ValuesCircumplexChart, { SCHWARTZ_CIRCUMPLEX } from './ValuesCircumplexChart';
+import AlchemeLogo from '../AlchemeLogo';
 
 type CharacterCardContent = {
   archetype_name: string;
@@ -756,43 +757,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between gap-4">
             {/* Logo */}
-            <a href="/" className="iiy-logo">
-              <div className="iiy-signet">
-                <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="iiy-hg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#38b6ff" /><stop offset="50%" stopColor="#7b5ea7" /><stop offset="100%" stopColor="#38b6ff" /></linearGradient>
-                    <linearGradient id="iiy-bg2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#38b6ff" stopOpacity="0.45" /><stop offset="100%" stopColor="#1a1d4a" stopOpacity="0.08" /></linearGradient>
-                    <filter id="iiy-glow2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
-                    <clipPath id="iiy-clip2"><polygon points="48,5 87,27 87,69 48,91 9,69 9,27" /></clipPath>
-                  </defs>
-                  <polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="#11143a" />
-                  <g className="iiy-ring-ticks" filter="url(#iiy-glow2)">
-                    <line x1="48" y1="5" x2="48" y2="12" stroke="#38b6ff" strokeWidth="1.8" /><line x1="87" y1="27" x2="81" y2="30" stroke="#38b6ff" strokeWidth="1.8" /><line x1="87" y1="69" x2="81" y2="66" stroke="#38b6ff" strokeWidth="1.8" /><line x1="48" y1="91" x2="48" y2="84" stroke="#38b6ff" strokeWidth="1.8" /><line x1="9" y1="69" x2="15" y2="66" stroke="#38b6ff" strokeWidth="1.8" /><line x1="9" y1="27" x2="15" y2="30" stroke="#38b6ff" strokeWidth="1.8" />
-                    <line x1="68" y1="8" x2="66" y2="12" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" /><line x1="28" y1="8" x2="30" y2="12" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" /><line x1="90" y1="48" x2="84" y2="48" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" /><line x1="6" y1="48" x2="12" y2="48" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" /><line x1="68" y1="88" x2="66" y2="84" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" /><line x1="28" y1="88" x2="30" y2="84" stroke="#7b5ea7" strokeWidth="1" opacity="0.6" />
-                  </g>
-                  <polygon points="48,5 87,27 87,69 48,91 9,69 9,27" fill="none" stroke="url(#iiy-hg2)" strokeWidth="1.8" />
-                  <g clipPath="url(#iiy-clip2)">
-                    <line className="iiy-scan" x1="12" y1="48" x2="84" y2="48" stroke="#38b6ff" strokeWidth="1.2" opacity="0.5" />
-                    <circle cx="48" cy="30" r="12" fill="#11143a" stroke="#38b6ff" strokeWidth="1.2" />
-                    <rect x="37" y="26.5" width="22" height="6" rx="3" fill="#0d0f2b" stroke="#38b6ff" strokeWidth="0.7" />
-                    <ellipse className="iiy-eye-l" cx="43" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#iiy-glow2)" />
-                    <ellipse className="iiy-eye-r" cx="53" cy="29.5" rx="3.5" ry="1.8" fill="#7b5ea7" filter="url(#iiy-glow2)" />
-                    <rect x="44.5" y="42" width="7" height="6" rx="1" fill="#11143a" stroke="#38b6ff" strokeWidth="0.8" />
-                    <path d="M28 90 L31 50 Q48 44 65 50 L68 90 Z" fill="url(#iiy-bg2)" stroke="#38b6ff" strokeWidth="0.9" />
-                    <line x1="48" y1="50" x2="48" y2="74" stroke="#38b6ff" strokeWidth="0.5" opacity="0.35" />
-                    <rect x="39" y="55" width="18" height="12" rx="1.5" fill="none" stroke="#38b6ff" strokeWidth="0.6" opacity="0.5" />
-                    <line x1="31" y1="52" x2="31" y2="65" stroke="#7b5ea7" strokeWidth="1.4" opacity="0.9" />
-                    <line x1="65" y1="52" x2="65" y2="65" stroke="#7b5ea7" strokeWidth="1.4" opacity="0.9" />
-                    <circle className="iiy-core" cx="48" cy="61" r="2.8" fill="#38b6ff" filter="url(#iiy-glow2)" />
-                  </g>
-                </svg>
-              </div>
-              <div className="iiy-wordmark">
-                <div className="iiy-title">PSYCHER</div>
-                <div className="iiy-divider" />
-                <div className="iiy-sub">Psychometric AI Engine</div>
-              </div>
-            </a>
+            <AlchemeLogo href="/" size={36} />
 
             {/* Center tabs */}
             <div className="iiy-nav-tabs">
@@ -1500,7 +1465,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
       <footer className="border-t border-white/5 bg-slate-950/80 py-10 text-slate-500 text-sm mt-8">
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 sm:grid-cols-4 gap-8">
           <div className="col-span-2 sm:col-span-1">
-            <span className="font-bold text-lg text-white tracking-tight block mb-3">Psycher</span>
+            <span className="font-bold text-lg text-white tracking-tight block mb-3">Alcheme</span>
             <p>Naukowa diagnoza potencjału w formie przystępnej grywalizacji.</p>
           </div>
           <div>
@@ -1529,7 +1494,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
           </div>
         </div>
         <div className="max-w-5xl mx-auto px-6 mt-8 pt-6 border-t border-white/5 text-center text-xs">
-          &copy; {new Date().getFullYear()} Psycher. All rights reserved. Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.
+          &copy; {new Date().getFullYear()} Alcheme. All rights reserved. Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.
         </div>
       </footer>
     </div>

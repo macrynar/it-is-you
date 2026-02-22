@@ -1,5 +1,6 @@
 import React from 'react';
-import { Lock, LogOut, User, AlertCircle, Zap } from 'lucide-react';
+import { Lock, LogOut, User, AlertCircle } from 'lucide-react';
+import AlchemeLogo from '../AlchemeLogo';
 
 interface NewUserDashboardProps {
   username: string;
@@ -18,12 +19,7 @@ export default function NewUserDashboard({
       <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-brand-gradient flex items-center justify-center shadow-glow-primary">
-              <Zap className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-lg font-bold text-text-main font-brand">Psycher</span>
-          </div>
+          <AlchemeLogo href="/" size={30} />
 
           {/* Right Side */}
           <div className="flex items-center gap-4">
@@ -257,7 +253,7 @@ export default function NewUserDashboard({
       <footer className="border-t border-white/5 bg-bg-surface/50 mt-20">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="text-center text-slate-600 text-xs">
-            <p>© 2026 Psycher — Psychologiczna Analiza Osobowości | Jakość gwarantowana</p>
+            <p>© 2026 Alcheme — Psychologiczna Analiza Osobowości | Jakość gwarantowana</p>
           </div>
         </div>
       </footer>

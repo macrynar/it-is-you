@@ -257,7 +257,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold brand-font mb-2 bg-gradient-to-r from-white via-indigo-300 to-white bg-clip-text text-transparent">
-            Psycher
+            Alcheme
           </h1>
           <p className="text-slate-400 text-sm">Portal do Twojej Duszy</p>
           <p className="text-slate-500 text-xs mt-1">Zaloguj się aby odkryć kim naprawdę jesteś</p>

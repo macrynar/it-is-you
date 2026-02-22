@@ -321,7 +321,7 @@ function App() {
               Witaj, {user.email}! 👋
             </h1>
             <p className="text-slate-300 mb-6">
-              Zostałeś pomyślnie zalogowany do portalu "Psycher"
+              Zostałeś pomyślnie zalogowany do portalu "Alcheme"
             </p>
             
             {/* User Info */}
