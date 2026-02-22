@@ -112,7 +112,7 @@ export default function AlchemeLogo({ size = 46, href = '/', className = '' }: P
     <a
       href={href}
       className={className}
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '7px', userSelect: 'none', textDecoration: 'none', cursor: 'pointer' }}
+      style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', userSelect: 'none', textDecoration: 'none', cursor: 'pointer' }}
     >
       <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
         <defs>
@@ -173,12 +173,12 @@ export default function AlchemeLogo({ size = 46, href = '/', className = '' }: P
         </circle>
       </svg>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', width: `${size}px`, textAlign: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: '4px' }}>
         <div style={{
           fontFamily: "'Cinzel', serif",
-          fontSize: '11px',
+          fontSize: '18px',
           fontWeight: 600,
-          letterSpacing: '.18em',
+          letterSpacing: '.16em',
           lineHeight: 1,
           background: 'linear-gradient(120deg, #fff 0%, rgba(0,240,255,.95) 55%, rgba(167,139,250,.9) 100%)',
           WebkitBackgroundClip: 'text',
@@ -188,11 +188,11 @@ export default function AlchemeLogo({ size = 46, href = '/', className = '' }: P
         }}>Alcheme</div>
         <div style={{
           fontFamily: "'Raleway', sans-serif",
-          fontSize: '5.5px',
+          fontSize: '7.5px',
           fontWeight: 300,
-          letterSpacing: '.22em',
+          letterSpacing: '.28em',
           textTransform: 'uppercase',
-          color: 'rgba(255,255,255,.5)',
+          color: 'rgba(255,255,255,.55)',
           whiteSpace: 'nowrap',
         }}>Know yourself · Transform</div>
       </div>
