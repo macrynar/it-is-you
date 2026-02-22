@@ -56,10 +56,19 @@ export default function ValuesCircumplexChart({
 
   const topIds = new Set(sorted.slice(0, topN).map((d) => d.id));
 
+  // Normalize: Schwartz centered_scores range ~ -3..+3
+  // Use min-max so the shape is visible even when all scores differ by small amounts
+  const rawVals = SCHWARTZ_CIRCUMPLEX.map((d) => Number(scores[d.id] ?? 0));
+  const minV = Math.min(...rawVals);
+  const maxV = Math.max(...rawVals);
+  const range = maxV - minV;
+  const toPct = (v: number) =>
+    range > 0.001 ? Math.max(12, Math.min(100, ((v - minV) / range) * 88 + 12)) : 50;
+
   const vals = SCHWARTZ_CIRCUMPLEX.map((d, i) => ({
     ...d,
     v: Number(scores[d.id] ?? 0),
-    pct: Number(scores[d.id] ?? 0) > 0 ? Math.min(100, (Number(scores[d.id] ?? 0) / 6) * 100) : 0,
+    pct: Object.keys(scores).length > 0 ? toPct(Number(scores[d.id] ?? 0)) : 0,
     isTop: topIds.has(d.id),
     idx: i,
   }));

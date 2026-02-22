@@ -652,16 +652,24 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
   }, [valuesRep, raw.VALUES]);
 
   const riasecScores = useMemo(() => {
-    const typeScores = careerRep?.type_scores ?? careerRep?.typeScores ?? careerRep?.type_scores_map ?? null;
-    const m = (typeScores && typeof typeScores === 'object') ? typeScores : {};
+    // all_scores is the actual field from generateCareerReport / calculateCareerScore
+    const allScores = careerRep?.all_scores ?? careerRep?.type_scores ?? careerRep?.typeScores ?? null;
+    const m = (allScores && typeof allScores === 'object') ? allScores as Record<string, any> : {};
+
+    const getV = (key: string, alt: string): number => {
+      const entry = m[key] ?? m[alt];
+      if (entry == null) return 0;
+      if (typeof entry === 'object') return Number(entry?.raw_score ?? entry?.score ?? 0);
+      return Number(entry);
+    };
 
     const map: Record<string, number> = {
-      realistic: Number(m.realistic ?? m.R ?? 0),
-      investigative: Number(m.investigative ?? m.I ?? 0),
-      artistic: Number(m.artistic ?? m.A ?? 0),
-      social: Number(m.social ?? m.S ?? 0),
-      enterprising: Number(m.enterprising ?? m.E ?? 0),
-      conventional: Number(m.conventional ?? m.C ?? 0),
+      realistic:     getV('realistic',     'R'),
+      investigative: getV('investigative', 'I'),
+      artistic:      getV('artistic',      'A'),
+      social:        getV('social',        'S'),
+      enterprising:  getV('enterprising',  'E'),
+      conventional:  getV('conventional',  'C'),
     };
 
     const items = Object.entries(map)
@@ -1147,36 +1155,48 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                 {!raw.STRENGTHS ? <span className="badge">Zablokowane</span> : null}
               </div>
               {raw.STRENGTHS ? (
-                <div className="mt-4 space-y-3">
-                  {(top5 ?? []).slice(0, 5).map((t: any, idx: number) => {
-                    const domain = STRENGTHS_DOMAIN[String(t?.category ?? '')] ?? { label: String(t?.category ?? 'Talent'), className: 'bg-white/5 border-white/10 text-white/55' }
-                    const name = String(t?.name ?? t?.name_en ?? `Talent ${idx + 1}`)
-                    return (
-                      <div key={`${name}-${idx}`} className="rounded-xl border border-white/10 bg-white/5 p-3 iiy-hover-panel">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2">
-                              <div className="text-xl font-extrabold text-white/25 leading-none">{idx + 1}</div>
-                              <div className="text-sm font-semibold text-white/80 truncate">{name}</div>
-                            </div>
+                <>
+                  <div className="mt-4 space-y-2">
+                    {(top5 ?? []).slice(0, 5).map((t: any, idx: number) => {
+                      const domain = STRENGTHS_DOMAIN[String(t?.category ?? '')] ?? { label: String(t?.category ?? 'Talent'), className: 'bg-white/5 border-white/10 text-white/55' };
+                      const name = String(t?.name ?? t?.name_en ?? `Talent ${idx + 1}`);
+                      const rankColors = ['#a78bfa', '#818cf8', '#60a5fa', '#34d399', '#94a3b8'];
+                      const rankColor = rankColors[idx] ?? '#94a3b8';
+                      return (
+                        <div
+                          key={`${name}-${idx}`}
+                          className="flex items-center gap-3 rounded-xl border bg-white/[0.03] px-3 py-2.5 iiy-hover-panel"
+                          style={{ borderColor: idx === 0 ? `${rankColor}40` : 'rgba(255,255,255,0.07)' }}
+                        >
+                          <span
+                            className="w-6 h-6 rounded-lg flex-shrink-0 flex items-center justify-center text-[11px] font-extrabold"
+                            style={{
+                              background: `${rankColor}1a`,
+                              border: `1px solid ${rankColor}45`,
+                              color: rankColor,
+                              ...(idx === 0 ? { boxShadow: `0 0 10px -2px ${rankColor}60` } : {}),
+                            }}
+                          >{idx + 1}</span>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold truncate" style={{ color: idx === 0 ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.65)' }}>{name}</div>
                           </div>
-                          <span className={`shrink-0 inline-flex items-center px-2.5 py-1 rounded-full border text-[11px] font-semibold ${domain.className}`}>{domain.label}</span>
+                          <span className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full border text-[10px] font-semibold ${domain.className}`}>{domain.label}</span>
                         </div>
-                        {idx === 0 ? (
-                          <div className="mt-2 text-xs italic text-purple-200/70">
-                            {llmLoading ? (
-                              <Skeleton className="h-4 w-full" />
-                            ) : llmContent?.strengths_top1_interpretation && !llmError ? (
-                              <>✦ {llmContent.strengths_top1_interpretation}</>
-                            ) : llmError ? (
-                              <span className="text-white/35">{llmError}</span>
-                            ) : null}
-                          </div>
-                        ) : null}
-                      </div>
-                    )
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                  {/* AI for top talent */}
+                  <div className="mt-4 rounded-xl p-4 border border-white/10 bg-white/5 iiy-hover-panel">
+                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ AI · Talent #1</div>
+                    {llmLoading ? (
+                      <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-3/4 mt-2" /></div>
+                    ) : llmContent?.strengths_top1_interpretation && !llmError ? (
+                      <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.strengths_top1_interpretation}</div>
+                    ) : (
+                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak treści AI'}</div>
+                    )}
+                  </div>
+                </>
               ) : (
                 <a href="/user-profile-tests.html" className="mt-4 block bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white/55 hover:border-emerald-400/30 transition no-underline iiy-hover-panel">
                   Ukończ test Strengths, aby odblokować ten kafel →
@@ -1252,7 +1272,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                   </div>
 
                   {/* AI */}
-                  <div className="mt-4 rounded-xl p-4 border border-white/10 bg-white/5 iiy-hover-panel">
+                  <div className="mt-6 rounded-xl p-4 border border-white/10 bg-white/5 iiy-hover-panel">
                     <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ AI · Środowisko</div>
                     {llmLoading ? (
                       <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-4/5 mt-2" /></div>
