@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabaseClient.js';
+import { SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import { DARK_TRIAD_TEST } from '../../data/tests/darkTriad.js';
 import { generateDarkTriadReport } from '../../utils/scoring.js';
+import { PROMPT_VERSION } from '../../utils/promptVersion.js';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 import ResultsScaffold from './modules/ResultsScaffold.jsx';
 
@@ -319,6 +320,7 @@ function DarkTriadResults() {
         .select('interpretation')
         .eq('user_id', session.user.id)
         .eq('test_type', 'DARK_TRIAD')
+        .eq('prompt_version', PROMPT_VERSION)
         .maybeSingle();
 
       setReport(fullReport);
@@ -350,7 +352,7 @@ function DarkTriadResults() {
 
       const { data, error: fnErr } = await supabase.functions.invoke('interpret-test', {
         body: { test_type: 'DARK_TRIAD', percentile_scores, force },
-        headers: { Authorization: `Bearer ${session.access_token}` },
+        headers: { Authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_ANON_KEY },
       });
       if (fnErr) throw fnErr;
       setInterpretation(data?.interpretation ?? null);

@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { GLOBAL_GUIDELINES, PROMPT_VERSION } from './promptConfig.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -48,6 +49,7 @@ serve(async (req) => {
         .select('interpretation')
         .eq('user_id', user.id)
         .eq('test_type', test_type)
+        .eq('prompt_version', PROMPT_VERSION)
         .single()
 
       if (cached?.interpretation) {
@@ -97,8 +99,9 @@ serve(async (req) => {
     await supabaseAdmin.from('ai_interpretations').upsert({
       user_id: user.id,
       test_type,
+      prompt_version: PROMPT_VERSION,
       interpretation
-    }, { onConflict: 'user_id,test_type' })
+    }, { onConflict: 'user_id,test_type,prompt_version' })
 
     return new Response(JSON.stringify({ interpretation, cached: false }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -156,7 +159,9 @@ Zasady:
 - Pisz bezpośrednio do osoby, w 2. osobie: "Twój...", "Wykazujesz...", "Masz tendencję do..."
 - Nie pisz "wyniki testu wskazują" ani "na podstawie testu"
 - Bądź ciepły, precyzyjny psychologicznie i konkretny — unikaj ogólników
-- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)
+
+${GLOBAL_GUIDELINES}`
   }
 
   if (testType === 'ENNEAGRAM') {
@@ -209,7 +214,9 @@ Zasady:
 - Pisz bezpośrednio do osoby, w 2. osobie
 - Nie pisz "wyniki wskazują", "test pokazuje" itp.
 - Bądź głęboki, precyzyjny psychologicznie, ciepły i motywujący
-- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)
+
+${GLOBAL_GUIDELINES}`
   }
 
   if (testType === 'DARK_TRIAD') {
@@ -251,7 +258,9 @@ Zasady:
 - Zachowaj NEUTRALNY i analityczny ton — nie oceniaj moralnie
 - Niskie wyniki (poniżej 30%) pomijaj lub wspomnij skrótowo jako zasoby
 - Bądź precyzyjny psychologicznie i konstruktywny
-- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)
+
+${GLOBAL_GUIDELINES}`
   }
 
   if (testType === 'STRENGTHS') {
@@ -294,7 +303,9 @@ Zasady:
 - Pisz bezpośrednio do osoby, w 2. osobie
 - Ton: inspirujący, wzmacniający, psychologicznie precyzyjny
 - Koncentruj się na mocnych stronach i potencjale
-- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)
+
+${GLOBAL_GUIDELINES}`
   }
 
   if (testType === 'VALUES') {
@@ -351,7 +362,9 @@ Zasady:
 - Ton: refleksyjny, ciepły, psychologicznie precyzyjny — jak mądry psycholog
 - Nie pisz "wyniki wskazują", "test pokazuje" itp.
 - Odwołuj się do konkretnych nazw wartości z teorii Schwartza
-- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)
+
+${GLOBAL_GUIDELINES}`
   }
 
   if (testType === 'CAREER') {
@@ -403,8 +416,12 @@ Zasady:
 - Ton: motywujący, profesjonalny, konkretny — jak dobry doradca kariery
 - Nie pisz "wyniki wskazują", "test pokazuje" itp.
 - Odwołuj się do kodu Hollanda i liter RIASEC w naturalny sposób
-- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)`
+- Zachowaj DOKŁADNIE podaną strukturę Markdown (##, **, ---, *)
+
+${GLOBAL_GUIDELINES}`
   }
 
-  return `Napisz krótką interpretację wyników psychometrycznych dla testu "${testType}" w języku polskim.`
+  return `Napisz krótką interpretację wyników psychometrycznych dla testu "${testType}" w języku polskim.
+
+${GLOBAL_GUIDELINES}`
 }

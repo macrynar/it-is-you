@@ -6,10 +6,11 @@ CREATE TABLE IF NOT EXISTS public.ai_interpretations (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   test_type TEXT NOT NULL,          -- 'HEXACO', 'ENNEAGRAM', 'DARK_TRIAD', etc.
+  prompt_version INTEGER NOT NULL DEFAULT 1, -- prompt version for cache invalidation
   interpretation TEXT NOT NULL,     -- full LLM-generated text
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(user_id, test_type)        -- one cached result per user per test
+  UNIQUE(user_id, test_type, prompt_version) -- one cached result per user per test per prompt version
 );
 
 CREATE INDEX IF NOT EXISTS idx_ai_interpretations_user_id
@@ -40,3 +41,4 @@ CREATE TRIGGER update_ai_interpretations_updated_at
 GRANT SELECT, INSERT, UPDATE ON public.ai_interpretations TO authenticated;
 
 COMMENT ON TABLE public.ai_interpretations IS 'Cached LLM interpretations of psychometric test results';
+COMMENT ON COLUMN public.ai_interpretations.prompt_version IS 'Prompt version used for cache invalidation';

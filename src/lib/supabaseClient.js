@@ -20,6 +20,8 @@ const FALLBACK_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || FALLBACK_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || FALLBACK_KEY
 
+export const SUPABASE_ANON_KEY = supabaseAnonKey
+
 // Debug log for production
 console.log('🔧 Supabase Config Check:', {
   hasUrl: !!supabaseUrl,

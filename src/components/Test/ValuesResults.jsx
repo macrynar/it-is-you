@@ -3,8 +3,9 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ReferenceLine, Cell, ResponsiveContainer
 } from 'recharts';
-import { supabase } from '../../lib/supabaseClient.js';
+import { SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
 import { generateValuesReport } from '../../utils/scoring.js';
+import { PROMPT_VERSION } from '../../utils/promptVersion.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 import ResultsScaffold from './modules/ResultsScaffold.jsx';
@@ -69,6 +70,7 @@ export default function ValuesResults() {
           .order('completed_at', { ascending: false }).limit(1),
         supabase.from('ai_interpretations').select('interpretation')
           .eq('user_id', user.id).eq('test_type', 'VALUES')
+          .eq('prompt_version', PROMPT_VERSION)
           .maybeSingle(),
       ]);
 
@@ -108,7 +110,7 @@ export default function ValuesResults() {
       const { data: { session } } = await supabase.auth.getSession();
       const { data, error } = await supabase.functions.invoke('interpret-test', {
         body: { test_type: 'VALUES', raw_scores: scores, report: reportData, force },
-        headers: { Authorization: `Bearer ${session.access_token}` },
+        headers: { Authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_ANON_KEY },
       });
       if (error) throw error;
       setInterpretation(data.interpretation);

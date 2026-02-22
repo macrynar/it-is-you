@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabaseClient.js';
+import { SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
 import { ENNEAGRAM_TEST } from '../../data/tests/enneagram.js';
+import { PROMPT_VERSION } from '../../utils/promptVersion.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 import ResultsScaffold from './modules/ResultsScaffold.jsx';
@@ -234,6 +235,7 @@ export default function EnneagramResults() {
           .order('completed_at', { ascending: false }).limit(1),
         supabase.from('ai_interpretations').select('interpretation')
           .eq('user_id', user.id).eq('test_type', 'ENNEAGRAM')
+          .eq('prompt_version', PROMPT_VERSION)
           .maybeSingle(),
       ]);
 
@@ -262,7 +264,7 @@ export default function EnneagramResults() {
       if (!session) throw new Error('Brak sesji');
       const { data: d, error: fnErr } = await supabase.functions.invoke('interpret-test', {
         body: { test_type: 'ENNEAGRAM', raw_scores: r.raw_scores, report: r.report, force },
-        headers: { Authorization: `Bearer ${session.access_token}` },
+        headers: { Authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_ANON_KEY },
       });
       if (fnErr) throw fnErr;
       setAiInterp(d?.interpretation ?? null);

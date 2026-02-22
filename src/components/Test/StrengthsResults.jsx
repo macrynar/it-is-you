@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabaseClient.js';
+import { SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
 import { STRENGTHS_TEST } from '../../data/tests/strengths.js';
 import { generateStrengthsReport } from '../../utils/scoring.js';
+import { PROMPT_VERSION } from '../../utils/promptVersion.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 import ResultsScaffold from './modules/ResultsScaffold.jsx';
@@ -89,6 +90,7 @@ export default function StrengthsResults() {
           .order('completed_at', { ascending: false }).limit(1),
         supabase.from('ai_interpretations').select('interpretation')
           .eq('user_id', user.id).eq('test_type', 'STRENGTHS')
+          .eq('prompt_version', PROMPT_VERSION)
           .maybeSingle(),
       ]);
 
@@ -135,7 +137,7 @@ export default function StrengthsResults() {
       if (!session) throw new Error('Brak sesji');
       const { data, error: fe } = await supabase.functions.invoke('interpret-test', {
         body: { test_type: 'STRENGTHS', raw_scores: scores, report: scores, force },
-        headers: { Authorization: `Bearer ${session.access_token}` },
+        headers: { Authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_ANON_KEY },
       });
       if (fe) throw fe;
       setInterpretation(data?.interpretation || '');
