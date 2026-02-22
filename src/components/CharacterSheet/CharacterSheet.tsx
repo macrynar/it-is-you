@@ -43,18 +43,17 @@ const HEX_DIMS = [
   { id: 'openness', label: 'Otwartość' },
 ] as const;
 
-const ENNEAGRAM_META: Record<number, { name: string; mottoEn: string; stress: string; growth: string }> = {
-  1: { name: 'Reformista', mottoEn: 'The Reformer', stress: 'Pod presją: sztywność, krytycyzm, napięcie na „powinno”.', growth: 'W rozwoju: elastyczność, mądry standard zamiast perfekcjonizmu.' },
-  2: { name: 'Pomocnik', mottoEn: 'The Helper', stress: 'Pod presją: nadopiekuńczość, ukryte oczekiwania, rozczarowanie.', growth: 'W rozwoju: zdrowe granice i proszenie o wsparcie wprost.' },
-  3: { name: 'Osiągacz', mottoEn: 'The Achiever', stress: 'Pod presją: praca w trybie „wynik albo nic”, utrata kontaktu z sobą.', growth: 'W rozwoju: autentyczność, spokój i cele zgodne z wartościami.' },
-  4: { name: 'Indywidualista', mottoEn: 'The Individualist', stress: 'Pod presją: porównywanie, dramatyzacja, poczucie braku.', growth: 'W rozwoju: ugruntowanie i działanie mimo nastroju.' },
-  5: { name: 'Badacz', mottoEn: 'The Investigator', stress: 'Pod presją: wycofanie, nadmierna analiza, odcięcie od potrzeb.', growth: 'W rozwoju: kontakt, dzielenie się i ucieleśnione działanie.' },
-  6: { name: 'Lojalista', mottoEn: 'The Loyalist', stress: 'Pod presją: czarny scenariusz, testowanie lojalności, napięcie.', growth: 'W rozwoju: zaufanie do siebie i odwaga w niepewności.' },
-  7: { name: 'Entuzjasta', mottoEn: 'The Enthusiast', stress: 'Pod presją: ucieczka w bodźce, rozproszenie, unikanie ciężaru.', growth: 'W rozwoju: głębia, konsekwencja i wybór jednej rzeczy naraz.' },
-  8: { name: 'Wyzywacz', mottoEn: 'The Challenger', stress: 'Pod presją: kontrola, ostrość, „siła albo słabość”.', growth: 'W rozwoju: ochrona bez dominacji i siła z empatią.' },
-  9: { name: 'Mediator', mottoEn: 'The Peacemaker', stress: 'Pod presją: zamrożenie, prokrastynacja, znikanie z konfliktu.', growth: 'W rozwoju: priorytety, obecność i zdrowa asertywność.' },
+const ENNEAGRAM_META: Record<number, { name: string; mottoEn: string; stress: string; growth: string; motivation: string; fear: string }> = {
+  1: { name: 'Reformista', mottoEn: 'The Reformer', stress: 'Pod presją: sztywność, krytycyzm, napięcie na „powinno".', growth: 'W rozwoju: elastyczność, mądry standard zamiast perfekcjonizmu.', motivation: 'Być dobrym, prawym i doskonalić siebie oraz świat wokół siebie.', fear: 'Bycia złym, zdeprawowanym lub popełnienia błędu bez możliwości naprawy.' },
+  2: { name: 'Pomocnik', mottoEn: 'The Helper', stress: 'Pod presją: nadopiekuńczość, ukryte oczekiwania, rozczarowanie.', growth: 'W rozwoju: zdrowe granice i proszenie o wsparcie wprost.', motivation: 'Być kochanym i potrzebnym — wyrażać miłość i troskę dla innych.', fear: 'Bycia niekochanym lub niechcianym przez tych, na których zależy.' },
+  3: { name: 'Osiągacz', mottoEn: 'The Achiever', stress: 'Pod presją: praca w trybie „wynik albo nic", utrata kontaktu z sobą.', growth: 'W rozwoju: autentyczność, spokój i cele zgodne z wartościami.', motivation: 'Być wartościowym i odnoszącym sukcesy — wyróżniać się i być podziwianym.', fear: 'Bycia bezwartościowym lub postrzeganym jako porażka.' },
+  4: { name: 'Indywidualista', mottoEn: 'The Individualist', stress: 'Pod presją: porównywanie, dramatyzacja, poczucie braku.', growth: 'W rozwoju: ugruntowanie i działanie mimo nastroju.', motivation: 'Być sobą — odnaleźć i wyrazić swoją unikalną tożsamość i znaczenie.', fear: 'Braku tożsamości lub osobistego sensu; bycia zwyczajnym.' },
+  5: { name: 'Badacz', mottoEn: 'The Investigator', stress: 'Pod presją: wycofanie, nadmierna analiza, odcięcie od potrzeb.', growth: 'W rozwoju: kontakt, dzielenie się i ucieleśnione działanie.', motivation: 'Posiadać wiedzę i rozumieć świat — być kompetentnym i samowystarczalnym.', fear: 'Bycia nieudolnym, niekompetentnym lub niezdolnym do funkcjonowania.' },
+  6: { name: 'Lojalista', mottoEn: 'The Loyalist', stress: 'Pod presją: czarny scenariusz, testowanie lojalności, napięcie.', growth: 'W rozwoju: zaufanie do siebie i odwaga w niepewności.', motivation: 'Mieć bezpieczeństwo i wsparcie — budować lojalność i trwałe więzi.', fear: 'Braku oparcia i pewnego gruntu; zostania bez pomocy w trudnej chwili.' },
+  7: { name: 'Entuzjasta', mottoEn: 'The Enthusiast', stress: 'Pod presją: ucieczka w bodźce, rozproszenie, unikanie ciężaru.', growth: 'W rozwoju: głębia, konsekwencja i wybór jednej rzeczy naraz.', motivation: 'Być szczęśliwym i spełnionym — doświadczać wszystkiego, co życie ma do zaoferowania.', fear: 'Bycia pozbawionym, uwięzionym w bólu lub ograniczeniu.' },
+  8: { name: 'Wyzywacz', mottoEn: 'The Challenger', stress: 'Pod presją: kontrola, ostrość, „siła albo słabość".', growth: 'W rozwoju: ochrona bez dominacji i siła z empatią.', motivation: 'Być niezależnym i silnym — chronić siebie i bliskich, kontrolować własne życie.', fear: 'Bycia skrzywdzonym, zdradzonym lub kontrolowanym przez innych.' },
+  9: { name: 'Mediator', mottoEn: 'The Peacemaker', stress: 'Pod presją: zamrożenie, prokrastynacja, znikanie z konfliktu.', growth: 'W rozwoju: priorytety, obecność i zdrowa asertywność.', motivation: 'Zachować wewnętrzny spokój i harmonię — żyć w zgodzie z sobą i otoczeniem.', fear: 'Utraty połączenia z bliskimi lub rozpadnięcia się wewnętrznej harmonii.' },
 };
-
 const RIASEC_META: Record<string, { name: string; letter: string; colorClass: string }> = {
   realistic: { name: 'Realistic', letter: 'R', colorClass: 'text-rose-300' },
   investigative: { name: 'Investigative', letter: 'I', colorClass: 'text-sky-300' },
@@ -86,6 +85,13 @@ function levelLabelEn(pct: number) {
   if (pct >= 40) return 'Moderate';
   if (pct >= 25) return 'Low';
   return 'Very low';
+}
+
+function levelLabelPl(pct: number) {
+  if (pct >= 70) return 'Wysoki';
+  if (pct >= 40) return 'Umiarkowany';
+  if (pct >= 25) return 'Niski';
+  return 'Bardzo niski';
 }
 
 function firstSentence(text: unknown, fallback = '') {
@@ -613,8 +619,6 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
   const enneagramLabel = ennN ? ENNEAGRAM_META[ennN]?.name : '';
   const enneagramMotto = ennN ? ENNEAGRAM_META[ennN]?.mottoEn : '';
-  const enneagramStress = ennN ? ENNEAGRAM_META[ennN]?.stress : '';
-  const enneagramGrowth = ennN ? ENNEAGRAM_META[ennN]?.growth : '';
 
   const wingNum = useMemo(() => {
     const m = String(ennWing ?? '').match(/(\d+)/);
@@ -1000,9 +1004,8 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                       percentiles={raw.HEXACO?.percentile_scores ?? {}}
                       compact={false}
                       columns={2}
-                      showEnglishName
-                      showDescription
-                      descriptionLang="en"
+                      showEnglishName={false}
+                      showDescription={false}
                       extraContent={(id) => {
                         const interp = (llmContent?.hexaco_interpretations as any)?.[id] as string | undefined;
                         const pct = clamp(
@@ -1010,12 +1013,12 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                           0,
                           100,
                         );
-                        const lvl = levelLabelEn(pct);
+                        const lvl = levelLabelPl(pct);
                         if (llmLoading) return <Skeleton className="h-4 w-full" />;
                         return (
                           <div className="space-y-2">
                             <div className="text-[11px] text-white/45">
-                              Level: <span className="text-white/70 font-semibold">{lvl}</span>
+                              Poziom: <span className="text-white/70 font-semibold">{lvl}</span>
                             </div>
                             {interp && !llmError ? (
                               <div className="text-xs italic text-purple-200/70">✦ {interp}</div>
@@ -1095,13 +1098,13 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                   ) : null}
 
                   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="rounded-xl p-4 border border-rose-400/20 bg-rose-500/10 iiy-hover-panel">
-                      <div className="text-[10px] tracking-[2px] font-mono text-rose-200/70 uppercase">W stresie</div>
-                      <div className="mt-2 text-xs text-white/65 leading-relaxed">{enneagramStress}</div>
+                    <div className="rounded-xl p-4 border border-amber-400/20 bg-amber-500/10 iiy-hover-panel">
+                      <div className="text-[10px] tracking-[2px] font-mono text-amber-200/70 uppercase">⚡ Motywacja</div>
+                      <div className="mt-2 text-xs text-white/65 leading-relaxed">{ennN ? ENNEAGRAM_META[ennN]?.motivation : ''}</div>
                     </div>
-                    <div className="rounded-xl p-4 border border-emerald-400/20 bg-emerald-500/10 iiy-hover-panel">
-                      <div className="text-[10px] tracking-[2px] font-mono text-emerald-200/70 uppercase">W rozwoju</div>
-                      <div className="mt-2 text-xs text-white/65 leading-relaxed">{enneagramGrowth}</div>
+                    <div className="rounded-xl p-4 border border-rose-400/20 bg-rose-500/10 iiy-hover-panel">
+                      <div className="text-[10px] tracking-[2px] font-mono text-rose-200/70 uppercase">⚠ Lęki</div>
+                      <div className="mt-2 text-xs text-white/65 leading-relaxed">{ennN ? ENNEAGRAM_META[ennN]?.fear : ''}</div>
                     </div>
                   </div>
 
