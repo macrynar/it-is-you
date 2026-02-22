@@ -97,6 +97,16 @@ serve(async (req: Request) => {
         })
       }
 
+      // Enrich name/avatar from auth.users metadata when profile table has nulls
+      let fullName: string | null = profile.full_name ?? null
+      let avatarUrl: string | null = profile.avatar_url ?? null
+      if (!fullName || !avatarUrl) {
+        const { data: authUser } = await service.auth.admin.getUserById(profile.id)
+        const meta = (authUser?.user?.user_metadata ?? {}) as Record<string, unknown>
+        if (!fullName) fullName = (meta.full_name as string) || (meta.name as string) || null
+        if (!avatarUrl) avatarUrl = (meta.avatar_url as string) || (meta.picture as string) || null
+      }
+
       const { data: psychometrics } = await service
         .from('user_psychometrics')
         .select('test_type, raw_scores, percentile_scores, report, created_at')
@@ -113,8 +123,8 @@ serve(async (req: Request) => {
         JSON.stringify({
           user_id: profile.id,
           profile: {
-            full_name: profile.full_name ?? null,
-            avatar_url: profile.avatar_url ?? null,
+            full_name: fullName,
+            avatar_url: avatarUrl,
             is_premium: profile.is_premium ?? false,
           },
           psychometrics: psychometrics ?? [],

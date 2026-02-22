@@ -828,12 +828,6 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
       )}
 
       <main className="max-w-7xl mx-auto px-6 py-10">
-        {isPublic ? (
-          <div className="card-neural iiy-hover-panel p-6 mb-6">
-            <div className="text-sm text-white/70">To jest publiczny podgląd karty postaci.</div>
-            <a href="/auth" className="mt-4 inline-flex items-center gap-2 btn-neural no-underline">Stwórz swoją kartę postaci →</a>
-          </div>
-        ) : null}
 
         {!isPublic && done < 6 ? (
           <div className="card-neural iiy-hover-panel p-6 mb-6">
@@ -929,11 +923,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
                       {/* Segment 4: Actions */}
                       <div className="iiy-cs-s-actions">
-                        {isPublic ? (
-                          <a href="/auth" className="iiy-cs-btn iiy-cs-btn-primary no-underline" style={{ textDecoration: 'none' }}>
-                            Stwórz swoją kartę
-                          </a>
-                        ) : (
+                        {isPublic ? null : (
                           <>
                             <button
                               type="button"
@@ -1479,42 +1469,6 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
       </main>
 
       {!isPublic ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} /> : null}
-
-      {/* Spacer for sticky CTA bar */}
-      {isPublic ? <div className="h-24" /> : null}
-
-      {/* Public share CTA sticky bar */}
-      {isPublic ? (
-        <div
-          className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-4 px-6 py-4"
-          style={{
-            background: 'linear-gradient(90deg, rgba(10,4,40,.97) 0%, rgba(20,10,60,.97) 100%)',
-            borderTop: '1px solid rgba(0,240,255,.15)',
-            backdropFilter: 'blur(20px)',
-            boxShadow: '0 -8px 32px -8px rgba(0,240,255,.12)',
-          }}
-        >
-          <div className="flex flex-col gap-0.5">
-            <div className="text-sm font-semibold text-white/90">
-              Przeglądasz kartę postaci <span className="text-cyan-300">{userName}</span>
-            </div>
-            <div className="text-xs text-white/40">Poznaj siebie — 7 testów psychometrycznych w jednym miejscu</div>
-          </div>
-          <a
-            href="/auth"
-            className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all"
-            style={{
-              background: 'linear-gradient(120deg, rgba(112,0,255,.9) 0%, rgba(0,200,220,.9) 100%)',
-              boxShadow: '0 0 24px -4px rgba(0,240,255,.5)',
-              textDecoration: 'none',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Stwórz swoją kartę
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      ) : null}
 
       {/* Footer */}
       <footer className="border-t border-white/5 bg-slate-950/80 py-10 text-slate-500 text-sm mt-8">
