@@ -31,6 +31,7 @@ type CharacterCardContent = {
   portrait_blindspots: string
   darktriad_synthesis: string
   popculture: Array<{ context: string; name: string; reason: string }>
+  ideal_careers: Array<{ emoji: string; title: string; description: string }>
 }
 
 function extractJson(text: string): string {
@@ -123,6 +124,7 @@ serve(async (req: Request) => {
       portrait_blindspots: 'string',
       darktriad_synthesis: 'string',
       popculture: [{ context: 'string', name: 'string', reason: 'string' }],
+      ideal_careers: [{ emoji: 'string', title: 'string', description: 'string' }],
     }
 
     const userPayload = {
@@ -140,7 +142,7 @@ serve(async (req: Request) => {
       body: JSON.stringify({
         model: 'gpt-4o-mini',
         temperature: 0.4,
-        max_tokens: 900,
+        max_tokens: 1400,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
           {

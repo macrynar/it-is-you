@@ -5,7 +5,6 @@ import HexacoRadarChart from '../Test/modules/HexacoRadarChart';
 import HexacoDetailCards from '../Test/modules/HexacoDetailCards';
 import CharacterChatBubble from './CharacterChatBubble';
 import { getUserPremiumStatus, type UserPremiumStatus } from '../../lib/stripeService';
-import RiasecRadarChart from './RiasecRadarChart';
 import ValuesCircumplexChart, { SCHWARTZ_CIRCUMPLEX } from './ValuesCircumplexChart';
 
 type CharacterCardContent = {
@@ -32,6 +31,7 @@ type CharacterCardContent = {
   portrait_blindspots: string;
   darktriad_synthesis: string;
   popculture: Array<{ context: string; name: string; reason: string }>;
+  ideal_careers: Array<{ emoji: string; title: string; description: string }>;
 };
 
 const CORE_TESTS = ['HEXACO','ENNEAGRAM','STRENGTHS','CAREER','DARK_TRIAD','VALUES'] as const;
@@ -1234,41 +1234,31 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                     <span className="ml-1 text-[9px] font-mono text-white/25 uppercase tracking-widest">Kod Hollanda</span>
                   </div>
 
-                  {/* Radar + bars */}
-                  <div className="mt-3 flex gap-3 items-center">
-                    <div className="flex-shrink-0 w-[148px]">
-                      <RiasecRadarChart
-                        scores={Object.fromEntries(riasecScores.items.map((it) => [it.id, it.v]))}
-                        maxScale={riasecScores.max || 6}
-                        hollandCode={holland}
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0 space-y-2">
-                      {riasecScores.items.map((it) => {
-                        const meta = RIASEC_META[it.id] ?? { namePl: it.id, letter: '?', hexColor: '#94a3b8', colorClass: 'text-white/60', name: it.id };
-                        const pct = riasecScores.max > 0 ? clamp(Math.round((it.v / riasecScores.max) * 100), 0, 100) : 0;
-                        const isTop = String(holland).toUpperCase().slice(0, 3).includes(meta.letter);
-                        return (
-                          <div key={it.id} className="flex items-center gap-2">
-                            <div className="w-4 text-[11px] font-extrabold text-center" style={{ color: isTop ? meta.hexColor : 'rgba(255,255,255,0.25)' }}>{meta.letter}</div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between gap-1 mb-0.5">
-                                <span className="text-[11px] truncate" style={{ color: isTop ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.3)' }}>
-                                  {meta.namePl}
-                                </span>
-                                <span className="text-[10px] font-mono flex-shrink-0" style={{ color: isTop ? meta.hexColor : 'rgba(255,255,255,0.2)' }}>
-                                  {it.v ? it.v.toFixed(1) : '—'}
-                                </span>
-                              </div>
-                              <div className="h-1 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full rounded-full transition-all duration-500"
-                                  style={{ width: `${pct}%`, background: meta.hexColor, opacity: isTop ? 0.9 : 0.25 }} />
-                              </div>
+                  {/* Full-width bars */}
+                  <div className="mt-4 space-y-3">
+                    {riasecScores.items.map((it) => {
+                      const meta = RIASEC_META[it.id] ?? { namePl: it.id, letter: '?', hexColor: '#94a3b8', colorClass: 'text-white/60', name: it.id };
+                      const pct = riasecScores.max > 0 ? clamp(Math.round((it.v / riasecScores.max) * 100), 0, 100) : 0;
+                      const isTop = String(holland).toUpperCase().slice(0, 3).includes(meta.letter);
+                      return (
+                        <div key={it.id}>
+                          <div className="flex items-center justify-between gap-2 mb-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-extrabold w-5 text-center" style={{ color: isTop ? meta.hexColor : 'rgba(255,255,255,0.25)' }}>{meta.letter}</span>
+                              <span className="text-sm" style={{ color: isTop ? 'rgba(255,255,255,0.80)' : 'rgba(255,255,255,0.35)' }}>{meta.namePl}</span>
                             </div>
+                            <span className="text-sm font-mono font-bold" style={{ color: isTop ? meta.hexColor : 'rgba(255,255,255,0.25)' }}>
+                              {it.v ? it.v.toFixed(1) : '—'}
+                            </span>
                           </div>
-                        );
-                      })}
-                    </div>
+                          <div className="h-2.5 rounded-full bg-white/10 overflow-hidden">
+                            <div className="h-full rounded-full transition-all duration-500"
+                              style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${meta.hexColor}cc, ${meta.hexColor}88)`, opacity: isTop ? 1 : 0.28,
+                                ...(isTop ? { boxShadow: `0 0 8px 1px ${meta.hexColor}55` } : {}) }} />
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
 
                   {/* AI */}
@@ -1349,6 +1339,28 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
             <SectionDivider label="Synteza" />
 
+            {/* Idealne zawody */}
+            <section className="col-span-1 lg:col-span-3 card-neural iiy-hover-panel p-6">
+              <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">6 Zawodów Dla Ciebie</div>
+              {llmLoading ? (
+                <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-20" />)}
+                </div>
+              ) : llmContent?.ideal_careers?.length && !llmError ? (
+                <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {llmContent.ideal_careers.slice(0, 6).map((c, idx) => (
+                    <div key={idx} className="rounded-xl border border-white/10 bg-white/[0.04] p-4 iiy-hover-panel flex flex-col gap-1.5">
+                      <span className="text-2xl leading-none">{c.emoji}</span>
+                      <div className="text-sm font-semibold text-white/80 leading-snug">{c.title}</div>
+                      <div className="text-xs text-white/45 leading-relaxed">{c.description}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45 iiy-hover-panel">{llmError ?? 'Brak treści AI'}</div>
+              )}
+            </section>
+
             <section className="col-span-1 lg:col-span-2 card-neural iiy-hover-panel p-6">
               <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Kim jesteś naprawdę</div>
               {llmLoading ? (
@@ -1379,19 +1391,22 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
             <section className="col-span-1 lg:col-span-1 card-neural iiy-hover-panel p-6">
               <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Twoje Alter Ego</div>
+              <div className="mt-1 text-[11px] text-white/30">Postacie fikcyjne i pop-kulturowe z podobnym DNA osobowości</div>
               {llmLoading ? (
                 <div className="mt-4 space-y-3">
-                  <Skeleton className="h-16" />
-                  <Skeleton className="h-16" />
-                  <Skeleton className="h-16" />
+                  <Skeleton className="h-20" />
+                  <Skeleton className="h-20" />
+                  <Skeleton className="h-20" />
                 </div>
               ) : llmContent?.popculture?.length && !llmError ? (
                 <div className="mt-4 space-y-3">
                   {llmContent.popculture.slice(0, 3).map((p, idx) => (
-                    <div key={`${p.name}-${idx}`} className="rounded-xl border border-white/10 bg-white/5 p-4 iiy-hover-panel">
-                      <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">{p.context}</div>
-                      <div className="mt-1 text-sm font-semibold text-white/80">{p.name}</div>
-                      <div className="mt-2 text-xs text-white/60 leading-relaxed">{p.reason}</div>
+                    <div key={`${p.name}-${idx}`} className="rounded-xl border border-violet-400/15 bg-violet-500/[0.05] p-4 iiy-hover-panel">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="text-base font-bold text-white/85 leading-snug">{p.name}</div>
+                        <span className="shrink-0 text-[10px] font-mono text-violet-300/60 uppercase tracking-wider bg-violet-500/10 border border-violet-400/20 rounded-lg px-2 py-0.5">{p.context}</span>
+                      </div>
+                      <div className="mt-2 text-xs text-white/55 leading-relaxed italic">{p.reason}</div>
                     </div>
                   ))}
                 </div>
@@ -1475,6 +1490,43 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
       </main>
 
       {!isPublic ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} /> : null}
+
+      {/* Footer */}
+      <footer className="border-t border-white/5 bg-slate-950/80 py-10 text-slate-500 text-sm mt-8">
+        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 sm:grid-cols-4 gap-8">
+          <div className="col-span-2 sm:col-span-1">
+            <span className="font-bold text-lg text-white tracking-tight block mb-3">Psycher</span>
+            <p>Naukowa diagnoza potencjału w formie przystępnej grywalizacji.</p>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-3 text-sm">Metodologia</h4>
+            <ul className="space-y-1.5">
+              {['HEXACO & Big Five', 'Enneagram RHETI', 'O*NET Database', 'Dark Triad SD3'].map((l) => (
+                <li key={l}><a href="#" className="hover:text-indigo-400 transition">{l}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-3 text-sm">Projekt</h4>
+            <ul className="space-y-1.5">
+              {['O nas', 'Cennik', 'Dla Firm'].map((l) => (
+                <li key={l}><a href="#" className="hover:text-indigo-400 transition">{l}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-3 text-sm">Legal</h4>
+            <ul className="space-y-1.5">
+              {['Polityka Prywatności', 'Regulamin', 'RODO'].map((l) => (
+                <li key={l}><a href="#" className="hover:text-indigo-400 transition">{l}</a></li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="max-w-5xl mx-auto px-6 mt-8 pt-6 border-t border-white/5 text-center text-xs">
+          &copy; {new Date().getFullYear()} Psycher. All rights reserved. Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.
+        </div>
+      </footer>
     </div>
   );
 }
