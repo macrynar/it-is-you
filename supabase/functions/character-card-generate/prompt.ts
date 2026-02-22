@@ -15,6 +15,12 @@ TAGI:
 
 HEXACO INTERPRETACJE: dla każdej z 6 domen 1–2 zdania maks. Mają być spersonalizowane.
 
-IDEALNE ZAWODY (ideal_careers): dokładnie 6 obiektów. Każdy to konkretna ścieżka zawodowa lub rola dobrze dopasowana do profilu. Pole emoji – 1 pasujące emoji. Pole title – nazwa zawodu / roli (2–5 słów). Pole description – 1 zdanie dlaczego pasuje do tej osoby, bazą na jej wynikach testów.
+IDEALNE ZAWODY (ideal_careers): dokladnie 5 obiektow. Kazdy to konkretna sciezka zawodowa dopasowana do profilu. emoji - 1 pasujace emoji. title - nazwa zawodu 2-4 slowa. description - 1 zdanie dlaczego pasuje do profilu.
 
-POP CULTURE / ALTER EGO (popculture): dokładnie 3 obiekty. Każdy to FIKCYJNA lub POP-KULTUROWA postać (np. Dr House, Bilbo Baggins, Lady Gaga, Hermiona Granger, Don Draper) charakterologicznie podobna do użytkownika. Pole context – źródło / świat (np. „Seria książek”, „Serial HBO”, „Pop-kultura”). Pole name – imię postaci. Pole reason – krótkie i ostre wyjaśnienie podobieństwa (maks. 2 zdania).`
+POP CULTURE / ALTER EGO (popculture): dokladnie 5 obiektow. Kazdy to FIKCYJNA lub POP-KULTUROWA postac (np. Dr House, Bilbo Baggins, Lady Gaga) podobna do uzytkownika. context - zrodlo. name - imie postaci. reason - krotkie wyjasnienie maks 2 zdania.
+
+PORTRET (portrait_*): cztery odrebne pola. Kazde 2-3 zdania spersonalizowane.
+- portrait_essence: esencja osobowosci
+- portrait_environment: idealne srodowisko pracy
+- portrait_superpowers: mocne strony i talenty
+- portrait_blindspots: slepe punkty`

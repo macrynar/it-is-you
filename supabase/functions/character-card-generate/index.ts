@@ -123,8 +123,8 @@ serve(async (req: Request) => {
       portrait_superpowers: 'string',
       portrait_blindspots: 'string',
       darktriad_synthesis: 'string',
-      popculture: [{ context: 'string', name: 'string', reason: 'string' }],
-      ideal_careers: [{ emoji: 'string', title: 'string', description: 'string' }],
+      popculture: [{ context: 'string', name: 'string', reason: 'string' }, { context: 'string', name: 'string', reason: 'string' }, { context: 'string', name: 'string', reason: 'string' }, { context: 'string', name: 'string', reason: 'string' }, { context: 'string', name: 'string', reason: 'string' }],
+      ideal_careers: [{ emoji: 'string', title: 'string', description: 'string' }, { emoji: 'string', title: 'string', description: 'string' }, { emoji: 'string', title: 'string', description: 'string' }, { emoji: 'string', title: 'string', description: 'string' }, { emoji: 'string', title: 'string', description: 'string' }],
     }
 
     const userPayload = {
