@@ -9,6 +9,8 @@
     { "source": "/test", "destination": "/app.html" },
     { "source": "/settings", "destination": "/app.html" },
     { "source": "/settings/:path*", "destination": "/app.html" },
+    { "source": "/share", "destination": "/app.html" },
+    { "source": "/share/:path*", "destination": "/app.html" },
     { "source": "/character", "destination": "/app.html" },
     { "source": "/character/:path*", "destination": "/app.html" }
   ],
