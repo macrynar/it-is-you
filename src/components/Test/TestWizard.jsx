@@ -35,7 +35,7 @@ function hexToRgb(hex) {
 }
 
 const TEST_META = {
-  hexaco: { title: 'Rdzeń Osobowości (HEXACO)', accent: '#1F3C88' },
+  hexaco: { title: 'Rdzeń Osobowości (HEXACO)', accent: 'rgb(56, 182, 255)' },
   enneagram: { title: 'Silnik Motywacji (Enneagram)', accent: '#6A1B9A' },
   dark_triad: { title: 'Analiza Cienia (Dark Triad)', accent: '#8B0000' },
   strengths: { title: 'Mocne Strony', accent: '#FFB300' },
