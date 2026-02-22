@@ -31,7 +31,8 @@ serve(async (req) => {
 
     const { data: { user }, error: userError } = await supabaseClient.auth.getUser()
     if (userError || !user) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      const reason = userError?.message ?? 'No user from auth token'
+      return new Response(JSON.stringify({ error: 'Unauthorized', reason }), {
         status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }

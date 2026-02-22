@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
+import { getAccessToken, SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
 import { STRENGTHS_TEST } from '../../data/tests/strengths.js';
 import { generateStrengthsReport } from '../../utils/scoring.js';
 import { PROMPT_VERSION } from '../../utils/promptVersion.js';
@@ -133,11 +133,11 @@ export default function StrengthsResults() {
     setInterpLoading(true);
     setInterpError(null);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('Brak sesji');
+      const accessToken = await getAccessToken();
+      if (!accessToken) throw new Error('Brak sesji');
       const { data, error: fe } = await supabase.functions.invoke('interpret-test', {
         body: { test_type: 'STRENGTHS', raw_scores: scores, report: scores, force },
-        headers: { Authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_ANON_KEY },
+        headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
       });
       if (fe) throw fe;
       setInterpretation(data?.interpretation || '');

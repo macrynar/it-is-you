@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
+import { getAccessToken, SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
 import { ENNEAGRAM_TEST } from '../../data/tests/enneagram.js';
 import { PROMPT_VERSION } from '../../utils/promptVersion.js';
 import AiInterpretation from './AiInterpretation.jsx';
@@ -260,11 +260,11 @@ export default function EnneagramResults() {
   const generateInterpretation = async (r, { force = false } = {}) => {
     setAiLoading(true); setAiError(null);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('Brak sesji');
+      const accessToken = await getAccessToken();
+      if (!accessToken) throw new Error('Brak sesji');
       const { data: d, error: fnErr } = await supabase.functions.invoke('interpret-test', {
         body: { test_type: 'ENNEAGRAM', raw_scores: r.raw_scores, report: r.report, force },
-        headers: { Authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_ANON_KEY },
+        headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
       });
       if (fnErr) throw fnErr;
       setAiInterp(d?.interpretation ?? null);

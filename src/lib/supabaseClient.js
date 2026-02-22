@@ -36,6 +36,17 @@ console.log('🔧 Supabase Config Check:', {
  */
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+export const getAccessToken = async () => {
+  const { data: { session } } = await supabase.auth.getSession()
+  if (session?.access_token) return session.access_token
+
+  const { data, error } = await supabase.auth.refreshSession()
+  if (error) {
+    console.error('Session refresh error:', error)
+  }
+  return data?.session?.access_token || null
+}
+
 /**
  * Canonical app URL used for OAuth callback redirects.
  * In production this reads VITE_APP_URL from .env.production (https://it-is-you1.vercel.app).

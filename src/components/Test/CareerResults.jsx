@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
+import { getAccessToken, SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
 import { CAREER_TEST } from '../../data/tests/career.js';
 import { generateCareerReport } from '../../utils/scoring.js';
 import { PROMPT_VERSION } from '../../utils/promptVersion.js';
@@ -144,10 +144,11 @@ export default function CareerResults() {
     try {
       setInterpLoading(true);
       setInterpError(null);
-      const { data: { session } } = await supabase.auth.getSession();
+      const accessToken = await getAccessToken();
+      if (!accessToken) throw new Error('Brak sesji');
       const { data, error } = await supabase.functions.invoke('interpret-test', {
         body: { test_type: 'CAREER', raw_scores: scores, report: reportData, force },
-        headers: { Authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_ANON_KEY },
+        headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
       });
       if (error) throw error;
       setInterpretation(data.interpretation);

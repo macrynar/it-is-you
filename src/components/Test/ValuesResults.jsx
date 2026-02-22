@@ -3,7 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ReferenceLine, Cell, ResponsiveContainer
 } from 'recharts';
-import { SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
+import { getAccessToken, SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
 import { generateValuesReport } from '../../utils/scoring.js';
 import { PROMPT_VERSION } from '../../utils/promptVersion.js';
 import AiInterpretation from './AiInterpretation.jsx';
@@ -107,10 +107,11 @@ export default function ValuesResults() {
     try {
       setInterpLoading(true);
       setInterpError(null);
-      const { data: { session } } = await supabase.auth.getSession();
+      const accessToken = await getAccessToken();
+      if (!accessToken) throw new Error('Brak sesji');
       const { data, error } = await supabase.functions.invoke('interpret-test', {
         body: { test_type: 'VALUES', raw_scores: scores, report: reportData, force },
-        headers: { Authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_ANON_KEY },
+        headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
       });
       if (error) throw error;
       setInterpretation(data.interpretation);

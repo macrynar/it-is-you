@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
+import { getAccessToken, SUPABASE_ANON_KEY, supabase } from '../../lib/supabaseClient.js';
 import { HEXACO_TEST } from '../../data/tests/hexaco.js';
 import { PROMPT_VERSION } from '../../utils/promptVersion.js';
 import AiInterpretation from './AiInterpretation.jsx';
@@ -101,11 +101,11 @@ export default function HexacoResults() {
   const generateInterpretation = async (r, { force = false } = {}) => {
     setInterpLoading(true); setInterpError(null);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('Brak sesji');
+      const accessToken = await getAccessToken();
+      if (!accessToken) throw new Error('Brak sesji');
       const { data: d, error: fnErr } = await supabase.functions.invoke('interpret-test', {
         body: { test_type: 'HEXACO', percentile_scores: r.percentile_scores, raw_scores: r.raw_scores, force },
-        headers: { Authorization: `Bearer ${session.access_token}`, apikey: SUPABASE_ANON_KEY },
+        headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
       });
       if (fnErr) throw fnErr;
       setInterpretation(d?.interpretation ?? null);
