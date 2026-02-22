@@ -39,6 +39,8 @@ export default function CharacterChatBubble({ profileContext }: { profileContext
     setMessages(nextMessages)
     scrollToBottom()
 
+    if (!open) setOpen(true)
+
     setLoading(true)
     try {
       const accessToken = await getAccessToken()
@@ -67,47 +69,67 @@ export default function CharacterChatBubble({ profileContext }: { profileContext
   }
 
   return (
-    <div className="fixed bottom-5 right-5 z-[60]">
-      {!open ? (
-        <div className="flex items-center gap-3">
-          <div className="max-w-[220px] px-3 py-2 rounded-full bg-bg-surface/90 border border-white/10 backdrop-blur-xl shadow-lg">
-            <div className="text-[10px] tracking-[2px] font-mono text-white/45">AI</div>
-            <div className="text-xs font-semibold text-white/80 truncate">AI PsychoAssistant</div>
-          </div>
+    <>
+      {/* DOCKED ISLAND (bottom-center, input always visible) */}
+      {!open && (
+        <div className="fixed inset-x-0 bottom-4 z-[60] flex justify-center px-3">
+          <div className="w-[min(820px,calc(100vw-24px))] card-neural card-neural-highlight overflow-hidden">
+            <div className="h-[3px] bg-gradient-to-r from-brand-primary/50 via-brand-secondary/40 to-brand-primary/50" />
+            <div className="px-4 py-3 flex items-center gap-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="relative w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+                  <span aria-hidden="true" className="absolute -inset-2 bg-brand-primary/20 blur-lg animate-pulse" />
+                  <span aria-hidden="true" className="relative w-2.5 h-2.5 rounded-full bg-brand-primary/80 shadow" />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[10px] tracking-[2px] font-mono text-white/45">AI PSYCHOASSISTANT</div>
+                  <div className="text-xs text-white/70 truncate">Zapytaj o pracę, relacje, kierunek rozwoju…</div>
+                </div>
+              </div>
 
-          <div className="relative">
-            <span
-              aria-hidden="true"
-              className="absolute -inset-2 rounded-full bg-brand-primary/20 blur-md animate-pulse"
-            />
-            <span
-              aria-hidden="true"
-              className="absolute -inset-1 rounded-full border border-brand-primary/30 animate-ping"
-            />
-            <button
-              type="button"
-              onClick={() => setOpen(true)}
-              className="relative w-14 h-14 rounded-full bg-bg-surface/90 border border-white/10 hover:border-brand-primary/50 backdrop-blur-xl shadow-2xl flex items-center justify-center text-white/85 hover:text-white transition focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
-              aria-label="Otwórz czat: AI PsychoAssistant"
-            >
-              <span className="text-xl">💬</span>
-            </button>
+              <div className="flex-1" />
+
+              <div className="flex items-center gap-2 w-[min(520px,55vw)]">
+                <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault()
+                      send()
+                    }
+                  }}
+                  placeholder="Napisz pytanie…"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/85 placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                  disabled={loading}
+                />
+                <button type="button" onClick={send} disabled={!canSend} className="btn-neural disabled:opacity-50">
+                  Zapytaj
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      ) : (
-        <div className="w-[360px] max-w-[calc(100vw-40px)] h-[520px] max-h-[calc(100vh-140px)] bg-bg-surface/90 border border-white/10 rounded-2xl backdrop-blur-xl shadow-2xl flex flex-col overflow-hidden">
-          <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
+      )}
+
+      {/* SIDE PANEL (opens after first message) */}
+      <div
+        className={
+          open
+            ? 'fixed right-4 bottom-4 top-20 z-[70] w-[420px] max-w-[calc(100vw-24px)] transition-transform duration-300'
+            : 'fixed right-4 bottom-4 top-20 z-[70] w-[420px] max-w-[calc(100vw-24px)] translate-x-[110%] transition-transform duration-300 pointer-events-none'
+        }
+      >
+        <div className="h-full card-neural overflow-hidden flex flex-col">
+          <div className="h-[3px] bg-gradient-to-r from-brand-primary/50 via-brand-secondary/40 to-brand-primary/50" />
+
+          <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <div className="text-xs tracking-[2px] font-mono text-white/45">AI PSYCHOASSISTANT</div>
+              <div className="text-[10px] tracking-[2px] font-mono text-white/45">AI PSYCHOASSISTANT</div>
               <div className="text-sm font-semibold text-white/80 truncate">Dr. Aleksandra Wiśniewska</div>
             </div>
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/70"
-              aria-label="Zamknij czat"
-            >
-              ✕
+            <button type="button" onClick={() => setOpen(false)} className="btn-ghost-neural px-3" aria-label="Zminimalizuj czat">
+              Minimalizuj
             </button>
           </div>
 
@@ -117,7 +139,7 @@ export default function CharacterChatBubble({ profileContext }: { profileContext
                 <div
                   className={
                     m.role === 'user'
-                      ? 'max-w-[85%] rounded-2xl rounded-br-md bg-brand-primary/20 border border-brand-primary/30 text-white/85 px-3 py-2 text-sm leading-relaxed'
+                      ? 'max-w-[85%] rounded-2xl rounded-br-md bg-brand-primary/15 border border-brand-primary/25 text-white/85 px-3 py-2 text-sm leading-relaxed'
                       : 'max-w-[85%] rounded-2xl rounded-bl-md bg-white/5 border border-white/10 text-white/75 px-3 py-2 text-sm leading-relaxed'
                   }
                   style={{ whiteSpace: 'pre-wrap' }}
@@ -148,21 +170,16 @@ export default function CharacterChatBubble({ profileContext }: { profileContext
                   }
                 }}
                 placeholder="Napisz wiadomość…"
-                className="flex-1 bg-bg-main/40 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/80 placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/85 placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
                 disabled={loading}
               />
-              <button
-                type="button"
-                onClick={send}
-                disabled={!canSend}
-                className="px-3 py-2 rounded-xl bg-brand-primary/30 hover:bg-brand-primary/40 border border-brand-primary/30 text-white/85 text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
-              >
+              <button type="button" onClick={send} disabled={!canSend} className="btn-neural disabled:opacity-50">
                 Wyślij
               </button>
             </div>
           </div>
         </div>
-      )}
-    </div>
+      </div>
+    </>
   )
 }
