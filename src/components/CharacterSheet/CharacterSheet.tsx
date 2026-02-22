@@ -5,6 +5,8 @@ import HexacoRadarChart from '../Test/modules/HexacoRadarChart';
 import HexacoDetailCards from '../Test/modules/HexacoDetailCards';
 import CharacterChatBubble from './CharacterChatBubble';
 import { getUserPremiumStatus, type UserPremiumStatus } from '../../lib/stripeService';
+import RiasecRadarChart from './RiasecRadarChart';
+import ValuesCircumplexChart, { SCHWARTZ_CIRCUMPLEX } from './ValuesCircumplexChart';
 
 type CharacterCardContent = {
   archetype_name: string;
@@ -54,13 +56,13 @@ const ENNEAGRAM_META: Record<number, { name: string; mottoEn: string; stress: st
   8: { name: 'Wyzywacz', mottoEn: 'The Challenger', stress: 'Pod presją: kontrola, ostrość, „siła albo słabość".', growth: 'W rozwoju: ochrona bez dominacji i siła z empatią.', motivation: 'Być niezależnym i silnym — chronić siebie i bliskich, kontrolować własne życie.', fear: 'Bycia skrzywdzonym, zdradzonym lub kontrolowanym przez innych.' },
   9: { name: 'Mediator', mottoEn: 'The Peacemaker', stress: 'Pod presją: zamrożenie, prokrastynacja, znikanie z konfliktu.', growth: 'W rozwoju: priorytety, obecność i zdrowa asertywność.', motivation: 'Zachować wewnętrzny spokój i harmonię — żyć w zgodzie z sobą i otoczeniem.', fear: 'Utraty połączenia z bliskimi lub rozpadnięcia się wewnętrznej harmonii.' },
 };
-const RIASEC_META: Record<string, { name: string; letter: string; colorClass: string }> = {
-  realistic: { name: 'Realistic', letter: 'R', colorClass: 'text-rose-300' },
-  investigative: { name: 'Investigative', letter: 'I', colorClass: 'text-sky-300' },
-  artistic: { name: 'Artistic', letter: 'A', colorClass: 'text-fuchsia-300' },
-  social: { name: 'Social', letter: 'S', colorClass: 'text-emerald-300' },
-  enterprising: { name: 'Enterprising', letter: 'E', colorClass: 'text-amber-300' },
-  conventional: { name: 'Conventional', letter: 'C', colorClass: 'text-slate-300' },
+const RIASEC_META: Record<string, { name: string; namePl: string; letter: string; colorClass: string; hexColor: string }> = {
+  realistic:     { name: 'Realistic',     namePl: 'Praktyczny',    letter: 'R', colorClass: 'text-rose-300',    hexColor: '#f87171' },
+  investigative: { name: 'Investigative', namePl: 'Badawczy',      letter: 'I', colorClass: 'text-sky-300',     hexColor: '#38b6ff' },
+  artistic:      { name: 'Artistic',      namePl: 'Artystyczny',   letter: 'A', colorClass: 'text-fuchsia-300', hexColor: '#e878e0' },
+  social:        { name: 'Social',        namePl: 'Społeczny',     letter: 'S', colorClass: 'text-emerald-300', hexColor: '#10b981' },
+  enterprising:  { name: 'Enterprising',  namePl: 'Przedsięb.',    letter: 'E', colorClass: 'text-amber-300',   hexColor: '#fbbf24' },
+  conventional:  { name: 'Conventional',  namePl: 'Konwencjon.',   letter: 'C', colorClass: 'text-slate-300',   hexColor: '#94a3b8' },
 };
 
 const STRENGTHS_DOMAIN: Record<string, { label: string; className: string }> = {
@@ -638,6 +640,17 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
     return arr.slice(0, 3);
   }, [valuesRep, topVals]);
 
+  const valuesScoreMap = useMemo(() => {
+    const all: any[] = valuesRep?.all_values ?? raw.VALUES?.raw_scores?.sorted_values ?? [];
+    const map: Record<string, number> = {};
+    for (const v of Array.isArray(all) ? all : []) {
+      const id = String(v?.id ?? v?.value_id ?? '');
+      const score = Number(v?.raw_score ?? v?.score ?? v?.mrat_score ?? 0);
+      if (id && Number.isFinite(score)) map[id] = score;
+    }
+    return map;
+  }, [valuesRep, raw.VALUES]);
+
   const riasecScores = useMemo(() => {
     const typeScores = careerRep?.type_scores ?? careerRep?.typeScores ?? careerRep?.type_scores_map ?? null;
     const m = (typeScores && typeof typeScores === 'object') ? typeScores : {};
@@ -1126,7 +1139,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
               )}
             </section>
 
-            <SectionDivider label="Arsenal & Kariera" />
+            <SectionDivider label="Kariera i Wartości" />
 
             <section className="col-span-1 card-neural iiy-hover-panel p-6">
               <div className="flex items-center justify-between gap-3">
@@ -1179,48 +1192,72 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
               {raw.CAREER ? (
                 <>
-                  <div className="mt-4 flex items-center gap-2">
-                    {String(holland || '---').slice(0, 3).split('').map((ch, idx) => (
-                      <span
-                        key={`${ch}-${idx}`}
-                        className={
-                          idx === 0
-                            ? 'px-3 py-2 rounded-xl border border-emerald-400/25 bg-emerald-500/10 text-emerald-200 font-extrabold text-xl'
-                            : 'px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-white/70 font-bold'
-                        }
-                      >
-                        {ch.toUpperCase()}
-                      </span>
-                    ))}
+                  {/* Holland code */}
+                  <div className="mt-4 flex items-center gap-1.5 flex-wrap">
+                    {String(holland || '---').slice(0, 3).split('').map((ch, idx) => {
+                      const meta = Object.values(RIASEC_META).find((m) => m.letter === ch.toUpperCase());
+                      return (
+                        <span
+                          key={`${ch}-${idx}`}
+                          className="rounded-xl border font-extrabold"
+                          style={{
+                            padding: idx === 0 ? '6px 14px' : '4px 10px',
+                            fontSize: idx === 0 ? 20 : 15,
+                            color: meta?.hexColor ?? 'rgba(255,255,255,0.7)',
+                            background: `${meta?.hexColor ?? '#fff'}18`,
+                            borderColor: `${meta?.hexColor ?? '#fff'}40`,
+                            ...(idx === 0 ? { boxShadow: `0 0 14px -2px ${meta?.hexColor ?? '#fff'}60` } : {}),
+                          }}
+                        >{ch.toUpperCase()}</span>
+                      );
+                    })}
+                    <span className="ml-1 text-[9px] font-mono text-white/25 uppercase tracking-widest">Kod Hollanda</span>
                   </div>
 
-                  <div className="mt-4 space-y-3">
-                    {riasecScores.items.map((it) => {
-                      const meta = RIASEC_META[it.id] ?? { name: it.id, letter: '?', colorClass: 'text-white/60' }
-                      const pct = riasecScores.max > 0 ? clamp(Math.round((it.v / riasecScores.max) * 100), 0, 100) : 0
-                      return (
-                        <div key={it.id} className="flex items-center gap-3">
-                          <div className={`w-10 text-sm font-extrabold ${meta.colorClass}`}>{meta.letter}</div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between gap-3 mb-1">
-                              <div className="text-xs text-white/70 truncate">{meta.name} ({meta.letter})</div>
-                              <div className="text-xs text-white/35 font-mono">{it.v ? it.v.toFixed(2) : '—'}</div>
-                            </div>
-                            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full rounded-full bg-emerald-400/60" style={{ width: `${pct}%` }} />
+                  {/* Radar + bars */}
+                  <div className="mt-3 flex gap-3 items-center">
+                    <div className="flex-shrink-0 w-[148px]">
+                      <RiasecRadarChart
+                        scores={Object.fromEntries(riasecScores.items.map((it) => [it.id, it.v]))}
+                        maxScale={riasecScores.max || 6}
+                        hollandCode={holland}
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0 space-y-2">
+                      {riasecScores.items.map((it) => {
+                        const meta = RIASEC_META[it.id] ?? { namePl: it.id, letter: '?', hexColor: '#94a3b8', colorClass: 'text-white/60', name: it.id };
+                        const pct = riasecScores.max > 0 ? clamp(Math.round((it.v / riasecScores.max) * 100), 0, 100) : 0;
+                        const isTop = String(holland).toUpperCase().slice(0, 3).includes(meta.letter);
+                        return (
+                          <div key={it.id} className="flex items-center gap-2">
+                            <div className="w-4 text-[11px] font-extrabold text-center" style={{ color: isTop ? meta.hexColor : 'rgba(255,255,255,0.25)' }}>{meta.letter}</div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between gap-1 mb-0.5">
+                                <span className="text-[11px] truncate" style={{ color: isTop ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.3)' }}>
+                                  {meta.namePl}
+                                </span>
+                                <span className="text-[10px] font-mono flex-shrink-0" style={{ color: isTop ? meta.hexColor : 'rgba(255,255,255,0.2)' }}>
+                                  {it.v ? it.v.toFixed(1) : '—'}
+                                </span>
+                              </div>
+                              <div className="h-1 rounded-full bg-white/10 overflow-hidden">
+                                <div className="h-full rounded-full transition-all duration-500"
+                                  style={{ width: `${pct}%`, background: meta.hexColor, opacity: isTop ? 0.9 : 0.25 }} />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
 
+                  {/* AI */}
                   <div className="mt-4 rounded-xl p-4 border border-white/10 bg-white/5 iiy-hover-panel">
-                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ AI</div>
+                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ AI · Środowisko</div>
                     {llmLoading ? (
                       <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-4/5 mt-2" /></div>
                     ) : llmContent?.riasec_environment_text && !llmError ? (
-                      <div className="mt-2 text-sm text-white/70 leading-relaxed">{llmContent.riasec_environment_text}</div>
+                      <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.riasec_environment_text}</div>
                     ) : (
                       <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak treści AI'}</div>
                     )}
@@ -1241,24 +1278,43 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
               {raw.VALUES ? (
                 <>
-                  <div className="mt-4 space-y-3">
-                    {schwartzTop3.map((v: any, idx: number) => (
-                      <div key={`${v?.id ?? v?.name ?? idx}`} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 iiy-hover-panel">
-                        <span className="w-7 h-7 rounded-full inline-flex items-center justify-center text-[12px] font-extrabold" style={{ background: 'rgba(244,63,94,.18)', border: '1px solid rgba(244,63,94,.28)', color: 'rgba(255,200,200,.9)' }}>{idx + 1}</span>
-                        <div className="min-w-0 flex-1">
-                          <div className="text-sm font-semibold text-white/80 truncate">{v?.name ?? v?.value_name ?? String(v)}</div>
-                          <div className="text-[11px] text-white/35 font-mono">{Number.isFinite(Number(v?.raw_score)) ? `${Number(v.raw_score).toFixed(1)}/6` : ''}</div>
-                        </div>
-                      </div>
-                    ))}
+                  {/* Schwartz circumflex radar */}
+                  <div className="mt-3 max-w-[210px] mx-auto">
+                    <ValuesCircumplexChart scores={valuesScoreMap} topN={3} />
                   </div>
 
+                  {/* Top 3 values */}
+                  <div className="mt-3 space-y-2">
+                    {schwartzTop3.map((v: any, idx: number) => {
+                      const id = String(v?.id ?? '');
+                      const schwartzDef = SCHWARTZ_CIRCUMPLEX.find((s) => s.id === id);
+                      const score = Number(v?.raw_score ?? v?.score ?? 0);
+                      return (
+                        <div key={`${id}-${idx}`} className="flex items-center gap-3 rounded-xl border bg-white/[0.03] px-3 py-2 iiy-hover-panel"
+                          style={{ borderColor: `${schwartzDef?.color ?? '#7c3aed'}35` }}>
+                          <span className="w-6 h-6 rounded-lg flex-shrink-0 flex items-center justify-center text-[11px] font-extrabold"
+                            style={{ background: `${schwartzDef?.color ?? '#7c3aed'}20`, border: `1px solid ${schwartzDef?.color ?? '#7c3aed'}45`, color: schwartzDef?.color ?? '#c4b5fd' }}>
+                            {idx + 1}
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold text-white/80 truncate">{v?.name ?? v?.value_name ?? String(v)}</div>
+                          </div>
+                          {Number.isFinite(score) && score > 0 ? (
+                            <span className="text-[12px] font-mono font-bold flex-shrink-0"
+                              style={{ color: schwartzDef?.color ?? '#c4b5fd' }}>{score.toFixed(1)}</span>
+                          ) : null}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* AI */}
                   <div className="mt-4 rounded-xl p-4 border border-white/10 bg-white/5 iiy-hover-panel">
-                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ AI</div>
+                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ AI · Wartości</div>
                     {llmLoading ? (
                       <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-2/3 mt-2" /></div>
                     ) : llmContent?.schwartz_values_text && !llmError ? (
-                      <div className="mt-2 text-sm text-white/70 leading-relaxed">{llmContent.schwartz_values_text}</div>
+                      <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.schwartz_values_text}</div>
                     ) : (
                       <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak treści AI'}</div>
                     )}
