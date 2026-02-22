@@ -720,7 +720,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
       setLlmContent((data?.content ?? null) as CharacterCardContent | null);
       setLlmGeneratedAt(String(data?.generated_at ?? ''));
     } catch (_e: any) {
-      setLlmError('Interpretacje AI chwilowo niedostępne');
+      setLlmError('Analiza chwilowo niedostępna');
       setLlmContent(null);
       setLlmGeneratedAt(null);
     } finally {
@@ -916,7 +916,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                                 {llmLoading ? 'Generuję…' : (llmContent?.archetype_name ?? '—')}
                               </div>
                               <div className="text-[11px] text-white/35 truncate">
-                                {llmContent ? (llmContent.archetype_subtitle ?? '') : (llmError ?? 'Interpretacje AI chwilowo niedostępne')}
+                                {llmContent ? (llmContent.archetype_subtitle ?? '') : (llmError ?? 'Analiza chwilowo niedostępna')}
                               </div>
                             </div>
                           </div>
@@ -933,10 +933,10 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                             ) : llmContent ? (
                               <>
                                 {firstSentence(llmContent.portrait_essence, '—')}
-                                <span className="iiy-cs-ai-chip">AI</span>
+                                <span className="iiy-cs-ai-chip">Analiza</span>
                               </>
                             ) : (
-                              <>Wygeneruj kartę, aby zobaczyć opis.<span className="iiy-cs-ai-chip">AI</span></>
+                              <>Wygeneruj kartę, aby zobaczyć opis.<span className="iiy-cs-ai-chip">Analiza</span></>
                             )}
                           </div>
                         </div>
@@ -968,7 +968,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                               className="iiy-cs-btn iiy-cs-btn-ghost"
                               disabled={done < 6 || llmLoading}
                               onClick={() => void generateCharacterCard(true)}
-                              title={done < 6 ? 'Ukończ wszystkie testy, aby odświeżyć kartę' : 'Odśwież kartę (AI)'}
+                              title={done < 6 ? 'Ukończ wszystkie testy, aby odświeżyć kartę' : 'Odśwież kartę (Analiza)'}
                             >
                               <svg className="iiy-cs-spin" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v6h6M20 20v-6h-6" />
@@ -1130,13 +1130,13 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                   </div>
 
                   <div className="mt-4 rounded-xl p-4 border border-white/10 bg-white/5 iiy-hover-panel">
-                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ AI</div>
+                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Analiza</div>
                     {llmLoading ? (
                       <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-5/6 mt-2" /></div>
                     ) : llmContent?.enneagram_motivation_text && !llmError ? (
                       <div className="mt-2 text-sm text-white/70 leading-relaxed">{llmContent.enneagram_motivation_text}</div>
                     ) : (
-                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak treści AI'}</div>
+                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
                     )}
                   </div>
                 </>
@@ -1187,13 +1187,13 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                   </div>
                   {/* AI for top talent */}
                   <div className="mt-4 rounded-xl p-4 border border-white/10 bg-white/5 iiy-hover-panel">
-                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ AI · Talent #1</div>
+                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Analiza · Talent #1</div>
                     {llmLoading ? (
                       <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-3/4 mt-2" /></div>
                     ) : llmContent?.strengths_top1_interpretation && !llmError ? (
                       <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.strengths_top1_interpretation}</div>
                     ) : (
-                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak treści AI'}</div>
+                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
                     )}
                   </div>
                 </>
@@ -1263,13 +1263,13 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
                   {/* AI */}
                   <div className="mt-6 rounded-xl p-4 border border-white/10 bg-white/5 iiy-hover-panel">
-                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ AI · Środowisko</div>
+                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Analiza · Środowisko</div>
                     {llmLoading ? (
                       <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-4/5 mt-2" /></div>
                     ) : llmContent?.riasec_environment_text && !llmError ? (
                       <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.riasec_environment_text}</div>
                     ) : (
-                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak treści AI'}</div>
+                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
                     )}
                   </div>
                 </>
@@ -1320,13 +1320,13 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
                   {/* AI */}
                   <div className="mt-4 rounded-xl p-4 border border-white/10 bg-white/5 iiy-hover-panel">
-                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ AI · Wartości</div>
+                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Analiza · Wartości</div>
                     {llmLoading ? (
                       <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-2/3 mt-2" /></div>
                     ) : llmContent?.schwartz_values_text && !llmError ? (
                       <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.schwartz_values_text}</div>
                     ) : (
-                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak treści AI'}</div>
+                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
                     )}
                   </div>
                 </>
@@ -1340,73 +1340,83 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
             <SectionDivider label="Synteza" />
 
             {/* Col 1 – Zawody dla Ciebie */}
-            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col">
-              <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Zawody dla Ciebie</div>
+            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col border-t-[1.5px] border-t-emerald-400/20">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-emerald-400/60 text-[11px] leading-none">◈</span>
+                <div className="text-[10px] tracking-[2px] font-mono text-emerald-300/55 uppercase">Zawody dla Ciebie</div>
+              </div>
               {llmLoading ? (
-                <div className="mt-4 space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
+                <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
               ) : llmContent?.ideal_careers?.length && !llmError ? (
-                <div className="mt-4 space-y-2">
+                <div className="space-y-2">
                   {llmContent.ideal_careers.slice(0, 5).map((c, idx) => (
-                    <div key={idx} className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-3 iiy-hover-panel">
-                      <span className="text-xl flex-shrink-0 leading-none mt-0.5">{c.emoji}</span>
+                    <div key={idx} className="flex items-start gap-3 rounded-xl border border-emerald-400/10 bg-emerald-500/[0.04] px-3 py-3 transition-all duration-200 hover:border-emerald-400/25 hover:bg-emerald-500/[0.08] hover:-translate-y-px hover:shadow-[0_0_22px_-8px_rgba(52,211,153,0.28)]">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500/15 border border-emerald-400/25 text-[9px] font-mono text-emerald-300/75 flex items-center justify-center leading-none mt-0.5">{idx + 1}</span>
+                      <span className="text-lg flex-shrink-0 leading-none mt-0.5">{c.emoji}</span>
                       <div className="min-w-0">
-                        <div className="text-sm font-semibold text-white/80 leading-snug">{c.title}</div>
+                        <div className="text-sm font-semibold text-white/85 leading-snug">{c.title}</div>
                         <div className="mt-0.5 text-xs text-white/40 leading-relaxed">{c.description}</div>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45 iiy-hover-panel">{llmError ?? 'Brak treści AI – wymagana regeneracja karty'}</div>
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy – wymaga regeneracji karty'}</div>
               )}
             </section>
 
             {/* Col 2 – Twoje Alter Ego */}
-            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col">
-              <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Twoje Alter Ego</div>
-              <div className="mt-0.5 text-[11px] text-white/25">Fikcyjne postacie z podobnym DNA osobowości</div>
+            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col border-t-[1.5px] border-t-violet-400/20">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-violet-400/60 text-[11px] leading-none">◈</span>
+                <div className="text-[10px] tracking-[2px] font-mono text-violet-300/55 uppercase">Twoje Alter Ego</div>
+              </div>
+              <div className="mb-4 text-[11px] text-white/25">Fikcyjne postacie z podobnym DNA osobowości</div>
               {llmLoading ? (
-                <div className="mt-4 space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
+                <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
               ) : llmContent?.popculture?.length && !llmError ? (
-                <div className="mt-4 space-y-2">
+                <div className="space-y-2">
                   {llmContent.popculture.slice(0, 5).map((p, idx) => (
-                    <div key={`${p.name}-${idx}`} className="rounded-xl border border-violet-400/15 bg-violet-500/[0.04] px-3 py-3 iiy-hover-panel">
+                    <div key={`${p.name}-${idx}`} className="rounded-xl border border-violet-400/15 bg-violet-500/[0.04] px-3 py-3 transition-all duration-200 hover:border-violet-400/30 hover:bg-violet-500/[0.09] hover:-translate-y-px hover:shadow-[0_0_22px_-8px_rgba(139,92,246,0.32)]">
                       <div className="flex items-start justify-between gap-2">
                         <div className="text-sm font-bold text-white/85 leading-snug">{p.name}</div>
-                        <span className="shrink-0 text-[9px] font-mono text-violet-300/55 uppercase tracking-wider bg-violet-500/10 border border-violet-400/20 rounded-md px-1.5 py-0.5">{p.context}</span>
+                        <span className="shrink-0 text-[9px] font-mono text-violet-300/65 uppercase tracking-wider bg-violet-500/15 border border-violet-400/25 rounded-md px-1.5 py-0.5">{p.context}</span>
                       </div>
                       <div className="mt-1 text-xs text-white/45 leading-relaxed italic">{p.reason}</div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45 iiy-hover-panel">{llmError ?? 'Brak treści AI'}</div>
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
               )}
             </section>
 
             {/* Col 3 – Kim naprawdę jesteś */}
-            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col">
-              <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Kim jesteś naprawdę</div>
+            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col border-t-[1.5px] border-t-sky-400/20">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-sky-400/60 text-[11px] leading-none">◈</span>
+                <div className="text-[10px] tracking-[2px] font-mono text-sky-300/55 uppercase">Kim jesteś naprawdę</div>
+              </div>
               {llmLoading ? (
-                <div className="mt-4 space-y-3">
+                <div className="space-y-3">
                   <Skeleton className="h-24" /><Skeleton className="h-20" /><Skeleton className="h-20" /><Skeleton className="h-16" />
                 </div>
               ) : llmContent && !llmError ? (
-                <div className="mt-4 space-y-3">
+                <div className="space-y-3">
                   {([
-                    { label: 'Esencja', key: 'portrait_essence', accent: 'text-violet-300/70', border: 'border-violet-400/15', bg: 'bg-violet-500/[0.04]' },
-                    { label: 'Środowisko naturalne', key: 'portrait_environment', accent: 'text-sky-300/70', border: 'border-sky-400/15', bg: 'bg-sky-500/[0.04]' },
-                    { label: 'Supermoce', key: 'portrait_superpowers', accent: 'text-emerald-300/70', border: 'border-emerald-400/15', bg: 'bg-emerald-500/[0.04]' },
-                    { label: 'Ślepe punkty', key: 'portrait_blindspots', accent: 'text-amber-300/70', border: 'border-amber-400/15', bg: 'bg-amber-500/[0.04]' },
+                    { label: 'Esencja', key: 'portrait_essence', accent: 'text-violet-300/70', border: 'border-violet-400/15', bg: 'bg-violet-500/[0.04]', hb: 'hover:border-violet-400/30 hover:bg-violet-500/[0.09]', glow: 'hover:shadow-[0_0_18px_-8px_rgba(139,92,246,0.3)]' },
+                    { label: 'Środowisko naturalne', key: 'portrait_environment', accent: 'text-sky-300/70', border: 'border-sky-400/15', bg: 'bg-sky-500/[0.04]', hb: 'hover:border-sky-400/30 hover:bg-sky-500/[0.09]', glow: 'hover:shadow-[0_0_18px_-8px_rgba(56,189,248,0.3)]' },
+                    { label: 'Supermoce', key: 'portrait_superpowers', accent: 'text-emerald-300/70', border: 'border-emerald-400/15', bg: 'bg-emerald-500/[0.04]', hb: 'hover:border-emerald-400/30 hover:bg-emerald-500/[0.09]', glow: 'hover:shadow-[0_0_18px_-8px_rgba(52,211,153,0.3)]' },
+                    { label: 'Ślepe punkty', key: 'portrait_blindspots', accent: 'text-amber-300/70', border: 'border-amber-400/15', bg: 'bg-amber-500/[0.04]', hb: 'hover:border-amber-400/30 hover:bg-amber-500/[0.09]', glow: 'hover:shadow-[0_0_18px_-8px_rgba(251,191,36,0.25)]' },
                   ] as const).map((b) => (
-                    <div key={b.key} className={`rounded-xl border ${b.border} ${b.bg} p-4 iiy-hover-panel`}>
+                    <div key={b.key} className={`rounded-xl border ${b.border} ${b.bg} ${b.hb} ${b.glow} p-4 transition-all duration-200 hover:-translate-y-px`}>
                       <div className={`text-[10px] tracking-[2px] font-mono uppercase ${b.accent}`}>{b.label}</div>
                       <div className="mt-2 text-sm text-white/70 leading-relaxed">{(llmContent as any)[b.key]}</div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45 iiy-hover-panel">{llmError ?? 'Brak treści AI'}</div>
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
               )}
             </section>
 
@@ -1464,13 +1474,13 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                   </div>
 
                   <div className="mt-5 rounded-2xl p-5 border iiy-hover-panel" style={{ background: 'rgba(244,63,94,.06)', borderColor: 'rgba(244,63,94,.18)' }}>
-                    <div className="text-[10px] tracking-[2px] font-mono text-rose-200/60 uppercase">✦ AI · Synteza Cienia</div>
+                    <div className="text-[10px] tracking-[2px] font-mono text-rose-200/60 uppercase">✦ Analiza · Synteza Cienia</div>
                     {llmLoading ? (
                       <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-5/6 mt-2" /></div>
                     ) : llmContent?.darktriad_synthesis && !llmError ? (
                       <div className="mt-2 text-sm text-white/70 leading-relaxed">{llmContent.darktriad_synthesis}</div>
                     ) : (
-                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak treści AI'}</div>
+                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
                     )}
                   </div>
                 </>
