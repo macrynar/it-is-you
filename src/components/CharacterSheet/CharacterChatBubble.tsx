@@ -75,7 +75,12 @@ export default function CharacterChatBubble({ profileContext }: { profileContext
       setMessages((prev) => [...prev, { role: 'assistant', content: reply }])
       scrollToBottom()
     } catch (_e: any) {
-      setError('Nie udało się wysłać wiadomości. Spróbuj ponownie.')
+      const msg = String(_e?.message ?? '')
+      if (/Invalid JWT/i.test(msg)) {
+        setError('Sesja wygasła lub jest nieprawidłowa. Zaloguj się ponownie i spróbuj jeszcze raz.')
+      } else {
+        setError('Nie udało się wysłać wiadomości. Spróbuj ponownie.')
+      }
     } finally {
       setLoading(false)
     }
