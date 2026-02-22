@@ -12,7 +12,7 @@ export default function CharacterChatBubble({ profileContext }: { profileContext
     {
       role: 'assistant',
       content:
-        'Dzień dobry. Jestem Dr. Aleksandra Wiśniewska. Jestem tu po to, żeby towarzyszyć Ci w myśleniu o sobie — nie żeby dawać gotowe odpowiedzi.\n\nCo sprawiło, że zdecydowałeś/aś się porozmawiać właśnie teraz?',
+        'Hej. Jestem Alex — czytam ludzi jak kod. Wklej wyniki testów, opisz siebie, powiedz czego się boisz albo zapytaj gdzie zmierzasz. Zaczynam analizę.',
     },
   ])
   const [input, setInput] = useState('')
@@ -43,16 +43,29 @@ export default function CharacterChatBubble({ profileContext }: { profileContext
 
     setLoading(true)
     try {
-      const accessToken = await getAccessToken()
-      if (!accessToken) throw new Error('Brak sesji')
+      const invokeOnce = async () => {
+        const accessToken = await getAccessToken()
+        if (!accessToken) throw new Error('Brak sesji')
 
-      const { data, error: fnErr } = await supabase.functions.invoke('character-chat', {
-        body: {
-          profile_context: profileContext,
-          messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
-        },
-        headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
-      })
+        return await supabase.functions.invoke('character-chat', {
+          body: {
+            profile_context: profileContext,
+            messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
+          },
+          headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
+        })
+      }
+
+      let { data, error: fnErr } = await invokeOnce()
+
+      const errMsg = String((fnErr as any)?.message ?? '')
+      const errStatus = Number((fnErr as any)?.context?.status ?? (fnErr as any)?.status ?? 0)
+      const isInvalidJwt = errStatus === 401 && /Invalid JWT/i.test(errMsg)
+
+      if (fnErr && isInvalidJwt) {
+        await supabase.auth.refreshSession()
+        ;({ data, error: fnErr } = await invokeOnce())
+      }
 
       if (fnErr) throw fnErr
 
@@ -126,7 +139,7 @@ export default function CharacterChatBubble({ profileContext }: { profileContext
           <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between gap-3">
             <div className="min-w-0">
               <div className="text-[10px] tracking-[2px] font-mono text-white/45">AI PSYCHOASSISTANT</div>
-              <div className="text-sm font-semibold text-white/80 truncate">Dr. Aleksandra Wiśniewska</div>
+              <div className="text-sm font-semibold text-white/80 truncate">Alex</div>
             </div>
             <button type="button" onClick={() => setOpen(false)} className="btn-ghost-neural px-3" aria-label="Zminimalizuj czat">
               Minimalizuj
