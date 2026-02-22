@@ -216,6 +216,16 @@ function App() {
     return <ValuesResults />
   }
 
+  // Handle public shared character card route
+  if (currentRoute.startsWith('/share/')) {
+    const token = currentRoute.replace(/^\/share\/+/, '').split('/')[0]
+    if (!token) {
+      window.location.href = '/'
+      return null
+    }
+    return <CharacterSheet publicToken={token} />
+  }
+
   // Handle /character and /character-sheet routes
   if (currentRoute === '/character' || currentRoute === '/character/' || currentRoute === '/character-sheet' || currentRoute === '/character-sheet/') {
     if (loading) {

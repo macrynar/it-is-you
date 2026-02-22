@@ -1,6 +1,15 @@
 import React from 'react';
 import { HEXACO_TEST } from '../../../data/tests/hexaco.js';
 
+const HEXACO_DESC_EN: Record<string, string> = {
+  honesty_humility: 'Tendency toward honesty, modesty, and resisting manipulation or exploitation.',
+  emotionality: 'Emotional sensitivity, fearfulness, and a greater need for closeness and reassurance.',
+  extraversion: 'Social energy, confidence, enthusiasm, and comfort taking the lead in groups.',
+  agreeableness: 'Patience, forgiveness, and willingness to cooperate rather than escalate conflict.',
+  conscientiousness: 'Organization, diligence, self-discipline, and follow-through on plans and commitments.',
+  openness: 'Intellectual curiosity, imagination, and appreciation for ideas, art, and novel experiences.',
+};
+
 const ACCENT: Record<
   string,
   {
@@ -91,13 +100,17 @@ export default function HexacoDetailCards({
   compact = true,
   showEnglishName = true,
   showDescription = true,
+  descriptionLang = 'pl',
   columns,
+  extraContent,
 }: {
   percentiles: Record<string, number>;
   compact?: boolean;
   showEnglishName?: boolean;
   showDescription?: boolean;
+  descriptionLang?: 'pl' | 'en' | 'both';
   columns?: 2 | 3;
+  extraContent?: (id: string) => React.ReactNode;
 }) {
   const gridClass = (() => {
     const cols = columns ?? (compact ? 3 : 3);
@@ -113,7 +126,15 @@ export default function HexacoDetailCards({
         const ac = ACCENT[id];
         const pct = Math.round(percentiles?.[id] ?? 0);
         const dim = (HEXACO_TEST as any).dimensions?.find((d: any) => d.id === id);
-        const desc = String(dim?.description ?? '').substring(0, compact ? 88 : 140);
+        const plDesc = String(dim?.description ?? '');
+        const enDesc = HEXACO_DESC_EN[id] ?? '';
+        const desc = (
+          descriptionLang === 'en'
+            ? enDesc
+            : descriptionLang === 'both'
+              ? [enDesc, plDesc].filter(Boolean).join(' ')
+              : plDesc
+        ).substring(0, compact ? 120 : 220);
 
         return (
           <div
@@ -192,6 +213,10 @@ export default function HexacoDetailCards({
               {showDescription && desc && (
                 <div className="text-xs text-white/40 leading-relaxed">{desc}</div>
               )}
+
+              {extraContent ? (
+                <div className={showDescription && desc ? 'mt-3' : ''}>{extraContent(id)}</div>
+              ) : null}
             </div>
           </div>
         );
