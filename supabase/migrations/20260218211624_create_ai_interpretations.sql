@@ -2,6 +2,17 @@
 -- Stores LLM-generated interpretations of psychometric test results
 -- One interpretation per user per test type (cached / regenerable)
 
+-- Helper for updated_at triggers (kept here so migrations are self-contained)
+CREATE OR REPLACE FUNCTION public.update_updated_at_column()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$;
+
 CREATE TABLE IF NOT EXISTS public.ai_interpretations (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
