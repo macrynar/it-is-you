@@ -588,9 +588,6 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
     return '';
   })();
   const ennScores: Record<string, number> = raw.ENNEAGRAM?.raw_scores ?? {};
-  const ennScore = ennN ? (ennScores[String(ennN)] ?? 0) : 0;
-  const ennMax = Math.max(0, ...Object.values(ennScores).map(v => (typeof v === 'number' ? v : 0)));
-  const ennStrengthPct = ennMax > 0 ? Math.round((ennScore / ennMax) * 100) : 0;
 
   /* STRENGTHS */
   const top5: any[] = raw.STRENGTHS?.raw_scores?.top_5 ?? [];
@@ -782,16 +779,6 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
             <div className="flex items-center gap-4">
               <button
                 type="button"
-                onClick={() => void createShareLink()}
-                disabled={shareLoading}
-                className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm disabled:opacity-50"
-                title="Udostępnij publiczny link do karty postaci"
-              >
-                {shareLoading ? 'Generuję link…' : 'Udostępnij'}
-              </button>
-
-              <button
-                type="button"
                 className={`theme-toggle ${theme === 'light' ? 'light' : ''}`}
                 onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
                 title="Przełącz motyw"
@@ -850,51 +837,129 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
             <section className="col-span-1 lg:col-span-3">
               <div className="card-neural iiy-hover-panel px-5 py-5">
                   <div className="iiy-cs-hero-inner">
-                    {/* Segment 1: Avatar */}
-                    <div className="iiy-cs-s-avatar">
-                      <div className="iiy-cs-avatar-wrap">
-                        <div className="iiy-cs-avatar" aria-label="Avatar">
-                          {avatarUrl ? (
-                            <img src={avatarUrl} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          ) : (
-                            <div className="text-3xl font-extrabold text-white/70" style={{ letterSpacing: '-0.06em' }}>{initials}</div>
-                          )}
+                    {/* Top row */}
+                    <div className="iiy-cs-hero-top">
+                      {/* Segment 1: Avatar */}
+                      <div className="iiy-cs-s-avatar">
+                        <div className="iiy-cs-avatar-wrap">
+                          <div className="iiy-cs-avatar" aria-label="Avatar">
+                            {avatarUrl ? (
+                              <img src={avatarUrl} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            ) : (
+                              <div className="text-3xl font-extrabold text-white/70" style={{ letterSpacing: '-0.06em' }}>{initials}</div>
+                            )}
+                          </div>
+                          <div className="iiy-cs-avatar-ring" />
+                          <div className="iiy-cs-avatar-ring-2" />
                         </div>
-                        <div className="iiy-cs-avatar-ring" />
-                        <div className="iiy-cs-avatar-ring-2" />
+                      </div>
+
+                      <div className="iiy-cs-vd" />
+
+                      {/* Segment 2: Identity + progress */}
+                      <div className="iiy-cs-s-identity">
+                        <div className="iiy-cs-test-progress" aria-label="Postęp testów">
+                          {Array.from({ length: 6 }).map((_, i) => {
+                            const active = i < done;
+                            const isCurrent = active && i === Math.max(0, done - 1);
+                            const cls = active
+                              ? (isCurrent ? 'iiy-cs-dot iiy-cs-cyan' : 'iiy-cs-dot')
+                              : 'iiy-cs-dot iiy-cs-empty';
+                            return <span key={i} className={cls} />;
+                          })}
+                          <div className="iiy-cs-test-count">{done}/6 testów</div>
+                        </div>
+
+                        <div className="iiy-cs-user-name" title={userName}>{userName}</div>
+
+                        <div className="iiy-cs-account-row">
+                          {isPremium ? <span className="iiy-cs-badge-premium">PREMIUM</span> : null}
+                          <span className="iiy-cs-account-status">Konto aktywne</span>
+                        </div>
+                      </div>
+
+                      <div className="iiy-cs-vd" />
+
+                      {/* Segment 3: Archetype + description side by side */}
+                      <div className="iiy-cs-s-archetype">
+                        <div className="iiy-cs-archetype-box iiy-hover-panel">
+                          <div className="iiy-cs-arch-eye"><span className="iiy-cs-arch-blink" /> ARCHETYP AI</div>
+                          <div className="iiy-cs-arch-row">
+                            <div className="iiy-cs-arch-icon">🧙</div>
+                            <div className="min-w-0">
+                              <div className="iiy-cs-arch-name truncate">
+                                {llmLoading ? 'Generuję…' : (llmContent?.archetype_name ?? '—')}
+                              </div>
+                              <div className="text-[11px] text-white/35 truncate">
+                                {llmContent ? (llmContent.archetype_subtitle ?? '') : (llmError ?? 'Interpretacje AI chwilowo niedostępne')}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="iiy-cs-subtitle-box iiy-hover-panel">
+                          <div className="iiy-cs-sub-eye">Opis postaci</div>
+                          <div className="iiy-cs-sub-text">
+                            {llmLoading ? (
+                              <>
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-5/6 mt-2" />
+                              </>
+                            ) : llmContent ? (
+                              <>
+                                {firstSentence(llmContent.portrait_essence, '—')}
+                                <span className="iiy-cs-ai-chip">AI</span>
+                              </>
+                            ) : (
+                              <>Wygeneruj kartę, aby zobaczyć opis.<span className="iiy-cs-ai-chip">AI</span></>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Segment 4: Actions */}
+                      <div className="iiy-cs-s-actions">
+                        {isPublic ? (
+                          <a href="/auth" className="iiy-cs-btn iiy-cs-btn-primary no-underline" style={{ textDecoration: 'none' }}>
+                            Stwórz swoją kartę
+                          </a>
+                        ) : (
+                          <>
+                            <button
+                              type="button"
+                              className="iiy-cs-btn iiy-cs-btn-primary"
+                              onClick={() => void createShareLink()}
+                              disabled={shareLoading}
+                              title="Udostępnij publiczny link do karty postaci"
+                            >
+                              <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M3 11l2-2 4 4 8-8 4 4v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7z" />
+                              </svg>
+                              {shareLoading ? 'Generuję…' : 'Udostępnij'}
+                            </button>
+
+                            <button
+                              type="button"
+                              className="iiy-cs-btn iiy-cs-btn-ghost"
+                              disabled={done < 6 || llmLoading}
+                              onClick={() => void generateCharacterCard(true)}
+                              title={done < 6 ? 'Ukończ wszystkie testy, aby odświeżyć kartę' : 'Odśwież kartę (AI)'}
+                            >
+                              <svg className="iiy-cs-spin" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v6h6M20 20v-6h-6" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M20 8a8 8 0 00-14.83-3M4 16a8 8 0 0014.83 3" />
+                              </svg>
+                              {llmLoading ? 'Generuję…' : 'Odśwież'}
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
 
-                    <div className="iiy-cs-vd" />
-
-                    {/* Segment 2: Identity + progress */}
-                    <div className="iiy-cs-s-identity">
-                      <div className="iiy-cs-test-progress" aria-label="Postęp testów">
-                        {Array.from({ length: 6 }).map((_, i) => {
-                          const active = i < done;
-                          const isCurrent = active && i === Math.max(0, done - 1);
-                          const cls = active
-                            ? (isCurrent ? 'iiy-cs-dot iiy-cs-cyan' : 'iiy-cs-dot')
-                            : 'iiy-cs-dot iiy-cs-empty';
-                          return <span key={i} className={cls} />;
-                        })}
-                        <div className="iiy-cs-test-count">{done}/6 testów</div>
-                      </div>
-
-                      <div className="iiy-cs-user-name" title={userName}>{userName}</div>
-
-                      <div className="iiy-cs-account-row">
-                        {isPremium ? <span className="iiy-cs-badge-premium">PREMIUM</span> : null}
-                        <span className="iiy-cs-account-status">Konto aktywne</span>
-                      </div>
-                    </div>
-
-                    <div className="iiy-cs-vd" />
-
-                    {/* Segment 3: Tags */}
-                    <div className="iiy-cs-s-tags">
+                    {/* Bottom row: full-width tags */}
+                    <div className="iiy-cs-hero-bottom">
                       <div className="iiy-cs-tags-label">Cechy dominujące</div>
-                      <div className="iiy-cs-tags-row flex-wrap">
+                      <div className="iiy-cs-tags-row">
                         {heroTagItems.length ? (
                           heroTagItems.map((t) => (
                             <div key={t.text} className={`iiy-cs-tag ${t.className}`} data-tip={t.tip}>
@@ -911,83 +976,6 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                           <div className="text-xs text-white/35">Wygeneruj kartę, aby zobaczyć tagi.</div>
                         )}
                       </div>
-                    </div>
-
-                    <div className="iiy-cs-vd" />
-
-                    {/* Segment 4: Archetype + description */}
-                    <div className="iiy-cs-s-archetype">
-                      <div className="iiy-cs-archetype-box iiy-hover-panel">
-                        <div className="iiy-cs-arch-eye"><span className="iiy-cs-arch-blink" /> ARCHETYP AI</div>
-                        <div className="iiy-cs-arch-row">
-                          <div className="iiy-cs-arch-icon">🧙</div>
-                          <div className="min-w-0">
-                            <div className="iiy-cs-arch-name truncate">
-                              {llmLoading ? 'Generuję…' : (llmContent?.archetype_name ?? '—')}
-                            </div>
-                            <div className="text-[11px] text-white/35 truncate">
-                              {llmContent ? (llmContent.archetype_subtitle ?? '') : (llmError ?? 'Interpretacje AI chwilowo niedostępne')}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="iiy-cs-subtitle-box iiy-hover-panel">
-                        <div className="iiy-cs-sub-eye">Opis postaci</div>
-                        <div className="iiy-cs-sub-text">
-                          {llmLoading ? (
-                            <>
-                              <Skeleton className="h-4 w-full" />
-                              <Skeleton className="h-4 w-5/6 mt-2" />
-                            </>
-                          ) : llmContent ? (
-                            <>
-                              {firstSentence(llmContent.portrait_essence, '—')}
-                              <span className="iiy-cs-ai-chip">AI</span>
-                            </>
-                          ) : (
-                            <>Wygeneruj kartę, aby zobaczyć opis.<span className="iiy-cs-ai-chip">AI</span></>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Segment 5: Actions */}
-                    <div className="iiy-cs-s-actions">
-                      {isPublic ? (
-                        <a href="/auth" className="iiy-cs-btn iiy-cs-btn-primary no-underline" style={{ textDecoration: 'none' }}>
-                          Stwórz swoją kartę
-                        </a>
-                      ) : (
-                        <>
-                          <button
-                            type="button"
-                            className="iiy-cs-btn iiy-cs-btn-primary"
-                            onClick={() => void createShareLink()}
-                            disabled={shareLoading}
-                            title="Udostępnij publiczny link do karty postaci"
-                          >
-                            <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M3 11l2-2 4 4 8-8 4 4v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7z" />
-                            </svg>
-                            {shareLoading ? 'Generuję…' : 'Udostępnij'}
-                          </button>
-
-                          <button
-                            type="button"
-                            className="iiy-cs-btn iiy-cs-btn-ghost"
-                            disabled={done < 6 || llmLoading}
-                            onClick={() => void generateCharacterCard(true)}
-                            title={done < 6 ? 'Ukończ wszystkie testy, aby odświeżyć kartę' : 'Odśwież kartę (AI)'}
-                          >
-                            <svg className="iiy-cs-spin" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v6h6M20 20v-6h-6" />
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M20 8a8 8 0 00-14.83-3M4 16a8 8 0 0014.83 3" />
-                            </svg>
-                            {llmLoading ? 'Generuję…' : 'Odśwież'}
-                          </button>
-                        </>
-                      )}
                     </div>
                   </div>
               </div>
@@ -1073,14 +1061,9 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                         </span>
                       ) : null}
                     </div>
-                    <div className="mt-3">
-                      <div className="flex items-center justify-between text-[11px] text-white/35">
-                        <span>Siła profilu</span>
-                        <span className="font-mono text-brand-secondary">{clamp(Math.round(ennStrengthPct), 0, 100)}%</span>
-                      </div>
-                      <div className="mt-2 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                        <div className="h-full rounded-full" style={{ width: `${clamp(Math.round(ennStrengthPct), 0, 100)}%`, background: 'linear-gradient(90deg,#4a28b0,#b08fff)' }} />
-                      </div>
+                    <div className="mt-3 flex items-center gap-3">
+                      <div className="iiy-cs-enn-type-badge">{ennN}</div>
+                      <div className="text-[11px] text-white/45">Typ dominujący</div>
                     </div>
                   </div>
 

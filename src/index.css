@@ -403,8 +403,13 @@
     -webkit-backdrop-filter: none;
     border-radius: 1rem;
     display: flex;
-    align-items: stretch;
+    flex-direction: column;
     overflow: hidden;
+  }
+
+  .iiy-cs-hero-top {
+    display: flex;
+    align-items: stretch;
     flex-wrap: wrap;
   }
 
@@ -459,12 +464,13 @@
   }
 
   .iiy-cs-s-identity {
-    padding: 26px 18px 26px 14px;
+    padding: 26px 20px 26px 14px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 9px;
+    gap: 14px;
     flex-shrink: 0;
+    min-width: 160px;
   }
 
   .iiy-cs-test-progress {
@@ -531,6 +537,14 @@
     flex-shrink: 0;
   }
 
+  .iiy-cs-hero-bottom {
+    padding: 14px 20px 20px;
+    border-top: 1px solid rgba(255,255,255,.05);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .iiy-cs-tags-label {
     font-size: 8px;
     font-weight: 700;
@@ -540,7 +554,11 @@
     margin-bottom: 1px;
   }
 
-  .iiy-cs-tags-row { display: flex; gap: 6px; }
+  .iiy-cs-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
 
   .iiy-cs-tag {
     padding: 7px 13px;
@@ -591,16 +609,18 @@
   .iiy-cs-t-pink:hover { box-shadow: 0 4px 16px -4px rgba(255,0,92,.2); }
 
   .iiy-cs-s-archetype {
-    padding: 20px 20px;
+    padding: 20px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 9px;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 12px;
     flex: 1;
     min-width: 0;
   }
 
   .iiy-cs-archetype-box {
+    flex: 0 0 auto;
+    min-width: 190px;
     background: rgba(112,0,255,.06);
     border: 1px solid rgba(112,0,255,.22);
     border-radius: 14px;
@@ -665,10 +685,17 @@
   }
 
   .iiy-cs-subtitle-box {
+    flex: 1;
+    min-width: 0;
     background: rgba(255,255,255,.02);
     border: 1px solid rgba(255,255,255,.06);
     border-radius: 11px;
     padding: 11px 14px;
+    display: flex;
+    flex-direction: column;
+  }
+  .iiy-cs-subtitle-box .iiy-cs-sub-text {
+    flex: 1;
   }
   .iiy-cs-sub-eye {
     font-size: 8px;
@@ -684,6 +711,26 @@
     font-style: italic;
     line-height: 1.55;
   }
+  /* Enneagram type badge */
+  .iiy-cs-enn-type-badge {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(112,0,255,.2), rgba(0,240,255,.12));
+    border: 1px solid rgba(112,0,255,.4);
+    box-shadow: 0 0 18px -4px rgba(112,0,255,.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--neon-cyan);
+    letter-spacing: -.03em;
+    text-shadow: 0 0 14px rgba(0,240,255,.5);
+  }
+
   .iiy-cs-ai-chip {
     display: inline-flex;
     align-items: center;
@@ -812,7 +859,8 @@
   }
 
   @media (max-width: 900px) {
-    .iiy-cs-hero-inner { flex-direction: column; }
+    .iiy-cs-hero-top { flex-direction: column; }
+    .iiy-cs-s-archetype { flex-direction: column; }
     .iiy-cs-vd { display: none; }
     .iiy-cs-s-actions { border-left: none; border-top: 1px solid rgba(255,255,255,.05); }
     .iiy-cs-btn { width: 100%; }
