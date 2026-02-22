@@ -8,6 +8,7 @@ import StrengthsTopTalentsGrid from '../Test/modules/StrengthsTopTalentsGrid';
 import CareerHollandMiniCards from '../Test/modules/CareerHollandMiniCards';
 import ValuesTopChipsMini from '../Test/modules/ValuesTopChipsMini';
 import EnneagramTypeCardMini from '../Test/modules/EnneagramTypeCardMini';
+import CharacterChatBubble from './CharacterChatBubble';
 
 /* ═══════════ LORE ═══════════ */
 const ENN_LORE: Record<number, {
@@ -304,6 +305,63 @@ export default function CharacterSheet() {
   if (dtTraits.length && raw.DARK_TRIAD) synthLines.push(`<strong>Strefa cienia:</strong> ${dtTraits[0].label} (${dtTraits[0].pct}%) to najsilniejszy obszar Twojego cienia. Świadomość to pierwsza linia obrony.`);
   if (topVals.length) synthLines.push(`<strong>Wartości dominujące:</strong> ${topVals.slice(0,3).map((v:any) => v.name ?? v.value_name ?? String(v)).join(', ')}. To Twój wewnętrzny kompas.`);
   if (careerRep && holland) synthLines.push(`<strong>Profil kariery:</strong> Kod Holland ${holland} wskazuje na środowiska: ${topJobs.slice(0,2).map((j:any) => j.title ?? j.name ?? '').filter(Boolean).join(' i ')}. Twój flow jest właśnie tam.`);
+
+  const profileContext = (() => {
+    const lines: string[] = [];
+    lines.push(`Imię: ${userName}`);
+    if (profileSignature) lines.push(`Sygnatura: ${profileSignature}`);
+    if (mbtiLabel) lines.push(`MBTI: ${mbtiLabel}`);
+    if (discLabel) lines.push(`DISC: ${discLabel}`);
+
+    if (raw.HEXACO) {
+      const hp: any = raw.HEXACO?.percentile_scores ?? {};
+      lines.push(
+        `HEXACO (percentyle): H ${Math.round(hp.honesty_humility ?? 0)} | E ${Math.round(hp.emotionality ?? 0)} | X ${Math.round(hp.extraversion ?? 0)} | A ${Math.round(hp.agreeableness ?? 0)} | C ${Math.round(hp.conscientiousness ?? 0)} | O ${Math.round(hp.openness ?? 0)}`,
+      );
+      if (hexTop3?.length) lines.push(`HEXACO top: ${hexTop3.map((h) => `${h.label} (${h.pct}%)`).join(', ')}`);
+    }
+
+    if (raw.ENNEAGRAM && (ennN || ennWing)) {
+      const label = ennL ? `${ennL.epithet}` : '';
+      const w = ennWing ? ` ${ennWing}` : '';
+      const t = ennN ? `Typ ${ennN}` : 'Enneagram';
+      const s = label ? ` — ${label}` : '';
+      const p = ennStrengthPct ? ` (siła: ${ennStrengthPct}%)` : '';
+      lines.push(`${t}${w}${s}${p}`.trim());
+    }
+
+    if (top5?.length) {
+      const names = top5
+        .slice(0, 5)
+        .map((t: any) => t?.name ?? t?.name_en)
+        .filter(Boolean);
+      if (names.length) lines.push(`Strengths top5: ${names.join(', ')}`);
+    }
+
+    if (careerRep && holland) {
+      const jobs = (topJobs ?? [])
+        .slice(0, 3)
+        .map((j: any) => j?.title ?? j?.name)
+        .filter(Boolean);
+      lines.push(`Kariera: Holland ${holland}${jobs.length ? `; role: ${jobs.join(', ')}` : ''}`);
+    }
+
+    if (topVals?.length) {
+      const v = topVals
+        .slice(0, 5)
+        .map((x: any) => x?.name ?? x?.value_name ?? String(x))
+        .filter(Boolean);
+      if (v.length) lines.push(`Wartości: ${v.join(', ')}`);
+    }
+
+    if (raw.DARK_TRIAD && dtTraits?.length) {
+      lines.push(`Dark Triad (szac. %): ${dtTraits.map((d) => `${d.label} ${d.pct}%`).join(', ')}`);
+    }
+
+    if (dominantTraits?.length) lines.push(`Cechy (tagi): ${dominantTraits.join(', ')}`);
+    if (archetypeAiBlurb) lines.push(`Archetyp (skrót): ${archetypeAiBlurb}`);
+    return lines.join('\n');
+  })();
 
   /* LOADING */
   if (loading) return (
@@ -699,6 +757,8 @@ export default function CharacterSheet() {
           })()}
         </div>
       </main>
+
+      <CharacterChatBubble profileContext={profileContext} />
     </div>
   );
 }
