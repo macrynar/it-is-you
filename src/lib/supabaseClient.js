@@ -38,7 +38,11 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export const getAccessToken = async () => {
   const { data: { session } } = await supabase.auth.getSession()
-  if (session?.access_token) return session.access_token
+  if (session?.access_token) {
+    const now = Math.floor(Date.now() / 1000)
+    const expiresAt = session.expires_at || 0
+    if (expiresAt > now + 30) return session.access_token
+  }
 
   const { data, error } = await supabase.auth.refreshSession()
   if (error) {
