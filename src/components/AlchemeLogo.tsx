@@ -41,7 +41,7 @@ interface Props {
   className?: string;
 }
 
-export default function AlchemeLogo({ size = 36, href = '/', className = '' }: Props) {
+export default function AlchemeLogo({ size = 46, href = '/', className = '' }: Props) {
   const signalsRef = useRef<SVGGElement>(null);
   const rafRef = useRef<number>(0);
 
@@ -112,7 +112,7 @@ export default function AlchemeLogo({ size = 36, href = '/', className = '' }: P
     <a
       href={href}
       className={className}
-      style={{ display: 'flex', alignItems: 'center', gap: '11px', userSelect: 'none', textDecoration: 'none', cursor: 'pointer' }}
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '7px', userSelect: 'none', textDecoration: 'none', cursor: 'pointer' }}
     >
       <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
         <defs>
@@ -173,26 +173,27 @@ export default function AlchemeLogo({ size = 36, href = '/', className = '' }: P
         </circle>
       </svg>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', width: `${size}px`, textAlign: 'center' }}>
         <div style={{
           fontFamily: "'Cinzel', serif",
-          fontSize: '16px',
+          fontSize: '11px',
           fontWeight: 600,
-          letterSpacing: '.14em',
+          letterSpacing: '.18em',
           lineHeight: 1,
-          background: 'linear-gradient(120deg, #fff 0%, rgba(0,240,255,.88) 55%, rgba(112,0,255,.75) 100%)',
+          background: 'linear-gradient(120deg, #fff 0%, rgba(0,240,255,.95) 55%, rgba(167,139,250,.9) 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
+          whiteSpace: 'nowrap',
         }}>Alcheme</div>
         <div style={{
           fontFamily: "'Raleway', sans-serif",
-          fontSize: '6.5px',
+          fontSize: '5.5px',
           fontWeight: 300,
-          letterSpacing: '.36em',
+          letterSpacing: '.22em',
           textTransform: 'uppercase',
-          color: 'rgba(255,255,255,.28)',
-          paddingLeft: '1px',
+          color: 'rgba(255,255,255,.5)',
+          whiteSpace: 'nowrap',
         }}>Know yourself · Transform</div>
       </div>
     </a>

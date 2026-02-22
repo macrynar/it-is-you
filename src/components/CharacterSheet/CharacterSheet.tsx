@@ -1316,7 +1316,6 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                 <div className="space-y-2">
                   {llmContent.ideal_careers.slice(0, 5).map((c, idx) => (
                     <div key={idx} className="flex items-start gap-3 rounded-xl border border-emerald-400/10 bg-emerald-500/[0.04] px-3 py-3 transition-all duration-200 hover:border-emerald-400/25 hover:bg-emerald-500/[0.08] hover:-translate-y-px hover:shadow-[0_0_22px_-8px_rgba(52,211,153,0.28)]">
-                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500/15 border border-emerald-400/25 text-[9px] font-mono text-emerald-300/75 flex items-center justify-center leading-none mt-0.5">{idx + 1}</span>
                       <span className="text-lg flex-shrink-0 leading-none mt-0.5">{c.emoji}</span>
                       <div className="min-w-0">
                         <div className="text-sm font-semibold text-white/85 leading-snug">{c.title}</div>
