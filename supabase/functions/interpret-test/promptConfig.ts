@@ -1,4 +1,4 @@
-export const PROMPT_VERSION = 2;
+export const PROMPT_VERSION = 3;
 
 export const GLOBAL_GUIDELINES = `
 ## Podejście psychodynamiczne:
