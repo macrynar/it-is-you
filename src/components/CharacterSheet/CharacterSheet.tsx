@@ -1339,20 +1339,43 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
             <SectionDivider label="Synteza" />
 
-            {/* Idealne zawody */}
-            <section className="col-span-1 lg:col-span-3 card-neural iiy-hover-panel p-6">
-              <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">6 Zawodów Dla Ciebie</div>
+            {/* Col 1 – Zawody dla Ciebie */}
+            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col">
+              <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Zawody dla Ciebie</div>
               {llmLoading ? (
-                <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-20" />)}
-                </div>
+                <div className="mt-4 space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
               ) : llmContent?.ideal_careers?.length && !llmError ? (
-                <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {llmContent.ideal_careers.slice(0, 6).map((c, idx) => (
-                    <div key={idx} className="rounded-xl border border-white/10 bg-white/[0.04] p-4 iiy-hover-panel flex flex-col gap-1.5">
-                      <span className="text-2xl leading-none">{c.emoji}</span>
-                      <div className="text-sm font-semibold text-white/80 leading-snug">{c.title}</div>
-                      <div className="text-xs text-white/45 leading-relaxed">{c.description}</div>
+                <div className="mt-4 space-y-2">
+                  {llmContent.ideal_careers.slice(0, 5).map((c, idx) => (
+                    <div key={idx} className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-3 iiy-hover-panel">
+                      <span className="text-xl flex-shrink-0 leading-none mt-0.5">{c.emoji}</span>
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold text-white/80 leading-snug">{c.title}</div>
+                        <div className="mt-0.5 text-xs text-white/40 leading-relaxed">{c.description}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45 iiy-hover-panel">{llmError ?? 'Brak treści AI – wymagana regeneracja karty'}</div>
+              )}
+            </section>
+
+            {/* Col 2 – Twoje Alter Ego */}
+            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col">
+              <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Twoje Alter Ego</div>
+              <div className="mt-0.5 text-[11px] text-white/25">Fikcyjne postacie z podobnym DNA osobowości</div>
+              {llmLoading ? (
+                <div className="mt-4 space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}</div>
+              ) : llmContent?.popculture?.length && !llmError ? (
+                <div className="mt-4 space-y-2">
+                  {llmContent.popculture.slice(0, 5).map((p, idx) => (
+                    <div key={`${p.name}-${idx}`} className="rounded-xl border border-violet-400/15 bg-violet-500/[0.04] px-3 py-3 iiy-hover-panel">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="text-sm font-bold text-white/85 leading-snug">{p.name}</div>
+                        <span className="shrink-0 text-[9px] font-mono text-violet-300/55 uppercase tracking-wider bg-violet-500/10 border border-violet-400/20 rounded-md px-1.5 py-0.5">{p.context}</span>
+                      </div>
+                      <div className="mt-1 text-xs text-white/45 leading-relaxed italic">{p.reason}</div>
                     </div>
                   ))}
                 </div>
@@ -1361,52 +1384,24 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
               )}
             </section>
 
-            <section className="col-span-1 lg:col-span-2 card-neural iiy-hover-panel p-6">
+            {/* Col 3 – Kim naprawdę jesteś */}
+            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col">
               <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Kim jesteś naprawdę</div>
               {llmLoading ? (
-                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Skeleton className="h-24" />
-                  <Skeleton className="h-24" />
-                  <Skeleton className="h-24" />
-                  <Skeleton className="h-24" />
+                <div className="mt-4 space-y-3">
+                  <Skeleton className="h-24" /><Skeleton className="h-20" /><Skeleton className="h-20" /><Skeleton className="h-16" />
                 </div>
               ) : llmContent && !llmError ? (
-                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="mt-4 space-y-3">
                   {([
-                    { label: 'Esencja', key: 'portrait_essence' },
-                    { label: 'Środowisko naturalne', key: 'portrait_environment' },
-                    { label: 'Twoje supermoce', key: 'portrait_superpowers' },
-                    { label: 'Ślepe punkty', key: 'portrait_blindspots' },
+                    { label: 'Esencja', key: 'portrait_essence', accent: 'text-violet-300/70', border: 'border-violet-400/15', bg: 'bg-violet-500/[0.04]' },
+                    { label: 'Środowisko naturalne', key: 'portrait_environment', accent: 'text-sky-300/70', border: 'border-sky-400/15', bg: 'bg-sky-500/[0.04]' },
+                    { label: 'Supermoce', key: 'portrait_superpowers', accent: 'text-emerald-300/70', border: 'border-emerald-400/15', bg: 'bg-emerald-500/[0.04]' },
+                    { label: 'Ślepe punkty', key: 'portrait_blindspots', accent: 'text-amber-300/70', border: 'border-amber-400/15', bg: 'bg-amber-500/[0.04]' },
                   ] as const).map((b) => (
-                    <div key={b.key} className="rounded-xl border border-white/10 bg-white/5 p-4 iiy-hover-panel">
-                      <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">{b.label}</div>
+                    <div key={b.key} className={`rounded-xl border ${b.border} ${b.bg} p-4 iiy-hover-panel`}>
+                      <div className={`text-[10px] tracking-[2px] font-mono uppercase ${b.accent}`}>{b.label}</div>
                       <div className="mt-2 text-sm text-white/70 leading-relaxed">{(llmContent as any)[b.key]}</div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45 iiy-hover-panel">{llmError ?? 'Brak treści AI'}</div>
-              )}
-            </section>
-
-            <section className="col-span-1 lg:col-span-1 card-neural iiy-hover-panel p-6">
-              <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Twoje Alter Ego</div>
-              <div className="mt-1 text-[11px] text-white/30">Postacie fikcyjne i pop-kulturowe z podobnym DNA osobowości</div>
-              {llmLoading ? (
-                <div className="mt-4 space-y-3">
-                  <Skeleton className="h-20" />
-                  <Skeleton className="h-20" />
-                  <Skeleton className="h-20" />
-                </div>
-              ) : llmContent?.popculture?.length && !llmError ? (
-                <div className="mt-4 space-y-3">
-                  {llmContent.popculture.slice(0, 3).map((p, idx) => (
-                    <div key={`${p.name}-${idx}`} className="rounded-xl border border-violet-400/15 bg-violet-500/[0.05] p-4 iiy-hover-panel">
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="text-base font-bold text-white/85 leading-snug">{p.name}</div>
-                        <span className="shrink-0 text-[10px] font-mono text-violet-300/60 uppercase tracking-wider bg-violet-500/10 border border-violet-400/20 rounded-lg px-2 py-0.5">{p.context}</span>
-                      </div>
-                      <div className="mt-2 text-xs text-white/55 leading-relaxed italic">{p.reason}</div>
                     </div>
                   ))}
                 </div>
