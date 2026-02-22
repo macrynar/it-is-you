@@ -44,19 +44,19 @@ const THEMES: Record<string, TestTheme> = {
     tw: 'cyan',
     hex: '#38b6ff',
     hexLight: '#8cd7ff',
-    hexDark: '#1a6aff',
+    hexDark: '#38b6ff',
     glow: 'rgba(56,182,255,.5)',
     bg15: 'rgba(56,182,255,.15)',
     bg12: 'rgba(56,182,255,.12)',
     border35: 'rgba(56,182,255,.35)',
     border20: 'rgba(56,182,255,.20)',
-    btnGradient: 'linear-gradient(135deg,#1a6aff,#38b6ff)',
+    btnGradient: 'linear-gradient(135deg,#38b6ff,#38b6ff)',
     dropShadow: 'drop-shadow(0 0 12px rgba(56,182,255,.55))',
     bgTint:
       'radial-gradient(ellipse 60% 40% at 15% 20%,rgba(56,182,255,.1) 0%,transparent 65%),' +
-      'radial-gradient(ellipse 50% 50% at 85% 75%,rgba(26,106,255,.12) 0%,transparent 65%)',
+      'radial-gradient(ellipse 50% 50% at 85% 75%,rgba(56,182,255,.08) 0%,transparent 65%)',
     glassBorder:
-      'linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(56,182,255,.2) 35%,rgba(26,106,255,.12) 70%,rgba(255,255,255,.04) 100%)',
+      'linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(56,182,255,.2) 35%,rgba(56,182,255,.12) 70%,rgba(255,255,255,.04) 100%)',
     hoverShadow:
       'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(56,182,255,.35),0 0 30px -4px rgba(56,182,255,.3),0 16px 48px -6px rgba(0,0,0,.7)',
     glowLine: '0 0 10px 2px rgba(56,182,255,.55)',

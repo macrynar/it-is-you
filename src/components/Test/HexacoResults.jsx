@@ -6,10 +6,10 @@ import AiInterpretation from './AiInterpretation.jsx';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 import ResultsScaffold from './modules/ResultsScaffold.jsx';
 
-const PAGE_ACCENT = '#1F3C88';
+const PAGE_ACCENT = 'rgb(56, 182, 255)';
 
 const ACCENT = {
-  honesty_humility: { plName:'Szczerość', name:'Honesty-Humility', color:'#38b6ff', gradient:'linear-gradient(90deg,#1a6aff,#38b6ff)', glow:'rgba(56,182,255,.5)', blob:'#38b6ff', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(56,182,255,.35),0 0 30px -4px rgba(56,182,255,.3),0 16px 48px -6px rgba(0,0,0,.7)' },
+  honesty_humility: { plName:'Szczerość', name:'Honesty-Humility', color:'#38b6ff', gradient:'linear-gradient(90deg,#38b6ff,#38b6ff)', glow:'rgba(56,182,255,.5)', blob:'#38b6ff', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(56,182,255,.35),0 0 30px -4px rgba(56,182,255,.3),0 16px 48px -6px rgba(0,0,0,.7)' },
   emotionality:     { plName:'Emocjonalność', name:'Emotionality', color:'#ff9532', gradient:'linear-gradient(90deg,#a04000,#ff9532)', glow:'rgba(255,149,50,.5)', blob:'#ff9532', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(255,149,50,.35),0 0 30px -4px rgba(255,149,50,.25),0 16px 48px -6px rgba(0,0,0,.7)' },
   extraversion:     { plName:'Ekstrawersja', name:'Extraversion', color:'#b08fff', gradient:'linear-gradient(90deg,#4a28b0,#b08fff)', glow:'rgba(123,94,167,.6)', blob:'#7b5ea7', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(123,94,167,.4),0 0 30px -4px rgba(123,94,167,.3),0 16px 48px -6px rgba(0,0,0,.7)' },
   agreeableness:    { plName:'Ugodowość', name:'Agreeableness', color:'#40e0d0', gradient:'linear-gradient(90deg,#006060,#40e0d0)', glow:'rgba(64,224,208,.5)', blob:'#40e0d0', hover:'inset 0 1px 0 rgba(255,255,255,.15),0 0 0 1px rgba(64,224,208,.35),0 0 30px -4px rgba(64,224,208,.25),0 16px 48px -6px rgba(0,0,0,.7)' },
@@ -28,9 +28,9 @@ function ringPts(pct) { return DIM_ORDER.map((_, i) => pt(i, pct).join(',')).joi
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 .hr-root{font-family:'Space Grotesk',sans-serif;background:#0d0f2b;color:#fff;min-height:100vh;overflow-x:hidden;}
-.hr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(31,60,136,.14) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(31,60,136,.09) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
+.hr-root::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(56,182,255,.14) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 85% 75%,rgba(56,182,255,.09) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(80,40,160,.07) 0%,transparent 65%);}
 .hr-glass{background:rgba(16,20,56,.6);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:20px;position:relative;isolation:isolate;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(255,255,255,.07),0 8px 32px -4px rgba(0,0,0,.6),0 2px 8px -2px rgba(0,0,0,.4);}
-.hr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(31,60,136,.22) 35%,rgba(31,60,136,.12) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
+.hr-glass::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(56,182,255,.22) 35%,rgba(56,182,255,.12) 70%,rgba(255,255,255,.04) 100%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
 .hr-stat-card{border-radius:16px;cursor:pointer;overflow:hidden;position:relative;isolation:isolate;transition:transform .28s cubic-bezier(.22,.68,0,1.15),box-shadow .28s ease;}
 .hr-stat-card::after{content:'';position:absolute;width:120px;height:120px;border-radius:50%;filter:blur(45px);bottom:-40px;right:-30px;opacity:.18;pointer-events:none;z-index:-1;transition:opacity .3s,transform .3s;}
 .hr-stat-card:hover::after{opacity:.35;transform:scale(1.2);}
@@ -127,7 +127,7 @@ export default function HexacoResults() {
     <><style>{CSS}</style>
     <div className="hr-root" style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'100vh'}}>
       <div style={{textAlign:'center'}}>
-        <div style={{width:44,height:44,border:'3px solid rgba(31,60,136,.25)',borderTopColor:PAGE_ACCENT,borderRadius:'50%',animation:'spinLoader 1s linear infinite',margin:'0 auto 16px'}}/>
+        <div style={{width:44,height:44,border:'3px solid rgba(56,182,255,.22)',borderTopColor:PAGE_ACCENT,borderRadius:'50%',animation:'spinLoader 1s linear infinite',margin:'0 auto 16px'}}/>
         <p style={{color:'rgba(255,255,255,.4)',fontSize:13}}>Ładowanie wyników...</p>
       </div>
     </div></>
@@ -261,7 +261,7 @@ export default function HexacoResults() {
               onRegenerate={regenerate}
               onRetry={() => generateInterpretation(results)}
               accentColor={PAGE_ACCENT}
-              accentGlow="rgba(31,60,136,.5)"
+              accentGlow="rgba(56,182,255,.5)"
               testLabel="Twojego profilu HEXACO"
             />
           </div>

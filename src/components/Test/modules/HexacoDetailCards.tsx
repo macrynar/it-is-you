@@ -17,7 +17,7 @@ const ACCENT: Record<
     plName: 'Szczerość',
     name: 'Honesty-Humility',
     color: '#38b6ff',
-    gradient: 'linear-gradient(90deg,#1a6aff,#38b6ff)',
+    gradient: 'linear-gradient(90deg,#38b6ff,#38b6ff)',
     glow: 'rgba(56,182,255,.5)',
     blob: '#38b6ff',
     hover:
