@@ -53,7 +53,7 @@ export const getAccessToken = async () => {
 
 /**
  * Canonical app URL used for OAuth callback redirects.
- * In production this reads VITE_APP_URL from .env.production (https://it-is-you1.vercel.app).
+ * In production this reads VITE_APP_URL from .env.production (https://www.alcheme.io).
  * Falls back to window.location.origin for local development / any other environment.
  */
 const APP_URL = import.meta.env.VITE_APP_URL?.replace(/\/$/, '') || window.location.origin
