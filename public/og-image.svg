@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a12"/>
+      <stop offset="100%" stop-color="#0f0a1e"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#00f0ff"/>
+      <stop offset="100%" stop-color="#7000ff"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#00f0ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7000ff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#7000ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur1">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+    <filter id="blur2">
+      <feGaussianBlur stdDeviation="60"/>
+    </filter>
+    <filter id="logoGlow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Ambient glows -->
+  <ellipse cx="300" cy="200" rx="400" ry="300" fill="url(#glow1)" filter="url(#blur2)"/>
+  <ellipse cx="900" cy="430" rx="400" ry="300" fill="url(#glow2)" filter="url(#blur2)"/>
+
+  <!-- Grid lines subtle -->
+  <g stroke="rgba(255,255,255,0.03)" stroke-width="1">
+    <line x1="0" y1="105" x2="1200" y2="105"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="0" y1="525" x2="1200" y2="525"/>
+    <line x1="150" y1="0" x2="150" y2="630"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="450" y1="0" x2="450" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="750" y1="0" x2="750" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="1050" y1="0" x2="1050" y2="630"/>
+  </g>
+
+  <!-- Logo symbol (octagram + geometry) centered left -->
+  <g transform="translate(160, 315)" filter="url(#logoGlow)">
+    <!-- Outer ring -->
+    <circle cx="0" cy="0" r="72" fill="none" stroke="rgba(0,240,255,0.2)" stroke-width="1"/>
+    <!-- Square rotated 45° -->
+    <rect x="-40" y="-40" width="80" height="80" fill="none" stroke="rgba(0,240,255,0.25)" stroke-width="1.5" transform="rotate(45)"/>
+    <!-- Square straight -->
+    <rect x="-40" y="-40" width="80" height="80" fill="none" stroke="rgba(112,0,255,0.25)" stroke-width="1.5"/>
+    <!-- Diamond -->
+    <polygon points="0,-52 52,0 0,52 -52,0" fill="none" stroke="rgba(0,240,255,0.35)" stroke-width="1.5"/>
+    <!-- Octagram lines -->
+    <line x1="0" y1="-72" x2="0" y2="72" stroke="rgba(0,240,255,0.12)" stroke-width="1"/>
+    <line x1="-72" y1="0" x2="72" y2="0" stroke="rgba(0,240,255,0.12)" stroke-width="1"/>
+    <line x1="-51" y1="-51" x2="51" y2="51" stroke="rgba(0,240,255,0.12)" stroke-width="1"/>
+    <line x1="51" y1="-51" x2="-51" y2="51" stroke="rgba(0,240,255,0.12)" stroke-width="1"/>
+    <!-- Vertex dots cyan -->
+    <circle cx="0" cy="-52" r="3" fill="#00f0ff"/>
+    <circle cx="52" cy="0" r="3" fill="#00f0ff"/>
+    <circle cx="0" cy="52" r="3" fill="#00f0ff"/>
+    <circle cx="-52" cy="0" r="3" fill="#00f0ff"/>
+    <!-- Vertex dots violet -->
+    <circle cx="37" cy="-37" r="2.5" fill="#a855f7"/>
+    <circle cx="37" cy="37" r="2.5" fill="#a855f7"/>
+    <circle cx="-37" cy="37" r="2.5" fill="#a855f7"/>
+    <circle cx="-37" cy="-37" r="2.5" fill="#a855f7"/>
+    <!-- Core -->
+    <circle cx="0" cy="0" r="8" fill="none" stroke="#00f0ff" stroke-width="1.5" opacity="0.8"/>
+    <circle cx="0" cy="0" r="3" fill="#00f0ff" opacity="0.9"/>
+  </g>
+
+  <!-- Brand name -->
+  <text x="280" y="278" font-family="Georgia, serif" font-size="88" font-weight="700" letter-spacing="12" fill="url(#titleGrad)">ALCHEME</text>
+
+  <!-- Subtitle line -->
+  <text x="283" y="318" font-family="Arial, sans-serif" font-size="17" font-weight="300" letter-spacing="6" fill="rgba(255,255,255,0.38)" text-transform="uppercase">POZNAJ SIEBIE GŁĘBIEJ</text>
+
+  <!-- Divider -->
+  <line x1="280" y1="348" x2="920" y2="348" stroke="rgba(0,240,255,0.2)" stroke-width="1"/>
+
+  <!-- Description -->
+  <text x="280" y="390" font-family="Arial, sans-serif" font-size="26" font-weight="400" fill="rgba(255,255,255,0.75)">6 testów psychometrycznych · AI Karta Postaci</text>
+  <text x="280" y="432" font-family="Arial, sans-serif" font-size="22" font-weight="300" fill="rgba(255,255,255,0.45)">HEXACO · Enneagram · Wartości · Kariera · Mocne Strony</text>
+
+  <!-- Bottom URL -->
+  <text x="280" y="555" font-family="Arial, sans-serif" font-size="18" font-weight="400" letter-spacing="2" fill="rgba(0,240,255,0.5)">www.alcheme.io</text>
+
+  <!-- Top border accent -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#titleGrad)"/>
+</svg>
