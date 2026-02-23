@@ -23,4 +23,10 @@ PORTRET (portrait_*): cztery odrebne pola. Kazde 2-3 zdania spersonalizowane.
 - portrait_essence: esencja osobowosci
 - portrait_environment: idealne srodowisko pracy
 - portrait_superpowers: mocne strony i talenty
-- portrait_blindspots: slepe punkty`
+- portrait_blindspots: slepe punkty
+
+DLACZEGO (energy_why): 3-4 zdania o glebokim powodzie, dla ktorego ta osoba robi to co robi — jej wewnetrzna motywacja, pasja i sens dzialania. Konkretne i spersonalizowane na podstawie wynikow testow.
+
+ENERGIA: LADOWANIE (energy_boosters): dokladnie 5 krotkich fraz (3-6 slow kazda) opisujacych aktywnosci, zajecia lub konteksty, ktore daja tej osobie energie, radosc i satysfakcje. Zwroc jako tablice stringow JSON.
+
+ENERGIA: DRENOWANIE (energy_drainers): dokladnie 5 krotkich fraz (3-6 slow kazda) opisujacych aktywnosci, zajecia lub konteksty, ktore drenuja energie tej osoby, wykancza ja lub ktorych unika. Zwroc jako tablice stringow JSON.`

@@ -30,6 +30,9 @@ type CharacterCardContent = {
   portrait_environment: string;
   portrait_superpowers: string;
   portrait_blindspots: string;
+  energy_why: string;
+  energy_boosters: string[];
+  energy_drainers: string[];
   darktriad_synthesis: string;
   popculture: Array<{ context: string; name: string; reason: string }>;
   ideal_careers: Array<{ emoji: string; title: string; description: string }>;
@@ -1411,6 +1414,81 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                 </div>
               ) : (
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
+              )}
+            </section>
+
+            {/* ── Row 2: Why / Energy Boosters / Energy Drainers ── */}
+
+            {/* Col 1 – Twoje „Dlaczego" */}
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col border-t-[1.5px] border-t-amber-400/20">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-amber-400/60 text-[11px] leading-none">◈</span>
+                <div className="text-[10px] tracking-[2px] font-mono text-amber-300/55 uppercase">Twoje „Dlaczego" (Why)</div>
+              </div>
+              <div className="mb-4 text-[11px] text-white/25">Głęboka wewnętrzna motywacja i sens działania</div>
+              {llmLoading ? (
+                <div className="space-y-2"><Skeleton className="h-8" /><Skeleton className="h-8" /><Skeleton className="h-8" /></div>
+              ) : llmContent?.energy_why && !llmError ? (
+                <div className="relative rounded-xl border border-amber-400/20 bg-amber-500/[0.05] p-4 flex-1
+                                shadow-[0_0_40px_-14px_rgba(251,191,36,0.22)]
+                                transition-all duration-200 hover:border-amber-400/38 hover:shadow-[0_0_54px_-10px_rgba(251,191,36,0.34)]
+                                hover:-translate-y-px">
+                  <div className="absolute -inset-px rounded-xl pointer-events-none"
+                    style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(251,191,36,0.14), transparent 65%)' }} />
+                  <p className="relative text-sm text-white/75 leading-relaxed">{llmContent.energy_why}</p>
+                </div>
+              ) : (
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy – wymaga regeneracji karty'}</div>
+              )}
+            </section>
+
+            {/* Col 2 – Co daje Ci energię */}
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col border-t-[1.5px] border-t-emerald-400/20">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-emerald-400/60 text-[11px] leading-none">◈</span>
+                <div className="text-[10px] tracking-[2px] font-mono text-emerald-300/55 uppercase">Co daje Ci energię</div>
+              </div>
+              <div className="mb-4 text-[11px] text-white/25">Aktywności, które ładują Twoje baterie</div>
+              {llmLoading ? (
+                <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-10" />)}</div>
+              ) : llmContent?.energy_boosters?.length && !llmError ? (
+                <div className="space-y-2">
+                  {llmContent.energy_boosters.slice(0, 5).map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-3 rounded-xl border border-emerald-400/15 bg-emerald-500/[0.04] px-3 py-2.5
+                                              transition-all duration-200 hover:border-emerald-400/32 hover:bg-emerald-500/[0.09]
+                                              hover:-translate-y-px hover:shadow-[0_0_18px_-8px_rgba(52,211,153,0.32)]">
+                      <span className="text-emerald-400 text-sm font-bold leading-none flex-shrink-0">＋</span>
+                      <span className="text-sm text-white/75 leading-snug">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy – wymaga regeneracji karty'}</div>
+              )}
+            </section>
+
+            {/* Col 3 – Co drenuje Twoją energię */}
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col border-t-[1.5px] border-t-rose-400/20">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-rose-400/60 text-[11px] leading-none">◈</span>
+                <div className="text-[10px] tracking-[2px] font-mono text-rose-300/55 uppercase">Co drenuje Twoją energię</div>
+              </div>
+              <div className="mb-4 text-[11px] text-white/25">Aktywności, które Cię wykańczają</div>
+              {llmLoading ? (
+                <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-10" />)}</div>
+              ) : llmContent?.energy_drainers?.length && !llmError ? (
+                <div className="space-y-2">
+                  {llmContent.energy_drainers.slice(0, 5).map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-3 rounded-xl border border-rose-400/15 bg-rose-500/[0.04] px-3 py-2.5
+                                              transition-all duration-200 hover:border-rose-400/32 hover:bg-rose-500/[0.08]
+                                              hover:-translate-y-px hover:shadow-[0_0_18px_-8px_rgba(244,63,94,0.3)]">
+                      <span className="text-rose-400 text-sm font-bold leading-none flex-shrink-0">−</span>
+                      <span className="text-sm text-white/75 leading-snug">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy – wymaga regeneracji karty'}</div>
               )}
             </section>
 
