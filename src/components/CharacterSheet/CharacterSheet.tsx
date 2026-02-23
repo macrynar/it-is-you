@@ -538,16 +538,35 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
       text: String(text),
       className: 'iiy-cs-t-cyan',
       tip: 'Fundamental tag',
+      icon: (
+        <svg className="iiy-cs-tag-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <circle cx="12" cy="12" r="9" opacity=".4"/>
+          <circle cx="12" cy="12" r="4.5" opacity=".7"/>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+        </svg>
+      ),
     }));
     const style = (llmContent?.tags_style ?? []).map((text) => ({
       text: String(text),
       className: 'iiy-cs-t-violet',
       tip: 'Style tag',
+      icon: (
+        <svg className="iiy-cs-tag-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <path d="M12 3v3M12 18v3M3 12h3M18 12h3M6.4 6.4l2.1 2.1M15.5 15.5l2.1 2.1M15.5 8.5l2.1-2.1M6.4 17.6l2.1-2.1"/>
+          <circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none" opacity=".6"/>
+        </svg>
+      ),
     }));
     const values = (llmContent?.tags_values ?? []).map((text) => ({
       text: String(text),
       className: 'iiy-cs-t-amber',
       tip: 'Values tag',
+      icon: (
+        <svg className="iiy-cs-tag-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="12,2 22,12 12,22 2,12"/>
+          <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" opacity=".6"/>
+        </svg>
+      ),
     }));
 
     const merged = [...fundamental, ...style, ...values]
@@ -1025,6 +1044,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
                         {heroTagItems.length ? (
                           heroTagItems.map((t) => (
                             <div key={t.text} className={`iiy-cs-tag ${t.className}`} data-tip={t.tip}>
+                              {t.icon}
                               {t.text}
                             </div>
                           ))
