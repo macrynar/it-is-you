@@ -928,6 +928,11 @@
 }
 
 /* ─── ANIMATIONS ──────────────────────────────────────────────── */
+@keyframes iiy-auth-glow {
+  0%,100% { opacity:.55; transform:translateX(-50%) scale(1); }
+  50%      { opacity:1;   transform:translateX(-50%) scale(1.08); }
+}
+
 @keyframes spin-slow { to { transform: rotate(360deg); } }
 .animate-spin-slow { animation: spin-slow 3s linear infinite; }
 

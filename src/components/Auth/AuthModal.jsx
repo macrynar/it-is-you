@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Mail, Eye, EyeOff, Loader, AlertCircle, CheckCircle } from 'lucide-react'
 import { 
   signInWithGoogle, 
@@ -38,6 +38,81 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     email: false,
     magicLink: false,
   })
+
+  const signalGroupRef = useRef(null)
+
+  // Load fonts
+  useEffect(() => {
+    const id = 'alcheme-auth-fonts'
+    if (!document.getElementById(id)) {
+      const link = document.createElement('link')
+      link.id   = id
+      link.rel  = 'stylesheet'
+      link.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Raleway:wght@300;400&display=swap'
+      document.head.appendChild(link)
+    }
+  }, [])
+
+  // Signals animation
+  useEffect(() => {
+    const group = signalGroupRef.current
+    if (!group) return
+
+    const N = [
+      { x: 50.0, y:  8.0 },{ x: 79.7, y: 20.3 },{ x: 92.0, y: 50.0 },{ x: 79.7, y: 79.7 },
+      { x: 50.0, y: 92.0 },{ x: 20.3, y: 79.7 },{ x:  8.0, y: 50.0 },{ x: 20.3, y: 20.3 },
+    ]
+    const EDGES = [[0,3],[3,6],[6,1],[1,4],[4,7],[7,2],[2,5],[5,0]]
+    const ns = 'http://www.w3.org/2000/svg'
+
+    const ease = t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2
+
+    class Sig {
+      constructor(ei, color, r, filt, travel, pause, delay) {
+        this.edge = EDGES[ei]; this.travel = travel; this.pause = pause
+        this.phase = 'pausing'; this.pauseEnd = performance.now() + delay; this.t0 = null
+        this.el = document.createElementNS(ns, 'circle')
+        this.el.setAttribute('r', r); this.el.setAttribute('fill', color)
+        this.el.setAttribute('filter', filt); this.el.setAttribute('opacity', '0')
+        this.el.setAttribute('cx', N[this.edge[0]].x); this.el.setAttribute('cy', N[this.edge[0]].y)
+        group.appendChild(this.el)
+      }
+      tick(now) {
+        if (this.phase === 'pausing') {
+          if (now >= this.pauseEnd) { this.phase = 'traveling'; this.t0 = now }
+          return
+        }
+        const tL = Math.min((now - this.t0) / this.travel, 1)
+        const tE = ease(tL)
+        const fr = N[this.edge[0]], to = N[this.edge[1]]
+        this.el.setAttribute('cx', (fr.x + (to.x - fr.x) * tE).toFixed(3))
+        this.el.setAttribute('cy', (fr.y + (to.y - fr.y) * tE).toFixed(3))
+        const op = tL < 0.15 ? (tL/0.15)*0.72 : tL > 0.80 ? ((1-tL)/0.20)*0.72 : 0.72
+        this.el.setAttribute('opacity', op.toFixed(3))
+        if (tL >= 1) {
+          this.el.setAttribute('opacity', '0')
+          this.el.setAttribute('cx', N[this.edge[0]].x); this.el.setAttribute('cy', N[this.edge[0]].y)
+          this.phase = 'pausing'; this.pauseEnd = now + this.pause + Math.random() * 800
+        }
+      }
+    }
+
+    const sigs = [
+      new Sig(0,'#00f0ff',3.0,'url(#ags-gm)',1800,4800, 200),
+      new Sig(2,'#00f0ff',3.0,'url(#ags-gm)',1900,5200,2600),
+      new Sig(4,'#00f0ff',3.0,'url(#ags-gm)',1700,5000,4800),
+      new Sig(6,'#00f0ff',3.0,'url(#ags-gm)',2000,5400,7200),
+      new Sig(1,'#c4b5fd',2.6,'url(#ags-gs)',2100,6200,1400),
+      new Sig(3,'#c4b5fd',2.6,'url(#ags-gs)',2200,6000,3800),
+      new Sig(5,'#c4b5fd',2.6,'url(#ags-gs)',2000,6400,6000),
+      new Sig(7,'#c4b5fd',2.6,'url(#ags-gs)',2300,5800,8800),
+    ]
+
+    let raf
+    const loop = now => { sigs.forEach(s => s.tick(now)); raf = requestAnimationFrame(loop) }
+    raf = requestAnimationFrame(loop)
+    return () => { cancelAnimationFrame(raf); while (group.firstChild) group.removeChild(group.firstChild) }
+  }, [])
 
   // Reset messages on tab change
   useEffect(() => {
@@ -254,14 +329,78 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
 
       {/* Main Modal */}
       <div className="relative z-10 w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold brand-font mb-2 bg-gradient-to-r from-white via-indigo-300 to-white bg-clip-text text-transparent">
-            Alcheme
-          </h1>
-          <p className="text-slate-400 text-sm">Portal do Twojej Duszy</p>
-          <p className="text-slate-500 text-xs mt-1">Zaloguj się aby odkryć kim naprawdę jesteś</p>
+      {/* Vertical Logo */}
+      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:22, position:'relative', marginBottom:32, cursor:'default', userSelect:'none' }}>
+        {/* Ambient glow backdrop */}
+        <div style={{
+          position:'absolute', width:300, height:300, top:-40, left:'50%',
+          transform:'translateX(-50%)', borderRadius:'50%', pointerEvents:'none', zIndex:0,
+          background:'radial-gradient(circle, rgba(112,0,255,.14) 0%, rgba(0,240,255,.05) 45%, transparent 70%)',
+          animation:'iiy-auth-glow 4s ease-in-out infinite',
+        }} />
+
+        {/* Signet SVG */}
+        <svg width="120" height="120" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position:'relative', zIndex:1 }}>
+          <defs>
+            <filter id="ags-gs"><feGaussianBlur stdDeviation=".7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="ags-gm"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <filter id="ags-gl"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <circle cx="50" cy="50" r="47" fill="rgba(10,4,40,.5)" stroke="rgba(255,255,255,.15)" strokeWidth="1.0"/>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.07)" strokeWidth=".4"/>
+
+          <polygon points="50.0,8.0 92.0,50.0 50.0,92.0 8.0,50.0"
+            fill="rgba(112,0,255,.07)" stroke="rgba(167,139,250,.5)" strokeWidth="1.1" strokeLinejoin="round"/>
+          <polygon points="79.7,20.3 79.7,79.7 20.3,79.7 20.3,20.3"
+            fill="rgba(112,0,255,.07)" stroke="rgba(167,139,250,.5)" strokeWidth="1.1" strokeLinejoin="round"/>
+          <polygon points="50.0,8.0 79.7,79.7 8.0,50.0 79.7,20.3 50.0,92.0 20.3,20.3 92.0,50.0 20.3,79.7"
+            fill="rgba(0,240,255,.06)" stroke="#00f0ff" strokeWidth="1.3" strokeLinejoin="round" filter="url(#ags-gs)"/>
+
+          <circle cx="50.0" cy="8.0"  r="3.2" fill="#00f0ff" filter="url(#ags-gm)"/>
+          <circle cx="79.7" cy="20.3" r="2.8" fill="#c4b5fd" filter="url(#ags-gs)"/>
+          <circle cx="92.0" cy="50.0" r="3.2" fill="#00f0ff" filter="url(#ags-gm)"/>
+          <circle cx="79.7" cy="79.7" r="2.8" fill="#c4b5fd" filter="url(#ags-gs)"/>
+          <circle cx="50.0" cy="92.0" r="3.2" fill="#00f0ff" filter="url(#ags-gm)"/>
+          <circle cx="20.3" cy="79.7" r="2.8" fill="#c4b5fd" filter="url(#ags-gs)"/>
+          <circle cx="8.0"  cy="50.0" r="3.2" fill="#00f0ff" filter="url(#ags-gm)"/>
+          <circle cx="20.3" cy="20.3" r="2.8" fill="#c4b5fd" filter="url(#ags-gs)"/>
+
+          {/* Signal particles (injected by useEffect) */}
+          <g ref={signalGroupRef} />
+
+          <circle cx="50" cy="50" r="13" fill="rgba(0,240,255,.08)" filter="url(#ags-gl)">
+            <animate attributeName="opacity" values=".3;.8;.3" dur="3s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="50" cy="50" r="11" fill="#040115"/>
+          <circle cx="50" cy="50" r="11" fill="none" stroke="#00f0ff" strokeWidth="1.8" filter="url(#ags-gs)">
+            <animate attributeName="stroke-opacity" values=".45;.95;.45" dur="3s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="50" cy="50" r="3.2" fill="#00f0ff" filter="url(#ags-gm)">
+            <animate attributeName="r"       values="2.6;3.8;2.6" dur="3s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values=".75;1;.75"   dur="3s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+
+        {/* Text block */}
+        <div style={{ position:'relative', zIndex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:10 }}>
+          <div style={{
+            fontFamily:"'Cinzel', serif", fontSize:36, fontWeight:600,
+            letterSpacing:'.22em', lineHeight:1,
+            background:'linear-gradient(120deg, #fff 0%, rgba(0,240,255,.9) 52%, rgba(112,0,255,.8) 100%)',
+            WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text',
+          }}>Alcheme</div>
+          <div style={{
+            width:'100%', height:1,
+            background:'linear-gradient(90deg, transparent, rgba(0,240,255,.35) 30%, rgba(112,0,255,.35) 70%, transparent)',
+          }} />
+          <div style={{
+            fontFamily:"'Raleway', sans-serif", fontSize:9, fontWeight:300,
+            letterSpacing:'.55em', textTransform:'uppercase', color:'rgba(255,255,255,.3)',
+            paddingLeft:'.55em',
+          }}>Know yourself · Transform</div>
         </div>
+      </div>
 
         {/* Glass Panel */}
         <div className="glass-panel p-8 rounded-2xl">
