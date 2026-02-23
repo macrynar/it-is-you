@@ -670,7 +670,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
     const map: Record<string, number> = {};
     for (const v of Array.isArray(all) ? all : []) {
       const id = String(v?.id ?? v?.value_id ?? '');
-      const score = Number(v?.raw_score ?? v?.score ?? v?.mrat_score ?? 0);
+      const score = Number(v?.centered_score ?? v?.raw_score ?? v?.score ?? v?.mrat_score ?? 0);
       if (id && Number.isFinite(score)) map[id] = score;
     }
     return map;
