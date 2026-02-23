@@ -6,6 +6,7 @@ import { generateDarkTriadReport } from '../../utils/scoring.js';
 import { PROMPT_VERSION } from '../../utils/promptVersion.js';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 import ResultsScaffold from './modules/ResultsScaffold.jsx';
+import { useIsMobile } from '../../utils/useIsMobile.js';
 
 const PAGE_ACCENT = '#8B0000';
 
@@ -266,6 +267,7 @@ const CSS = `
    COMPONENT
 ════════════════════════════════════════════════════════════════════ */
 function DarkTriadResults() {
+  const isMobile = useIsMobile();
   const [report, setReport]                               = useState(null);
   const [loading, setLoading]                             = useState(true);
   const [error, setError]                                 = useState(null);
@@ -444,7 +446,7 @@ function DarkTriadResults() {
       )}
 
       {/* ── MAIN LAYOUT ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 20, maxWidth: 1100, margin: '0 auto' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 340px', gap: 20, maxWidth: 1100, margin: '0 auto' }}>
 
         {/* LEFT — trait cards */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

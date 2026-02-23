@@ -5,6 +5,7 @@ import { PROMPT_VERSION } from '../../utils/promptVersion.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 import ResultsScaffold from './modules/ResultsScaffold.jsx';
+import { useIsMobile } from '../../utils/useIsMobile.js';
 
 const PAGE_ACCENT = '#6A1B9A';
 
@@ -214,6 +215,7 @@ function EnneagramDiagram({ primaryType, allScores }) {
 }
 
 export default function EnneagramResults() {
+  const isMobile = useIsMobile();
   const [results,        setResults]        = useState(null);
   const [loading,        setLoading]        = useState(true);
   const [error,          setError]          = useState(null);
@@ -348,7 +350,7 @@ export default function EnneagramResults() {
       >
 
         {/* ── Main 2-column: Diagram + Type Card ── */}
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 380px', gap:24, marginBottom:24 }}>
+        <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 380px', gap:24, marginBottom:24 }}>
 
           {/* Enneagram circle diagram */}
           <div className="en-glass en-card" style={{ ...G, padding:36, overflow:'hidden' }}
@@ -420,7 +422,7 @@ export default function EnneagramResults() {
         </div>
 
         {/* ── Core Motivation + Basic Fear ── */}
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom:24 }}>
+        <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:16, marginBottom:24 }}>
           <div className="en-glass en-card" style={{ ...G, padding:28, overflow:'hidden' }}
             onMouseEnter={hoverOn('#55efc4','rgba(85,239,196,.4)')}
             onMouseLeave={hoverOff}>
@@ -439,7 +441,7 @@ export default function EnneagramResults() {
 
         {/* ── Strengths + Challenges ── */}
         {interp && (
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom:24 }}>
+          <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:16, marginBottom:24 }}>
             <div className="en-glass en-card" style={{ ...G, padding:28, overflow:'hidden' }}
               onMouseEnter={hoverOn('#55efc4','rgba(85,239,196,.4)')}
               onMouseLeave={hoverOff}>

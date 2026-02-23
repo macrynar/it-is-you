@@ -5,6 +5,7 @@ import { PROMPT_VERSION } from '../../utils/promptVersion.js';
 import AiInterpretation from './AiInterpretation.jsx';
 import ResultsFooterActions from './modules/ResultsFooterActions.jsx';
 import ResultsScaffold from './modules/ResultsScaffold.jsx';
+import { useIsMobile } from '../../utils/useIsMobile.js';
 
 const PAGE_ACCENT = 'rgb(56, 182, 255)';
 
@@ -60,6 +61,7 @@ const labelAnchors = [
 ];
 
 export default function HexacoResults() {
+  const isMobile = useIsMobile();
   const [results,        setResults]        = useState(null);
   const [loading,        setLoading]        = useState(true);
   const [error,          setError]          = useState(null);
@@ -164,7 +166,7 @@ export default function HexacoResults() {
         retakeHref="/test"
       >
 
-        <div style={{display:'grid',gridTemplateColumns:'1fr 360px',gap:24,marginBottom:24}}>
+        <div style={{display:'grid',gridTemplateColumns: isMobile ? '1fr' : '1fr 360px',gap:24,marginBottom:24}}>
 
           <div className="hr-glass" style={{...G,padding:36}}>
             <div style={{fontSize:11,fontWeight:600,letterSpacing:'3px',textTransform:'uppercase',color:'rgba(255,255,255,.3)',marginBottom:28,display:'flex',alignItems:'center',gap:12}}>
@@ -225,7 +227,7 @@ export default function HexacoResults() {
             <span style={{fontSize:11,fontWeight:600,letterSpacing:'3px',textTransform:'uppercase',color:'rgba(255,255,255,.3)'}}>Szczegółowe wyniki</span>
               <span style={{flex:1,height:1,background:`linear-gradient(90deg,${PAGE_ACCENT}66,transparent)`}}/>
           </div>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16}}>
+          <div style={{display:'grid',gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)',gap:16}}>
             {DIM_ORDER.map(id => {
               const ac=ACCENT[id];
               const pct=Math.round(results.percentile_scores[id]??0);
