@@ -15,11 +15,11 @@ export const STRENGTHS_TEST = {
   question_count: 48,
   scale_type: "likert_5",
   scale_labels: {
-    1: "Zdecydowanie nie do mnie",
-    2: "Nie do mnie",
+    1: "Zdecydowanie nie pasuje do mnie",
+    2: "Nie pasuje do mnie",
     3: "Neutralnie",
-    4: "Do mnie",
-    5: "Bardzo do mnie"
+    4: "Pasuje do mnie",
+    5: "Bardzo pasuje do mnie"
   },
   
   // Categories with assigned colors
