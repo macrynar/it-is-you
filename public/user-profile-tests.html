@@ -1737,19 +1737,29 @@
         // Check authentication
         async function checkAuth() {
             console.log('Checking auth...');
-            // Wait for Supabase to restore session from localStorage
+            // First attempt
             const { data: { session }, error } = await supabase.auth.getSession();
-            
-            console.log('Session check:', { session: session ? 'exists' : 'null', error, userId: session?.user?.id });
-            
-            if (error || !session) {
-                console.log('No valid session, redirecting to auth');
-                window.location.href = '/auth';
-                return false;
+            console.log('Session check (attempt 1):', { session: session ? 'exists' : 'null', error, userId: session?.user?.id });
+
+            if (!error && session) {
+                console.log('User authenticated:', session.user.id);
+                return true;
             }
-            
-            console.log('User authenticated:', session.user.id);
-            return true;
+
+            // Session may not have been restored from localStorage in time — retry after 1.5s
+            console.log('No session on first check, retrying in 1.5s...');
+            await new Promise(r => setTimeout(r, 1500));
+            const { data: { session: session2 }, error: error2 } = await supabase.auth.getSession();
+            console.log('Session check (attempt 2):', { session: session2 ? 'exists' : 'null', error: error2, userId: session2?.user?.id });
+
+            if (!error2 && session2) {
+                console.log('User authenticated on retry:', session2.user.id);
+                return true;
+            }
+
+            console.log('No valid session after retry, redirecting to auth');
+            window.location.href = '/auth';
+            return false;
         }
 
         // Logout function

@@ -50,7 +50,11 @@ function App() {
               window.location.href = redirectUrl
             }
           }, 500)
-          setTimeout(() => clearInterval(checkInterval), 5000)
+          // Fallback after 5s – redirect to auth so the user is not stuck
+          setTimeout(() => {
+            clearInterval(checkInterval)
+            window.location.href = '/auth'
+          }, 5000)
         }
       }, 500)
       return
