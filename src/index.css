@@ -867,25 +867,62 @@
     .iiy-nav-tabs { display: none; }
   }
 
+  /* ── MOBILE (≤ 640px) ──────────────────────────────────────── */
   @media (max-width: 640px) {
-    /* Nav: keep only logo visible */
+    /* Nav */
     .iiy-nav-tabs { display: none; }
-    /* Hero avatar smaller */
-    .iiy-cs-avatar { width: 68px; height: 68px; border-radius: 16px; }
-    .iiy-cs-avatar-ring { inset: -4px; border-radius: 21px; }
-    .iiy-cs-avatar-ring-2 { inset: -9px; border-radius: 26px; }
-    .iiy-cs-s-avatar { padding: 16px 12px 16px 16px; }
-    /* Identity */
-    .iiy-cs-s-identity { padding: 16px 12px; min-width: 0; gap: 10px; }
-    .iiy-cs-user-name { font-size: 19px; }
-    /* Archetype boxes full width */
+
+    /* Hero top: avatar + identity side-by-side in row 1,
+       archetype + actions each own full-width row below */
+    .iiy-cs-hero-top {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    /* Avatar: compact, auto-width, stays in row 1 */
+    .iiy-cs-s-avatar {
+      flex: 0 0 auto;
+      padding: 14px 8px 14px 14px;
+    }
+    .iiy-cs-avatar { width: 58px; height: 58px; border-radius: 14px; }
+    .iiy-cs-avatar-ring { inset: -4px; border-radius: 18px; }
+    .iiy-cs-avatar-ring-2 { inset: -8px; border-radius: 22px; }
+    /* Identity: fills remaining space in row 1 */
+    .iiy-cs-s-identity {
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 12px 12px 12px 10px;
+      gap: 8px;
+    }
+    .iiy-cs-user-name { font-size: 17px; }
+    /* Archetype: new row, full width */
+    .iiy-cs-s-archetype {
+      flex: 0 0 100%;
+      flex-direction: column;
+      padding: 10px 14px 12px;
+      gap: 8px;
+    }
     .iiy-cs-archetype-box { min-width: 0; width: 100%; }
-    .iiy-cs-s-archetype { padding: 12px 14px; gap: 10px; }
-    /* Actions row on mobile */
-    .iiy-cs-s-actions { padding: 14px 16px; flex-direction: row; flex-wrap: wrap; }
-    .iiy-cs-btn { width: auto; flex: 1 1 auto; min-width: 0; padding: 10px 14px; font-size: 12px; }
-    /* Hero bottom tags wrap nicely */
-    .iiy-cs-hero-bottom { padding: 12px 14px 16px; }
+    .iiy-cs-subtitle-box { min-width: 0; width: 100%; }
+    /* Actions: new row, full width, side-by-side buttons */
+    .iiy-cs-s-actions {
+      flex: 0 0 100%;
+      border-left: none;
+      border-top: 1px solid rgba(255,255,255,.05);
+      padding: 10px 14px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .iiy-cs-btn {
+      width: auto;
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 9px 12px;
+      font-size: 12px;
+    }
+    /* Tags */
+    .iiy-cs-hero-bottom { padding: 10px 14px 14px; }
     .iiy-cs-tag { font-size: 11px; padding: 5px 10px; }
   }
 }

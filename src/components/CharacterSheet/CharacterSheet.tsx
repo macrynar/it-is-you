@@ -111,7 +111,7 @@ function Skeleton({ className }: { className: string }) {
 function SectionDivider({ label, tone }: { label: string; tone?: 'default' | 'danger' }) {
   const danger = tone === 'danger';
   return (
-    <div className="col-span-3 flex items-center gap-3 mt-2">
+    <div className="col-span-full flex items-center gap-3 mt-2">
       <div className={
         `text-[10px] tracking-[2px] font-mono uppercase ${danger ? 'text-rose-200/60' : 'text-white/35'}`
       }>
@@ -754,10 +754,10 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
       {/* TOP NAV */}
       {!isPublic ? (
       <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50 nav-neural">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
             {/* Logo */}
-            <AlchemeLogo href="/" size={36} />
+            <AlchemeLogo href="/" size={32} />
 
             {/* Center tabs */}
             <div className="iiy-nav-tabs">
@@ -766,53 +766,73 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
             </div>
 
             {/* Actions */}
-            <div className="hidden sm:flex items-center gap-4">
-              <button
-                type="button"
-                className={`theme-toggle ${theme === 'light' ? 'light' : ''}`}
-                onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
-                title="Przełącz motyw"
-              >
-                <div className="theme-toggle-slider" />
-                <svg className="theme-icon theme-icon-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-                <svg className="theme-icon theme-icon-sun" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </button>
-
-              <button
-                type="button"
-                onClick={async () => {
-                  await supabase.auth.signOut();
-                  window.location.href = '/';
-                }}
-                className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm"
-              >
-                Wyloguj
-              </button>
-
-              <a
-                href="/settings"
-                className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}
-                title="Ustawienia konta"
-              >
-                ⚙️ Ustawienia
-              </a>
+            <div className="flex items-center gap-2 sm:gap-4">
+              {/* Mobile-only icon buttons */}
+              <div className="flex sm:hidden items-center gap-2">
+                <button
+                  type="button"
+                  className={`theme-toggle ${theme === 'light' ? 'light' : ''}`}
+                  onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
+                  title="Przełącz motyw"
+                >
+                  <div className="theme-toggle-slider" />
+                  <svg className="theme-icon theme-icon-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                  <svg className="theme-icon theme-icon-sun" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </button>
+                <a href="/settings" className="p-2 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white transition-colors" title="Ustawienia">⚙️</a>
+                <button type="button" onClick={async () => { await supabase.auth.signOut(); window.location.href = '/'; }} className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white/60 hover:text-white transition-colors text-xs font-medium" title="Wyloguj">Wyloguj</button>
+              </div>
+              {/* Desktop-only full buttons */}
+              <div className="hidden sm:flex items-center gap-4">
+                <button
+                  type="button"
+                  className={`theme-toggle ${theme === 'light' ? 'light' : ''}`}
+                  onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
+                  title="Przełącz motyw"
+                >
+                  <div className="theme-toggle-slider" />
+                  <svg className="theme-icon theme-icon-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                  <svg className="theme-icon theme-icon-sun" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await supabase.auth.signOut();
+                    window.location.href = '/';
+                  }}
+                  className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm"
+                >
+                  Wyloguj
+                </button>
+                <a
+                  href="/settings"
+                  className="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}
+                  title="Ustawienia konta"
+                >
+                  ⚙️ Ustawienia
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </nav>
       ) : (
       <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50 nav-neural">
-        <div className="max-w-7xl mx-auto px-6 py-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3">
           <div className="flex items-center justify-between gap-4">
-            <AlchemeLogo href="/" size={36} />
+            <AlchemeLogo href="/" size={32} />
             <a
               href="/auth"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all"
+              className="inline-flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white transition-all"
               style={{
                 background: 'linear-gradient(120deg, rgba(112,0,255,.75) 0%, rgba(0,200,220,.8) 100%)',
                 boxShadow: '0 0 18px -4px rgba(0,240,255,.35)',
@@ -830,7 +850,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
       <main className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
 
         {!isPublic && done < 6 ? (
-          <div className="card-neural iiy-hover-panel p-6 mb-6">
+          <div className="card-neural iiy-hover-panel p-4 sm:p-6 mb-6">
             <div className="text-sm text-white/70">Ukończ wszystkie testy, aby odblokować pełny widok karty postaci.</div>
             <a href="/user-profile-tests.html" className="mt-4 inline-flex items-center gap-2 btn-neural no-underline">Przejdź do testów →</a>
           </div>
@@ -983,7 +1003,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
             <SectionDivider label="Osobowość & Motywacja" />
 
-            <section className="col-span-1 lg:col-span-2 card-neural iiy-hover-panel p-6">
+            <section className="col-span-1 lg:col-span-2 card-neural iiy-hover-panel p-4 sm:p-6">
               <div className="flex items-center justify-between gap-3">
                 <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Matryca HEXACO</div>
                 {!raw.HEXACO ? <span className="badge">Zablokowane</span> : null}
@@ -1032,7 +1052,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
               )}
             </section>
 
-            <section className="col-span-1 lg:col-span-1 card-neural iiy-hover-panel p-6">
+            <section className="col-span-1 lg:col-span-1 card-neural iiy-hover-panel p-4 sm:p-6">
               <div className="flex items-center justify-between gap-3">
                 <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Silnik motywacji — Enneagram</div>
                 {!raw.ENNEAGRAM ? <span className="badge">Zablokowane</span> : null}
@@ -1124,7 +1144,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
             <SectionDivider label="Kariera i Wartości" />
 
-            <section className="col-span-1 card-neural iiy-hover-panel p-6">
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6">
               <div className="flex items-center justify-between gap-3">
                 <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Top Talenty</div>
                 {!raw.STRENGTHS ? <span className="badge">Zablokowane</span> : null}
@@ -1179,7 +1199,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
               )}
             </section>
 
-            <section className="col-span-1 card-neural iiy-hover-panel p-6">
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6">
               <div className="flex items-center justify-between gap-3">
                 <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Profil Kariery RIASEC</div>
                 {!raw.CAREER ? <span className="badge">Zablokowane</span> : null}
@@ -1255,7 +1275,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
               )}
             </section>
 
-            <section className="col-span-1 card-neural iiy-hover-panel p-6">
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6">
               <div className="flex items-center justify-between gap-3">
                 <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Wartości Fundamentalne</div>
                 {!raw.VALUES ? <span className="badge">Zablokowane</span> : null}
@@ -1315,7 +1335,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
             <SectionDivider label="Synteza" />
 
             {/* Col 1 – Zawody dla Ciebie */}
-            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col border-t-[1.5px] border-t-emerald-400/20">
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col border-t-[1.5px] border-t-emerald-400/20">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-emerald-400/60 text-[11px] leading-none">◈</span>
                 <div className="text-[10px] tracking-[2px] font-mono text-emerald-300/55 uppercase">Zawody dla Ciebie</div>
@@ -1340,7 +1360,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
             </section>
 
             {/* Col 2 – Twoje Alter Ego */}
-            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col border-t-[1.5px] border-t-violet-400/20">
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col border-t-[1.5px] border-t-violet-400/20">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-violet-400/60 text-[11px] leading-none">◈</span>
                 <div className="text-[10px] tracking-[2px] font-mono text-violet-300/55 uppercase">Twoje Alter Ego</div>
@@ -1366,7 +1386,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
             </section>
 
             {/* Col 3 – Kim naprawdę jesteś */}
-            <section className="col-span-1 card-neural iiy-hover-panel p-6 flex flex-col border-t-[1.5px] border-t-sky-400/20">
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col border-t-[1.5px] border-t-sky-400/20">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-sky-400/60 text-[11px] leading-none">◈</span>
                 <div className="text-[10px] tracking-[2px] font-mono text-sky-300/55 uppercase">Kim jesteś naprawdę</div>
@@ -1396,7 +1416,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
             <SectionDivider label="Strefa Cienia" tone="danger" />
 
-            <section className="col-span-1 lg:col-span-3 card-neural iiy-hover-panel p-6">
+            <section className="col-span-1 lg:col-span-3 card-neural iiy-hover-panel p-4 sm:p-6">
               <div className="flex items-center justify-between gap-3">
                 <div className="text-[10px] tracking-[2px] font-mono text-rose-200/60 uppercase">Ciemna Strona Mocy</div>
                 {!raw.DARK_TRIAD ? <span className="badge">Zablokowane</span> : null}
@@ -1471,8 +1491,8 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
       {!isPublic ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} /> : null}
 
       {/* Footer */}
-      <footer className="border-t border-white/5 bg-slate-950/80 py-10 text-slate-500 text-sm mt-8">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 sm:grid-cols-4 gap-8">
+      <footer className="border-t border-white/5 bg-slate-950/80 py-6 sm:py-10 text-slate-500 text-sm mt-6 sm:mt-8">
+        <div className="max-w-5xl mx-auto px-3 sm:px-6 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
           <div className="col-span-2 sm:col-span-1">
             <span className="font-bold text-lg text-white tracking-tight block mb-3">Alcheme</span>
             <p>Naukowa diagnoza potencjału w formie przystępnej grywalizacji.</p>
@@ -1502,7 +1522,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
             </ul>
           </div>
         </div>
-        <div className="max-w-5xl mx-auto px-6 mt-8 pt-6 border-t border-white/5 text-center text-xs">
+        <div className="max-w-5xl mx-auto px-3 sm:px-6 mt-6 sm:mt-8 pt-6 border-t border-white/5 text-center text-xs">
           &copy; {new Date().getFullYear()} Alcheme. All rights reserved. Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.
         </div>
       </footer>
