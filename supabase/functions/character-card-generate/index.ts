@@ -29,6 +29,9 @@ type CharacterCardContent = {
   portrait_environment: string
   portrait_superpowers: string
   portrait_blindspots: string
+  energy_why: string
+  energy_boosters: string[]
+  energy_drainers: string[]
   darktriad_synthesis: string
   popculture: Array<{ context: string; name: string; reason: string }>
   ideal_careers: Array<{ emoji: string; title: string; description: string }>
@@ -122,6 +125,9 @@ serve(async (req: Request) => {
       portrait_environment: 'string',
       portrait_superpowers: 'string',
       portrait_blindspots: 'string',
+      energy_why: 'string',
+      energy_boosters: ['string', 'string', 'string', 'string', 'string'],
+      energy_drainers: ['string', 'string', 'string', 'string', 'string'],
       darktriad_synthesis: 'string',
       popculture: [{ context: 'string', name: 'string', reason: 'string' }, { context: 'string', name: 'string', reason: 'string' }, { context: 'string', name: 'string', reason: 'string' }, { context: 'string', name: 'string', reason: 'string' }, { context: 'string', name: 'string', reason: 'string' }],
       ideal_careers: [{ emoji: 'string', title: 'string', description: 'string' }, { emoji: 'string', title: 'string', description: 'string' }, { emoji: 'string', title: 'string', description: 'string' }, { emoji: 'string', title: 'string', description: 'string' }, { emoji: 'string', title: 'string', description: 'string' }],
@@ -142,7 +148,7 @@ serve(async (req: Request) => {
       body: JSON.stringify({
         model: 'gpt-4o-mini',
         temperature: 0.4,
-        max_tokens: 1400,
+        max_tokens: 2200,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
           {
