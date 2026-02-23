@@ -766,7 +766,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-4">
               <button
                 type="button"
                 className={`theme-toggle ${theme === 'light' ? 'light' : ''}`}
@@ -827,7 +827,7 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
       </nav>
       )}
 
-      <main className="max-w-7xl mx-auto px-6 py-10">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
 
         {!isPublic && done < 6 ? (
           <div className="card-neural iiy-hover-panel p-6 mb-6">
