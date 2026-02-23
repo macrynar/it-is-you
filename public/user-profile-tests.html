@@ -672,6 +672,35 @@
             color: #fff;
             box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 0 0 1px rgba(99,102,241,.3);
         }
+        /* ── Nav Links ─────────────────────────────────────────── */
+        .iiy-nav-link {
+            position: relative;
+            color: rgba(255,255,255,.5);
+            font-size: 13.5px;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 4px 0;
+            transition: color .2s;
+            white-space: nowrap;
+            letter-spacing: .2px;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+        }
+        .iiy-nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #00f0ff, #7000ff);
+            box-shadow: 0 0 8px rgba(0,240,255,.55);
+            transition: width .25s ease;
+        }
+        .iiy-nav-link:hover { color: rgba(255,255,255,.9); }
+        .iiy-nav-link:hover::after { width: 100%; }
+        .iiy-nav-link.active { color: #fff; }
+        .iiy-nav-link.active::after { width: 100%; }
         /* ── Character Card ───────────────────────────────────── */
         .cc-grid {
             display: grid;
@@ -935,14 +964,12 @@
                   <div class="alcheme-logo-texts"><div class="alcheme-logo-name">Alcheme</div><div class="alcheme-logo-sub">Know yourself · Transform</div></div>
                 </a>
 
-                <!-- Center Nav Tabs -->
-                <div class="iiy-nav-tabs">
-                    <button class="iiy-tab-btn active" id="tab-btn-tests" onclick="switchTab('tests')">
-                        🧪 Testy
-                    </button>
-                    <button class="iiy-tab-btn" id="tab-btn-character" onclick="window.location.href='/character'">
-                        🃏 Karta Postaci
-                    </button>
+                <!-- Center Nav Links (desktop) -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a class="iiy-nav-link" href="/settings">Ustawienia</a>
+                    <a class="iiy-nav-link" href="/pricing">Cennik</a>
+                    <a class="iiy-nav-link" href="/character">Karta Postaci</a>
+                    <a class="iiy-nav-link active" href="#" onclick="switchTab('tests'); return false;">Testy</a>
                 </div>
 
                 <!-- User Actions (desktop) -->
@@ -983,9 +1010,10 @@
         <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu" style="display:none;border-top:1px solid rgba(255,255,255,0.06);background:rgba(13,15,43,0.97);backdrop-filter:blur(20px);">
             <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-2">
-                <button onclick="switchTab('tests'); toggleMobileMenu();" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all text-left">🧪 Testy</button>
-                <a href="/character" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">🃏 Karta Postaci</a>
-                <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">⚙️ Ustawienia</a>
+                <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Ustawienia</a>
+                <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
+                <a href="/character" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Karta Postaci</a>
+                <button onclick="switchTab('tests'); toggleMobileMenu();" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white hover:bg-white/5 transition-all text-left">Testy</button>
                 <div style="height:1px;background:rgba(255,255,255,0.06);margin:4px 0;"></div>
                 <div class="flex items-center justify-between px-4 py-2">
                     <span class="text-xs text-white/30 uppercase tracking-widest font-semibold">Motyw</span>
