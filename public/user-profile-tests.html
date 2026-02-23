@@ -616,6 +616,16 @@
           box-shadow: 0 0 10px -2px rgba(245,158,11,0.4);
           white-space: nowrap;
         }
+        /* FREE badge */
+        .iiy-badge-free {
+          font-size: 9px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase;
+          padding: 3px 10px; border-radius: 999px;
+          color: #34d399;
+          background: rgba(52,211,153,0.1);
+          border: 1px solid rgba(52,211,153,0.35);
+          box-shadow: 0 0 8px -2px rgba(52,211,153,0.3);
+          white-space: nowrap;
+        }
         .iiy-card-btn-arrow { font-size: 16px; transition: transform 0.2s ease; }
         .iiy-card-btn:hover .iiy-card-btn-arrow { transform: translateX(4px); }
 
@@ -1139,7 +1149,10 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                   </span>
                 </div>
-                <span id="hexaco-status" class="iiy-card-tag">Do Wykonania</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="hexaco-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
               </div>
               <div class="iiy-card-title">Rdzeń Osobowości</div>
               <div class="iiy-card-methodology">MODEL HEXACO-60</div>
@@ -1165,7 +1178,10 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                   </span>
                 </div>
-                <span id="enneagram-status" class="iiy-card-tag">Do Wykonania</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="enneagram-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
               </div>
               <div class="iiy-card-title">Silnik Motywacji</div>
               <div class="iiy-card-methodology">ENNEAGRAM RISO-HUDSON</div>
@@ -1220,7 +1236,10 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                   </span>
                 </div>
-                <span id="strengths-status" class="iiy-card-tag">Do Wykonania</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-premium">⭐ PREMIUM</span>
+                  <span id="strengths-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
               </div>
               <div class="iiy-card-title">Mocne Strony</div>
               <div class="iiy-card-methodology">STRENGTHS ASSESSMENT</div>
@@ -1246,7 +1265,10 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                   </span>
                 </div>
-                <span id="career-status" class="iiy-card-tag">Do Wykonania</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="career-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
               </div>
               <div class="iiy-card-title">Profil Kariery</div>
               <div class="iiy-card-methodology">HOLLAND CODE (RIASEC)</div>
@@ -1272,7 +1294,10 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
                   </span>
                 </div>
-                <span id="values-status" class="iiy-card-tag">Do Wykonania</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="values-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
               </div>
               <div class="iiy-card-title">Kompas Wartości</div>
               <div class="iiy-card-methodology">SCHWARTZ VALUES (PVQ)</div>
@@ -1597,7 +1622,8 @@
          * Redirect user to Stripe Checkout.
          * Called from the Dark Triad locked button.
          */
-        window.handleUpgradeToPremium = async function() {
+        window.handleUpgradeToPremium = async function(buttonId) {
+            buttonId = buttonId || 'dark-triad-button';
             try {
                 const { data: { session } } = await supabase.auth.getSession();
                 if (!session?.access_token) {
@@ -1606,7 +1632,7 @@
                 }
 
                 // Show loading state on the button
-                const btn = document.getElementById('dark-triad-button');
+                const btn = document.getElementById(buttonId);
                 if (btn) { btn.textContent = 'Ładowanie...'; btn.disabled = true; }
 
                 const response = await fetch(
@@ -1632,7 +1658,7 @@
                 window.location.href = result.url;
             } catch (err) {
                 console.error('[handleUpgradeToPremium] Error:', err);
-                const btn = document.getElementById('dark-triad-button');
+                const btn = document.getElementById(buttonId);
                 if (btn) { btn.innerHTML = '🔒 Odblokuj Premium'; btn.disabled = false; }
                 alert('Wystąpił błąd. Spróbuj ponownie.');
             }
@@ -1927,6 +1953,12 @@
 
         // Start Strengths test or view results
         window.startStrengthsTest = async function() {
+            // Premium-gated
+            if (!window.userIsPremium) {
+                await window.handleUpgradeToPremium('strengths-button');
+                return;
+            }
+
             const completed = await checkStrengthsCompleted();
             
             if (completed) {
