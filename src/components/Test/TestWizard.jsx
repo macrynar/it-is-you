@@ -435,6 +435,13 @@ export default function TestWizard({ testType = 'hexaco' }) {
             </div>
           ) : (
             <>
+              {/* Scale Hint (shown for tests that have instructional context, e.g. RIASEC) */}
+              {TEST_DATA.scale_hint && (
+                <p className="text-xs text-slate-400 text-center mb-2 px-2 leading-snug italic">
+                  {TEST_DATA.scale_hint}
+                </p>
+              )}
+
               {/* Question Text */}
               <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-xl p-4 mb-3">
                 <p className="text-base font-medium leading-relaxed text-white text-center">

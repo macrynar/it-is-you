@@ -183,7 +183,7 @@ export const VALUES_TEST = {
     },
     {
       id: "val_013",
-      text: "Bycie bardzo odnoszącym sukcesy jest dla mnie ważne",
+      text: "Bycie człowiekiem sukcesu jest dla mnie ważne",
       text_en: "Being very successful is important to them",
       value: "achievement"
     },
@@ -203,7 +203,7 @@ export const VALUES_TEST = {
     },
     {
       id: "val_017",
-      text: "Jest dla mnie ważne dostawanie szacunku od innych",
+      text: "Jest dla mnie ważne otrzymywanie szacunku od innych",
       text_en: "It is important to them to get respect from others",
       value: "power"
     },

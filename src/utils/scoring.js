@@ -1271,7 +1271,7 @@ export function getCareerInterpretation(typeId, rank) {
       ]
     },
     social: {
-      overview: "Osoby z wysokim wynikiem w kategorii Społecznik (Pomagacz) uwielbiają pracować z ludźmi, pomagać innym i służyć społeczeństwu. Są empatyczne i zorientowane na relacje.",
+      overview: "Osoby z wysokim wynikiem w kategorii Społecznik (Pomocnik) uwielbiają pracować z ludźmi, pomagać innym i służyć społeczeństwu. Są empatyczne i zorientowane na relacje.",
       characteristics: [
         "Lubisz pomagać ludziom w rozwoju",
         "Masz naturalne zdolności interpersonalne",

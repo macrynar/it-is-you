@@ -121,7 +121,7 @@ export const STRENGTHS_TEST = {
       name: "Odpowiedzialny",
       name_en: "Responsibility",
       category: "executing",
-      description: "Bierzesz psychiczne zobowiązanie wobec zobowiązań. Dotrzymujesz obietnic.",
+      description: "Bierzesz na siebie pełną odpowiedzialność za swoje zobowiązania. Dotrzymujesz obietnic.",
       keywords: ["Niezawodny", "rzetelny", "uczciwy"]
     },
     {
@@ -224,8 +224,8 @@ export const STRENGTHS_TEST = {
     
     // Focus (3 questions)
     { id: "str_007", text: "Potrafię koncentrować się na jednej rzeczy przez długi czas", strength: "focus" },
-    { id: "str_023", text: "Priorytetuję zadania i eliminuję rozproszonią, aby pozostać na kursie", strength: "focus" },
-    { id: "str_039", text: "Opiera się pokusie wielozadaniowości i koncentruję się na jednym priorytecie", strength: "focus" },
+    { id: "str_023", text: "Priorytetuję zadania i eliminuję rozproszenia, aby pozostać na kursie", strength: "focus" },
+    { id: "str_039", text: "Opieram się pokusie wielozadaniowości i koncentruję się na jednym priorytecie", strength: "focus" },
     
     // Responsibility (3 questions)
     { id: "str_008", text: "Biorę odpowiedzialność za moje zobowiązania i realizuję je", strength: "responsibility" },
@@ -234,7 +234,7 @@ export const STRENGTHS_TEST = {
     
     // Communication (3 questions)
     { id: "str_009", text: "Potrafię wyjaśniać złożone tematy w sposób zrozumiały dla innych", strength: "communication" },
-    { id: "str_025", text: "Dobrze znajdę odpowiednie słowa, aby przyciągnąć uwagę", strength: "communication" },
+    { id: "str_025", text: "Zawsze znajduję odpowiednie słowa, aby przykuć uwagę słuchaczy", strength: "communication" },
     { id: "str_041", text: "Potrafię jasno wyrażać swoje myśli w mowie i piśmie", strength: "communication" },
     
     // Competition (3 questions)
@@ -243,7 +243,7 @@ export const STRENGTHS_TEST = {
     { id: "str_042", text: "Zwycięstwo ma dla mnie znaczenie, nawet w przyjacielskich zawodach", strength: "competition" },
     
     // Maximizer (3 questions)
-    { id: "str_011", text: "Popyham siebie i innych do osiągania doskonałości", strength: "maximizer" },
+    { id: "str_011", text: "Motywuję siebie i innych do osiągania doskonałości", strength: "maximizer" },
     { id: "str_027", text: "Wystarczająco dobre nigdy nie jest dla mnie wystarczające; chcę wyjątkowego", strength: "maximizer" },
     { id: "str_043", text: "Koncentruję się na wykorzystywaniu mocnych stron zamiast naprawianiu słabości", strength: "maximizer" },
     

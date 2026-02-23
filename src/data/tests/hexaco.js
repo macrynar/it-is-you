@@ -121,7 +121,7 @@ export const HEXACO_TEST = {
     },
     {
       id: "hex_011",
-      text: "Planuję z wyprzedzeniem i organizuję sprawy, aby uniknąć śpiechu w ostatniej chwili",
+      text: "Planuję z wyprzedzeniem i organizuję sprawy, aby uniknąć pośpiechu w ostatniej chwili",
       dimension: "conscientiousness",
       reverse: false
     },
@@ -169,7 +169,7 @@ export const HEXACO_TEST = {
     },
     {
       id: "hex_019",
-      text: "Zachowuję spokój nawet w napięciu sytuacjach",
+      text: "Zachowuję spokój nawet w napiętych sytuacjach",
       dimension: "emotionality",
       reverse: true
     },

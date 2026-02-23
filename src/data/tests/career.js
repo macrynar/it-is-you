@@ -21,7 +21,8 @@ export const CAREER_TEST = {
     4: "Lubię",
     5: "Bardzo lubię"
   },
-  
+  scale_hint: "Oceń każdą czynność zgodnie z tym, czy lubisz ją wykonywać — lub czy sądzisz, że by Ci się podobała, gdybyś miał okazję ją wykonywać.",
+
   // Holland RIASEC Types with colors for radar chart
   interest_types: [
     {
@@ -53,7 +54,7 @@ export const CAREER_TEST = {
     },
     {
       id: "social",
-      name: "Społecznik (Pomagacz)",
+      name: "Społecznik (Pomocnik)",
       name_en: "Social (Helpers)",
       letter: "S",
       description: "Enjoy helping, teaching, and serving others",

@@ -36,9 +36,9 @@ export const ENNEAGRAM_TEST = {
       id: 3,
       name: "Osiągacz",
       name_en: "The Achiever",
-      description: "Sukcesywny, adaptacyjny, ambitny i skoncentrowany na wizerunku",
-      core_motivation: "Być wartościowym, podziwianym i sukces osiągającym",
-      basic_fear: "Bycie bezwartościowym lub nieudacznikiem"
+      description: "Ambitny, adaptacyjny i skoncentrowany na wizerunku",
+      core_motivation: "Być wartościowym, podziwianym i odnosić sukces",
+      basic_fear: "Bycie bezwartościowym lub porażką"
     },
     {
       id: 4,
@@ -74,7 +74,7 @@ export const ENNEAGRAM_TEST = {
     },
     {
       id: 8,
-      name: "Wyzywacz",
+      name: "Przywódca",
       name_en: "The Challenger",
       description: "Mocny, pewny siebie, konfrontacyjny i ochronny",
       core_motivation: "Być niezależnym, samowystarczalnym i mocnym",

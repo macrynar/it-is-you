@@ -17,7 +17,7 @@ const TYPE_ACCENT: Record<
   5: { name: 'Badacz', color: '#55efc4', gradient: 'linear-gradient(90deg,#00695c,#55efc4)', glow: 'rgba(85,239,196,.5)', blob: '#55efc4' },
   6: { name: 'Lojalista', color: '#74b9ff', gradient: 'linear-gradient(90deg,#0a3d8a,#74b9ff)', glow: 'rgba(116,185,255,.5)', blob: '#74b9ff' },
   7: { name: 'Entuzjasta', color: '#fd9644', gradient: 'linear-gradient(90deg,#a04000,#fd9644)', glow: 'rgba(253,150,68,.5)', blob: '#fd9644' },
-  8: { name: 'Wyzywacz', color: '#ff4757', gradient: 'linear-gradient(90deg,#7f0000,#ff4757)', glow: 'rgba(255,71,87,.5)', blob: '#ff4757' },
+  8: { name: 'Przywódca', color: '#ff4757', gradient: 'linear-gradient(90deg,#7f0000,#ff4757)', glow: 'rgba(255,71,87,.5)', blob: '#ff4757' },
   9: { name: 'Mediator', color: '#26de81', gradient: 'linear-gradient(90deg,#006633,#26de81)', glow: 'rgba(38,222,129,.5)', blob: '#26de81' },
 };
 
