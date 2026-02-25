@@ -785,9 +785,10 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
 
             {/* Center nav links — desktop only, page-level navigation */}
             <div className="hidden md:flex items-center gap-8">
+              <a className="iiy-nav-link" href="/methodology">Metodologia</a>
               <a className="iiy-nav-link" href="/pricing">Cennik</a>
               <a className="iiy-nav-link active" href="/character">Karta Postaci</a>
-              <a className="iiy-nav-link" href="/user-profile-tests.html">Testy</a>
+              <a className="iiy-nav-link" href="/user-profile-tests">Testy</a>
             </div>
 
             {/* Right utility actions — desktop */}
@@ -853,9 +854,10 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(13,15,43,0.97)', backdropFilter: 'blur(20px)' }}>
             <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
               <a href="/settings" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Ustawienia</a>
+              <a href="/methodology" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Metodologia</a>
               <a href="/pricing" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Cennik</a>
               <a href="/character" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Karta Postaci</a>
-              <a href="/user-profile-tests.html" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Testy</a>
+              <a href="/user-profile-tests" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Testy</a>
               <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '4px 0' }} />
               <div className="flex items-center justify-between px-4 py-2">
                 <span className="text-xs text-white/30 uppercase tracking-widest font-semibold">Motyw</span>
@@ -1637,16 +1639,16 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
           <div>
             <h4 className="text-white font-bold mb-3 text-sm">Metodologia</h4>
             <ul className="space-y-1.5">
-              {['HEXACO & Big Five', 'Enneagram RHETI', 'O*NET Database', 'Dark Triad SD3'].map((l) => (
-                <li key={l}><a href="#" className="hover:text-indigo-400 transition">{l}</a></li>
+              {[['HEXACO & Big Five', '/methodology#hexaco'], ['Enneagram RHETI', '/methodology#enneagram'], ['O*NET Database', '/methodology#career'], ['Dark Triad SD3', '/methodology#darktriad']].map(([l, href]) => (
+                <li key={l}><a href={href} className="hover:text-indigo-400 transition">{l}</a></li>
               ))}
             </ul>
           </div>
           <div>
             <h4 className="text-white font-bold mb-3 text-sm">Projekt</h4>
             <ul className="space-y-1.5">
-              {['O nas', 'Cennik', 'Dla Firm'].map((l) => (
-                <li key={l}><a href="#" className="hover:text-indigo-400 transition">{l}</a></li>
+              {[['Cennik', '/pricing'], ['Metodologia', '/methodology']].map(([l, href]) => (
+                <li key={l}><a href={href} className="hover:text-indigo-400 transition">{l}</a></li>
               ))}
             </ul>
           </div>

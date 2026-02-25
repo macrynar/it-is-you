@@ -4,6 +4,7 @@
   ],
   "rewrites": [
     { "source": "/pricing", "destination": "/pricing.html" },
+    { "source": "/methodology", "destination": "/methodology.html" },
     { "source": "/user-profile-tests", "destination": "/user-profile-tests.html" },
     { "source": "/auth/:path*", "destination": "/app.html" },
     { "source": "/test/:path*", "destination": "/app.html" },

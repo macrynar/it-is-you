@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metodologia – Alcheme</title>
+  <meta name="description" content="Poznaj naukowe podstawy 6 testów psychometrycznych Alcheme: HEXACO, Enneagram, Wartości, Kariera RIASEC, Mocne Strony VIA i Dark Triad SD3." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&family=Cinzel:wght@600&family=Raleway:wght@300&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #020617; color: #e2e8f0; }
+    h1, h2, h3, h4, .brand-font { font-family: 'Space Grotesk', sans-serif; }
+
+    .alcheme-logo{display:flex;align-items:center;gap:11px;cursor:pointer;user-select:none;text-decoration:none;}
+    .alcheme-logo-texts{display:flex;flex-direction:column;gap:2px;}
+    .alcheme-logo-name{font-family:'Cinzel',serif;font-size:17px;font-weight:600;letter-spacing:.14em;line-height:1;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.88) 55%,rgba(112,0,255,.75) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .alcheme-logo-sub{font-family:'Raleway',sans-serif;font-size:6.5px;font-weight:300;letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.28);padding-left:1px;}
+
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .test-card {
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .test-card:hover { box-shadow: 0 0 40px var(--card-glow, rgba(99,102,241,0.12)); border-color: var(--card-border, rgba(99,102,241,0.3)); }
+
+    .ref-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 999px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.5);
+    }
+
+    .score-bar-wrap { background: rgba(255,255,255,0.05); border-radius: 999px; height: 4px; overflow: hidden; }
+    .score-bar { height: 100%; border-radius: 999px; }
+
+    .toc-link {
+      display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+      border-radius: 10px; text-decoration: none; color: rgba(255,255,255,0.5);
+      font-size: 13px; font-weight: 500; transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .toc-link:hover { color: #fff; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08); }
+    .toc-link.active { color: #fff; background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.1); }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- BG GRID -->
+  <div class="fixed inset-0 bg-[linear-gradient(rgba(99,102,241,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.03)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none"></div>
+  <div class="fixed top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-indigo-950/20 to-transparent pointer-events-none"></div>
+
+  <!-- NAV -->
+  <nav id="main-nav" class="fixed w-full z-50 glass-panel border-b border-white/5 bg-slate-950/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <a href="/" class="alcheme-logo">
+          <svg width="38" height="38" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+            <defs><filter id="alch-gs"><feGaussianBlur stdDeviation=".9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="alch-gm"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="alch-gl"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <circle cx="50" cy="50" r="47" fill="rgba(10,4,40,.55)" stroke="rgba(255,255,255,.18)" stroke-width="1.2"/><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.07)" stroke-width=".4"/>
+            <polygon points="50,8 92,50 50,92 8,50" fill="rgba(112,0,255,.08)" stroke="rgba(167,139,250,.55)" stroke-width="1.2" stroke-linejoin="round"/>
+            <polygon points="79.7,20.3 79.7,79.7 20.3,79.7 20.3,20.3" fill="rgba(112,0,255,.08)" stroke="rgba(167,139,250,.55)" stroke-width="1.2" stroke-linejoin="round"/>
+            <polygon points="50,8 79.7,79.7 8,50 79.7,20.3 50,92 20.3,20.3 92,50 20.3,79.7" fill="rgba(0,240,255,.07)" stroke="#00f0ff" stroke-width="1.4" stroke-linejoin="round" filter="url(#alch-gs)"/>
+            <circle cx="50" cy="8" r="3.5" fill="#00f0ff" filter="url(#alch-gm)"/><circle cx="79.7" cy="20.3" r="3" fill="#c4b5fd" filter="url(#alch-gs)"/><circle cx="92" cy="50" r="3.5" fill="#00f0ff" filter="url(#alch-gm)"/><circle cx="79.7" cy="79.7" r="3" fill="#c4b5fd" filter="url(#alch-gs)"/><circle cx="50" cy="92" r="3.5" fill="#00f0ff" filter="url(#alch-gm)"/><circle cx="20.3" cy="79.7" r="3" fill="#c4b5fd" filter="url(#alch-gs)"/><circle cx="8" cy="50" r="3.5" fill="#00f0ff" filter="url(#alch-gm)"/><circle cx="20.3" cy="20.3" r="3" fill="#c4b5fd" filter="url(#alch-gs)"/>
+            <circle cx="50" cy="50" r="14" fill="rgba(0,240,255,.09)" filter="url(#alch-gl)"><animate attributeName="opacity" values=".3;.75;.3" dur="3s" repeatCount="indefinite"/></circle>
+            <circle cx="50" cy="50" r="11" fill="#040115"/><circle cx="50" cy="50" r="11" fill="none" stroke="#00f0ff" stroke-width="2" filter="url(#alch-gs)"><animate attributeName="stroke-opacity" values=".5;1;.5" dur="3s" repeatCount="indefinite"/></circle>
+            <circle cx="50" cy="50" r="3.5" fill="#00f0ff" filter="url(#alch-gm)"><animate attributeName="r" values="2.8;4.2;2.8" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values=".75;1;.75" dur="3s" repeatCount="indefinite"/></circle>
+          </svg>
+          <div class="alcheme-logo-texts">
+            <div class="alcheme-logo-name">Alcheme</div>
+            <div class="alcheme-logo-sub">Know yourself · Transform</div>
+          </div>
+        </a>
+
+        <!-- Desktop nav — updated dynamically for logged-in users -->
+        <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-400" id="nav-links">
+          <a href="/methodology" class="text-white transition-colors duration-200">Metodologia</a>
+          <a href="/pricing" class="hover:text-white transition-colors duration-200">Cennik</a>
+        </div>
+
+        <div class="flex items-center gap-4" id="nav-actions">
+          <a href="/auth" class="text-sm font-medium text-slate-400 hover:text-white transition-colors hidden sm:block" id="nav-login">Zaloguj</a>
+          <a href="/auth" class="bg-white text-slate-950 px-6 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-50 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)]" id="nav-cta">
+            Wykonaj test
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="pt-36 pb-14 px-4 text-center relative">
+    <div class="inline-flex items-center gap-2 px-4 py-2 mb-6 text-xs font-semibold tracking-wider text-indigo-300 uppercase bg-indigo-950/40 rounded-full border border-indigo-500/30 backdrop-blur-sm">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#818cf8" stroke-width="1.5"/><path d="M4 6h4M6 4v4" stroke="#818cf8" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Podstawy naukowe
+    </div>
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold brand-font text-white mb-5 leading-tight">
+      Metodologia<br>
+      <span style="background:linear-gradient(135deg,#818cf8 0%,#60a5fa 50%,#34d399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">opartą na nauce</span>
+    </h1>
+    <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+      Każdy test w Alcheme opiera się na zwalidowanych naukowo kwestionariuszach psychometrycznych. Łączymy rygor akademicki z przystępną formą — żebyś mógł zrozumieć siebie bez czytania prac naukowych.
+    </p>
+  </section>
+
+  <!-- STATS STRIP -->
+  <section class="max-w-4xl mx-auto px-4 pb-16">
+    <div class="glass-panel rounded-2xl px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div>
+        <div class="text-3xl font-bold brand-font text-white">6</div>
+        <div class="text-slate-500 text-xs mt-1">testów psychometrycznych</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold brand-font" style="background:linear-gradient(135deg,#818cf8,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">300+</div>
+        <div class="text-slate-500 text-xs mt-1">pytań łącznie</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold brand-font" style="background:linear-gradient(135deg,#34d399,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">50+</div>
+        <div class="text-slate-500 text-xs mt-1">lat badań za każdym modelem</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold brand-font text-white">AI</div>
+        <div class="text-slate-500 text-xs mt-1">interpretacja wyników</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT: TOC + TESTS -->
+  <div class="max-w-6xl mx-auto px-4 pb-24">
+    <div class="flex gap-10 items-start">
+
+      <!-- STICKY TOC (desktop) -->
+      <aside class="hidden lg:block w-56 flex-shrink-0 sticky top-28">
+        <div class="glass-panel rounded-2xl p-4">
+          <div class="text-xs font-semibold tracking-widest text-slate-500 uppercase mb-3 px-2">Testy</div>
+          <nav class="space-y-1">
+            <a href="#hexaco" class="toc-link" onclick="setActive(this)">
+              <span style="width:8px;height:8px;border-radius:50%;background:#818cf8;box-shadow:0 0 6px rgba(129,140,248,.7);flex-shrink:0;"></span>
+              HEXACO-60
+            </a>
+            <a href="#enneagram" class="toc-link" onclick="setActive(this)">
+              <span style="width:8px;height:8px;border-radius:50%;background:#f472b6;box-shadow:0 0 6px rgba(244,114,182,.7);flex-shrink:0;"></span>
+              Enneagram
+            </a>
+            <a href="#values" class="toc-link" onclick="setActive(this)">
+              <span style="width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 6px rgba(52,211,153,.7);flex-shrink:0;"></span>
+              Wartości (PVQ)
+            </a>
+            <a href="#career" class="toc-link" onclick="setActive(this)">
+              <span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;box-shadow:0 0 6px rgba(245,158,11,.7);flex-shrink:0;"></span>
+              Kariera RIASEC
+            </a>
+            <a href="#strengths" class="toc-link" onclick="setActive(this)">
+              <span style="width:8px;height:8px;border-radius:50%;background:#60a5fa;box-shadow:0 0 6px rgba(96,165,250,.7);flex-shrink:0;"></span>
+              Mocne Strony (VIA)
+            </a>
+            <a href="#darktriad" class="toc-link" onclick="setActive(this)">
+              <span style="width:8px;height:8px;border-radius:50%;background:#f87171;box-shadow:0 0 6px rgba(248,113,113,.7);flex-shrink:0;"></span>
+              Dark Triad (SD3)
+            </a>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- TESTS -->
+      <div class="flex-1 space-y-10">
+
+        <!-- 1. HEXACO -->
+        <div id="hexaco" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(129,140,248,0.15);--card-border:rgba(129,140,248,0.35);">
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">🧬</span>
+                <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full" style="background:rgba(129,140,248,0.1);color:#818cf8;border:1px solid rgba(129,140,248,0.25);">Osobowość</span>
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Darmowy</span>
+              </div>
+              <h2 class="text-2xl font-bold brand-font text-white">HEXACO-60</h2>
+              <p class="text-indigo-300 text-sm font-medium mt-0.5">Kwestionariusz Osobowości</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="text-slate-500 text-xs">Pytań</div>
+              <div class="text-white font-bold text-xl">60</div>
+            </div>
+          </div>
+
+          <p class="text-slate-300 leading-relaxed mb-6">
+            HEXACO to sześcioczynnikowy model osobowości opracowany przez Ashton & Lee (2001–2004) jako rozwinięcie modelu Big Five. Kluczową innowacją jest dodanie szóstego wymiaru — <strong class="text-white">Uczciwości-Pokory (H)</strong> — który nie istnieje w modelu Wielkiej Piątki, a jest jednym z najsilniejszych predyktorów zachowań etycznych, korupcji i narcyzmu.
+          </p>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-indigo-300 mb-1">H – Uczciwość-Pokora</div>
+              <div class="text-slate-500 text-xs">Szczerość, skromność, unikanie chciwości</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-indigo-300 mb-1">E – Emocjonalność</div>
+              <div class="text-slate-500 text-xs">Lękowość, zależność, wrażliwość emocjonalna</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-indigo-300 mb-1">X – Ekstrawersja</div>
+              <div class="text-slate-500 text-xs">Towarzyskość, ekspresja społeczna, pewność siebie</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-indigo-300 mb-1">A – Ugodowość</div>
+              <div class="text-slate-500 text-xs">Wyrozumiałość, łagodność, unikanie agresji</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-indigo-300 mb-1">C – Sumienność</div>
+              <div class="text-slate-500 text-xs">Organizacja, perfekcjonizm, wytrwałość</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-indigo-300 mb-1">O – Otwartość</div>
+              <div class="text-slate-500 text-xs">Ciekawość intelektualna, kreatywność, estetyka</div>
+            </div>
+          </div>
+
+          <div class="border-t border-white/6 pt-5">
+            <div class="text-xs font-semibold tracking-widest text-slate-600 uppercase mb-3">Źródła naukowe</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="ref-pill">📖 Ashton & Lee (2007) — Journal of Personality Disorders</span>
+              <span class="ref-pill">📖 Lee & Ashton (2004) — Psychological Assessment</span>
+              <span class="ref-pill">📖 Metaanaliza: 23 kultury (2010)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Enneagram -->
+        <div id="enneagram" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(244,114,182,0.15);--card-border:rgba(244,114,182,0.35);">
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">🔷</span>
+                <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full" style="background:rgba(244,114,182,0.1);color:#f472b6;border:1px solid rgba(244,114,182,0.25);">Typy osobowości</span>
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Darmowy</span>
+              </div>
+              <h2 class="text-2xl font-bold brand-font text-white">Enneagram RHETI</h2>
+              <p class="text-pink-300 text-sm font-medium mt-0.5">9 Typów Osobowości</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="text-slate-500 text-xs">Pytań</div>
+              <div class="text-white font-bold text-xl">36</div>
+            </div>
+          </div>
+
+          <p class="text-slate-300 leading-relaxed mb-6">
+            Enneagram to system typologii opisujący 9 fundamentalnych wzorców osobowości, każdy zakorzeniony w innym <strong class="text-white">strachu bazowym i pragnieniu</strong>. W Alcheme stosujemy metodologię RHETI (Riso-Hudson Enneagram Type Indicator) — jedno z najlepiej zwalidowanych narzędzi enneagramowych z badaniami rzetelności i trafności. Każdy typ opisuje głęboko zakorzeniony styl motywacyjny, niewidoczny dla tradycyjnych cechtowych modeli osobowości.
+          </p>
+
+          <div class="grid grid-cols-3 gap-2 mb-6">
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-lg mb-1">👑</div>
+              <div class="text-xs font-bold text-pink-200">Trylogia Siły</div>
+              <div class="text-slate-500 text-xs mt-0.5">Typy 8, 9, 1</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-lg mb-1">❤️</div>
+              <div class="text-xs font-bold text-pink-200">Trylogia Serca</div>
+              <div class="text-slate-500 text-xs mt-0.5">Typy 2, 3, 4</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-lg mb-1">🧠</div>
+              <div class="text-xs font-bold text-pink-200">Trylogia Głowy</div>
+              <div class="text-slate-500 text-xs mt-0.5">Typy 5, 6, 7</div>
+            </div>
+          </div>
+
+          <p class="text-slate-500 text-sm mb-5">
+            Wartość Enneagramu leży w tym, że opisuje <em>dlaczego</em> robimy co robimy — nie tylko jakie mamy cechy. To narzędzie do zrozumienia nieświadomych motywatorów, wzorców obrony i ścieżek rozwoju.
+          </p>
+
+          <div class="border-t border-white/6 pt-5">
+            <div class="text-xs font-semibold tracking-widest text-slate-600 uppercase mb-3">Źródła naukowe</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="ref-pill">📖 Riso & Hudson (1999) — Wisdom of the Enneagram</span>
+              <span class="ref-pill">📖 Sutton et al. (2013) — Enneagram Journal</span>
+              <span class="ref-pill">📖 Wagner (1983) — RHETI Reliability & Validity</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Wartości -->
+        <div id="values" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(52,211,153,0.15);--card-border:rgba(52,211,153,0.35);">
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">🌀</span>
+                <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full" style="background:rgba(52,211,153,0.1);color:#34d399;border:1px solid rgba(52,211,153,0.25);">Wartości</span>
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Darmowy</span>
+              </div>
+              <h2 class="text-2xl font-bold brand-font text-white">Wartości — PVQ</h2>
+              <p class="text-emerald-300 text-sm font-medium mt-0.5">Portrait Values Questionnaire (Schwartz)</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="text-slate-500 text-xs">Pytań</div>
+              <div class="text-white font-bold text-xl">40</div>
+            </div>
+          </div>
+
+          <p class="text-slate-300 leading-relaxed mb-6">
+            Test oparty na <strong class="text-white">Teorii Wartości Schuarta Schwartza</strong> (1992) — jednym z najszerzej cytowanych modeli w psychologii społecznej. PVQ mierzy 10 uniwersalnych wartości ludzkich pogrupowanych wzdłuż dwóch osi: <em>Otwartość na zmianę vs Zachowanie</em> oraz <em>Przekraczanie siebie vs Wzmacnianie siebie</em>. Model jest zwalidowany w ponad 70 krajach.
+          </p>
+
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6">
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-slate-300 text-xs font-semibold">Władza</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-slate-300 text-xs font-semibold">Osiągnięcia</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-slate-300 text-xs font-semibold">Hedonizm</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-slate-300 text-xs font-semibold">Stymulacja</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-slate-300 text-xs font-semibold">Samokier.</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-slate-300 text-xs font-semibold">Universalizm</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-slate-300 text-xs font-semibold">Życzliwość</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-slate-300 text-xs font-semibold">Tradycja</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-slate-300 text-xs font-semibold">Konform.</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6 text-center">
+              <div class="text-slate-300 text-xs font-semibold">Bezpiecz.</div>
+            </div>
+          </div>
+
+          <div class="border-t border-white/6 pt-5">
+            <div class="text-xs font-semibold tracking-widest text-slate-600 uppercase mb-3">Źródła naukowe</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="ref-pill">📖 Schwartz (1992) — Advances in Experimental Social Psychology</span>
+              <span class="ref-pill">📖 Schwartz et al. (2001) — validacja PVQ-21</span>
+              <span class="ref-pill">📖 70+ krajów, European Social Survey</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Kariera RIASEC -->
+        <div id="career" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(245,158,11,0.15);--card-border:rgba(245,158,11,0.35);">
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">🧭</span>
+                <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full" style="background:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);">Kariera</span>
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Darmowy</span>
+              </div>
+              <h2 class="text-2xl font-bold brand-font text-white">Kariera — RIASEC</h2>
+              <p class="text-amber-300 text-sm font-medium mt-0.5">Hexagon Hollanda / O*NET</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="text-slate-500 text-xs">Pytań</div>
+              <div class="text-white font-bold text-xl">42</div>
+            </div>
+          </div>
+
+          <p class="text-slate-300 leading-relaxed mb-6">
+            Model RIASEC (Realistic, Investigative, Artistic, Social, Enterprising, Conventional) opracowany przez <strong class="text-white">Johna Hollanda</strong> w latach 50. jest fundamentem współczesnego doradztwa zawodowego. O*NET (Occupational Information Network) Departamentu Pracy USA stosuje go do klasyfikacji tysięcy zawodów. Wyniki pokazują profil zainteresowań zawodowych w formie trójkodu (np. ISA, ECR) umożliwiającego dopasowanie środowiska pracy.
+          </p>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-amber-300 mb-1">R – Realistyczny</div>
+              <div class="text-slate-500 text-xs">Praca manualna, techniczna, z narzędziami</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-amber-300 mb-1">I – Badawczy</div>
+              <div class="text-slate-500 text-xs">Nauka, analizy, odkrywanie prawd</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-amber-300 mb-1">A – Artystyczny</div>
+              <div class="text-slate-500 text-xs">Ekspresja, kreatywność, tworzenie</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-amber-300 mb-1">S – Społeczny</div>
+              <div class="text-slate-500 text-xs">Pomoc innym, edukacja, relacje</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-amber-300 mb-1">E – Przedsiębiorczy</div>
+              <div class="text-slate-500 text-xs">Liderowanie, sprzedaż, wpływ</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-amber-300 mb-1">C – Konwencjonalny</div>
+              <div class="text-slate-500 text-xs">Porządek, dane, procedury</div>
+            </div>
+          </div>
+
+          <div class="border-t border-white/6 pt-5">
+            <div class="text-xs font-semibold tracking-widest text-slate-600 uppercase mb-3">Źródła naukowe</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="ref-pill">📖 Holland (1959) — Journal of Counseling Psychology</span>
+              <span class="ref-pill">📖 O*NET Resource Center — US Dept. of Labor</span>
+              <span class="ref-pill">📖 Rounds & Tracey (1993) — metaanaliza validity</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Mocne Strony VIA -->
+        <div id="strengths" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(96,165,250,0.15);--card-border:rgba(96,165,250,0.35);">
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">⚡</span>
+                <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full" style="background:rgba(96,165,250,0.1);color:#60a5fa;border:1px solid rgba(96,165,250,0.25);">Talenty</span>
+                <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full" style="background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);">Premium</span>
+              </div>
+              <h2 class="text-2xl font-bold brand-font text-white">Mocne Strony — VIA</h2>
+              <p class="text-blue-300 text-sm font-medium mt-0.5">Values in Action Character Strengths</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="text-slate-500 text-xs">Pytań</div>
+              <div class="text-white font-bold text-xl">48</div>
+            </div>
+          </div>
+
+          <p class="text-slate-300 leading-relaxed mb-6">
+            Test oparty na klasyfikacji VIA (<em>Values in Action</em>) opracowanej przez Petersona & Seligmana (2004) w ramach psychologii pozytywnej. VIA identyfikuje <strong class="text-white">24 mocne strony charakteru</strong> pogrupowane w 6 cnót. Jest jednym z najczęściej stosowanych narzędzi psychologii pozytywnej na świecie — stosowanym przez Google, armię USA i setki uczelni wyższych.
+          </p>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-blue-300 mb-1">🦁 Odwaga</div>
+              <div class="text-slate-500 text-xs">Waleczność, wytrwałość, integralność, witalność</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-blue-300 mb-1">🧠 Mądrość</div>
+              <div class="text-slate-500 text-xs">Kreatywność, ciekawość, otwartość, uczenie się</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-blue-300 mb-1">❤️ Człowieczeństwo</div>
+              <div class="text-slate-500 text-xs">Miłość, życzliwość, inteligencja społeczna</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-blue-300 mb-1">⚖️ Sprawiedliwość</div>
+              <div class="text-slate-500 text-xs">Pracy zespołowej, rzetelność, przywództwo</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-blue-300 mb-1">🕊️ Umiarkowanie</div>
+              <div class="text-slate-500 text-xs">Przebaczanie, pokora, roztropność, samokontrola</div>
+            </div>
+            <div class="bg-white/4 rounded-xl p-3 border border-white/6">
+              <div class="text-xs font-bold text-blue-300 mb-1">✨ Transcendencja</div>
+              <div class="text-slate-500 text-xs">Wdzięczność, nadzieja, humor, duchowość</div>
+            </div>
+          </div>
+
+          <p class="text-slate-500 text-sm mb-5">
+            Wiedza o mocnych stronach zwiększa zaangażowanie w pracę, wspiera dobrostan i poprawia wydajność — niezależnie od branży czy roli zawodowej.
+          </p>
+
+          <div class="border-t border-white/6 pt-5">
+            <div class="text-xs font-semibold tracking-widest text-slate-600 uppercase mb-3">Źródła naukowe</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="ref-pill">📖 Peterson & Seligman (2004) — Character Strengths and Virtues</span>
+              <span class="ref-pill">📖 Park et al. (2004) — 54 nations study</span>
+              <span class="ref-pill">📖 Linley & Harrington (2006) — Applied Psychology: Health and Well‑Being</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Dark Triad -->
+        <div id="darktriad" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(248,113,113,0.15);--card-border:rgba(248,113,113,0.35);">
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">🎭</span>
+                <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full" style="background:rgba(248,113,113,0.1);color:#f87171;border:1px solid rgba(248,113,113,0.25);">Ciemna Triada</div>
+                <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full" style="background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);">Premium</span>
+              </div>
+              <h2 class="text-2xl font-bold brand-font text-white">Dark Triad — SD3</h2>
+              <p class="text-red-300 text-sm font-medium mt-0.5">Short Dark Triad (Jones & Paulhus)</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="text-slate-500 text-xs">Pytań</div>
+              <div class="text-white font-bold text-xl">27</div>
+            </div>
+          </div>
+
+          <p class="text-slate-300 leading-relaxed mb-5">
+            SD3 (<em>Short Dark Triad</em>) autorstwa Jonesa & Paulhusa (2014) mierzy trzy subkliniczne cechy osobowości zwane Ciemną Triadą. To nie diagnoza kliniczna — wszystkie trzy cechy istnieją na kontinuum i w umiarkowanym natężeniu są powszechne w populacji. Wiedza o sobie w tym obszarze to <strong class="text-white">jeden z najbardziej praktycznych wglądów</strong>: wpływa na podejmowanie ryzyka, styl przywódczy, relacje i negocjacje.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="rounded-xl p-4 border" style="background:rgba(248,113,113,0.05);border-color:rgba(248,113,113,0.2);">
+              <div class="text-sm font-bold text-red-300 mb-2">😈 Narcyzm</div>
+              <p class="text-slate-500 text-xs leading-relaxed">Wyolbrzymione poczucie własnej wyjątkowości, potrzeba podziwu, brak empatii. Umiarkowany narcyzm koreluje z osiągnięciami zawodowymi i przywódczą charyzmą.</p>
+            </div>
+            <div class="rounded-xl p-4 border" style="background:rgba(248,113,113,0.05);border-color:rgba(248,113,113,0.2);">
+              <div class="text-sm font-bold text-red-300 mb-2">🎯 Makiawelizm</div>
+              <p class="text-slate-500 text-xs leading-relaxed">Cynizm, skłonność do manipulacji i strategicznego myślenia długoterminowego. Wysoki makiawelizm koreluje ze skutecznością w polityce, finansach i negocjacjach.</p>
+            </div>
+            <div class="rounded-xl p-4 border" style="background:rgba(248,113,113,0.05);border-color:rgba(248,113,113,0.2);">
+              <div class="text-sm font-bold text-red-300 mb-2">⚡ Psychopatia</div>
+              <p class="text-slate-500 text-xs leading-relaxed">Impulsywność, odporność na stres i niski lęk. Subkliniczna psychopatia jest nadreprezentowana wśród liderów, chirurgów i służb specjalnych.</p>
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-xl px-4 py-3 mb-5 border border-amber-500/15">
+            <p class="text-amber-200/70 text-xs">
+              <strong class="text-amber-200">Ważne:</strong> SD3 to narzędzie samopoznania, nie diagnoza kliniczna. Wyniki nie wskazują na zaburzenie — wszystkie wartości mieszczą się w normalnym spektrum populacyjnym.
+            </p>
+          </div>
+
+          <div class="border-t border-white/6 pt-5">
+            <div class="text-xs font-semibold tracking-widest text-slate-600 uppercase mb-3">Źródła naukowe</div>
+            <div class="flex flex-wrap gap-2">
+              <span class="ref-pill">📖 Jones & Paulhus (2014) — Assessment</span>
+              <span class="ref-pill">📖 Paulhus & Williams (2002) — Journal of Research in Personality</span>
+              <span class="ref-pill">📖 Babiak & Hare (2006) — Snakes in Suits</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /tests -->
+    </div><!-- /flex -->
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <section class="max-w-3xl mx-auto px-4 pb-28 text-center">
+    <div class="glass-panel rounded-3xl p-10 border border-indigo-500/20">
+      <h2 class="text-2xl font-bold brand-font text-white mb-4">Gotowy na własną diagnozę?</h2>
+      <p class="text-slate-400 mb-8">Ponad 300 pytań. 6 modeli. Jedna spójna Karta Postaci.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/auth" class="px-8 py-4 rounded-xl font-bold text-slate-950 text-sm" style="background:linear-gradient(135deg,#7c3aed,#4f46e5,#2563eb);color:#fff;box-shadow:0 0 30px rgba(124,58,237,.4);">
+          Zacznij testy →
+        </a>
+        <a href="/pricing" class="px-8 py-4 rounded-xl font-semibold text-slate-300 border border-white/10 hover:border-white/20 hover:text-white transition-all text-sm">
+          Zobacz cennik
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-6 py-8 text-center">
+      <p class="text-slate-500 text-sm">
+        &copy; 2026 <span class="text-indigo-400 font-semibold">Alcheme</span> – Psychometric Engine. Wszystkie prawa zastrzeżone.
+      </p>
+      <p class="text-slate-600 text-xs mt-2">
+        <a href="/regulamin.pdf" target="_blank" rel="noopener noreferrer" class="hover:text-slate-400 transition underline underline-offset-2">Regulamin Usługi</a>
+      </p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const supabase = createClient(
+      'https://uvzilorpyuqicuwkufky.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA'
+    );
+
+    // Adapt nav for logged-in users
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      document.getElementById('nav-links').innerHTML = `
+        <a href="/methodology" style="color:#fff;" class="transition-colors duration-200">Metodologia</a>
+        <a href="/pricing" class="hover:text-white transition-colors duration-200" style="color:rgb(148,163,184);">Cennik</a>
+        <a href="/character" class="hover:text-white transition-colors duration-200" style="color:rgb(148,163,184);">Karta Postaci</a>
+        <a href="/user-profile-tests" class="hover:text-white transition-colors duration-200" style="color:rgb(148,163,184);">Moje testy</a>
+      `;
+      document.getElementById('nav-actions').innerHTML = `
+        <a href="/settings" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;color:rgba(255,255,255,.45);border:1px solid transparent;text-decoration:none;transition:all .2s;" title="Ustawienia">
+          <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </a>
+        <a href="/user-profile-tests" class="bg-white text-slate-950 px-5 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-50 transition-all duration-300">Moje testy</a>
+      `;
+    }
+  </script>
+
+  <script>
+    function setActive(el) {
+      document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+      el.classList.add('active');
+    }
+  </script>
+</body>
+</html>
