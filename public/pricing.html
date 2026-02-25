@@ -33,7 +33,6 @@
       border: 1px solid rgba(168, 85, 247, 0.35);
       box-shadow: 0 0 60px rgba(168, 85, 247, 0.18), 0 0 120px rgba(99, 102, 241, 0.08), inset 0 1px 0 rgba(255,255,255,0.06);
       position: relative;
-      overflow: hidden;
     }
     .premium-card::before {
       content: '';
@@ -185,7 +184,7 @@
 
   <!-- PRICING CARDS -->
   <section class="max-w-5xl mx-auto px-4 pb-20">
-    <div class="grid md:grid-cols-2 gap-6 items-start pricing-grid">
+    <div class="grid md:grid-cols-2 gap-6 items-stretch pricing-grid">
 
       <!-- FREE CARD -->
       <div class="free-card rounded-3xl p-8">
@@ -259,13 +258,13 @@
         <div class="shimmer-line"></div>
 
         <!-- Badge -->
-        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2">
+        <div class="flex justify-center mb-5">
           <div class="badge-popular px-4 py-1.5 rounded-full text-xs font-bold text-white tracking-wider uppercase whitespace-nowrap">
             ✦ Najbardziej popularne
           </div>
         </div>
 
-        <div class="mb-6 mt-2">
+        <div class="mb-6">
           <div class="text-xs font-semibold tracking-widest text-purple-400 uppercase mb-3">Premium</div>
           <div class="flex items-end gap-2 mb-2">
             <span class="text-5xl font-bold brand-font text-white">29 zł</span>
