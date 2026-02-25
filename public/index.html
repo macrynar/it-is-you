@@ -793,63 +793,123 @@
 
                     <!-- HEXACO – 2 cols -->
                     <div class="lg:col-span-2 cs-card p-5">
-                        <div class="cs-mono mb-4" style="color:rgba(255,255,255,.35);">Matryca HEXACO</div>
-                        <div class="space-y-4">
+                        <div class="cs-mono mb-3" style="color:rgba(255,255,255,.35);">Matryca HEXACO</div>
 
-                            <div>
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-xs font-bold" style="color:rgba(255,255,255,.55);">Uczciwość-Pokora</span>
-                                    <span class="text-xs font-mono font-bold" style="color:rgba(255,255,255,.55);">68p · Umiarkowany</span>
+                        <!-- Radar chart SVG -->
+                        <div class="flex justify-center mb-4">
+                            <svg viewBox="0 0 420 420" style="width:100%;max-width:420px;height:auto;overflow:visible;">
+                                <defs>
+                                    <linearGradient id="iiy-hexaco-rg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#38b6ff" stop-opacity=".35"/>
+                                        <stop offset="100%" stop-color="#7b5ea7" stop-opacity=".25"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- grid rings -->
+                                <polygon points="210.0,179.0 236.8,194.5 236.8,225.5 210.0,241.0 183.2,225.5 183.2,194.5" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+                                <polygon points="210.0,148.0 263.7,179.0 263.7,241.0 210.0,272.0 156.3,241.0 156.3,179.0" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+                                <polygon points="210.0,117.0 290.5,163.5 290.5,256.5 210.0,303.0 129.5,256.5 129.5,163.5" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+                                <polygon points="210.0,86.0 317.4,148.0 317.4,272.0 210.0,334.0 102.6,272.0 102.6,148.0" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+                                <polygon points="210.0,55.0 344.2,132.5 344.2,287.5 210.0,365.0 75.8,287.5 75.8,132.5" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+                                <!-- axis lines -->
+                                <line x1="210" y1="210" x2="210" y2="55" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+                                <line x1="210" y1="210" x2="344.2" y2="132.5" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+                                <line x1="210" y1="210" x2="344.2" y2="287.5" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+                                <line x1="210" y1="210" x2="210" y2="365" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+                                <line x1="210" y1="210" x2="75.8" y2="287.5" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+                                <line x1="210" y1="210" x2="75.8" y2="132.5" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+                                <!-- data polygon -->
+                                <polygon points="210.0,104.6 265.0,178.2 316.0,271.2 210.0,290.6 122.7,260.4 85.2,137.9" fill="url(#iiy-hexaco-rg)" stroke="#38b6ff" stroke-width="2" style="filter:drop-shadow(0 0 12px rgba(56,182,255,.45));"/>
+                                <!-- data dots -->
+                                <circle cx="210" cy="104.6" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
+                                <circle cx="265" cy="178.2" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
+                                <circle cx="316" cy="271.2" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
+                                <circle cx="210" cy="290.6" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
+                                <circle cx="122.7" cy="260.4" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
+                                <circle cx="85.2" cy="137.9" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
+                                <!-- labels -->
+                                <g>
+                                    <rect x="166" y="21" width="88" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+                                    <text x="210" y="36" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">⚖️ Honesty</text>
+                                </g>
+                                <g>
+                                    <rect x="289" y="88" width="114" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+                                    <text x="346" y="103" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">💜 Emocjonalność</text>
+                                </g>
+                                <g>
+                                    <rect x="289" y="308" width="114" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+                                    <text x="346" y="323" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">💬 Ekstrawersja</text>
+                                </g>
+                                <g>
+                                    <rect x="163" y="378" width="94" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+                                    <text x="210" y="393" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">🤝 Ugodowość</text>
+                                </g>
+                                <g>
+                                    <rect x="0" y="308" width="104" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+                                    <text x="52" y="323" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">📋 Sumienność</text>
+                                </g>
+                                <g>
+                                    <rect x="0" y="88" width="104" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+                                    <text x="52" y="103" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">✨ Otwartość</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <!-- Detail cards 2-col -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                                <div class="flex items-baseline justify-between mb-1">
+                                    <span class="text-sm font-semibold text-white/75">Uczciwość-Pokora</span>
+                                    <span class="text-base font-bold" style="color:rgba(139,92,246,.9);">68%</span>
                                 </div>
-                                <div class="cs-thin-bar"><div class="cs-thin-bar-fill" style="width:68%;background:linear-gradient(90deg,rgba(139,92,246,.8),rgba(139,92,246,.5));"></div></div>
-                                <div class="mt-1.5 text-xs italic" style="color:rgba(196,181,253,.7);">Działa z integralnością gdy jest to strategicznie wartościowe — bez nadmiernego podporządkowania.</div>
+                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:68%;background:linear-gradient(90deg,rgba(139,92,246,.8),rgba(139,92,246,.5));"></div></div>
+                                <div class="text-xs" style="color:rgba(255,255,255,.4);">Poziom: Umiarkowany</div>
+                                <div class="mt-1 text-xs italic" style="color:rgba(196,181,253,.7);">✦ Działa z integralnością gdy służy celowi — bez nadmiernego podporządkowania.</div>
                             </div>
-
-                            <div>
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-xs font-bold" style="color:rgba(255,255,255,.55);">Emocjonalność</span>
-                                    <span class="text-xs font-mono font-bold" style="color:rgba(255,255,255,.55);">41p · Umiarkowany</span>
+                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                                <div class="flex items-baseline justify-between mb-1">
+                                    <span class="text-sm font-semibold text-white/75">Emocjonalność</span>
+                                    <span class="text-base font-bold" style="color:rgba(56,189,248,.9);">41%</span>
                                 </div>
-                                <div class="cs-thin-bar"><div class="cs-thin-bar-fill" style="width:41%;background:linear-gradient(90deg,rgba(56,189,248,.8),rgba(56,189,248,.5));"></div></div>
-                                <div class="mt-1.5 text-xs italic" style="color:rgba(103,232,249,.7);">Emocjonalna niezależność pozwalająca sprawnie działać pod presją — z zachowaną empatią w kluczowych relacjach.</div>
+                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:41%;background:linear-gradient(90deg,rgba(56,189,248,.8),rgba(56,189,248,.5));"></div></div>
+                                <div class="text-xs" style="color:rgba(255,255,255,.4);">Poziom: Niski</div>
+                                <div class="mt-1 text-xs italic" style="color:rgba(103,232,249,.7);">✦ Niska emocjonalność może wskazywać na większą odporność na stres.</div>
                             </div>
-
-                            <div>
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-xs font-bold" style="color:rgba(255,255,255,.55);">Ekstrawersja</span>
-                                    <span class="text-xs font-mono font-bold" style="color:rgba(52,211,153,.8);">79p · Wysoki</span>
+                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                                <div class="flex items-baseline justify-between mb-1">
+                                    <span class="text-sm font-semibold text-white/75">Ekstrawersja</span>
+                                    <span class="text-base font-bold" style="color:rgba(52,211,153,.9);">79%</span>
                                 </div>
-                                <div class="cs-thin-bar"><div class="cs-thin-bar-fill" style="width:79%;background:linear-gradient(90deg,rgba(52,211,153,.9),rgba(52,211,153,.6));box-shadow:0 0 8px rgba(52,211,153,.4);"></div></div>
-                                <div class="mt-1.5 text-xs italic" style="color:rgba(110,231,183,.7);">Wysoka ekstrawersja daje naturalne zdolności do mobilizowania i inspirowania ludzi wokół wspólnego celu.</div>
+                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:79%;background:linear-gradient(90deg,rgba(52,211,153,.9),rgba(52,211,153,.6));box-shadow:0 0 6px rgba(52,211,153,.3);"></div></div>
+                                <div class="text-xs" style="color:rgba(52,211,153,.7);">Poziom: Wysoki</div>
+                                <div class="mt-1 text-xs italic" style="color:rgba(110,231,183,.7);">✦ Wysoka ekstrawersja — naturalny lider, który energetyzuje otoczenie.</div>
                             </div>
-
-                            <div>
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-xs font-bold" style="color:rgba(255,255,255,.55);">Ugodowość</span>
-                                    <span class="text-xs font-mono font-bold" style="color:rgba(255,255,255,.55);">52p · Umiarkowany</span>
+                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                                <div class="flex items-baseline justify-between mb-1">
+                                    <span class="text-sm font-semibold text-white/75">Ugodowość</span>
+                                    <span class="text-base font-bold" style="color:rgba(251,191,36,.9);">52%</span>
                                 </div>
-                                <div class="cs-thin-bar"><div class="cs-thin-bar-fill" style="width:52%;background:linear-gradient(90deg,rgba(251,191,36,.8),rgba(251,191,36,.5));"></div></div>
-                                <div class="mt-1.5 text-xs italic" style="color:rgba(252,211,77,.7);">Potrafi współpracować i ustępować gdy służy to celowi — ale nie kosztem własnych standardów.</div>
+                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:52%;background:linear-gradient(90deg,rgba(251,191,36,.8),rgba(251,191,36,.5));"></div></div>
+                                <div class="text-xs" style="color:rgba(255,255,255,.4);">Poziom: Umiarkowany</div>
+                                <div class="mt-1 text-xs italic" style="color:rgba(252,211,77,.7);">✦ Potrafi współpracować bez rezygnacji z własnych standardów.</div>
                             </div>
-
-                            <div>
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-xs font-bold" style="color:rgba(255,255,255,.55);">Sumienność</span>
-                                    <span class="text-xs font-mono font-bold" style="color:rgba(255,255,255,.55);">65p · Umiarkowany</span>
+                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                                <div class="flex items-baseline justify-between mb-1">
+                                    <span class="text-sm font-semibold text-white/75">Sumienność</span>
+                                    <span class="text-base font-bold" style="color:rgba(244,114,182,.9);">65%</span>
                                 </div>
-                                <div class="cs-thin-bar"><div class="cs-thin-bar-fill" style="width:65%;background:linear-gradient(90deg,rgba(244,114,182,.8),rgba(244,114,182,.5));"></div></div>
-                                <div class="mt-1.5 text-xs italic" style="color:rgba(249,168,212,.7);">Ustrukturyzowane podejście do celów — organizuje to co ważne, zostawiając przestrzeń na improwizację.</div>
+                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:65%;background:linear-gradient(90deg,rgba(244,114,182,.8),rgba(244,114,182,.5));"></div></div>
+                                <div class="text-xs" style="color:rgba(255,255,255,.4);">Poziom: Umiarkowany</div>
+                                <div class="mt-1 text-xs italic" style="color:rgba(249,168,212,.7);">✦ Organizuje to co ważne — zostawiając przestrzeń na improwizację.</div>
                             </div>
-
-                            <div>
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-xs font-bold" style="color:rgba(255,255,255,.55);">Otwartość</span>
-                                    <span class="text-xs font-mono font-bold" style="color:rgba(167,139,250,.9);">93p · Wysoki</span>
+                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3" style="border-color:rgba(167,139,250,.25);">
+                                <div class="flex items-baseline justify-between mb-1">
+                                    <span class="text-sm font-semibold text-white/75">Otwartość</span>
+                                    <span class="text-base font-bold" style="color:rgba(167,139,250,.9);">93%</span>
                                 </div>
-                                <div class="cs-thin-bar"><div class="cs-thin-bar-fill" style="width:93%;background:linear-gradient(90deg,rgba(167,139,250,.9),rgba(167,139,250,.6));box-shadow:0 0 10px rgba(167,139,250,.45);"></div></div>
-                                <div class="mt-1.5 text-xs italic" style="color:rgba(196,181,253,.7);">Najwyższy percentyl — źródło nieustannej ciekawości i zdolności do tworzenia nowych, niespotykanych połączeń.</div>
+                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:93%;background:linear-gradient(90deg,rgba(167,139,250,.9),rgba(167,139,250,.6));box-shadow:0 0 8px rgba(167,139,250,.4);"></div></div>
+                                <div class="text-xs" style="color:rgba(167,139,250,.7);">Poziom: Wysoki</div>
+                                <div class="mt-1 text-xs italic" style="color:rgba(196,181,253,.7);">✦ Najwyższy percentyl — źródło nieustannej ciekawości i tworzenia nowych połączeń.</div>
                             </div>
-
                         </div>
                     </div>
 
@@ -857,37 +917,50 @@
                     <div class="lg:col-span-1 cs-card p-5 flex flex-col gap-4">
                         <div class="cs-mono" style="color:rgba(255,255,255,.35);">Silnik motywacji — Enneagram</div>
 
-                        <!-- Star SVG -->
-                        <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex justify-center">
-                            <svg viewBox="0 0 200 200" width="150" height="150">
-                                <circle cx="100" cy="100" r="78" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-                                <circle cx="100" cy="100" r="52" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                                <line x1="100" y1="22" x2="100" y2="178" stroke="rgba(255,255,255,0.05)" stroke-width=".5"/>
-                                <line x1="22" y1="100" x2="178" y2="100" stroke="rgba(255,255,255,0.05)" stroke-width=".5"/>
-                                <line x1="45" y1="45" x2="155" y2="155" stroke="rgba(255,255,255,0.05)" stroke-width=".5"/>
-                                <line x1="155" y1="45" x2="45" y2="155" stroke="rgba(255,255,255,0.05)" stroke-width=".5"/>
-                                <!-- inactive dots -->
-                                <circle cx="100" cy="22" r="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-                                <text x="100" y="26" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.3)">1</text>
-                                <circle cx="163" cy="50" r="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                                <text x="163" y="54" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.25)">2</text>
-                                <!-- Type 3 active -->
-                                <circle cx="178" cy="100" r="7" fill="rgba(0,240,255,0.18)" stroke="rgba(0,240,255,0.75)" stroke-width="1.5"/>
-                                <text x="178" y="104" text-anchor="middle" font-size="9" font-weight="bold" fill="rgba(103,232,249,1)">3</text>
-                                <circle cx="163" cy="150" r="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                                <text x="163" y="154" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.25)">4</text>
-                                <circle cx="126" cy="178" r="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                                <text x="126" y="182" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.25)">5</text>
-                                <circle cx="74" cy="178" r="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                                <text x="74" y="182" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.25)">6</text>
-                                <circle cx="37" cy="150" r="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                                <text x="37" y="154" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.25)">7</text>
-                                <circle cx="22" cy="100" r="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                                <text x="22" y="104" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.25)">8</text>
-                                <circle cx="37" cy="50" r="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                                <text x="37" y="54" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.25)">9</text>
-                            </svg>
-                        </div>
+                        <!-- EnnStar SVG (faithful replica) -->
+                        <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex justify-center" style="color:rgb(0,240,255);">
+                            <svg viewBox="0 0 200 200" style="width:100%;max-width:220px;height:auto;display:block;">
+                                <defs>
+                                    <filter id="iiyEnnGlow" x="-50%" y="-50%" width="200%" height="200%">
+                                        <feGaussianBlur stdDeviation="2.8" result="blur"/>
+                                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                                    </filter>
+                                </defs>
+                                <!-- outer ring -->
+                                <circle cx="100" cy="100" r="87" fill="none" stroke="white" stroke-opacity="0.08" stroke-width="1.5"/>
+                                <!-- star lines (1-4-2-8-5-7-1) -->
+                                <polyline points="100.0,22.0 167.5,139.0 150.1,40.2 23.2,86.5 126.7,173.3 32.5,139.0 100.0,22.0" fill="none" stroke="white" stroke-opacity="0.13" stroke-width="1.2" stroke-linejoin="round"/>
+                                <!-- triangle (3-6-9-3) -->
+                                <polyline points="176.8,86.5 73.3,173.3 49.9,40.2 176.8,86.5" fill="none" stroke="white" stroke-opacity="0.09" stroke-width="1.2" stroke-linejoin="round"/>
+                                <!-- rays from center -->
+                                <line x1="100" y1="100" x2="100" y2="22" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
+                                <line x1="100" y1="100" x2="150.1" y2="40.2" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
+                                <line x1="100" y1="100" x2="176.8" y2="86.5" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
+                                <line x1="100" y1="100" x2="167.5" y2="139" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
+                                <line x1="100" y1="100" x2="126.7" y2="173.3" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
+                                <line x1="100" y1="100" x2="73.3" y2="173.3" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
+                                <line x1="100" y1="100" x2="32.5" y2="139" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
+                                <line x1="100" y1="100" x2="23.2" y2="86.5" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
+                                <line x1="100" y1="100" x2="49.9" y2="40.2" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
+                                <!-- score ticks -->
+                                <line x1="100" y1="16" x2="100" y2="23.3" stroke="white" stroke-opacity="0.12" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="154" y1="35.7" x2="149.8" y2="40.6" stroke="white" stroke-opacity="0.1" stroke-width="2" stroke-linecap="round"/>
+                                <!-- n=3 active tick -->
+                                <line x1="182.7" y1="85.4" x2="165" y2="88.5" stroke="currentColor" stroke-opacity="0.85" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="172.7" y1="142" x2="164.3" y2="137.1" stroke="white" stroke-opacity="0.14" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="128.7" y1="178.9" x2="126" y2="171.3" stroke="white" stroke-opacity="0.12" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="71.3" y1="178.9" x2="74.3" y2="170.5" stroke="white" stroke-opacity="0.13" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="27.3" y1="142" x2="38.6" y2="135.5" stroke="white" stroke-opacity="0.19" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="17.3" y1="85.4" x2="27.7" y2="87.3" stroke="white" stroke-opacity="0.16" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="46" y1="35.7" x2="50.7" y2="41.2" stroke="white" stroke-opacity="0.12" stroke-width="2" stroke-linecap="round"/>
+                                <!-- active glow line center → type 3 -->
+                                <line x1="100" y1="100" x2="176.8" y2="86.5" stroke="currentColor" stroke-opacity="0.65" stroke-width="2.4" filter="url(#iiyEnnGlow)"/>
+                                <!-- inactive nodes (n=1,2,4,5,6,7,8,9) -->
+                                <circle cx="100" cy="22" r="4" fill="white" fill-opacity="0.18"/>
+                                <text x="100" y="36" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">1</text>
+                                <circle cx="150.1" cy="40.2" r="4" fill="white" fill-opacity="0.18"/>
+                                <text x="150.1" y="54.2" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">2</text>
+                                <!-- n=3 active glow circle -->\n                                <circle cx="176.8" cy="86.5" r="13" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" filter="url(#iiyEnnGlow)"/>\n                                <!-- n=3 active main circle -->\n                                <circle cx="176.8" cy="86.5" r="8.5" fill="currentColor" fill-opacity="0.9" stroke="currentColor" stroke-opacity="0.45" stroke-width="3"/>\n                                <text x="176.8" y="90.5" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.9" font-size="10" font-weight="700" font-family="monospace">3</text>\n                                <!-- inactive n=4 -->\n                                <circle cx="167.5" cy="139" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="167.5" y="153" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">4</text>\n                                <!-- inactive n=5 -->\n                                <circle cx="126.7" cy="173.3" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="126.7" y="187.3" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">5</text>\n                                <!-- inactive n=6 -->\n                                <circle cx="73.3" cy="173.3" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="73.3" y="187.3" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">6</text>\n                                <!-- inactive n=7 -->\n                                <circle cx="32.5" cy="139" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="32.5" y="153" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">7</text>\n                                <!-- inactive n=8 -->\n                                <circle cx="23.2" cy="86.5" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="23.2" y="100.5" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">8</text>\n                                <!-- inactive n=9 -->\n                                <circle cx="49.9" cy="40.2" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="49.9" y="54.2" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">9</text>\n                                <!-- center dot -->\n                                <circle cx="100" cy="100" r="2.6" fill="white" fill-opacity="0.25"/>\n                            </svg>\n                        </div>
 
                         <!-- Type info -->
                         <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4">
