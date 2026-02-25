@@ -897,7 +897,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
   );
 
   return (
-    <div className="min-h-screen bg-bg-main text-text-main bg-neural-gradient bg-fixed">
+    <div className={`min-h-screen bg-bg-main text-text-main bg-neural-gradient bg-fixed${demoMode ? ' demo-mode' : ''}`}>
       {/* TOP NAV */}
       {!demoMode && (!isPublic ? (
       <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50 nav-neural">
