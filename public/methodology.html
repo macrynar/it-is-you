@@ -27,13 +27,12 @@
     }
 
     .test-card {
-      background: rgba(15, 23, 42, 0.55);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.07);
       transition: border-color 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
     }
-    .test-card:hover { box-shadow: 0 0 40px var(--card-glow, rgba(99,102,241,0.12)); border-color: var(--card-border, rgba(99,102,241,0.3)); }
 
     .ref-pill {
       display: inline-flex; align-items: center; gap: 6px;
@@ -237,7 +236,9 @@
       <div class="flex-1 space-y-10">
 
         <!-- 1. HEXACO -->
-        <div id="hexaco" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(129,140,248,0.15);--card-border:rgba(129,140,248,0.35);">
+        <div id="hexaco" class="test-card rounded-3xl scroll-mt-32" style="background:linear-gradient(160deg,rgba(129,140,248,.1) 0%,rgba(13,5,32,.88) 45%,rgba(5,2,15,.75) 100%);border:1px solid rgba(129,140,248,.18);box-shadow:0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)" onmouseover="this.style.borderColor='rgba(129,140,248,.45)';this.style.boxShadow='0 0 40px -8px rgba(129,140,248,.3),inset 0 1px 0 rgba(255,255,255,.12)'" onmouseout="this.style.borderColor='rgba(129,140,248,.18)';this.style.boxShadow='0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)'">
+          <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(129,140,248,.55),transparent)"></div>
+          <div class="p-8">
           <div class="flex items-start justify-between gap-4 mb-6">
             <div>
               <div class="flex items-center gap-3 mb-2">
@@ -293,10 +294,13 @@
               <span class="ref-pill">📖 Metaanaliza: 23 kultury (2010)</span>
             </div>
           </div>
+          </div>
         </div>
 
         <!-- 2. Enneagram -->
-        <div id="enneagram" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(244,114,182,0.15);--card-border:rgba(244,114,182,0.35);">
+        <div id="enneagram" class="test-card rounded-3xl scroll-mt-32" style="background:linear-gradient(160deg,rgba(244,114,182,.1) 0%,rgba(13,5,32,.88) 45%,rgba(5,2,15,.75) 100%);border:1px solid rgba(244,114,182,.18);box-shadow:0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)" onmouseover="this.style.borderColor='rgba(244,114,182,.45)';this.style.boxShadow='0 0 40px -8px rgba(244,114,182,.3),inset 0 1px 0 rgba(255,255,255,.12)'" onmouseout="this.style.borderColor='rgba(244,114,182,.18)';this.style.boxShadow='0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)'">
+          <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(244,114,182,.55),transparent)"></div>
+          <div class="p-8">
           <div class="flex items-start justify-between gap-4 mb-6">
             <div>
               <div class="flex items-center gap-3 mb-2">
@@ -347,10 +351,13 @@
               <span class="ref-pill">📖 Wagner (1983) — RHETI Reliability & Validity</span>
             </div>
           </div>
+          </div>
         </div>
 
         <!-- 3. Wartości -->
-        <div id="values" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(52,211,153,0.15);--card-border:rgba(52,211,153,0.35);">
+        <div id="values" class="test-card rounded-3xl scroll-mt-32" style="background:linear-gradient(160deg,rgba(52,211,153,.1) 0%,rgba(13,5,32,.88) 45%,rgba(5,2,15,.75) 100%);border:1px solid rgba(52,211,153,.18);box-shadow:0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)" onmouseover="this.style.borderColor='rgba(52,211,153,.45)';this.style.boxShadow='0 0 40px -8px rgba(52,211,153,.3),inset 0 1px 0 rgba(255,255,255,.12)'" onmouseout="this.style.borderColor='rgba(52,211,153,.18)';this.style.boxShadow='0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)'">
+          <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(52,211,153,.55),transparent)"></div>
+          <div class="p-8">
           <div class="flex items-start justify-between gap-4 mb-6">
             <div>
               <div class="flex items-center gap-3 mb-2">
@@ -412,10 +419,13 @@
               <span class="ref-pill">📖 70+ krajów, European Social Survey</span>
             </div>
           </div>
+          </div>
         </div>
 
         <!-- 4. Kariera RIASEC -->
-        <div id="career" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(245,158,11,0.15);--card-border:rgba(245,158,11,0.35);">
+        <div id="career" class="test-card rounded-3xl scroll-mt-32" style="background:linear-gradient(160deg,rgba(245,158,11,.1) 0%,rgba(13,5,32,.88) 45%,rgba(5,2,15,.75) 100%);border:1px solid rgba(245,158,11,.18);box-shadow:0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)" onmouseover="this.style.borderColor='rgba(245,158,11,.45)';this.style.boxShadow='0 0 40px -8px rgba(245,158,11,.3),inset 0 1px 0 rgba(255,255,255,.12)'" onmouseout="this.style.borderColor='rgba(245,158,11,.18)';this.style.boxShadow='0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)'">
+          <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(245,158,11,.55),transparent)"></div>
+          <div class="p-8">
           <div class="flex items-start justify-between gap-4 mb-6">
             <div>
               <div class="flex items-center gap-3 mb-2">
@@ -471,10 +481,13 @@
               <span class="ref-pill">📖 Rounds & Tracey (1993) — metaanaliza validity</span>
             </div>
           </div>
+          </div>
         </div>
 
         <!-- 5. Mocne Strony VIA -->
-        <div id="strengths" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(96,165,250,0.15);--card-border:rgba(96,165,250,0.35);">
+        <div id="strengths" class="test-card rounded-3xl scroll-mt-32" style="background:linear-gradient(160deg,rgba(96,165,250,.1) 0%,rgba(13,5,32,.88) 45%,rgba(5,2,15,.75) 100%);border:1px solid rgba(96,165,250,.18);box-shadow:0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)" onmouseover="this.style.borderColor='rgba(96,165,250,.45)';this.style.boxShadow='0 0 40px -8px rgba(96,165,250,.3),inset 0 1px 0 rgba(255,255,255,.12)'" onmouseout="this.style.borderColor='rgba(96,165,250,.18)';this.style.boxShadow='0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)'">
+          <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(96,165,250,.55),transparent)"></div>
+          <div class="p-8">
           <div class="flex items-start justify-between gap-4 mb-6">
             <div>
               <div class="flex items-center gap-3 mb-2">
@@ -534,15 +547,18 @@
               <span class="ref-pill">📖 Linley & Harrington (2006) — Applied Psychology: Health and Well‑Being</span>
             </div>
           </div>
+          </div>
         </div>
 
         <!-- 6. Dark Triad -->
-        <div id="darktriad" class="test-card rounded-3xl p-8 scroll-mt-32" style="--card-glow:rgba(248,113,113,0.15);--card-border:rgba(248,113,113,0.35);">
+        <div id="darktriad" class="test-card rounded-3xl scroll-mt-32" style="background:linear-gradient(160deg,rgba(248,113,113,.1) 0%,rgba(13,5,32,.88) 45%,rgba(5,2,15,.75) 100%);border:1px solid rgba(248,113,113,.18);box-shadow:0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)" onmouseover="this.style.borderColor='rgba(248,113,113,.45)';this.style.boxShadow='0 0 40px -8px rgba(248,113,113,.3),inset 0 1px 0 rgba(255,255,255,.12)'" onmouseout="this.style.borderColor='rgba(248,113,113,.18)';this.style.boxShadow='0 4px 32px -6px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.07)'">
+          <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(248,113,113,.55),transparent)"></div>
+          <div class="p-8">
           <div class="flex items-start justify-between gap-4 mb-6">
             <div>
               <div class="flex items-center gap-3 mb-2">
                 <span class="text-2xl">🎭</span>
-                <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full" style="background:rgba(248,113,113,0.1);color:#f87171;border:1px solid rgba(248,113,113,0.25);">Ciemna Triada</div>
+                <span class="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full" style="background:rgba(248,113,113,0.1);color:#f87171;border:1px solid rgba(248,113,113,0.25);">Ciemna Triada</span>
                 <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full" style="background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);">Premium</span>
               </div>
               <h2 class="text-2xl font-bold brand-font text-white">Dark Triad — SD3</h2>
@@ -586,6 +602,7 @@
               <span class="ref-pill">📖 Paulhus & Williams (2002) — Journal of Research in Personality</span>
               <span class="ref-pill">📖 Babiak & Hare (2006) — Snakes in Suits</span>
             </div>
+          </div>
           </div>
         </div>
 
