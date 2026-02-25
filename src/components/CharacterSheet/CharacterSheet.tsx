@@ -899,7 +899,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
   return (
     <div className="min-h-screen bg-bg-main text-text-main bg-neural-gradient bg-fixed">
       {/* TOP NAV */}
-      {!isPublic ? (
+      {!isPublic && !demoMode ? (
       <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50 nav-neural">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-4">
