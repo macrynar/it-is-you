@@ -401,7 +401,7 @@ const DEMO_RAW: Record<string, RawRow> = {
   },
   DARK_TRIAD: {
     test_type: 'DARK_TRIAD',
-    raw_scores: { dimensions: { narcissism: { raw_score: 42 }, machiavellianism: { raw_score: 35 }, psychopathy: { raw_score: 18 } } },
+    raw_scores: { dimensions: { narcissism: { raw_score: 3.4 }, machiavellianism: { raw_score: 2.8 }, psychopathy: { raw_score: 1.6 } } },
     percentile_scores: {},
     report: null,
   },
@@ -1750,10 +1750,10 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
       </main>
 
-      {!isPublic ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} /> : null}
+      {!isPublic && !demoMode ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} /> : null}
 
       {/* Footer */}
-      <footer className="border-t border-white/5 bg-slate-950/80 py-6 sm:py-10 text-slate-500 text-sm mt-6 sm:mt-8">
+      {!demoMode && <footer className="border-t border-white/5 bg-slate-950/80 py-6 sm:py-10 text-slate-500 text-sm mt-6 sm:mt-8">
         <div className="max-w-5xl mx-auto px-3 sm:px-6 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
           <div className="col-span-2 sm:col-span-1">
             <span className="font-bold text-lg text-white tracking-tight block mb-3">Alcheme</span>
@@ -1787,7 +1787,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
         <div className="max-w-5xl mx-auto px-3 sm:px-6 mt-6 sm:mt-8 pt-6 border-t border-white/5 text-center text-xs">
           &copy; {new Date().getFullYear()} Alcheme. All rights reserved. Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.
         </div>
-      </footer>
+      </footer>}
     </div>
   );
 }
