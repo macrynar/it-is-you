@@ -151,35 +151,19 @@
           </div>
         </a>
 
-        <!-- Public nav links (shown to logged-out users) -->
-        <div id="nav-links-public" class="hidden md:flex space-x-10 text-sm font-medium text-slate-400">
+        <!-- Nav links — populated by JS; public links shown by default -->
+        <div id="nav-links" class="hidden md:flex space-x-8 text-sm font-medium text-slate-400">
           <a href="/methodology" class="hover:text-white transition-colors duration-200">Metodologia</a>
           <a href="/#features" class="hover:text-white transition-colors duration-200">Korzyści</a>
-          <a href="/pricing" class="text-white transition-colors duration-200">Cennik</a>
+          <a href="/pricing" class="text-white">Cennik</a>
         </div>
 
-        <!-- Logged-in nav links (hidden by default, shown when session exists) -->
-        <div id="nav-links-loggedin" class="hidden space-x-10 text-sm font-medium text-slate-400">
-          <a href="/methodology" class="hover:text-white transition-colors duration-200">Metodologia</a>
-          <a href="/pricing" class="text-white transition-colors duration-200">Cennik</a>
-          <a href="/character" class="hover:text-white transition-colors duration-200">Karta Postaci</a>
-          <a href="/user-profile-tests" class="hover:text-white transition-colors duration-200">Moje testy</a>
-        </div>
-
-        <!-- Public actions (logged-out) -->
-        <div id="nav-actions-public" class="flex items-center gap-4">
+        <!-- Nav actions — populated by JS; public actions shown by default -->
+        <div id="nav-actions" class="flex items-center gap-4">
           <a href="/auth" class="text-sm font-medium text-slate-400 hover:text-white transition-colors hidden sm:block">Zaloguj</a>
           <a href="/auth" class="bg-white text-slate-950 px-6 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-50 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)]">
             Wykonaj test
           </a>
-        </div>
-
-        <!-- Logged-in actions (hidden by default) -->
-        <div id="nav-actions-loggedin" class="hidden items-center gap-2">
-          <a href="/settings" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;color:rgba(255,255,255,.45);border:1px solid transparent;text-decoration:none;transition:all .2s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,.08)';this.style.borderColor='rgba(255,255,255,.1)';" onmouseout="this.style.color='rgba(255,255,255,.45)';this.style.background='';this.style.borderColor='transparent';" title="Ustawienia">
-            <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          </a>
-          <a href="/user-profile-tests" class="bg-white text-slate-950 px-5 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-50 transition-all duration-300">Moje testy</a>
         </div>
       </div>
     </div>
@@ -605,18 +589,29 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA';
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Detect auth state and swap nav accordingly
+    // Detect auth state and swap nav
+    const NAV_LINK_CLS = 'hover:text-white transition-colors duration-200';
+    const NAV_ACTIVE_CLS = 'text-white';
+    const ICON_BTN = 'display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;color:rgba(255,255,255,.45);border:1px solid transparent;text-decoration:none;transition:all .2s;';
+    const ICON_HOVER = "this.style.color='#fff';this.style.background='rgba(255,255,255,.08)';this.style.borderColor='rgba(255,255,255,.1)';";
+    const ICON_OUT = "this.style.color='rgba(255,255,255,.45)';this.style.background='';this.style.borderColor='transparent';";
+    const SETTINGS_SVG = `<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`;
+    const LOGOUT_SVG = `<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>`;
+
     (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        document.getElementById('nav-links-public').classList.add('hidden');
-        document.getElementById('nav-actions-public').classList.add('hidden');
-        const linksLI = document.getElementById('nav-links-loggedin');
-        linksLI.classList.remove('hidden');
-        linksLI.style.display = 'flex';
-        const actionsLI = document.getElementById('nav-actions-loggedin');
-        actionsLI.classList.remove('hidden');
-        actionsLI.style.display = 'flex';
+        document.getElementById('nav-links').innerHTML = `
+          <a href="/methodology" class="${NAV_LINK_CLS}">Metodologia</a>
+          <a href="/pricing" class="${NAV_ACTIVE_CLS}">Cennik</a>
+          <a href="/character" class="${NAV_LINK_CLS}">Karta Postaci</a>
+          <a href="/user-profile-tests" class="${NAV_LINK_CLS}">Moje testy</a>
+        `;
+        document.getElementById('nav-actions').innerHTML = `
+          <a href="/settings" style="${ICON_BTN}" onmouseover="${ICON_HOVER}" onmouseout="${ICON_OUT}" title="Ustawienia">${SETTINGS_SVG}</a>
+          <button onclick="(async()=>{const s=createClient('https://uvzilorpyuqicuwkufky.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA');await s.auth.signOut();location.href='/'})()" style="${ICON_BTN};cursor:pointer;background:none;" onmouseover="this.style.color='#f87171';this.style.background='rgba(239,68,68,.08)';this.style.borderColor='rgba(239,68,68,.2)';" onmouseout="${ICON_OUT}" title="Wyloguj">${LOGOUT_SVG}</button>
+          <a href="/user-profile-tests" class="bg-white text-slate-950 px-5 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-50 transition-all duration-300">Moje testy</a>
+        `;
       }
     })();
 
