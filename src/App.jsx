@@ -10,6 +10,7 @@ import ValuesResults from './components/Test/ValuesResults'
 import Settings from './components/Settings/Settings'
 import CharacterSheet from './components/CharacterSheet/CharacterSheet'
 import { supabase, onAuthStateChange } from './lib/supabaseClient'
+import Footer from './components/Footer'
 
 /**
  * Main App Component
@@ -112,7 +113,7 @@ function App() {
       return null
     }
     
-    return <HexacoResults />
+    return <><HexacoResults /><Footer /></>
   }
 
   // Handle /test/enneagram/results route - show enneagram results
@@ -133,7 +134,7 @@ function App() {
       return null
     }
     
-    return <EnneagramResults />
+    return <><EnneagramResults /><Footer /></>
   }
 
   // Handle /test/dark-triad/results route - show dark triad results
@@ -154,7 +155,7 @@ function App() {
       return null
     }
     
-    return <DarkTriadResults />
+    return <><DarkTriadResults /><Footer /></>
   }
 
   // Handle /test/strengths/results route - show strengths results
@@ -175,7 +176,7 @@ function App() {
       return null
     }
     
-    return <StrengthsResults />
+    return <><StrengthsResults /><Footer /></>
   }
 
   // Handle /test/career/results route - show career results
@@ -196,7 +197,7 @@ function App() {
       return null
     }
     
-    return <CareerResults />
+    return <><CareerResults /><Footer /></>
   }
 
   // Handle /test/values/results route - show values results
@@ -217,7 +218,7 @@ function App() {
       return null
     }
     
-    return <ValuesResults />
+    return <><ValuesResults /><Footer /></>
   }
 
   // Handle public shared character card route
@@ -227,7 +228,7 @@ function App() {
       window.location.href = '/'
       return null
     }
-    return <CharacterSheet publicToken={token} />
+    return <><CharacterSheet publicToken={token} /><Footer /></>
   }
 
   // Handle /character and /character-sheet routes
@@ -243,7 +244,7 @@ function App() {
       )
     }
     if (!user) { window.location.href = '/auth'; return null; }
-    return <CharacterSheet />
+    return <><CharacterSheet /><Footer /></>
   }
 
   // Handle /settings route
@@ -259,7 +260,7 @@ function App() {
       )
     }
     if (!user) { window.location.href = '/auth'; return null; }
-    return <Settings />
+    return <><Settings /><Footer /></>
   }
 
   // Handle /test route - require authentication & check for test type
@@ -285,7 +286,7 @@ function App() {
     const urlParams = new URLSearchParams(window.location.search)
     const testType = urlParams.get('type') || 'hexaco' // default to hexaco
     
-    return <TestWizard testType={testType} />
+    return <><TestWizard testType={testType} /><Footer /></>
   }
 
   // Loading state or OAuth callback processing
