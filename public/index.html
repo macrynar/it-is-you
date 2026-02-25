@@ -702,704 +702,103 @@
                 </div>
             </div>
 
-            <!-- OUTER SHELL -->
-            <div class="cs-outer">
+            <!-- OUTER SHELL: React app iframe (identical to real /character page) -->
+            <div class="overflow-hidden rounded-2xl border border-white/10 shadow-2xl" style="height:920px;">
+                <iframe src="/demo-card" title="Przykladowa Karta Postaci" style="width:100%;height:100%;border:none;display:block;" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+            </div>
 
-                <!-- HERO BAR -->
-                <div class="cs-hero-bar">
-                    <div class="flex flex-wrap items-start gap-5">
-
-                        <!-- Left: dots + name -->
-                        <div class="flex flex-col gap-1.5 min-w-0">
-                            <div class="flex items-center gap-1.5">
-                                <span class="cs-dot"></span>
-                                <span class="cs-dot"></span>
-                                <span class="cs-dot"></span>
-                                <span class="cs-dot"></span>
-                                <span class="cs-dot"></span>
-                                <span class="cs-dot" style="background:rgba(0,240,255,1);box-shadow:0 0 10px rgba(0,240,255,.9);"></span>
-                                <span class="cs-mono ml-2" style="color:rgba(255,255,255,.25);">6/6 testów</span>
-                            </div>
-                            <div class="text-lg font-bold text-white" style="letter-spacing:-.01em;">Aleksandra M.</div>
-                            <div class="flex items-center gap-2">
-                                <span class="cs-mono px-2 py-0.5 rounded" style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:rgba(252,211,77,.9);">PREMIUM</span>
-                                <span class="cs-mono" style="color:rgba(255,255,255,.25);">Konto aktywne</span>
-                            </div>
-                        </div>
-
-                        <!-- Vertical divider -->
-                        <div class="hidden md:block w-px self-stretch bg-white/8 mx-2"></div>
-
-                        <!-- Center: Archetype boxes -->
-                        <div class="flex-1 min-w-0 flex flex-col md:flex-row gap-3">
-                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex items-center gap-3 flex-1 min-w-0" style="border-top:1.5px solid rgba(112,0,255,.35);">
-                                <span class="text-2xl flex-shrink-0">🧙</span>
-                                <div class="min-w-0">
-                                    <div class="cs-mono mb-1" style="color:rgba(0,240,255,.5);">◉ ARCHETYP AI</div>
-                                    <div class="text-base font-bold text-white/90 truncate">Wizjonerski Architekt</div>
-                                    <div class="text-xs text-white/35 truncate mt-0.5">Visionary Architect</div>
-                                </div>
-                            </div>
-                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex-1 min-w-0" style="border-top:1.5px solid rgba(56,182,255,.25);">
-                                <div class="cs-mono mb-1.5" style="color:rgba(255,255,255,.25);">Opis postaci</div>
-                                <div class="text-sm text-white/65 leading-relaxed">Widzi całość zanim inni dostrzegą poszczególne elementy — myśli systemowo i działa z intencją.
-                                    <span class="ml-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-mono font-bold uppercase" style="background:rgba(112,0,255,.15);border:1px solid rgba(112,0,255,.3);color:rgba(196,181,253,.8);">Analiza</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Tags row -->
-                    <div class="mt-4 pt-4 border-t border-white/5">
-                        <div class="cs-mono mb-2" style="color:rgba(255,255,255,.2);">Cechy dominujące</div>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="cs-diamond-tag cs-tag-cyan">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4" fill="currentColor" opacity=".6" stroke="none"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke-linecap="round"/></svg>
-                                Analityczny
-                            </span>
-                            <span class="cs-diamond-tag cs-tag-cyan">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4" fill="currentColor" opacity=".6" stroke="none"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke-linecap="round"/></svg>
-                                Strategiczny
-                            </span>
-                            <span class="cs-diamond-tag cs-tag-cyan">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4" fill="currentColor" opacity=".6" stroke="none"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke-linecap="round"/></svg>
-                                Charyzmatyczny
-                            </span>
-                            <span class="cs-diamond-tag cs-tag-violet">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6.4 6.4l2.1 2.1M15.5 15.5l2.1 2.1M15.5 8.5l2.1-2.1M6.4 17.6l2.1-2.1"/><circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none" opacity=".6"/></svg>
-                                Niezależny
-                            </span>
-                            <span class="cs-diamond-tag cs-tag-violet">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6.4 6.4l2.1 2.1M15.5 15.5l2.1 2.1M15.5 8.5l2.1-2.1M6.4 17.6l2.1-2.1"/><circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none" opacity=".6"/></svg>
-                                Innowacyjny
-                            </span>
-                            <span class="cs-diamond-tag cs-tag-amber">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 22,12 12,22 2,12"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" opacity=".6"/></svg>
-                                Ambitny
-                            </span>
-                        </div>
-                    </div>
+            <!-- CTA banner -->
+            <div class="mt-6 border border-white/10 rounded-2xl px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/[0.02]">
+                <div>
+                    <div class="text-sm font-semibold text-white/70">Chcesz zobaczyć swój własny profil?</div>
+                    <div class="text-xs text-white/35 mt-0.5">Ukończ 6 testów i odblokuj kompletną Kartę Postaci z Analizą AI.</div>
                 </div>
-
-                <!-- MAIN GRID -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 auto-rows-min">
-
-                    <!-- Osobowość divider -->
-                    <div class="lg:col-span-3 cs-section-divider">
-                        <span>Osobowość &amp; Motywacja</span>
-                        <div></div>
-                    </div>
-
-                    <!-- HEXACO – 2 cols -->
-                    <div class="lg:col-span-2 cs-card p-5">
-                        <div class="cs-mono mb-3" style="color:rgba(255,255,255,.35);">Matryca HEXACO</div>
-
-                        <!-- Radar chart SVG -->
-                        <div class="flex justify-center mb-4">
-                            <svg viewBox="0 0 420 420" style="width:100%;max-width:420px;height:auto;overflow:visible;">
-                                <defs>
-                                    <linearGradient id="iiy-hexaco-rg" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#38b6ff" stop-opacity=".35"/>
-                                        <stop offset="100%" stop-color="#7b5ea7" stop-opacity=".25"/>
-                                    </linearGradient>
-                                </defs>
-                                <!-- grid rings -->
-                                <polygon points="210.0,179.0 236.8,194.5 236.8,225.5 210.0,241.0 183.2,225.5 183.2,194.5" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
-                                <polygon points="210.0,148.0 263.7,179.0 263.7,241.0 210.0,272.0 156.3,241.0 156.3,179.0" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
-                                <polygon points="210.0,117.0 290.5,163.5 290.5,256.5 210.0,303.0 129.5,256.5 129.5,163.5" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
-                                <polygon points="210.0,86.0 317.4,148.0 317.4,272.0 210.0,334.0 102.6,272.0 102.6,148.0" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
-                                <polygon points="210.0,55.0 344.2,132.5 344.2,287.5 210.0,365.0 75.8,287.5 75.8,132.5" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
-                                <!-- axis lines -->
-                                <line x1="210" y1="210" x2="210" y2="55" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-                                <line x1="210" y1="210" x2="344.2" y2="132.5" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-                                <line x1="210" y1="210" x2="344.2" y2="287.5" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-                                <line x1="210" y1="210" x2="210" y2="365" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-                                <line x1="210" y1="210" x2="75.8" y2="287.5" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-                                <line x1="210" y1="210" x2="75.8" y2="132.5" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
-                                <!-- data polygon -->
-                                <polygon points="210.0,104.6 265.0,178.2 316.0,271.2 210.0,290.6 122.7,260.4 85.2,137.9" fill="url(#iiy-hexaco-rg)" stroke="#38b6ff" stroke-width="2" style="filter:drop-shadow(0 0 12px rgba(56,182,255,.45));"/>
-                                <!-- data dots -->
-                                <circle cx="210" cy="104.6" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
-                                <circle cx="265" cy="178.2" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
-                                <circle cx="316" cy="271.2" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
-                                <circle cx="210" cy="290.6" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
-                                <circle cx="122.7" cy="260.4" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
-                                <circle cx="85.2" cy="137.9" r="4" fill="#38b6ff" style="filter:drop-shadow(0 0 6px #38b6ff);"/>
-                                <!-- labels -->
-                                <g>
-                                    <rect x="166" y="21" width="88" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
-                                    <text x="210" y="36" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">⚖️ Honesty</text>
-                                </g>
-                                <g>
-                                    <rect x="289" y="88" width="114" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
-                                    <text x="346" y="103" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">💜 Emocjonalność</text>
-                                </g>
-                                <g>
-                                    <rect x="289" y="308" width="114" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
-                                    <text x="346" y="323" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">💬 Ekstrawersja</text>
-                                </g>
-                                <g>
-                                    <rect x="163" y="378" width="94" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
-                                    <text x="210" y="393" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">🤝 Ugodowość</text>
-                                </g>
-                                <g>
-                                    <rect x="0" y="308" width="104" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
-                                    <text x="52" y="323" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">📋 Sumienność</text>
-                                </g>
-                                <g>
-                                    <rect x="0" y="88" width="104" height="23" rx="11" fill="rgba(13,15,43,.85)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
-                                    <text x="52" y="103" text-anchor="middle" style="font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;fill:rgba(255,255,255,.75);">✨ Otwartość</text>
-                                </g>
-                            </svg>
-                        </div>
-
-                        <!-- Detail cards 2-col -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                                <div class="flex items-baseline justify-between mb-1">
-                                    <span class="text-sm font-semibold text-white/75">Uczciwość-Pokora</span>
-                                    <span class="text-base font-bold" style="color:rgba(139,92,246,.9);">68%</span>
-                                </div>
-                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:68%;background:linear-gradient(90deg,rgba(139,92,246,.8),rgba(139,92,246,.5));"></div></div>
-                                <div class="text-xs" style="color:rgba(255,255,255,.4);">Poziom: Umiarkowany</div>
-                                <div class="mt-1 text-xs italic" style="color:rgba(196,181,253,.7);">✦ Działa z integralnością gdy służy celowi — bez nadmiernego podporządkowania.</div>
-                            </div>
-                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                                <div class="flex items-baseline justify-between mb-1">
-                                    <span class="text-sm font-semibold text-white/75">Emocjonalność</span>
-                                    <span class="text-base font-bold" style="color:rgba(56,189,248,.9);">41%</span>
-                                </div>
-                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:41%;background:linear-gradient(90deg,rgba(56,189,248,.8),rgba(56,189,248,.5));"></div></div>
-                                <div class="text-xs" style="color:rgba(255,255,255,.4);">Poziom: Niski</div>
-                                <div class="mt-1 text-xs italic" style="color:rgba(103,232,249,.7);">✦ Niska emocjonalność może wskazywać na większą odporność na stres.</div>
-                            </div>
-                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                                <div class="flex items-baseline justify-between mb-1">
-                                    <span class="text-sm font-semibold text-white/75">Ekstrawersja</span>
-                                    <span class="text-base font-bold" style="color:rgba(52,211,153,.9);">79%</span>
-                                </div>
-                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:79%;background:linear-gradient(90deg,rgba(52,211,153,.9),rgba(52,211,153,.6));box-shadow:0 0 6px rgba(52,211,153,.3);"></div></div>
-                                <div class="text-xs" style="color:rgba(52,211,153,.7);">Poziom: Wysoki</div>
-                                <div class="mt-1 text-xs italic" style="color:rgba(110,231,183,.7);">✦ Wysoka ekstrawersja — naturalny lider, który energetyzuje otoczenie.</div>
-                            </div>
-                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                                <div class="flex items-baseline justify-between mb-1">
-                                    <span class="text-sm font-semibold text-white/75">Ugodowość</span>
-                                    <span class="text-base font-bold" style="color:rgba(251,191,36,.9);">52%</span>
-                                </div>
-                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:52%;background:linear-gradient(90deg,rgba(251,191,36,.8),rgba(251,191,36,.5));"></div></div>
-                                <div class="text-xs" style="color:rgba(255,255,255,.4);">Poziom: Umiarkowany</div>
-                                <div class="mt-1 text-xs italic" style="color:rgba(252,211,77,.7);">✦ Potrafi współpracować bez rezygnacji z własnych standardów.</div>
-                            </div>
-                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                                <div class="flex items-baseline justify-between mb-1">
-                                    <span class="text-sm font-semibold text-white/75">Sumienność</span>
-                                    <span class="text-base font-bold" style="color:rgba(244,114,182,.9);">65%</span>
-                                </div>
-                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:65%;background:linear-gradient(90deg,rgba(244,114,182,.8),rgba(244,114,182,.5));"></div></div>
-                                <div class="text-xs" style="color:rgba(255,255,255,.4);">Poziom: Umiarkowany</div>
-                                <div class="mt-1 text-xs italic" style="color:rgba(249,168,212,.7);">✦ Organizuje to co ważne — zostawiając przestrzeń na improwizację.</div>
-                            </div>
-                            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3" style="border-color:rgba(167,139,250,.25);">
-                                <div class="flex items-baseline justify-between mb-1">
-                                    <span class="text-sm font-semibold text-white/75">Otwartość</span>
-                                    <span class="text-base font-bold" style="color:rgba(167,139,250,.9);">93%</span>
-                                </div>
-                                <div class="cs-thin-bar mb-1.5"><div class="cs-thin-bar-fill" style="width:93%;background:linear-gradient(90deg,rgba(167,139,250,.9),rgba(167,139,250,.6));box-shadow:0 0 8px rgba(167,139,250,.4);"></div></div>
-                                <div class="text-xs" style="color:rgba(167,139,250,.7);">Poziom: Wysoki</div>
-                                <div class="mt-1 text-xs italic" style="color:rgba(196,181,253,.7);">✦ Najwyższy percentyl — źródło nieustannej ciekawości i tworzenia nowych połączeń.</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Enneagram – 1 col -->
-                    <div class="lg:col-span-1 cs-card p-5 flex flex-col gap-4">
-                        <div class="cs-mono" style="color:rgba(255,255,255,.35);">Silnik motywacji — Enneagram</div>
-
-                        <!-- EnnStar SVG (faithful replica) -->
-                        <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex justify-center" style="color:rgb(0,240,255);">
-                            <svg viewBox="0 0 200 200" style="width:100%;max-width:220px;height:auto;display:block;">
-                                <defs>
-                                    <filter id="iiyEnnGlow" x="-50%" y="-50%" width="200%" height="200%">
-                                        <feGaussianBlur stdDeviation="2.8" result="blur"/>
-                                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                                    </filter>
-                                </defs>
-                                <!-- outer ring -->
-                                <circle cx="100" cy="100" r="87" fill="none" stroke="white" stroke-opacity="0.08" stroke-width="1.5"/>
-                                <!-- star lines (1-4-2-8-5-7-1) -->
-                                <polyline points="100.0,22.0 167.5,139.0 150.1,40.2 23.2,86.5 126.7,173.3 32.5,139.0 100.0,22.0" fill="none" stroke="white" stroke-opacity="0.13" stroke-width="1.2" stroke-linejoin="round"/>
-                                <!-- triangle (3-6-9-3) -->
-                                <polyline points="176.8,86.5 73.3,173.3 49.9,40.2 176.8,86.5" fill="none" stroke="white" stroke-opacity="0.09" stroke-width="1.2" stroke-linejoin="round"/>
-                                <!-- rays from center -->
-                                <line x1="100" y1="100" x2="100" y2="22" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
-                                <line x1="100" y1="100" x2="150.1" y2="40.2" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
-                                <line x1="100" y1="100" x2="176.8" y2="86.5" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
-                                <line x1="100" y1="100" x2="167.5" y2="139" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
-                                <line x1="100" y1="100" x2="126.7" y2="173.3" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
-                                <line x1="100" y1="100" x2="73.3" y2="173.3" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
-                                <line x1="100" y1="100" x2="32.5" y2="139" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
-                                <line x1="100" y1="100" x2="23.2" y2="86.5" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
-                                <line x1="100" y1="100" x2="49.9" y2="40.2" stroke="white" stroke-opacity="0.06" stroke-width="1"/>
-                                <!-- score ticks -->
-                                <line x1="100" y1="16" x2="100" y2="23.3" stroke="white" stroke-opacity="0.12" stroke-width="2" stroke-linecap="round"/>
-                                <line x1="154" y1="35.7" x2="149.8" y2="40.6" stroke="white" stroke-opacity="0.1" stroke-width="2" stroke-linecap="round"/>
-                                <!-- n=3 active tick -->
-                                <line x1="182.7" y1="85.4" x2="165" y2="88.5" stroke="currentColor" stroke-opacity="0.85" stroke-width="3" stroke-linecap="round"/>
-                                <line x1="172.7" y1="142" x2="164.3" y2="137.1" stroke="white" stroke-opacity="0.14" stroke-width="2" stroke-linecap="round"/>
-                                <line x1="128.7" y1="178.9" x2="126" y2="171.3" stroke="white" stroke-opacity="0.12" stroke-width="2" stroke-linecap="round"/>
-                                <line x1="71.3" y1="178.9" x2="74.3" y2="170.5" stroke="white" stroke-opacity="0.13" stroke-width="2" stroke-linecap="round"/>
-                                <line x1="27.3" y1="142" x2="38.6" y2="135.5" stroke="white" stroke-opacity="0.19" stroke-width="2" stroke-linecap="round"/>
-                                <line x1="17.3" y1="85.4" x2="27.7" y2="87.3" stroke="white" stroke-opacity="0.16" stroke-width="2" stroke-linecap="round"/>
-                                <line x1="46" y1="35.7" x2="50.7" y2="41.2" stroke="white" stroke-opacity="0.12" stroke-width="2" stroke-linecap="round"/>
-                                <!-- active glow line center → type 3 -->
-                                <line x1="100" y1="100" x2="176.8" y2="86.5" stroke="currentColor" stroke-opacity="0.65" stroke-width="2.4" filter="url(#iiyEnnGlow)"/>
-                                <!-- inactive nodes (n=1,2,4,5,6,7,8,9) -->
-                                <circle cx="100" cy="22" r="4" fill="white" fill-opacity="0.18"/>
-                                <text x="100" y="36" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">1</text>
-                                <circle cx="150.1" cy="40.2" r="4" fill="white" fill-opacity="0.18"/>
-                                <text x="150.1" y="54.2" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">2</text>
-                                <!-- n=3 active glow circle -->\n                                <circle cx="176.8" cy="86.5" r="13" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-opacity="0.35" stroke-width="2" filter="url(#iiyEnnGlow)"/>\n                                <!-- n=3 active main circle -->\n                                <circle cx="176.8" cy="86.5" r="8.5" fill="currentColor" fill-opacity="0.9" stroke="currentColor" stroke-opacity="0.45" stroke-width="3"/>\n                                <text x="176.8" y="90.5" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.9" font-size="10" font-weight="700" font-family="monospace">3</text>\n                                <!-- inactive n=4 -->\n                                <circle cx="167.5" cy="139" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="167.5" y="153" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">4</text>\n                                <!-- inactive n=5 -->\n                                <circle cx="126.7" cy="173.3" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="126.7" y="187.3" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">5</text>\n                                <!-- inactive n=6 -->\n                                <circle cx="73.3" cy="173.3" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="73.3" y="187.3" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">6</text>\n                                <!-- inactive n=7 -->\n                                <circle cx="32.5" cy="139" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="32.5" y="153" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">7</text>\n                                <!-- inactive n=8 -->\n                                <circle cx="23.2" cy="86.5" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="23.2" y="100.5" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">8</text>\n                                <!-- inactive n=9 -->\n                                <circle cx="49.9" cy="40.2" r="4" fill="white" fill-opacity="0.18"/>\n                                <text x="49.9" y="54.2" text-anchor="middle" dominant-baseline="middle" fill="white" fill-opacity="0.28" font-size="8.5" font-weight="700" font-family="monospace">9</text>\n                                <!-- center dot -->\n                                <circle cx="100" cy="100" r="2.6" fill="white" fill-opacity="0.25"/>\n                            </svg>\n                        </div>
-
-                        <!-- Type info -->
-                        <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                            <div class="flex items-start justify-between gap-3">
-                                <div>
-                                    <div class="text-base font-bold text-white/85">Osiągacz</div>
-                                    <div class="mt-0.5 text-xs italic" style="color:rgba(255,255,255,.4);">"The Achiever"</div>
-                                </div>
-                                <span class="text-xs font-semibold px-2.5 py-1 rounded-full border shrink-0" style="color:#d946ef;background:rgba(217,70,239,.1);border-color:rgba(217,70,239,.3);">🪶 Skrzydło 4</span>
-                            </div>
-                            <div class="mt-3 flex items-center gap-3">
-                                <div class="cs-enn-badge">3</div>
-                                <div class="text-xs" style="color:rgba(255,255,255,.4);">Typ dominujący</div>
-                            </div>
-                        </div>
-
-                        <!-- Tritype -->
-                        <div class="rounded-xl border border-white/10 bg-white/5 p-4">
-                            <div class="cs-mono mb-3" style="color:rgba(255,255,255,.35);">Tritype</div>
-                            <div class="grid grid-cols-3 gap-2">
-                                <div class="rounded-xl border p-3 text-center" style="border-color:rgba(0,240,255,.3);background:rgba(0,240,255,.1);">
-                                    <div class="text-2xl font-extrabold" style="color:rgba(0,240,255,.9);">3</div>
-                                    <div class="text-xs mt-1" style="color:rgba(255,255,255,.5);">Osiągacz</div>
-                                </div>
-                                <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-center">
-                                    <div class="text-2xl font-extrabold text-white/65">7</div>
-                                    <div class="text-xs mt-1 text-white/40">Entuzjasta</div>
-                                </div>
-                                <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-center">
-                                    <div class="text-2xl font-extrabold text-white/65">1</div>
-                                    <div class="text-xs mt-1 text-white/40">Reformista</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Motivation & Fear -->
-                        <div class="rounded-xl p-4 border" style="border-color:rgba(251,191,36,.2);background:rgba(245,158,11,.08);">
-                            <div class="cs-mono mb-2" style="color:rgba(252,211,77,.7);">⚡ Motywacja</div>
-                            <div class="text-xs text-white/65 leading-relaxed">Być wartościowym i odnoszącym sukcesy — wyróżniać się i być podziwianym.</div>
-                        </div>
-                        <div class="rounded-xl p-4 border" style="border-color:rgba(244,63,94,.2);background:rgba(239,68,68,.08);">
-                            <div class="cs-mono mb-2" style="color:rgba(252,165,165,.7);">⚠ Lęki</div>
-                            <div class="text-xs text-white/65 leading-relaxed">Bycia bezwartościowym lub postrzeganym jako porażka przez osoby, na których opinii zależy.</div>
-                        </div>
-
-                        <!-- AI Enneagram -->
-                        <div class="rounded-xl p-4 border border-white/10 bg-white/5">
-                            <div class="cs-mono mb-2" style="color:rgba(255,255,255,.35);">✦ Analiza</div>
-                            <div class="text-sm italic text-white/70 leading-relaxed">Twój typ 3 z skrzydłem 4 tworzy rzadką kombinację — ambicję Osiągacza wzbogaconą głębią Indywidualisty. Działasz efektywnie gdy czujesz, że Twoja praca ma znaczenie i tworzy realny wpływ.</div>
-                        </div>
-                    </div>
-
-                    <!-- Kariera i Wartości divider -->
-                    <div class="lg:col-span-3 cs-section-divider">
-                        <span>Kariera i Wartości</span>
-                        <div></div>
-                    </div>
-
-                    <!-- Top Talenty -->
-                    <div class="cs-card p-5 flex flex-col gap-3">
-                        <div class="cs-mono" style="color:rgba(255,255,255,.35);">Top Talenty</div>
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5" style="border-color:rgba(167,139,250,.25);background:rgba(255,255,255,.03);">
-                                <span class="cs-rank-badge" style="background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.4);color:#a78bfa;box-shadow:0 0 10px -2px rgba(167,139,250,.5);">1</span>
-                                <div class="flex-1 min-w-0 text-sm font-semibold text-white/85">Myślenie Strategiczne</div>
-                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full border shrink-0" style="background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.2);color:rgba(186,230,253,.8);">Strategic Thinking</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border border-white/7 px-3 py-2.5" style="background:rgba(255,255,255,.03);">
-                                <span class="cs-rank-badge" style="background:rgba(129,140,248,.12);border:1px solid rgba(129,140,248,.3);color:#818cf8;">2</span>
-                                <div class="flex-1 min-w-0 text-sm font-semibold text-white/65">Kreatywność</div>
-                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full border shrink-0" style="background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.2);color:rgba(186,230,253,.8);">Strategic Thinking</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border border-white/7 px-3 py-2.5" style="background:rgba(255,255,255,.03);">
-                                <span class="cs-rank-badge" style="background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.3);color:#60a5fa;">3</span>
-                                <div class="flex-1 min-w-0 text-sm font-semibold text-white/65">Miłość do Nauki</div>
-                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full border shrink-0" style="background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.2);color:rgba(186,230,253,.8);">Strategic Thinking</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border border-white/7 px-3 py-2.5" style="background:rgba(255,255,255,.03);">
-                                <span class="cs-rank-badge" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);color:#34d399;">4</span>
-                                <div class="flex-1 min-w-0 text-sm font-semibold text-white/65">Przywództwo</div>
-                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full border shrink-0" style="background:rgba(244,63,94,.1);border-color:rgba(244,63,94,.2);color:rgba(253,164,175,.8);">Influencing</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border border-white/7 px-3 py-2.5" style="background:rgba(255,255,255,.03);">
-                                <span class="cs-rank-badge" style="background:rgba(148,163,184,.1);border:1px solid rgba(148,163,184,.3);color:#94a3b8;">5</span>
-                                <div class="flex-1 min-w-0 text-sm font-semibold text-white/65">Komunikacja</div>
-                                <span class="text-xs font-semibold px-2 py-0.5 rounded-full border shrink-0" style="background:rgba(244,63,94,.1);border-color:rgba(244,63,94,.2);color:rgba(253,164,175,.8);">Influencing</span>
-                            </div>
-                        </div>
-                        <div class="rounded-xl p-4 border border-white/10 bg-white/5">
-                            <div class="cs-mono mb-2" style="color:rgba(255,255,255,.35);">✦ Analiza · Talent #1</div>
-                            <div class="text-sm italic text-white/70 leading-relaxed">Twoje Myślenie Strategiczne połączone z Kreatywnością to rzadka kombinacja. Większość strategów jest systematyczna, ale niekreatywna. Ty łączysz oba wymiary i tworzysz rozwiązania, których inni nie widzą.</div>
-                        </div>
-                    </div>
-
-                    <!-- Profil RIASEC -->
-                    <div class="cs-card p-5 flex flex-col gap-4">
-                        <div class="cs-mono" style="color:rgba(255,255,255,.35);">Profil Kariery RIASEC</div>
-                        <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="rounded-xl border font-extrabold" style="padding:6px 16px;font-size:20px;color:#fbbf24;background:rgba(251,191,36,.15);border-color:rgba(251,191,36,.4);box-shadow:0 0 14px -2px rgba(251,191,36,.55);">E</span>
-                            <span class="rounded-xl border font-extrabold" style="padding:4px 12px;font-size:15px;color:#e878e0;background:rgba(232,120,224,.12);border-color:rgba(232,120,224,.35);">A</span>
-                            <span class="rounded-xl border font-extrabold" style="padding:4px 12px;font-size:15px;color:#38b6ff;background:rgba(56,182,255,.1);border-color:rgba(56,182,255,.3);">I</span>
-                            <span class="ml-1 cs-mono" style="color:rgba(255,255,255,.25);">Kod Hollanda</span>
-                        </div>
-                        <div class="space-y-3">
-                            <div>
-                                <div class="flex justify-between mb-1"><span class="flex gap-2 items-center"><span class="font-extrabold text-sm w-5 text-center" style="color:#fbbf24;">E</span><span class="text-sm" style="color:rgba(255,255,255,.8);">Przedsiębiorczy</span></span><span class="text-sm font-mono font-bold" style="color:#fbbf24;">82</span></div>
-                                <div class="cs-thick-bar"><div class="cs-thick-bar-fill" style="width:100%;background:linear-gradient(90deg,rgba(251,191,36,.85),rgba(251,191,36,.55));box-shadow:0 0 8px 1px rgba(251,191,36,.4);"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between mb-1"><span class="flex gap-2 items-center"><span class="font-extrabold text-sm w-5 text-center" style="color:#e878e0;">A</span><span class="text-sm" style="color:rgba(255,255,255,.8);">Artystyczny</span></span><span class="text-sm font-mono font-bold" style="color:#e878e0;">71</span></div>
-                                <div class="cs-thick-bar"><div class="cs-thick-bar-fill" style="width:87%;background:linear-gradient(90deg,rgba(232,120,224,.85),rgba(232,120,224,.55));box-shadow:0 0 8px 1px rgba(232,120,224,.4);"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between mb-1"><span class="flex gap-2 items-center"><span class="font-extrabold text-sm w-5 text-center" style="color:#38b6ff;">I</span><span class="text-sm" style="color:rgba(255,255,255,.8);">Badawczy</span></span><span class="text-sm font-mono font-bold" style="color:#38b6ff;">65</span></div>
-                                <div class="cs-thick-bar"><div class="cs-thick-bar-fill" style="width:79%;background:linear-gradient(90deg,rgba(56,182,255,.85),rgba(56,182,255,.55));box-shadow:0 0 8px 1px rgba(56,182,255,.4);"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between mb-1"><span class="flex gap-2 items-center"><span class="font-extrabold text-sm w-5 text-center" style="color:rgba(16,185,129,.4);">S</span><span class="text-sm" style="color:rgba(255,255,255,.3);">Społeczny</span></span><span class="text-sm font-mono font-bold" style="color:rgba(16,185,129,.4);">44</span></div>
-                                <div class="cs-thick-bar"><div class="cs-thick-bar-fill" style="width:54%;opacity:.3;background:rgba(16,185,129,.5);"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between mb-1"><span class="flex gap-2 items-center"><span class="font-extrabold text-sm w-5 text-center" style="color:rgba(148,163,184,.4);">C</span><span class="text-sm" style="color:rgba(255,255,255,.3);">Konwencjonalny</span></span><span class="text-sm font-mono font-bold" style="color:rgba(148,163,184,.4);">32</span></div>
-                                <div class="cs-thick-bar"><div class="cs-thick-bar-fill" style="width:39%;opacity:.3;background:rgba(148,163,184,.5);"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between mb-1"><span class="flex gap-2 items-center"><span class="font-extrabold text-sm w-5 text-center" style="color:rgba(248,113,113,.4);">R</span><span class="text-sm" style="color:rgba(255,255,255,.3);">Praktyczny</span></span><span class="text-sm font-mono font-bold" style="color:rgba(248,113,113,.4);">28</span></div>
-                                <div class="cs-thick-bar"><div class="cs-thick-bar-fill" style="width:34%;opacity:.3;background:rgba(248,113,113,.5);"></div></div>
-                            </div>
-                        </div>
-                        <div class="rounded-xl p-4 border border-white/10 bg-white/5">
-                            <div class="cs-mono mb-2" style="color:rgba(255,255,255,.35);">✦ Analiza · Środowisko</div>
-                            <div class="text-sm italic text-white/70 leading-relaxed">Środowisko gdzie możesz inicjować, kreować i badać — to Twój naturalny biotop. Kwitnie w przestrzeniach, gdzie wizja spotyka się z autonomią działania i widocznym wpływem na innych.</div>
-                        </div>
-                    </div>
-
-                    <!-- Wartości Fundamentalne -->
-                    <div class="cs-card p-5 flex flex-col gap-4">
-                        <div class="cs-mono" style="color:rgba(255,255,255,.35);">Wartości Fundamentalne</div>
-                        <div class="flex justify-center py-2">
-                            <div class="relative" style="width:170px;height:170px;">
-                                <svg viewBox="0 0 170 170" width="170" height="170" class="absolute inset-0">
-                                    <circle cx="85" cy="85" r="75" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                                    <circle cx="85" cy="85" r="50" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                                    <circle cx="85" cy="85" r="25" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-                                    <line x1="85" y1="10" x2="85" y2="160" stroke="rgba(255,255,255,0.05)" stroke-width=".5"/>
-                                    <line x1="10" y1="85" x2="160" y2="85" stroke="rgba(255,255,255,0.05)" stroke-width=".5"/>
-                                    <line x1="32" y1="32" x2="138" y2="138" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
-                                    <line x1="138" y1="32" x2="32" y2="138" stroke="rgba(255,255,255,0.04)" stroke-width=".5"/>
-                                    <polygon points="85,15 138,42 155,100" fill="rgba(167,139,250,.1)" stroke="rgba(167,139,250,.35)" stroke-width="1.5" stroke-linejoin="round"/>
-                                    <circle cx="85" cy="15" r="5" fill="rgba(192,132,252,.9)" stroke="rgba(192,132,252,.3)" stroke-width="4"/>
-                                    <circle cx="138" cy="42" r="4" fill="rgba(56,189,248,.8)" stroke="rgba(56,189,248,.3)" stroke-width="3"/>
-                                    <circle cx="155" cy="100" r="4" fill="rgba(251,191,36,.8)" stroke="rgba(251,191,36,.3)" stroke-width="3"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2" style="border-color:rgba(192,132,252,.3);background:rgba(255,255,255,.03);">
-                                <span class="cs-rank-badge" style="background:rgba(192,132,252,.18);border:1px solid rgba(192,132,252,.4);color:#c084fc;">1</span>
-                                <div class="flex-1 text-sm font-semibold text-white/80">Kreatywność</div>
-                                <span class="text-xs font-mono font-bold" style="color:#c084fc;">4.8</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2" style="border-color:rgba(56,189,248,.25);background:rgba(255,255,255,.03);">
-                                <span class="cs-rank-badge" style="background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.35);color:#38bdf8;">2</span>
-                                <div class="flex-1 text-sm font-semibold text-white/75">Niezależność</div>
-                                <span class="text-xs font-mono font-bold" style="color:#38bdf8;">4.6</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2" style="border-color:rgba(251,191,36,.25);background:rgba(255,255,255,.03);">
-                                <span class="cs-rank-badge" style="background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:#fbbf24;">3</span>
-                                <div class="flex-1 text-sm font-semibold text-white/75">Osiągnięcia</div>
-                                <span class="text-xs font-mono font-bold" style="color:#fbbf24;">4.4</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2" style="border-color:rgba(52,211,153,.2);background:rgba(255,255,255,.03);">
-                                <span class="cs-rank-badge" style="background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:#34d399;">4</span>
-                                <div class="flex-1 text-sm font-semibold text-white/70">Wpływ Społeczny</div>
-                                <span class="text-xs font-mono font-bold" style="color:#34d399;">4.2</span>
-                            </div>
-                        </div>
-                        <div class="rounded-xl p-4 border border-white/10 bg-white/5">
-                            <div class="cs-mono mb-2" style="color:rgba(255,255,255,.35);">✦ Analiza · Wartości</div>
-                            <div class="text-sm italic text-white/70 leading-relaxed">Kreatywność jako wartość najwyższa mówi nie o estetyce — mówi o potrzebie tworzenia nowego. Wraz z Niezależnością kształtuje osobę, która musi sama decydować jak i co buduje.</div>
-                        </div>
-                    </div>
-
-                    <!-- Synteza divider -->
-                    <div class="lg:col-span-3 cs-section-divider">
-                        <span>Synteza</span>
-                        <div></div>
-                    </div>
-
-                    <!-- Col 1: Zawody dla Ciebie -->
-                    <div class="cs-card p-5 flex flex-col gap-3" style="border-top:1.5px solid rgba(52,211,153,.2);">
-                        <div class="flex items-center gap-2">
-                            <span style="color:rgba(52,211,153,.6);font-size:11px;">◈</span>
-                            <div class="cs-mono" style="color:rgba(52,211,153,.55);">Zawody dla Ciebie</div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-start gap-3 rounded-xl border px-3 py-3" style="border-color:rgba(52,211,153,.1);background:rgba(52,211,153,.04);">
-                                <span class="text-lg flex-shrink-0 mt-0.5">🎯</span>
-                                <div>
-                                    <div class="text-sm font-semibold text-white/85">Strateg Produktowy</div>
-                                    <div class="mt-0.5 text-xs text-white/40 leading-relaxed">Łączysz wizjonerskie myślenie z analitycznym profilem I, tworząc profil idealny dla roli GPM lub Product Directora.</div>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-3 rounded-xl border px-3 py-3" style="border-color:rgba(52,211,153,.1);background:rgba(52,211,153,.04);">
-                                <span class="text-lg flex-shrink-0 mt-0.5">💡</span>
-                                <div>
-                                    <div class="text-sm font-semibold text-white/85">Founder / CEO</div>
-                                    <div class="mt-0.5 text-xs text-white/40 leading-relaxed">Typ 3 Enneagram + Ekstrawersja 79p + naturalne Przywództwo to sygnatura twórcy firm i liderów organizacji.</div>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-3 rounded-xl border px-3 py-3" style="border-color:rgba(52,211,153,.1);background:rgba(52,211,153,.04);">
-                                <span class="text-lg flex-shrink-0 mt-0.5">📊</span>
-                                <div>
-                                    <div class="text-sm font-semibold text-white/85">Konsultant Zarządzania</div>
-                                    <div class="mt-0.5 text-xs text-white/40 leading-relaxed">Sumienność 65p i wysoki E w RIASEC predysponuje do diagnozowania systemów i ich efektywnych napraw.</div>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-3 rounded-xl border px-3 py-3" style="border-color:rgba(52,211,153,.1);background:rgba(52,211,153,.04);">
-                                <span class="text-lg flex-shrink-0 mt-0.5">🎨</span>
-                                <div>
-                                    <div class="text-sm font-semibold text-white/85">Dyrektor Kreatywny</div>
-                                    <div class="mt-0.5 text-xs text-white/40 leading-relaxed">Otwartość 93p i talent Kreatywności tworzą profil osoby definiującej wizję estetyczną marek i produktów.</div>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-3 rounded-xl border px-3 py-3" style="border-color:rgba(52,211,153,.1);background:rgba(52,211,153,.04);">
-                                <span class="text-lg flex-shrink-0 mt-0.5">✍️</span>
-                                <div>
-                                    <div class="text-sm font-semibold text-white/85">Brand &amp; Content Strategist</div>
-                                    <div class="mt-0.5 text-xs text-white/40 leading-relaxed">Wartości Kreatywności i Niezależności plus profil EAI Hollanda idealnie wpisują się w budowanie narracji marki.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Col 2: Twoje Alter Ego -->
-                    <div class="cs-card p-5 flex flex-col gap-3" style="border-top:1.5px solid rgba(139,92,246,.2);">
-                        <div class="flex items-center gap-2">
-                            <span style="color:rgba(139,92,246,.6);font-size:11px;">◈</span>
-                            <div class="cs-mono" style="color:rgba(196,181,253,.55);">Twoje Alter Ego</div>
-                        </div>
-                        <div class="text-xs mb-1" style="color:rgba(255,255,255,.25);">Fikcyjne postacie z podobnym DNA osobowości</div>
-                        <div class="space-y-2">
-                            <div class="rounded-xl border px-3 py-3" style="border-color:rgba(139,92,246,.15);background:rgba(139,92,246,.04);">
-                                <div class="flex items-start justify-between gap-2 mb-1">
-                                    <div class="text-sm font-bold text-white/85">Harvey Specter</div>
-                                    <span class="text-xs font-mono shrink-0 px-1.5 py-0.5 rounded-md" style="color:rgba(196,181,253,.65);background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);">Serial HBO</span>
-                                </div>
-                                <div class="text-xs italic text-white/45 leading-relaxed">Pewność siebie, strategiczne myślenie i charyzma połączone z bezkompromisowym dążeniem do sukcesu.</div>
-                            </div>
-                            <div class="rounded-xl border px-3 py-3" style="border-color:rgba(139,92,246,.15);background:rgba(139,92,246,.04);">
-                                <div class="flex items-start justify-between gap-2 mb-1">
-                                    <div class="text-sm font-bold text-white/85">Tony Stark</div>
-                                    <span class="text-xs font-mono shrink-0 px-1.5 py-0.5 rounded-md" style="color:rgba(196,181,253,.65);background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);">Marvel</span>
-                                </div>
-                                <div class="text-xs italic text-white/45 leading-relaxed">Łączy intelektualne wizjonerstwo z naturalnym przywództwem i wewnętrzną potrzebą bycia najlepszym.</div>
-                            </div>
-                            <div class="rounded-xl border px-3 py-3" style="border-color:rgba(139,92,246,.15);background:rgba(139,92,246,.04);">
-                                <div class="flex items-start justify-between gap-2 mb-1">
-                                    <div class="text-sm font-bold text-white/85">Miranda Priestly</div>
-                                    <span class="text-xs font-mono shrink-0 px-1.5 py-0.5 rounded-md" style="color:rgba(196,181,253,.65);background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);">Film</span>
-                                </div>
-                                <div class="text-xs italic text-white/45 leading-relaxed">Bezkompromisowy standard, siła autorytetu zbudowana na głębokiej ekspertyzie i nieugietej wizji doskonałości.</div>
-                            </div>
-                            <div class="rounded-xl border px-3 py-3" style="border-color:rgba(139,92,246,.15);background:rgba(139,92,246,.04);">
-                                <div class="flex items-start justify-between gap-2 mb-1">
-                                    <div class="text-sm font-bold text-white/85">Don Draper</div>
-                                    <span class="text-xs font-mono shrink-0 px-1.5 py-0.5 rounded-md" style="color:rgba(196,181,253,.65);background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);">Serial AMC</span>
-                                </div>
-                                <div class="text-xs italic text-white/45 leading-relaxed">Artystyczna wrażliwość połączona ze strategicznym umysłem i potrzebą ciągłego tworzenia własnej narracji.</div>
-                            </div>
-                            <div class="rounded-xl border px-3 py-3" style="border-color:rgba(139,92,246,.15);background:rgba(139,92,246,.04);">
-                                <div class="flex items-start justify-between gap-2 mb-1">
-                                    <div class="text-sm font-bold text-white/85">Hermiona Granger</div>
-                                    <span class="text-xs font-mono shrink-0 px-1.5 py-0.5 rounded-md" style="color:rgba(196,181,253,.65);background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);">Książka/Film</span>
-                                </div>
-                                <div class="text-xs italic text-white/45 leading-relaxed">Miłość do nauki, strategiczne myślenie i determinacja do osiągania ambitnych celów za każdą cenę.</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Col 3: Kim jesteś naprawdę -->
-                    <div class="cs-card p-5 flex flex-col gap-3" style="border-top:1.5px solid rgba(56,189,248,.2);">
-                        <div class="flex items-center gap-2">
-                            <span style="color:rgba(56,189,248,.6);font-size:11px;">◈</span>
-                            <div class="cs-mono" style="color:rgba(103,232,249,.55);">Kim jesteś naprawdę</div>
-                        </div>
-                        <div class="space-y-3">
-                            <div class="rounded-xl border p-4" style="border-color:rgba(139,92,246,.15);background:rgba(139,92,246,.04);">
-                                <div class="cs-mono mb-2" style="color:rgba(196,181,253,.7);">Esencja</div>
-                                <div class="text-sm text-white/70 leading-relaxed">Aleksandra widzi całość zanim inni dostrzegą poszczególne elementy. Myśli systemowo, działa z intencją i naturalnie sprawia, że ludzie wokół niej chcą dążyć wyżej.</div>
-                            </div>
-                            <div class="rounded-xl border p-4" style="border-color:rgba(56,189,248,.15);background:rgba(56,189,248,.04);">
-                                <div class="cs-mono mb-2" style="color:rgba(103,232,249,.7);">Środowisko naturalne</div>
-                                <div class="text-sm text-white/70 leading-relaxed">Kwitnie w środowiskach łączących autonomię z ambitnym celem. Potrzebuje przestrzeni, gdzie jej wizja ma znaczenie i gdzie wyniki są widzialne.</div>
-                            </div>
-                            <div class="rounded-xl border p-4" style="border-color:rgba(52,211,153,.15);background:rgba(52,211,153,.04);">
-                                <div class="cs-mono mb-2" style="color:rgba(110,231,183,.7);">Supermoce</div>
-                                <div class="text-sm text-white/70 leading-relaxed">Unikalna zdolność do łączenia strategicznego myślenia z autentyczną kreatywnością. Błyskawicznie przekuwa wzorce w konkretne działania, których inni nie widzą.</div>
-                            </div>
-                            <div class="rounded-xl border p-4" style="border-color:rgba(251,191,36,.15);background:rgba(251,191,36,.04);">
-                                <div class="cs-mono mb-2" style="color:rgba(252,211,77,.7);">Ślepe punkty</div>
-                                <div class="text-sm text-white/70 leading-relaxed">Może ignorować perspektywy emocjonalne koncentrując się na wynikach. Ryzyko pominięcia relacji kosztem strategii i tendencja do oceniania siebie przez pryzmat osiągnięć.</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Row 2: Why / Energizery / Drenaże -->
-                    <div class="cs-card p-5 flex flex-col gap-3" style="border-top:1.5px solid rgba(251,191,36,.2);">
-                        <div class="flex items-center gap-2">
-                            <span style="color:rgba(251,191,36,.6);font-size:11px;">◈</span>
-                            <div class="cs-mono" style="color:rgba(252,211,77,.55);">Twoje „Dlaczego" (Why)</div>
-                        </div>
-                        <div class="rounded-xl border p-4 flex-1" style="border-color:rgba(251,191,36,.2);background:rgba(245,158,11,.05);">
-                            <p class="text-sm text-white/75 leading-relaxed">Aleksandra działa, bo chce budować rzeczy, które trwają — systemy, marki, produkty, które mają realny wpływ na innych. Na głębszym poziomie dąży do potwierdzenia, że jej praca ma znaczenie i że ona sama jest wyjątkowa.</p>
-                        </div>
-                    </div>
-
-                    <div class="cs-card p-5 flex flex-col gap-3" style="border-top:1.5px solid rgba(52,211,153,.2);">
-                        <div class="flex items-center gap-2">
-                            <span style="color:rgba(52,211,153,.6);font-size:11px;">◈</span>
-                            <div class="cs-mono" style="color:rgba(110,231,183,.55);">Co daje Ci energię</div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5" style="border-color:rgba(52,211,153,.15);background:rgba(52,211,153,.04);">
-                                <span class="font-bold shrink-0 text-base" style="color:#34d399;">＋</span>
-                                <span class="text-sm text-white/75">Intensywne sesje burzy mózgów</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5" style="border-color:rgba(52,211,153,.15);background:rgba(52,211,153,.04);">
-                                <span class="font-bold shrink-0 text-base" style="color:#34d399;">＋</span>
-                                <span class="text-sm text-white/75">Wyznaczanie i osiąganie ambitnych celów</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5" style="border-color:rgba(52,211,153,.15);background:rgba(52,211,153,.04);">
-                                <span class="font-bold shrink-0 text-base" style="color:#34d399;">＋</span>
-                                <span class="text-sm text-white/75">Uczenie się zupełnie nowych dziedzin</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5" style="border-color:rgba(52,211,153,.15);background:rgba(52,211,153,.04);">
-                                <span class="font-bold shrink-0 text-base" style="color:#34d399;">＋</span>
-                                <span class="text-sm text-white/75">Prezentacje i wystąpienia publiczne</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5" style="border-color:rgba(52,211,153,.15);background:rgba(52,211,153,.04);">
-                                <span class="font-bold shrink-0 text-base" style="color:#34d399;">＋</span>
-                                <span class="text-sm text-white/75">Praca od koncepcji do realizacji</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="cs-card p-5 flex flex-col gap-3" style="border-top:1.5px solid rgba(244,63,94,.2);">
-                        <div class="flex items-center gap-2">
-                            <span style="color:rgba(244,63,94,.6);font-size:11px;">◈</span>
-                            <div class="cs-mono" style="color:rgba(253,164,175,.55);">Co drenuje Twoją energię</div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5" style="border-color:rgba(244,63,94,.15);background:rgba(244,63,94,.04);">
-                                <span class="font-bold shrink-0 text-base" style="color:#f43f5e;">−</span>
-                                <span class="text-sm text-white/75">Biurokratyczne procedury bez celu</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5" style="border-color:rgba(244,63,94,.15);background:rgba(244,63,94,.04);">
-                                <span class="font-bold shrink-0 text-base" style="color:#f43f5e;">−</span>
-                                <span class="text-sm text-white/75">Repetytywne zadania bez sensu</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5" style="border-color:rgba(244,63,94,.15);background:rgba(244,63,94,.04);">
-                                <span class="font-bold shrink-0 text-base" style="color:#f43f5e;">−</span>
-                                <span class="text-sm text-white/75">Mikrozarządzanie i brak autonomii</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5" style="border-color:rgba(244,63,94,.15);background:rgba(244,63,94,.04);">
-                                <span class="font-bold shrink-0 text-base" style="color:#f43f5e;">−</span>
-                                <span class="text-sm text-white/75">Spotkania bez agendy i wniosków</span>
-                            </div>
-                            <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5" style="border-color:rgba(244,63,94,.15);background:rgba(244,63,94,.04);">
-                                <span class="font-bold shrink-0 text-base" style="color:#f43f5e;">−</span>
-                                <span class="text-sm text-white/75">Środowisko konfliktu wartości</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Dark Triad divider -->
-                    <div class="lg:col-span-3 cs-section-divider cs-section-divider-danger">
-                        <span>✦ Cień — synteza ryzyk</span>
-                        <div></div>
-                    </div>
-
-                    <!-- Dark Triad full width -->
-                    <div class="lg:col-span-3 cs-card p-5" style="border-top:1.5px solid rgba(244,63,94,.25);">
-                        <div class="grid md:grid-cols-3 gap-6">
-                            <div class="md:col-span-2 space-y-4">
-                                <div class="cs-mono mb-2" style="color:rgba(244,63,94,.6);">Dark Triad — ryzyka osobowości</div>
-                                <div>
-                                    <div class="flex items-center justify-between mb-1.5">
-                                        <span class="text-sm" style="color:rgba(255,255,255,.6);">Narcyzm / Ego</span>
-                                        <span class="text-xs font-mono font-bold" style="color:rgba(251,191,36,.8);">45% · Umiarkowany</span>
-                                    </div>
-                                    <div class="cs-thick-bar"><div class="cs-thick-bar-fill" style="width:45%;background:linear-gradient(90deg,rgba(244,63,94,.7),rgba(251,191,36,.6));"></div></div>
-                                    <div class="mt-1 text-xs" style="color:rgba(255,255,255,.3);">Zdrowa wiara w siebie z tendencją do przeceniania własnych racji pod presją wyników.</div>
-                                </div>
-                                <div>
-                                    <div class="flex items-center justify-between mb-1.5">
-                                        <span class="text-sm" style="color:rgba(255,255,255,.6);">Makiawelizm / Strategia</span>
-                                        <span class="text-xs font-mono font-bold" style="color:rgba(103,232,249,.7);">38% · Niski</span>
-                                    </div>
-                                    <div class="cs-thick-bar"><div class="cs-thick-bar-fill" style="width:38%;background:linear-gradient(90deg,rgba(244,63,94,.6),rgba(103,232,249,.5));"></div></div>
-                                    <div class="mt-1 text-xs" style="color:rgba(255,255,255,.3);">Pragmatyczne podejście do relacji — rzadko instrumentalne, granica zależy od kontekstu.</div>
-                                </div>
-                                <div>
-                                    <div class="flex items-center justify-between mb-1.5">
-                                        <span class="text-sm" style="color:rgba(255,255,255,.6);">Psychopatia / Zimna krew</span>
-                                        <span class="text-xs font-mono font-bold" style="color:rgba(52,211,153,.8);">14% · Bardzo niski</span>
-                                    </div>
-                                    <div class="cs-thick-bar"><div class="cs-thick-bar-fill" style="width:14%;background:linear-gradient(90deg,rgba(244,63,94,.5),rgba(52,211,153,.6));"></div></div>
-                                    <div class="mt-1 text-xs" style="color:rgba(255,255,255,.3);">Wysoka empatia i troska o innych chronią przed chłodną kalkulacją w relacjach.</div>
-                                </div>
-                            </div>
-                            <div class="rounded-xl border p-4 flex flex-col justify-center" style="border-color:rgba(244,63,94,.2);background:rgba(244,63,94,.04);">
-                                <div class="cs-mono mb-3" style="color:rgba(244,63,94,.6);">✦ Analiza · Cień</div>
-                                <div class="text-sm italic text-white/65 leading-relaxed">Twój Cień jest kontrolowany. Ambicja pozostaje zasobem gdy trzymasz ją blisko autentycznych wartości. Uważaj na tendencję do instrumentalnego traktowania relacji w pędzie do sukcesu.</div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div><!-- /main grid -->
-
-                <!-- CTA banner -->
-                <div class="border-t border-white/5 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div>
-                        <div class="text-sm font-semibold text-white/70">Chcesz zobaczyć swój własny profil?</div>
-                        <div class="text-xs text-white/35 mt-0.5">Ukończ 6 testów i odblokuj kompletną Kartę Postaci z Analizą AI.</div>
-                    </div>
-                    <a href="/auth" class="flex-shrink-0 inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90" style="background:linear-gradient(120deg,rgba(112,0,255,.8),rgba(0,200,220,.85));box-shadow:0 0 24px -6px rgba(112,0,255,.5);">
-                        Wykonaj darmowy test
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-                    </a>
-                </div>
-
-            </div><!-- /cs-outer -->
+                <a href="/auth" class="flex-shrink-0 inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90" style="background:linear-gradient(120deg,rgba(112,0,255,.8),rgba(0,200,220,.85));box-shadow:0 0 24px -6px rgba(112,0,255,.5);">
+                    Wykonaj darmowy test
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </a>
+            </div>
 
         </div><!-- /max-w-6xl -->
 
     </section>
 
 
+    <!-- CHAT AI FEATURE TEASER -->
+    <section class="py-20 relative overflow-hidden bg-slate-900/40">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+
+                <!-- LEFT: copy -->
+                <div>
+                    <span class="text-indigo-400 font-bold uppercase tracking-widest text-xs mb-4 block">AI Psycholog</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-5" style="font-family:'SF Pro Display',-apple-system,sans-serif;letter-spacing:-.02em;">Zapytaj Alexa
+                        <span class="block" style="background:linear-gradient(120deg,#38b6ff,#7b5ea7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">o swoje wyniki</span>
+                    </h2>
+                    <p class="text-slate-400 leading-relaxed mb-6">Po ukończeniu testów możesz rozmawiać z Alexem — Twoim osobistym AI-psychologiem. Zadaj dowolne pytanie o swój profil, ścieżkę kariery, relacje czy rozwój osobisty.</p>
+                    <ul class="space-y-3 text-sm text-slate-400">
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Personalizowane odpowiedzi bazujące na Twoich wynikach 6 testów</li>
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Pytaj o kariery, relacje, mocne strony i wyzwania</li>
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 mt-0.5 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Bez cenzury — Alex mówi wprost, bez owijania w bawełnę</li>
+                    </ul>
+                </div>
+
+                <!-- RIGHT: chat window mock -->
+                <div class="relative">
+                    <svg class="absolute inset-0 w-full h-full opacity-10 pointer-events-none" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+                        <defs>
+                            <pattern id="chat-mesh" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+                                <circle cx="25" cy="25" r="2" fill="rgba(168,85,247,0.3)"/>
+                                <line x1="25" y1="0" x2="25" y2="50" stroke="rgba(168,85,247,0.1)" stroke-width="0.5"/>
+                                <line x1="0" y1="25" x2="50" y2="25" stroke="rgba(168,85,247,0.1)" stroke-width="0.5"/>
+                            </pattern>
+                        </defs>
+                        <rect width="400" height="500" fill="url(#chat-mesh)"/>
+                    </svg>
+
+                    <div class="relative bg-slate-900/60 backdrop-blur-xl border border-purple-500/30 rounded-3xl p-6 flex flex-col shadow-2xl" style="box-shadow:0 0 60px rgba(168,85,247,.15);">
+
+                        <!-- Chat header -->
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-700/50 mb-4">
+                            <h4 class="text-sm font-bold text-purple-300 uppercase tracking-widest flex items-center gap-2">
+                                <svg class="w-3 h-3 text-green-400 animate-pulse" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
+                                ALEX · NEURAL LINK
+                            </h4>
+                            <span class="text-xs text-slate-500">ACTIVE</span>
+                        </div>
+
+                        <!-- Messages -->
+                        <div class="space-y-4 mb-4">
+                            <div class="flex justify-end">
+                                <div class="bg-slate-700/60 text-white rounded-2xl rounded-tr-md px-4 py-3 max-w-xs text-sm border border-slate-600/50">
+                                    Jakie ścieżki kariery są najlepsze dla mojego profilu?
+                                </div>
+                            </div>
+                            <div class="flex justify-start">
+                                <div class="bg-gradient-to-br from-purple-600/60 to-indigo-600/50 text-white rounded-2xl rounded-tl-md px-4 py-3 max-w-sm text-sm border border-purple-500/50">
+                                    <p class="leading-relaxed mb-2">Twoja kombinacja: otwartość 93p + ekstrawersja 79p + profil RIASEC IA tworzy rzadki profil Wizjonera-Badacza.</p>
+                                    <p class="leading-relaxed mb-2">Najlepiej pasujesz do ról gdzie możesz łączyć głęboką analizę z wpływem na innych — Data Science, Product Strategy, Research Lead...</p>
+                                    <div class="flex items-center gap-1 mt-2">
+                                        <span class="text-xs text-purple-200 opacity-75">● ● ●</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Input -->
+                        <div class="flex gap-2 pt-2 border-t border-slate-700/50">
+                            <input type="text" placeholder="Pytaj o swój profil..." class="flex-1 bg-slate-800/50 border border-slate-700/50 rounded-xl px-4 py-2 text-sm text-slate-400 placeholder-slate-600 focus:outline-none focus:border-purple-500/50 transition" disabled/>
+                            <button class="bg-purple-600 hover:bg-purple-700 text-white rounded-xl p-2 transition" disabled>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
 
     <!-- METHODOLOGY SECTION (THE CORE) -->

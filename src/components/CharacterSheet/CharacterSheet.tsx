@@ -341,12 +341,66 @@ function EnnStar({ active, scores }: { active: number | null; scores: Record<str
   );
 }
 
+/* ══ DEMO DATA ══ */
+const DEMO_PROFILE = { full_name: 'Aleksandra K.', avatar_url: null as string | null, is_premium: true };
+const DEMO_AUTH_USER = { id: 'demo', email: 'demo@alcheme.io', user_metadata: { full_name: 'Aleksandra K.' } };
+const DEMO_RAW: Record<string, RawRow> = {
+  HEXACO: { test_type: 'HEXACO', raw_scores: {}, percentile_scores: { honesty_humility: 68, emotionality: 41, extraversion: 79, agreeableness: 52, conscientiousness: 65, openness: 93 }, report: null },
+  ENNEAGRAM: { test_type: 'ENNEAGRAM', raw_scores: { 1: 20, 2: 15, 3: 85, 4: 35, 5: 25, 6: 30, 7: 55, 8: 40, 9: 20 }, percentile_scores: {}, report: { primary_type: { type: 3 }, wing: 4, tritype: [3, 7, 1] } },
+  STRENGTHS: { test_type: 'STRENGTHS', raw_scores: { top_5: [{ name: 'Myślenie Strategiczne', domain: 'strategic_thinking', score: 0.95 }, { name: 'Kreatywność', domain: 'strategic_thinking', score: 0.88 }, { name: 'Miłość do Nauki', domain: 'strategic_thinking', score: 0.82 }, { name: 'Entuzjazm', domain: 'influencing', score: 0.78 }, { name: 'Maksymalizacja', domain: 'influencing', score: 0.74 }] }, percentile_scores: {}, report: null },
+  CAREER: { test_type: 'CAREER', raw_scores: {}, percentile_scores: {}, report: { holland_code: 'IAE', all_scores: { investigative: 88, artistic: 75, enterprising: 62, social: 54, realistic: 33, conventional: 22 }, top_careers: [{ emoji: '🔬', title: 'Data Scientist / Analityk', description: 'Otwartość 93p + precyzja myślenia tworzą idealne warunki do badań.' }, { emoji: '🚀', title: 'Founder / Strateg', description: 'Ekstrawersja 79p + myślenie systemowe = naturalny lider.' }, { emoji: '🎨', title: 'UX/Product Designer', description: 'Profil artystyczny IAE z silną kreatywnością.' }, { emoji: '🧠', title: 'Psycholog / Coach', description: 'Otwartość i empatia — idealny profil do pracy z ludźmi.' }, { emoji: '🎓', title: 'Badacz / Naukowiec', description: 'Profil badawczy i wysoka sumienność wspierają pracę naukową.' }] } },
+  VALUES: { test_type: 'VALUES', raw_scores: { sorted_values: [{ name: 'Autonomia', score: 0.95 }, { name: 'Kreatywność', score: 0.88 }, { name: 'Wpływ', score: 0.82 }, { name: 'Wiedza', score: 0.78 }, { name: 'Wolność', score: 0.74 }] }, percentile_scores: {}, report: null },
+  DARK_TRIAD: { test_type: 'DARK_TRIAD', raw_scores: { dimensions: { narcissism: { raw_score: 42 }, machiavellianism: { raw_score: 35 }, psychopathy: { raw_score: 18 } } }, percentile_scores: {}, report: null },
+};
+const DEMO_LLM: CharacterCardContent = {
+  archetype_name: 'Wizjoner-Analityk',
+  archetype_subtitle: 'Buduje nowe systemy rozumienia',
+  tags_fundamental: ['Analityczny', 'Strategiczny'],
+  tags_style: ['Ekspresyjny introwerk', 'Systemowy'],
+  tags_values: ['Autonomia', 'Wiedza'],
+  hexaco_interpretations: {
+    honesty_humility: 'Działa z integralnością gdy służy to celowi — bez nadmiernego podporządkowania.',
+    emotionality: 'Niska emocjonalność pozwala sprawnie działać pod presją z zachowaną empatią w kluczowych relacjach.',
+    extraversion: 'Wysoka ekstrawersja: naturalny lider który energetyzuje otoczenie i mobilizuje ludzi wokół wspólnego celu.',
+    agreeableness: 'Potrafi współpracować i ustąpić gdy służy to celowi — ale nie kosztem własnych standardów.',
+    conscientiousness: 'Ustrukturyzowane podejście do celów — organizuje to co ważne, zostawiając przestrzeń na improwizację.',
+    openness: 'Najwyższy percentyl — źródło nieustannej ciekawości i zdolności do tworzenia nowych, niespotykanych połączeń.',
+  },
+  enneagram_motivation_text: 'Napędza ją potrzeba bycia wartościowym i odnoszącym sukcesy — wyróżniać się i być podziwianym za realne osiągnięcia.',
+  strengths_top1_interpretation: 'Myślenie Strategiczne jako dominujący talent oznacza wyjątkową zdolność do tworzenia alternatywnych ścieżek do celu.',
+  riasec_environment_text: 'Profil IAE predysponuje do środowisk łączących głębię intelektualną z twórczością i wpływem na innych.',
+  schwartz_values_text: 'Autonomia i wiedza jako wartości nadrzędne tworzą profil osoby, która musi mieć przestrzeń do własnego myślenia.',
+  portrait_essence: 'Połączenie rzadkiej ciekawości intelektualnej z wyjątkową ekstrawersją tworzy osobę, która nie tylko widzi wzorce tam gdzie inni ich nie dostrzegają, ale potrafi je skutecznie komunikować.',
+  portrait_environment: 'Najlepiej działa w środowiskach gdzie może łączyć głęboką analizę z wpływem na innych. Przytłaczają ją miejsca z nadmierną biurokracją i brakiem sensu.',
+  portrait_superpowers: 'Wyjątkowa zdolność syntezy złożonych informacji + naturalne zdolności przywódcze = rzadki profil który potrafi zarówno tworzyć strategie jak i przekonywać innych do ich realizacji.',
+  portrait_blindspots: 'Może przeceniać własną wizję i niedoceniać pragmatycznych ograniczeń. Ryzyko wypalenia gdy zbyt wiele projektów jednocześnie.',
+  energy_why: 'Energia pochodzi z rozwiązywania problemów które inni uważają za zbyt złożone — każde nowe wyzwanie intelektualne to paliwo.',
+  energy_boosters: ['Projekty z realnym wpływem', 'Intelektualne wyzwania', 'Autonomia działania'],
+  energy_drainers: ['Biurokracja bez sensu', 'Mikromanagement', 'Powtarzalna rutyna'],
+  darktriad_synthesis: 'Profil Dark Triad na poziomie umiarkowanym — narcyzm służy ambicji, machiavelizm jest narzędziem strategii, nie manipulacji.',
+  popculture: [
+    { context: 'Marvel', name: 'Tony Stark', reason: 'Geniusz analityczny, ekstrawertyczny, zawsze musi być najlepszy — i przeważnie jest.' },
+    { context: 'Serial', name: 'Sherlock Holmes', reason: 'Obserwacja, dedukcja i niezrozumienie przez przeciętnych — brzmi znajomo?' },
+    { context: 'Pop-kultura', name: 'Lady Gaga', reason: 'Twórcza oryginalność + ambicja + absolutny brak strachu przed oceną innych.' },
+    { context: 'Film', name: 'Dr. Gregory House', reason: 'Intelekt ponad przeciętnością, niechęć do zasad, obsesja na punkcie rozwiązywania.' },
+    { context: 'Książka', name: 'Hermiona Granger', reason: 'Perfekcjonizm intelektualny, wysoka sumienność i otwartość na naukę jako etos.' },
+  ],
+  ideal_careers: [
+    { emoji: '🔬', title: 'Data Scientist / Analityk', description: 'Otwartość 93p + precyzja myślenia tworzą idealne warunki do badań.' },
+    { emoji: '🚀', title: 'Founder / Strateg', description: 'Ekstrawersja 79p + myślenie systemowe = naturalny lider.' },
+    { emoji: '🎨', title: 'UX/Product Designer', description: 'Profil artystyczny IAE z silną kreatywnością.' },
+    { emoji: '🧠', title: 'Psycholog / Coach', description: 'Otwartość i empatia — idealny profil do pracy z ludźmi.' },
+    { emoji: '🎓', title: 'Badacz / Naukowiec', description: 'Profil badawczy i wysoka sumienność wspierają pracę naukową.' },
+  ],
+};
+
 /* ══ MAIN ══ */
 type CharacterSheetProps = {
   publicToken?: string;
+  demoMode?: boolean;
 };
 
-export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
+export default function CharacterSheet({ publicToken, demoMode = false }: CharacterSheetProps) {
   const isPublic = Boolean(publicToken);
   const [loading, setLoading] = useState(true);
   const [authUser, setAuthUser] = useState<any>(null);
@@ -375,6 +429,21 @@ export default function CharacterSheet({ publicToken }: CharacterSheetProps) {
   useEffect(() => {
     (async () => {
       setLoading(true);
+
+      if (demoMode) {
+        setProfile(DEMO_PROFILE);
+        setAuthUser(DEMO_AUTH_USER);
+        const bt: Record<string, RawRow> = {};
+        const m: Record<string, RawRow|null> = { HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, DARK_TRIAD:null, VALUES:null };
+        for (const [k, v] of Object.entries(DEMO_RAW)) { bt[k] = v; m[k] = v; }
+        setByType(bt);
+        setRaw(m);
+        setLlmContent(DEMO_LLM);
+        setLlmGeneratedAt(new Date().toISOString());
+        setPremiumStatus({ isPremium: true, subscriptionStatus: 'active', stripeCustomerId: null });
+        setLoading(false);
+        return;
+      }
 
       if (isPublic) {
         const { data, error } = await supabase.functions.invoke('character-share', {

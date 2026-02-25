@@ -231,6 +231,11 @@ function App() {
     return <><CharacterSheet publicToken={token} /><Footer /></>
   }
 
+  // Handle /demo-card route — CharacterSheet with hardcoded demo data (used for homepage iframe preview)
+  if (currentRoute === '/demo-card' || currentRoute === '/demo-card/') {
+    return <CharacterSheet demoMode={true} />;
+  }
+
   // Handle /character and /character-sheet routes
   if (currentRoute === '/character' || currentRoute === '/character/' || currentRoute === '/character-sheet' || currentRoute === '/character-sheet/') {
     if (loading) {
