@@ -14,7 +14,9 @@
     { "source": "/share", "destination": "/app.html" },
     { "source": "/share/:path*", "destination": "/app.html" },
     { "source": "/character", "destination": "/app.html" },
-    { "source": "/character/:path*", "destination": "/app.html" }
+    { "source": "/character/:path*", "destination": "/app.html" },
+    { "source": "/demo-card", "destination": "/app.html" },
+    { "source": "/demo-card/:path*", "destination": "/app.html" }
   ],
   "headers": [
     {
@@ -32,6 +34,12 @@
           "key": "X-XSS-Protection",
           "value": "1; mode=block"
         }
+      ]
+    },
+    {
+      "source": "/demo-card",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
       ]
     }
   ]
