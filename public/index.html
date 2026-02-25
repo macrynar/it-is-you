@@ -251,6 +251,64 @@
             font-size: 11px; font-weight: 900; flex-shrink: 0;
         }
 
+        .iiy-nav-link {
+            position: relative;
+            color: rgba(255,255,255,.5);
+            font-size: 13.5px;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 4px 0;
+            transition: color .2s;
+            white-space: nowrap;
+            letter-spacing: .2px;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+        }
+        .iiy-nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 0; height: 1.5px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #00f0ff, #7000ff);
+            box-shadow: 0 0 8px rgba(0,240,255,.55);
+            transition: width .25s ease;
+        }
+        .iiy-nav-link:hover { color: rgba(255,255,255,.9); }
+        .iiy-nav-link:hover::after { width: 100%; }
+        .iiy-nav-link.active { color: #fff; }
+        .iiy-nav-link.active::after { width: 100%; }
+
+        .nav-icon-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 8px;
+            color: rgba(255,255,255,.45); border: 1px solid transparent;
+            background: none; cursor: pointer; transition: all .2s;
+            text-decoration: none;
+        }
+        .nav-icon-btn:hover { color: #fff; background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.1); }
+        .nav-icon-btn.logout:hover { color: #f87171; background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.2); }
+
+        .theme-toggle {
+            position: relative; width: 60px; height: 32px;
+            background: rgba(30,41,59,0.6); border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer; transition: all 0.3s ease; flex-shrink: 0;
+        }
+        .theme-toggle:hover { background: rgba(15,7,40,0.9); border-color: rgba(112,0,255,0.5); }
+        .theme-toggle-slider {
+            position: absolute; top: 3px; left: 3px;
+            width: 24px; height: 24px;
+            background: linear-gradient(135deg,#7000ff,#00f0ff);
+            border-radius: 50%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 2px 8px rgba(112,0,255,0.5);
+        }
+        .theme-toggle.light .theme-toggle-slider { transform: translateX(28px); background: linear-gradient(135deg,#F59E0B,#EAB308); box-shadow: 0 2px 8px rgba(245,158,11,0.4); }
+        .theme-icon { position: absolute; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; transition: opacity 0.3s ease; }
+        .theme-icon-moon { left: 8px; opacity: 1; }
+        .theme-icon-sun { right: 8px; opacity: 0.4; }
+        .theme-toggle.light .theme-icon-moon { opacity: 0.4; }
+        .theme-toggle.light .theme-icon-sun { opacity: 1; }
+
     </style>
 
 </head>
@@ -304,26 +362,17 @@
                     }
                 </style>
 
-                <div class="hidden md:flex space-x-10 text-sm font-medium text-slate-400">
-
-                    <a href="#methodology" class="hover:text-white transition-colors duration-200">Metodologia</a>
-
-                    <a href="#features" class="hover:text-white transition-colors duration-200">Korzyści</a>
-
-                    <a href="/pricing" class="hover:text-white transition-colors duration-200">Cennik</a>
-
+                <div id="nav-links" class="hidden md:flex items-center gap-8">
+                    <a href="/methodology" class="iiy-nav-link">Metodologia</a>
+                    <a href="/#features" class="iiy-nav-link">Korzyści</a>
+                    <a href="/pricing" class="iiy-nav-link">Cennik</a>
                 </div>
 
-                <div class="flex items-center gap-6">
-
+                <div id="nav-actions" class="flex items-center gap-4">
                     <a href="/auth" class="text-sm font-medium text-slate-400 hover:text-white transition-colors hidden sm:block">Zaloguj</a>
-
                     <a href="/auth" class="bg-white text-slate-950 px-6 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-50 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.25)]">
-
                         Wykonaj test
-
                     </a>
-
                 </div>
 
             </div>
@@ -1197,13 +1246,13 @@
 
                 <ul class="space-y-2">
 
-                    <li><a href="#" class="hover:text-indigo-400 transition">HEXACO & Big Five</a></li>
+                    <li><a href="/methodology#hexaco" class="hover:text-indigo-400 transition">HEXACO & Big Five</a></li>
 
-                    <li><a href="#" class="hover:text-indigo-400 transition">Enneagram RHETI</a></li>
+                    <li><a href="/methodology#enneagram" class="hover:text-indigo-400 transition">Enneagram RHETI</a></li>
 
-                    <li><a href="#" class="hover:text-indigo-400 transition">O*NET Database</a></li>
+                    <li><a href="/methodology#career" class="hover:text-indigo-400 transition">O*NET Database</a></li>
 
-                    <li><a href="#" class="hover:text-indigo-400 transition">Dark Triad SD3</a></li>
+                    <li><a href="/methodology#darktriad" class="hover:text-indigo-400 transition">Dark Triad SD3</a></li>
 
                 </ul>
 
@@ -1215,11 +1264,11 @@
 
                 <ul class="space-y-2">
 
-                    <li><a href="#" class="hover:text-indigo-400 transition">O nas</a></li>
+                    <li><a href="/methodology" class="hover:text-indigo-400 transition">Metodologia</a></li>
 
-                    <li><a href="#" class="hover:text-indigo-400 transition">Cennik</a></li>
+                    <li><a href="/pricing" class="hover:text-indigo-400 transition">Cennik</a></li>
 
-                    <li><a href="#" class="hover:text-indigo-400 transition">Dla Firm</a></li>
+                    <li><a href="/auth" class="hover:text-indigo-400 transition">Zacznij za darmo</a></li>
 
                 </ul>
 
@@ -1251,6 +1300,34 @@
 
     </footer>
 
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+  const supabase = createClient('https://uvzilorpyuqicuwkufky.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA');
+  const SETTINGS_SVG = `<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`;
+  const LOGOUT_SVG = `<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>`;
+  const MOON_SVG = `<svg class="theme-icon theme-icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`;
+  const SUN_SVG = `<svg class="theme-icon theme-icon-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`;
+  (async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      document.getElementById('nav-links').innerHTML = `
+        <a href="/methodology" class="iiy-nav-link">Metodologia</a>
+        <a href="/pricing" class="iiy-nav-link">Cennik</a>
+        <a href="/character" class="iiy-nav-link">Karta Postaci</a>
+        <a href="/user-profile-tests" class="iiy-nav-link">Moje testy</a>
+      `;
+      document.getElementById('nav-actions').innerHTML = `
+        <button id="nav-theme-btn" class="theme-toggle" onclick="this.classList.toggle('light')" title="Przełącz motyw">
+          <div class="theme-toggle-slider"></div>
+          ${MOON_SVG}${SUN_SVG}
+        </button>
+        <a href="/settings" class="nav-icon-btn" title="Ustawienia">${SETTINGS_SVG}</a>
+        <button class="nav-icon-btn logout" onclick="(async()=>{const s=createClient('https://uvzilorpyuqicuwkufky.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA');await s.auth.signOut();location.href='/'})(" title="Wyloguj">${LOGOUT_SVG}</button>
+      `;
+    }
+  })();
+</script>
 
 <script>(function(){var N=[{x:50,y:8},{x:79.7,y:20.3},{x:92,y:50},{x:79.7,y:79.7},{x:50,y:92},{x:20.3,y:79.7},{x:8,y:50},{x:20.3,y:20.3}],E=[[0,3],[3,6],[6,1],[1,4],[4,7],[7,2],[2,5],[5,0]],g=document.getElementById('alch-signals');if(!g)return;function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}var ns='http://www.w3.org/2000/svg',CFG=[{ei:0,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1800,p:4800,d:200},{ei:2,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1900,p:5200,d:2600},{ei:4,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1700,p:5000,d:4800},{ei:6,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:2000,p:5400,d:7200},{ei:1,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2100,p:6200,d:1400},{ei:3,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2200,p:6000,d:3800},{ei:5,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2000,p:6400,d:6000},{ei:7,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2300,p:5800,d:8800}],signals=CFG.map(function(c){var e=E[c.ei],el=document.createElementNS(ns,'circle');el.setAttribute('r',c.r);el.setAttribute('fill',c.c);el.setAttribute('filter',c.f);el.setAttribute('opacity','0');el.setAttribute('cx',N[e[0]].x);el.setAttribute('cy',N[e[0]].y);g.appendChild(el);return{c:c,e:e,ph:'pausing',pe:performance.now()+c.d,st:0,el:el};});(function loop(now){signals.forEach(function(s){if(s.ph==='pausing'){if(now>=s.pe){s.ph='traveling';s.st=now;}return;}var tL=Math.min((now-s.st)/s.c.t,1),tE=ease(tL),f=N[s.e[0]],to=N[s.e[1]],x=f.x+(to.x-f.x)*tE,y=f.y+(to.y-f.y)*tE,op=tL<.15?(tL/.15)*.72:tL>.8?((1-tL)/.2)*.72:.72;s.el.setAttribute('cx',x.toFixed(3));s.el.setAttribute('cy',y.toFixed(3));s.el.setAttribute('opacity',op.toFixed(3));if(tL>=1){s.el.setAttribute('opacity','0');s.el.setAttribute('cx',N[s.e[0]].x);s.el.setAttribute('cy',N[s.e[0]].y);s.ph='pausing';s.pe=now+s.c.p+Math.random()*800;}});requestAnimationFrame(loop);})(performance.now());})()</script>
 
