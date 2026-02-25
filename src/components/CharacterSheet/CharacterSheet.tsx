@@ -346,11 +346,65 @@ const DEMO_PROFILE = { full_name: 'Aleksandra K.', avatar_url: null as string | 
 const DEMO_AUTH_USER = { id: 'demo', email: 'demo@alcheme.io', user_metadata: { full_name: 'Aleksandra K.' } };
 const DEMO_RAW: Record<string, RawRow> = {
   HEXACO: { test_type: 'HEXACO', raw_scores: {}, percentile_scores: { honesty_humility: 68, emotionality: 41, extraversion: 79, agreeableness: 52, conscientiousness: 65, openness: 93 }, report: null },
-  ENNEAGRAM: { test_type: 'ENNEAGRAM', raw_scores: { 1: 20, 2: 15, 3: 85, 4: 35, 5: 25, 6: 30, 7: 55, 8: 40, 9: 20 }, percentile_scores: {}, report: { primary_type: { type: 3 }, wing: 4, tritype: [3, 7, 1] } },
-  STRENGTHS: { test_type: 'STRENGTHS', raw_scores: { top_5: [{ name: 'Myślenie Strategiczne', domain: 'strategic_thinking', score: 0.95 }, { name: 'Kreatywność', domain: 'strategic_thinking', score: 0.88 }, { name: 'Miłość do Nauki', domain: 'strategic_thinking', score: 0.82 }, { name: 'Entuzjazm', domain: 'influencing', score: 0.78 }, { name: 'Maksymalizacja', domain: 'influencing', score: 0.74 }] }, percentile_scores: {}, report: null },
-  CAREER: { test_type: 'CAREER', raw_scores: {}, percentile_scores: {}, report: { holland_code: 'IAE', all_scores: { investigative: 88, artistic: 75, enterprising: 62, social: 54, realistic: 33, conventional: 22 }, top_careers: [{ emoji: '🔬', title: 'Data Scientist / Analityk', description: 'Otwartość 93p + precyzja myślenia tworzą idealne warunki do badań.' }, { emoji: '🚀', title: 'Founder / Strateg', description: 'Ekstrawersja 79p + myślenie systemowe = naturalny lider.' }, { emoji: '🎨', title: 'UX/Product Designer', description: 'Profil artystyczny IAE z silną kreatywnością.' }, { emoji: '🧠', title: 'Psycholog / Coach', description: 'Otwartość i empatia — idealny profil do pracy z ludźmi.' }, { emoji: '🎓', title: 'Badacz / Naukowiec', description: 'Profil badawczy i wysoka sumienność wspierają pracę naukową.' }] } },
-  VALUES: { test_type: 'VALUES', raw_scores: { sorted_values: [{ name: 'Autonomia', score: 0.95 }, { name: 'Kreatywność', score: 0.88 }, { name: 'Wpływ', score: 0.82 }, { name: 'Wiedza', score: 0.78 }, { name: 'Wolność', score: 0.74 }] }, percentile_scores: {}, report: null },
-  DARK_TRIAD: { test_type: 'DARK_TRIAD', raw_scores: { dimensions: { narcissism: { raw_score: 42 }, machiavellianism: { raw_score: 35 }, psychopathy: { raw_score: 18 } } }, percentile_scores: {}, report: null },
+  ENNEAGRAM: {
+    test_type: 'ENNEAGRAM',
+    raw_scores: { '1': 20, '2': 15, '3': 85, '4': 35, '5': 25, '6': 30, '7': 55, '8': 40, '9': 20 },
+    percentile_scores: {},
+    report: { primary_type: { type: 3 }, wing: 4, tritype: [3, 7, 1] },
+  },
+  STRENGTHS: {
+    test_type: 'STRENGTHS',
+    raw_scores: { top_5: [
+      { name: 'Myślenie Strategiczne', domain: 'strategic_thinking', score: 0.95 },
+      { name: 'Kreatywność', domain: 'strategic_thinking', score: 0.88 },
+      { name: 'Miłość do Nauki', domain: 'strategic_thinking', score: 0.82 },
+      { name: 'Entuzjazm', domain: 'influencing', score: 0.78 },
+      { name: 'Maksymalizacja', domain: 'influencing', score: 0.74 },
+    ] },
+    percentile_scores: {},
+    report: null,
+  },
+  CAREER: {
+    test_type: 'CAREER',
+    raw_scores: {},
+    percentile_scores: {},
+    report: {
+      holland_code: 'IAE',
+      all_scores: { investigative: 88, artistic: 75, enterprising: 62, social: 54, realistic: 33, conventional: 22 },
+      top_careers: [
+        { emoji: '🔬', title: 'Data Scientist / Analityk', description: 'Otwartość 93p + precyzja myślenia tworzą idealne warunki do badań.' },
+        { emoji: '🚀', title: 'Founder / Strateg', description: 'Ekstrawersja 79p + myślenie systemowe = naturalny lider.' },
+        { emoji: '🎨', title: 'UX/Product Designer', description: 'Profil artystyczny IAE z silną kreatywnością.' },
+        { emoji: '🧠', title: 'Psycholog / Coach', description: 'Otwartość i empatia — idealny profil do pracy z ludźmi.' },
+        { emoji: '🎓', title: 'Badacz / Naukowiec', description: 'Profil badawczy i wysoka sumienność wspierają pracę naukową.' },
+      ],
+    },
+  },
+  VALUES: {
+    test_type: 'VALUES',
+    raw_scores: {},
+    percentile_scores: {},
+    report: {
+      all_values: [
+        { name: 'Autonomia', score: 0.95 },
+        { name: 'Kreatywność', score: 0.88 },
+        { name: 'Wpływ', score: 0.82 },
+        { name: 'Wiedza', score: 0.78 },
+        { name: 'Wolność', score: 0.74 },
+      ],
+      top_3: [
+        { name: 'Autonomia', score: 0.95 },
+        { name: 'Kreatywność', score: 0.88 },
+        { name: 'Wpływ', score: 0.82 },
+      ],
+    },
+  },
+  DARK_TRIAD: {
+    test_type: 'DARK_TRIAD',
+    raw_scores: { dimensions: { narcissism: { raw_score: 42 }, machiavellianism: { raw_score: 35 }, psychopathy: { raw_score: 18 } } },
+    percentile_scores: {},
+    report: null,
+  },
 };
 const DEMO_LLM: CharacterCardContent = {
   archetype_name: 'Wizjoner-Analityk',
