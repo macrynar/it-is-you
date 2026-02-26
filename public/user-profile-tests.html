@@ -988,10 +988,10 @@
 
     <!-- NAVIGATION -->
     <nav class="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 py-4">
             <div class="flex items-center justify-between">
                 <!-- Logo -->
-                <a href="/" class="alcheme-logo">
+                <a href="https://www.alcheme.io/" class="alcheme-logo">
                   <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
                     <defs><filter id="alch-gs"><feGaussianBlur stdDeviation=".9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="alch-gm"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="alch-gl"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
                     <circle cx="50" cy="50" r="47" fill="rgba(10,4,40,.55)" stroke="rgba(255,255,255,.18)" stroke-width="1.2"/><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.07)" stroke-width=".4"/>
@@ -1007,57 +1007,75 @@
                   <div class="alcheme-logo-texts"><div class="alcheme-logo-name">Alcheme</div><div class="alcheme-logo-sub">Know yourself · Transform</div></div>
                 </a>
 
-                <!-- Center Nav Tabs -->
-                <div class="iiy-nav-tabs">
-                    <button class="iiy-tab-btn active" id="tab-btn-tests" onclick="switchTab('tests')">
-                        🧪 Testy
-                    </button>
-                    <button class="iiy-tab-btn" id="tab-btn-character" onclick="window.location.href='/character'">
-                        🃏 Karta Postaci
-                    </button>
+                <!-- Center Nav Links (desktop) -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a class="iiy-nav-link" href="/methodology">Metodologia</a>
+                    <a class="iiy-nav-link" href="/pricing">Cennik</a>
+                    <a class="iiy-nav-link" href="/character">Karta Postaci</a>
+                    <a class="iiy-nav-link active" href="#" onclick="switchTab('tests'); return false;">Testy</a>
                 </div>
 
                 <!-- User Actions (desktop) -->
-                <div class="flex items-center gap-4 iiy-nav-desktop-actions">
+                <div class="hidden md:flex items-center gap-2">
                     <!-- Theme Toggle -->
                     <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="Przełącz motyw">
                         <div class="theme-toggle-slider"></div>
-                        <!-- Moon Icon (Dark Mode) -->
                         <svg class="theme-icon theme-icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                         </svg>
-                        <!-- Sun Icon (Light Mode) -->
                         <svg class="theme-icon theme-icon-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
                         </svg>
                     </button>
-                    
-                    <button onclick="logout()" class="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm">
-                        Wyloguj
-                    </button>
-                    <a href="/settings" class="px-4 py-2 bg-bg-surface/50 hover:bg-bg-surface text-white rounded-lg text-sm border border-white/10 hover:border-brand-primary/50 transition-all backdrop-blur-sm" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;" title="Ustawienia konta">
-                        ⚙️ Ustawienia
+                    <!-- Settings icon -->
+                    <a href="/settings" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;color:rgba(255,255,255,.45);border:1px solid transparent;text-decoration:none;transition:all .2s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,.08)';this.style.borderColor='rgba(255,255,255,.1)';" onmouseout="this.style.color='rgba(255,255,255,.45)';this.style.background='';this.style.borderColor='transparent';" title="Ustawienia">
+                        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
                     </a>
+                    <!-- Logout icon -->
+                    <button onclick="logout()" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;color:rgba(255,255,255,.45);background:none;border:1px solid transparent;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='#f87171';this.style.background='rgba(239,68,68,.08)';this.style.borderColor='rgba(239,68,68,.2)';" onmouseout="this.style.color='rgba(255,255,255,.45)';this.style.background='';this.style.borderColor='transparent';" title="Wyloguj">
+                        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                    </button>
                 </div>
 
-                <!-- Hamburger (mobile) -->
-                <button class="iiy-hamburger" id="iiy-hamburger" aria-label="Menu" onclick="toggleMobileMenu()">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <!-- Hamburger Button (mobile only) -->
+                <button id="hamburger-btn" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10 transition-all" onclick="toggleMobileMenu()" aria-label="Menu">
+                    <svg id="hamburger-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    <svg id="close-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile menu panel -->
-        <div class="iiy-mobile-menu" id="iiy-mobile-menu">
-            <button class="iiy-tab-btn active-mobile" onclick="switchTab('tests'); closeMobileMenu()">🧪 Testy</button>
-            <a href="/character" onclick="closeMobileMenu()">🃏 Karta Postaci</a>
-            <div class="iiy-mobile-divider"></div>
-            <a href="/settings" onclick="closeMobileMenu()">⚙️ Ustawienia</a>
-            <button onclick="toggleTheme(); closeMobileMenu()">🌙 Przełącz motyw</button>
-            <div class="iiy-mobile-divider"></div>
-            <button onclick="logout()" style="color: rgba(255,80,80,.9);">⏏ Wyloguj</button>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" style="display:none;border-top:1px solid rgba(255,255,255,0.06);background:rgba(13,15,43,0.97);backdrop-filter:blur(20px);">
+            <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-2">
+                <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Ustawienia</a>
+                <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
+                <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
+                <a href="/character" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Karta Postaci</a>
+                <button onclick="switchTab('tests'); toggleMobileMenu();" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white hover:bg-white/5 transition-all text-left">Testy</button>
+                <div style="height:1px;background:rgba(255,255,255,0.06);margin:4px 0;"></div>
+                <div class="flex items-center justify-between px-4 py-2">
+                    <span class="text-xs text-white/30 uppercase tracking-widest font-semibold">Motyw</span>
+                    <button id="theme-toggle-mobile" class="theme-toggle" onclick="toggleTheme()" title="Przełącz motyw">
+                        <div class="theme-toggle-slider"></div>
+                        <svg class="theme-icon theme-icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                        <svg class="theme-icon theme-icon-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    </button>
+                </div>
+                <button onclick="logout()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-400/80 hover:text-red-400 hover:bg-red-500/5 transition-all text-left">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    Wyloguj
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -1689,42 +1707,36 @@
         window.toggleTheme = function() {
             const body = document.body;
             const toggle = document.getElementById('theme-toggle');
+            const toggleMobile = document.getElementById('theme-toggle-mobile');
             const isLightMode = body.classList.contains('light-mode');
             
             if (isLightMode) {
                 // Switch to Dark Mode
                 body.classList.remove('light-mode');
-                toggle.classList.remove('light');
+                if (toggle) toggle.classList.remove('light');
+                if (toggleMobile) toggleMobile.classList.remove('light');
                 localStorage.setItem('theme', 'dark');
                 console.log('Switched to Dark Mode');
             } else {
                 // Switch to Light Mode
                 body.classList.add('light-mode');
-                toggle.classList.add('light');
+                if (toggle) toggle.classList.add('light');
+                if (toggleMobile) toggleMobile.classList.add('light');
                 localStorage.setItem('theme', 'light');
                 console.log('Switched to Light Mode');
             }
         }
 
-        // Mobile menu helpers
+        // Toggle mobile hamburger menu
         window.toggleMobileMenu = function() {
-            const menu = document.getElementById('iiy-mobile-menu');
-            const btn  = document.getElementById('iiy-hamburger');
-            const open = menu.classList.toggle('open');
-            btn.classList.toggle('open', open);
+            const menu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const closeIcon = document.getElementById('close-icon');
+            const isOpen = menu.style.display !== 'none';
+            menu.style.display = isOpen ? 'none' : 'block';
+            hamburgerIcon.style.display = isOpen ? 'block' : 'none';
+            closeIcon.style.display = isOpen ? 'none' : 'block';
         }
-        window.closeMobileMenu = function() {
-            document.getElementById('iiy-mobile-menu').classList.remove('open');
-            document.getElementById('iiy-hamburger').classList.remove('open');
-        }
-        // Close mobile menu on outside click
-        document.addEventListener('click', function(e) {
-            const menu = document.getElementById('iiy-mobile-menu');
-            const btn  = document.getElementById('iiy-hamburger');
-            if (menu && !menu.contains(e.target) && !btn.contains(e.target)) {
-                closeMobileMenu();
-            }
-        });
 
         // Load theme immediately (before other scripts)
         loadThemePreference();
