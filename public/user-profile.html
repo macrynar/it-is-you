@@ -185,11 +185,63 @@
     .alcheme-logo-texts{display:flex;flex-direction:column;gap:2px;}
     .alcheme-logo-name{font-family:'Cinzel',serif;font-size:17px;font-weight:600;letter-spacing:.14em;line-height:1;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.88) 55%,rgba(112,0,255,.75) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
     .alcheme-logo-sub{font-family:'Raleway',sans-serif;font-size:6.5px;font-weight:300;letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.28);padding-left:1px;}
+    .nav-neural {
+        background: rgba(3,0,20,0.82);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+        box-shadow: 0 1px 0 0 rgba(112,0,255,0.12);
+    }
+    .iiy-nav-link {
+        position: relative;
+        color: rgba(255,255,255,.5);
+        font-size: 13.5px;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 4px 0;
+        transition: color .2s;
+        white-space: nowrap;
+        letter-spacing: .2px;
+        font-family: 'Space Grotesk', -apple-system, sans-serif;
+    }
+    .iiy-nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 1.5px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, #00f0ff, #7000ff);
+        box-shadow: 0 0 8px rgba(0,240,255,.55);
+        transition: width .25s ease;
+    }
+    .iiy-nav-link:hover { color: rgba(255,255,255,.9); }
+    .iiy-nav-link:hover::after { width: 100%; }
+    .iiy-nav-link.active { color: #fff; }
+    .iiy-nav-link.active::after { width: 100%; }
+    .theme-toggle {
+        position: relative; width: 60px; height: 32px;
+        background: rgba(30,41,59,.6); border-radius: 16px;
+        border: 1px solid rgba(255,255,255,.1); cursor: pointer; transition: all .3s;
+    }
+    .theme-toggle:hover { background: rgba(15,7,40,.9); border-color: rgba(112,0,255,.5); }
+    .theme-toggle-slider {
+        position: absolute; top: 3px; left: 3px; width: 24px; height: 24px;
+        background: linear-gradient(135deg,#7000ff,#00f0ff); border-radius: 50%;
+        transition: transform .3s cubic-bezier(.4,0,.2,1); box-shadow: 0 2px 8px rgba(112,0,255,.5);
+    }
+    .theme-toggle.light .theme-toggle-slider { transform: translateX(28px); background: linear-gradient(135deg,#F59E0B,#EAB308); box-shadow: 0 2px 8px rgba(245,158,11,.4); }
+    .theme-icon { position: absolute; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; transition: opacity .3s; }
+    .theme-icon-moon { left: 8px; opacity: 1; }
+    .theme-icon-sun { right: 8px; opacity: .4; }
+    .theme-toggle.light .theme-icon-moon { opacity: .4; }
+    .theme-toggle.light .theme-icon-sun { opacity: 1; }
     </style>
 </head>
 <body>
-    <!-- NAVIGATION BAR -->
-    <nav class="bg-slate-950/80 backdrop-blur-md sticky top-0 z-50 border-b border-white/5">
+    <!-- NAVIGATION -->
+    <nav class="nav-neural sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
@@ -207,26 +259,58 @@
                         <circle cx="50" cy="50" r="11" fill="#040115"/><circle cx="50" cy="50" r="11" fill="none" stroke="#00f0ff" stroke-width="2" filter="url(#alch-gs)"><animate attributeName="stroke-opacity" values=".5;1;.5" dur="3s" repeatCount="indefinite"/></circle>
                         <circle cx="50" cy="50" r="3.5" fill="#00f0ff" filter="url(#alch-gm)"><animate attributeName="r" values="2.8;4.2;2.8" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values=".75;1;.75" dur="3s" repeatCount="indefinite"/></circle>
                       </svg>
-                      <div class="alcheme-logo-texts"><div class="alcheme-logo-name">Alcheme</div><div class="alcheme-logo-sub">Know yourself · Transform</div></div>
-                    </a>
-                </div>
+<div style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;">
+                <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:.16em;line-height:1;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.95) 55%,rgba(167,139,250,.9) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;">Alcheme</div>
+                <div style="font-family:'Raleway',sans-serif;font-size:7.5px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap;">Know yourself · Transform</div>
+              </div>
+            </a>
 
-                <div class="flex items-center gap-1">
-                    <a href="#overview" class="nav-link active">Przegląd</a>
-                    <a href="#card" class="nav-link">Karta Postaci</a>
-                    <a href="#analytics" class="nav-link">Analityka</a>
-                    <a href="#settings" class="nav-link">Ustawienia</a>
-                </div>
-
-                <div class="flex items-center gap-3">
-                    <button class="w-8 h-8 rounded-lg bg-slate-900/50 hover:bg-slate-800 flex items-center justify-center border border-white/10 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                    </button>
-                    <button class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold hover:shadow-lg transition">
-                        M
-                    </button>
-                </div>
+            <!-- Center nav links — desktop only -->
+            <div class="hidden md:flex items-center gap-8">
+              <a class="iiy-nav-link" href="/methodology">Metodologia</a>
+              <a class="iiy-nav-link" href="/pricing">Cennik</a>
+              <a class="iiy-nav-link" href="/character">Karta Postaci</a>
+              <a class="iiy-nav-link" href="/user-profile-tests">Testy</a>
             </div>
+
+            <!-- Right utility actions — desktop -->
+            <div class="hidden md:flex items-center gap-2">
+              <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="Przełącz motyw">
+                <div class="theme-toggle-slider"></div>
+                <svg class="theme-icon theme-icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                <svg class="theme-icon theme-icon-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              </button>
+              <a href="/settings" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;color:rgba(255,255,255,.45);border:1px solid transparent;text-decoration:none;transition:all .2s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,.08)';this.style.borderColor='rgba(255,255,255,.1)';" onmouseout="this.style.color='rgba(255,255,255,.45)';this.style.background='';this.style.borderColor='transparent';" title="Ustawienia"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></a>
+              <button onclick="logout()" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;color:rgba(255,255,255,.45);background:none;border:1px solid transparent;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='#f87171';this.style.background='rgba(239,68,68,.08)';this.style.borderColor='rgba(239,68,68,.2)';" onmouseout="this.style.color='rgba(255,255,255,.45)';this.style.background='';this.style.borderColor='transparent';" title="Wyloguj"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+            </div>
+
+            <!-- Hamburger — mobile -->
+            <button id="hamburger-btn" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10 transition-all" onclick="toggleMobileMenu()" aria-label="Menu">
+              <svg id="hamburger-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+              <svg id="close-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" style="display:none;border-top:1px solid rgba(255,255,255,0.06);background:rgba(13,15,43,0.97);backdrop-filter:blur(20px);">
+          <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
+            <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Ustawienia</a>
+            <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
+            <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
+            <a href="/character" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Karta Postaci</a>
+            <a href="/user-profile-tests" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Testy</a>
+            <div style="height:1px;background:rgba(255,255,255,0.06);margin:4px 0;"></div>
+            <div class="flex items-center justify-between px-4 py-2">
+              <span class="text-xs text-white/30 uppercase tracking-widest font-semibold">Motyw</span>
+              <button id="theme-toggle-mobile" class="theme-toggle" onclick="toggleTheme()" title="Przełącz motyw">
+                <div class="theme-toggle-slider"></div>
+                <svg class="theme-icon theme-icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                <svg class="theme-icon theme-icon-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              </button>
+            </div>
+            <button onclick="logout()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-400/80 hover:text-red-400 hover:bg-red-500/5 transition-all text-left"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>Wyloguj</button>
+          </div>
         </div>
     </nav>
 
@@ -1696,12 +1780,36 @@
 
         // Add logout functionality to buttons if they exist
         document.addEventListener('DOMContentLoaded', function() {
-            // Find logout buttons and add click handlers
-            const logoutButtons = document.querySelectorAll('[data-logout], .logout-btn, button:contains("Wyloguj")');
-            logoutButtons.forEach(btn => {
-                btn.addEventListener('click', handleLogout);
-            });
+            const logoutButtons = document.querySelectorAll('[data-logout], .logout-btn');
+            logoutButtons.forEach(btn => { btn.addEventListener('click', handleLogout); });
         });
+
+        function logout() { handleLogout(); }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const closeIcon = document.getElementById('close-icon');
+            if (!menu) return;
+            const isOpen = menu.style.display === 'block';
+            menu.style.display = isOpen ? 'none' : 'block';
+            if (hamburgerIcon) hamburgerIcon.style.display = isOpen ? 'block' : 'none';
+            if (closeIcon) closeIcon.style.display = isOpen ? 'none' : 'block';
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const isLight = body.classList.toggle('light-mode');
+            const toggles = document.querySelectorAll('.theme-toggle');
+            toggles.forEach(t => t.classList.toggle('light', isLight));
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        }
+        (function() {
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-mode');
+                document.querySelectorAll('.theme-toggle').forEach(t => t.classList.add('light'));
+            }
+        })();
     </script>
 <script>(function(){var N=[{x:50,y:8},{x:79.7,y:20.3},{x:92,y:50},{x:79.7,y:79.7},{x:50,y:92},{x:20.3,y:79.7},{x:8,y:50},{x:20.3,y:20.3}],E=[[0,3],[3,6],[6,1],[1,4],[4,7],[7,2],[2,5],[5,0]],g=document.getElementById('alch-signals');if(!g)return;function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}var ns='http://www.w3.org/2000/svg',CFG=[{ei:0,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1800,p:4800,d:200},{ei:2,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1900,p:5200,d:2600},{ei:4,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1700,p:5000,d:4800},{ei:6,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:2000,p:5400,d:7200},{ei:1,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2100,p:6200,d:1400},{ei:3,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2200,p:6000,d:3800},{ei:5,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2000,p:6400,d:6000},{ei:7,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2300,p:5800,d:8800}],signals=CFG.map(function(c){var e=E[c.ei],el=document.createElementNS(ns,'circle');el.setAttribute('r',c.r);el.setAttribute('fill',c.c);el.setAttribute('filter',c.f);el.setAttribute('opacity','0');el.setAttribute('cx',N[e[0]].x);el.setAttribute('cy',N[e[0]].y);g.appendChild(el);return{c:c,e:e,ph:'pausing',pe:performance.now()+c.d,st:0,el:el};});(function loop(now){signals.forEach(function(s){if(s.ph==='pausing'){if(now>=s.pe){s.ph='traveling';s.st=now;}return;}var tL=Math.min((now-s.st)/s.c.t,1),tE=ease(tL),f=N[s.e[0]],to=N[s.e[1]],x=f.x+(to.x-f.x)*tE,y=f.y+(to.y-f.y)*tE,op=tL<.15?(tL/.15)*.72:tL>.8?((1-tL)/.2)*.72:.72;s.el.setAttribute('cx',x.toFixed(3));s.el.setAttribute('cy',y.toFixed(3));s.el.setAttribute('opacity',op.toFixed(3));if(tL>=1){s.el.setAttribute('opacity','0');s.el.setAttribute('cx',N[s.e[0]].x);s.el.setAttribute('cy',N[s.e[0]].y);s.ph='pausing';s.pe=now+s.c.p+Math.random()*800;}});requestAnimationFrame(loop);})(performance.now());})()</script>
 </body>
