@@ -35,14 +35,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-3 text-sm">Metodologia</h4>
             <ul className="space-y-1.5 text-slate-500 text-sm" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {[
-                ['HEXACO & Big Five',  '/methodology#hexaco'],
-                ['Enneagram RHETI',    '/methodology#enneagram'],
-                ['O*NET Database',     '/methodology#career'],
-                ['Dark Triad SD3',     '/methodology#darktriad'],
-              ].map(([label, href]) => (
-                <li key={label}><a href={href} className="hover:text-indigo-400 transition">{label}</a></li>
-              ))}
+              <li><a href="/methodology" className="hover:text-indigo-400 transition">Metodologia</a></li>
             </ul>
           </div>
 
