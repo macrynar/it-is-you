@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../lib/supabaseClient.js';
+import { resetPasswordForEmail } from '../../lib/supabaseClient.js';
 import { handleUpgradeToPremium, getUserPremiumStatus } from '../../lib/stripeService';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
@@ -254,6 +255,8 @@ export default function Settings() {
   const [newPwd, setNewPwd]         = useState('');
   const [confirmPwd, setConfirmPwd] = useState('');
   const [pwdSaving, setPwdSaving]   = useState(false);
+  const [pwdResetSending, setPwdResetSending] = useState(false);
+  const [pwdResetSent, setPwdResetSent]       = useState(false);
 
   // ── Privacy state
   const [emailNotifs, setEmailNotifs]   = useState(true);
@@ -343,6 +346,21 @@ export default function Settings() {
       toast(err.message || 'Nie udało się zmienić hasła', 'error');
     } finally {
       setPwdSaving(false);
+    }
+  };
+
+  const handleSendPasswordReset = async () => {
+    if (!email) { toast('Brak adresu e-mail na koncie', 'error'); return; }
+    setPwdResetSending(true);
+    try {
+      const { error } = await resetPasswordForEmail(email);
+      if (error) throw error;
+      setPwdResetSent(true);
+      toast(`Link do resetu hasła wysłany na ${email} ✓`);
+    } catch (err: any) {
+      toast(err.message || 'Nie udało się wysłać e-maila', 'error');
+    } finally {
+      setPwdResetSending(false);
     }
   };
 
@@ -496,6 +514,42 @@ export default function Settings() {
         <button className="st-btn-ghost" onClick={() => { setCurrentPwd(''); setNewPwd(''); setConfirmPwd(''); }}>
           Anuluj
         </button>
+      </div>
+
+      {/* ── Reset via email ── */}
+      <div style={{ background: 'rgba(99,102,241,.06)', border: '1px solid rgba(99,102,241,.2)', borderRadius: 14, padding: '20px 24px', marginBottom: 40 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,.85)', marginBottom: 4 }}>
+              Wyślij link resetujący hasło
+            </div>
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', lineHeight: 1.55 }}>
+              {pwdResetSent
+                ? `✅ Link wysłany na ${email}. Sprawdź skrzynkę pocztową.`
+                : `Wyślemy link do ustawienia nowego hasła na adres: ${email || '—'}`
+              }
+            </div>
+          </div>
+          {!pwdResetSent && (
+            <button
+              className="st-btn-ghost"
+              style={{ flexShrink: 0, fontSize: 13, padding: '9px 18px' }}
+              onClick={handleSendPasswordReset}
+              disabled={pwdResetSending}
+            >
+              {pwdResetSending ? 'Wysyłanie…' : '📧 Wyślij link'}
+            </button>
+          )}
+          {pwdResetSent && (
+            <button
+              className="st-btn-ghost"
+              style={{ flexShrink: 0, fontSize: 12, padding: '7px 14px' }}
+              onClick={() => setPwdResetSent(false)}
+            >
+              Wyślij ponownie
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="st-divider" />

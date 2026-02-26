@@ -20,8 +20,6 @@ const FALLBACK_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || FALLBACK_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || FALLBACK_KEY
 
-export const SUPABASE_ANON_KEY = supabaseAnonKey
-
 // Debug log for production
 console.log('🔧 Supabase Config Check:', {
   hasUrl: !!supabaseUrl,
@@ -36,24 +34,9 @@ console.log('🔧 Supabase Config Check:', {
  */
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-export const getAccessToken = async () => {
-  const { data: { session } } = await supabase.auth.getSession()
-  if (session?.access_token) {
-    const now = Math.floor(Date.now() / 1000)
-    const expiresAt = session.expires_at || 0
-    if (expiresAt > now + 30) return session.access_token
-  }
-
-  const { data, error } = await supabase.auth.refreshSession()
-  if (error) {
-    console.error('Session refresh error:', error)
-  }
-  return data?.session?.access_token || null
-}
-
 /**
  * Canonical app URL used for OAuth callback redirects.
- * In production this reads VITE_APP_URL from .env.production (https://www.alcheme.io).
+ * In production this reads VITE_APP_URL from .env.production (https://it-is-you1.vercel.app).
  * Falls back to window.location.origin for local development / any other environment.
  */
 const APP_URL = import.meta.env.VITE_APP_URL?.replace(/\/$/, '') || window.location.origin
@@ -204,6 +187,23 @@ export const getCurrentUser = async () => {
   } catch (error) {
     console.error('Get current user error:', error)
     return { user: null, error }
+  }
+}
+
+/**
+ * Helper function to send password reset email
+ */
+export const resetPasswordForEmail = async (email) => {
+  try {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${APP_URL}/auth/callback?type=recovery`,
+    })
+
+    if (error) throw error
+    return { data, error: null }
+  } catch (error) {
+    console.error('Password reset error:', error)
+    return { data: null, error }
   }
 }
 

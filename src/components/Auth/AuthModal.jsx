@@ -6,7 +6,8 @@ import {
   signInWithApple, 
   signInWithEmail,
   signUpWithEmail,
-  signInWithMagicLink 
+  signInWithMagicLink,
+  resetPasswordForEmail
 } from '../../lib/supabaseClient'
 
 /**
@@ -30,6 +31,11 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
   const [generalError, setGeneralError] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
 
+  // Forgot password state
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const [forgotEmail, setForgotEmail] = useState('')
+  const [forgotPasswordSent, setForgotPasswordSent] = useState(false)
+
   // Loading states for each provider
   const [loadingStates, setLoadingStates] = useState({
     google: false,
@@ -37,6 +43,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     apple: false,
     email: false,
     magicLink: false,
+    forgotPassword: false,
   })
 
   const signalGroupRef = useRef(null)
@@ -120,6 +127,9 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     setSuccessMessage(null)
     setEmail('')
     setPassword('')
+    setShowForgotPassword(false)
+    setForgotEmail('')
+    setForgotPasswordSent(false)
   }, [currentTab])
 
   // ============ HELPER FUNCTIONS ============
@@ -288,6 +298,31 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
           setSuccessMessage(null)
         }, 5000)
       }
+    }
+  }
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault()
+    setGeneralError(null)
+    setSuccessMessage(null)
+
+    if (!forgotEmail) {
+      setGeneralError('Podaj adres e-mail')
+      return
+    }
+    if (!forgotEmail.includes('@')) {
+      setGeneralError('Podaj prawidłowy adres e-mail')
+      return
+    }
+
+    setLoading('forgotPassword', true)
+    const { error } = await resetPasswordForEmail(forgotEmail)
+    setLoading('forgotPassword', false)
+
+    if (error) {
+      setGeneralError(error.message || 'Nie udało się wysłać e-maila. Spróbuj ponownie.')
+    } else {
+      setForgotPasswordSent(true)
     }
   }
 
@@ -589,6 +624,75 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
                   'Zaloguj się'
                 )}
               </button>
+
+              {/* Forgot password link */}
+              <div style={{ textAlign: 'center', marginTop: 4 }}>
+                <button
+                  type="button"
+                  onClick={() => { setShowForgotPassword(true); setGeneralError(null); setSuccessMessage(null); setForgotEmail(email); }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'rgba(165,180,252,.65)', fontFamily: 'inherit', padding: '4px 8px', borderRadius: 6, transition: 'color .18s' }}
+                  onMouseEnter={e => e.target.style.color = 'rgba(165,180,252,1)'}
+                  onMouseLeave={e => e.target.style.color = 'rgba(165,180,252,.65)'}
+                  disabled={isAnyLoading}
+                >
+                  Zapomniałem hasła
+                </button>
+              </div>
+
+              {/* Inline forgot-password panel */}
+              {showForgotPassword && (
+                <div style={{ marginTop: 4, padding: '20px', borderRadius: 12, background: 'rgba(99,102,241,.07)', border: '1px solid rgba(99,102,241,.25)' }}>
+                  {forgotPasswordSent ? (
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: 28, marginBottom: 10 }}>📧</div>
+                      <p style={{ fontSize: 14, fontWeight: 600, color: '#6ee7b7', marginBottom: 6 }}>Link wysłany!</p>
+                      <p style={{ fontSize: 13, color: 'rgba(255,255,255,.45)', lineHeight: 1.6, marginBottom: 16 }}>
+                        Sprawdź skrzynkę <strong style={{ color: 'rgba(255,255,255,.7)' }}>{forgotEmail}</strong> i kliknij link, aby zresetować hasło.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => { setShowForgotPassword(false); setForgotPasswordSent(false); setForgotEmail(''); }}
+                        style={{ fontSize: 13, color: 'rgba(165,180,252,.7)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}
+                      >
+                        ← Wróć do logowania
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleForgotPassword}>
+                      <p style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,.7)', marginBottom: 12 }}>Reset hasła</p>
+                      <p style={{ fontSize: 12, color: 'rgba(255,255,255,.4)', marginBottom: 14, lineHeight: 1.55 }}>
+                        Podaj swój adres e-mail, a wyślemy Ci link do ustawienia nowego hasła.
+                      </p>
+                      <input
+                        type="email"
+                        value={forgotEmail}
+                        onChange={e => setForgotEmail(e.target.value)}
+                        placeholder="twoj@email.com"
+                        className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:border-neon-primary/50 focus:ring-1 focus:ring-neon-primary/30 transition-all"
+                        style={{ marginBottom: 12 }}
+                        disabled={loadingStates.forgotPassword}
+                      />
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button
+                          type="submit"
+                          disabled={loadingStates.forgotPassword}
+                          style={{ flex: 1, padding: '9px 0', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', border: 'none', background: 'linear-gradient(135deg,#4f46e5,#7c3aed)', color: '#fff', opacity: loadingStates.forgotPassword ? .5 : 1 }}
+                        >
+                          {loadingStates.forgotPassword ? 'Wysyłanie…' : 'Wyślij link'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => { setShowForgotPassword(false); setForgotEmail(''); }}
+                          style={{ padding: '9px 14px', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', background: 'rgba(255,255,255,.07)', border: '1px solid rgba(255,255,255,.1)', color: 'rgba(255,255,255,.55)' }}
+                          disabled={loadingStates.forgotPassword}
+                        >
+                          Anuluj
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </div>
+              )}
             </form>
           )}
 
