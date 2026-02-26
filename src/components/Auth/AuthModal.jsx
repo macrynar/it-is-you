@@ -672,7 +672,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
                         style={{ marginBottom: 12 }}
                         disabled={loadingStates.forgotPassword}
                       />
-                      <div style={{ display: 'flex', gap: 8 }}>
+                      <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
                         <button
                           type="submit"
                           disabled={loadingStates.forgotPassword}
@@ -688,6 +688,12 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
                         >
                           Anuluj
                         </button>
+                      </div>
+                      {/* Hint for social login users */}
+                      <div style={{ padding: '10px 12px', borderRadius: 8, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)' }}>
+                        <p style={{ fontSize: 11, color: 'rgba(255,255,255,.3)', lineHeight: 1.6, margin: 0 }}>
+                          ℹ️ Jeśli logowałeś się przez <strong style={{ color: 'rgba(255,255,255,.45)' }}>Google, Facebook lub Apple</strong>, użyj odpowiedniego przycisku powyżej. Konta social nie mają hasła Alcheme.
+                        </p>
                       </div>
                     </form>
                   )}

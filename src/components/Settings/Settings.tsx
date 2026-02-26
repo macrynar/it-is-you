@@ -265,6 +265,7 @@ export default function Settings() {
   // ── Premium state
   const [isPremium, setIsPremium] = useState(false);
   const [premiumLoading, setPremiumLoading] = useState(true);
+  const [userProvider, setUserProvider] = useState<string>('email');
 
   // ── Load user
   useEffect(() => {
@@ -275,6 +276,10 @@ export default function Settings() {
         setEmail(user.email || '');
         setDisplayName(user.user_metadata?.full_name || user.user_metadata?.name || '');
         setAvatarUrl(user.user_metadata?.avatar_url || null);
+        // Detect primary login provider
+        const emailIdentity = user.identities?.find((i: any) => i.provider === 'email');
+        const primaryProvider = emailIdentity ? 'email' : (user.identities?.[0]?.provider || user.app_metadata?.provider || 'email');
+        setUserProvider(primaryProvider);
       }
       // Load premium status
       const status = await getUserPremiumStatus();
@@ -491,65 +496,105 @@ export default function Settings() {
     <div>
       <p className="st-section-title">Zmiana hasła</p>
 
-      <div style={{ marginBottom: 20 }}>
-        <label className="st-label">Obecne hasło</label>
-        <input className="st-input" type="password" value={currentPwd} onChange={e => setCurrentPwd(e.target.value)} placeholder="••••••••" autoComplete="current-password" />
-      </div>
-      <div style={{ marginBottom: 20 }}>
-        <label className="st-label">Nowe hasło</label>
-        <input className="st-input" type="password" value={newPwd} onChange={e => setNewPwd(e.target.value)} placeholder="Min. 8 znaków" autoComplete="new-password" />
-      </div>
-      <div style={{ marginBottom: 28 }}>
-        <label className="st-label">Powtórz nowe hasło</label>
-        <input className="st-input" type="password" value={confirmPwd} onChange={e => setConfirmPwd(e.target.value)} placeholder="••••••••" autoComplete="new-password" />
-        {newPwd && confirmPwd && newPwd !== confirmPwd && (
-          <p style={{ color: '#f87171', fontSize: 12, margin: '6px 0 0' }}>Hasła nie są identyczne.</p>
-        )}
-      </div>
-
-      <div style={{ display: 'flex', gap: 12, marginBottom: 40 }}>
-        <button className="st-btn-primary" onClick={handleUpdatePassword} disabled={pwdSaving}>
-          {pwdSaving ? 'Zmienianie…' : 'Zmień hasło'}
-        </button>
-        <button className="st-btn-ghost" onClick={() => { setCurrentPwd(''); setNewPwd(''); setConfirmPwd(''); }}>
-          Anuluj
-        </button>
-      </div>
+      {userProvider !== 'email' ? (
+        /* OAuth user — explain they have no Alcheme password */
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, padding: '18px 20px', borderRadius: 12, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 40 }}>
+          <span style={{ fontSize: 22, flexShrink: 0 }}>
+            {userProvider === 'google' ? '🔵' : userProvider === 'facebook' ? '📘' : userProvider === 'apple' ? '🍎' : '🔗'}
+          </span>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,.8)', marginBottom: 5 }}>
+              Twoje konto nie ma hasła Alcheme
+            </div>
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', lineHeight: 1.65 }}>
+              Logujesz się przez <strong style={{ color: 'rgba(255,255,255,.6)' }}>{userProvider.charAt(0).toUpperCase() + userProvider.slice(1)}</strong>. 
+              Hasłem zarządza ten serwis — zmień je w ustawieniach swojego konta {userProvider.charAt(0).toUpperCase() + userProvider.slice(1)}.
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Email user — show password change form */
+        <>
+          <div style={{ marginBottom: 20 }}>
+            <label className="st-label">Obecne hasło</label>
+            <input className="st-input" type="password" value={currentPwd} onChange={e => setCurrentPwd(e.target.value)} placeholder="••••••••" autoComplete="current-password" />
+          </div>
+          <div style={{ marginBottom: 20 }}>
+            <label className="st-label">Nowe hasło</label>
+            <input className="st-input" type="password" value={newPwd} onChange={e => setNewPwd(e.target.value)} placeholder="Min. 8 znaków" autoComplete="new-password" />
+          </div>
+          <div style={{ marginBottom: 28 }}>
+            <label className="st-label">Powtórz nowe hasło</label>
+            <input className="st-input" type="password" value={confirmPwd} onChange={e => setConfirmPwd(e.target.value)} placeholder="••••••••" autoComplete="new-password" />
+            {newPwd && confirmPwd && newPwd !== confirmPwd && (
+              <p style={{ color: '#f87171', fontSize: 12, margin: '6px 0 0' }}>Hasła nie są identyczne.</p>
+            )}
+          </div>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 40 }}>
+            <button className="st-btn-primary" onClick={handleUpdatePassword} disabled={pwdSaving}>
+              {pwdSaving ? 'Zmienianie…' : 'Zmień hasło'}
+            </button>
+            <button className="st-btn-ghost" onClick={() => { setCurrentPwd(''); setNewPwd(''); setConfirmPwd(''); }}>
+              Anuluj
+            </button>
+          </div>
+        </>
+      )}
 
       {/* ── Reset via email ── */}
       <div style={{ background: 'rgba(99,102,241,.06)', border: '1px solid rgba(99,102,241,.2)', borderRadius: 14, padding: '20px 24px', marginBottom: 40 }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,.85)', marginBottom: 4 }}>
-              Wyślij link resetujący hasło
-            </div>
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', lineHeight: 1.55 }}>
-              {pwdResetSent
-                ? `✅ Link wysłany na ${email}. Sprawdź skrzynkę pocztową.`
-                : `Wyślemy link do ustawienia nowego hasła na adres: ${email || '—'}`
-              }
+        {userProvider !== 'email' ? (
+          /* OAuth user — no password to reset */
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+            <span style={{ fontSize: 20, flexShrink: 0, marginTop: 2 }}>
+              {userProvider === 'google' ? '🔵' : userProvider === 'facebook' ? '📘' : userProvider === 'apple' ? '🍎' : '🔗'}
+            </span>
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,.85)', marginBottom: 4 }}>
+                Konto połączone z {userProvider.charAt(0).toUpperCase() + userProvider.slice(1)}
+              </div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,.45)', lineHeight: 1.6 }}>
+                Twoje konto jest logowane przez <strong style={{ color: 'rgba(255,255,255,.65)' }}>{userProvider.charAt(0).toUpperCase() + userProvider.slice(1)}</strong>.
+                Hasło jest zarządzane przez ten serwis — nie można go zresetować z poziomu Alcheme.
+                Jeśli chcesz zmienić hasło, zrób to w ustawieniach konta {userProvider.charAt(0).toUpperCase() + userProvider.slice(1)}.
+              </div>
             </div>
           </div>
-          {!pwdResetSent && (
-            <button
-              className="st-btn-ghost"
-              style={{ flexShrink: 0, fontSize: 13, padding: '9px 18px' }}
-              onClick={handleSendPasswordReset}
-              disabled={pwdResetSending}
-            >
-              {pwdResetSending ? 'Wysyłanie…' : '📧 Wyślij link'}
-            </button>
-          )}
-          {pwdResetSent && (
-            <button
-              className="st-btn-ghost"
-              style={{ flexShrink: 0, fontSize: 12, padding: '7px 14px' }}
-              onClick={() => setPwdResetSent(false)}
-            >
-              Wyślij ponownie
-            </button>
-          )}
-        </div>
+        ) : (
+          /* Email user — show reset button */
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,.85)', marginBottom: 4 }}>
+                Wyślij link resetujący hasło
+              </div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', lineHeight: 1.55 }}>
+                {pwdResetSent
+                  ? `✅ Link wysłany na ${email}. Sprawdź skrzynkę pocztową.`
+                  : `Wyślemy link do ustawienia nowego hasła na adres: ${email || '—'}`
+                }
+              </div>
+            </div>
+            {!pwdResetSent && (
+              <button
+                className="st-btn-ghost"
+                style={{ flexShrink: 0, fontSize: 13, padding: '9px 18px' }}
+                onClick={handleSendPasswordReset}
+                disabled={pwdResetSending}
+              >
+                {pwdResetSending ? 'Wysyłanie…' : '📧 Wyślij link'}
+              </button>
+            )}
+            {pwdResetSent && (
+              <button
+                className="st-btn-ghost"
+                style={{ flexShrink: 0, fontSize: 12, padding: '7px 14px' }}
+                onClick={() => setPwdResetSent(false)}
+              >
+                Wyślij ponownie
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="st-divider" />
