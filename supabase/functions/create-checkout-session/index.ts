@@ -92,8 +92,9 @@ serve(async (req) => {
     // ══════════════════════════════════════════════════════════
     // ACTION: create (default) — create Stripe Checkout session
     // ══════════════════════════════════════════════════════════
+    const FALLBACK_PRICE_ID = 'price_1T4Ri9E8If9hyM30FgKn9jw7'
     const priceId: string =
-      body.price_id ?? Deno.env.get('STRIPE_DARK_TRIAD_PRICE_ID') ?? ''
+      body.price_id ?? Deno.env.get('STRIPE_DARK_TRIAD_PRICE_ID') ?? FALLBACK_PRICE_ID
 
     if (!priceId) {
       return json({ error: 'No Stripe Price ID configured. Set STRIPE_DARK_TRIAD_PRICE_ID secret.' }, 500)
@@ -112,16 +113,18 @@ serve(async (req) => {
     let customerId: string = profile?.stripe_customer_id ?? ''
 
     if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: user.email,
+      const customerData: { metadata: Record<string, string>; email?: string } = {
         metadata: { supabase_user_id: user.id },
-      })
+      }
+      if (user.email) customerData.email = user.email
+
+      const customer = await stripe.customers.create(customerData)
       customerId = customer.id
 
       await supabaseAdmin
         .from('profiles')
         .upsert(
-          { id: user.id, email: user.email, stripe_customer_id: customerId },
+          { id: user.id, email: user.email ?? '', stripe_customer_id: customerId },
           { onConflict: 'id' }
         )
     }
@@ -134,7 +137,7 @@ serve(async (req) => {
       customer: customerId,
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
-      mode: 'payment',              // one-time payment (change to 'subscription' if recurring)
+      mode: 'subscription',
       success_url: `${appUrl}/user-profile-tests.html?payment=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${appUrl}/user-profile-tests.html?payment=cancelled`,
       metadata: { supabase_user_id: user.id },

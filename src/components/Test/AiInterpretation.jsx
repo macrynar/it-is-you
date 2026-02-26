@@ -152,7 +152,7 @@ export default function AiInterpretation({
         <div>
           {renderMarkdown(interpretation, accentColor)}
           <div style={{ borderTop:'1px solid rgba(255,255,255,.05)', paddingTop:12, marginTop:20 }}>
-            <div style={{ fontSize:11, color:'rgba(255,255,255,.2)' }}>Analiza Silnika Neuronalnego (NEA®) · Powered by GPT-4o-mini · Nie diagnoza medyczna</div>
+            <div style={{ fontSize:11, color:'rgba(255,255,255,.2)' }}>Analiza Silnika Neuronalnego (NEA®) · Nie diagnoza medyczna</div>
           </div>
         </div>
       )}
