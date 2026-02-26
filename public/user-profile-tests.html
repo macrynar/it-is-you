@@ -991,7 +991,7 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 py-4">
             <div class="flex items-center justify-between">
                 <!-- Logo -->
-                <a href="https://www.alcheme.io/" class="alcheme-logo">
+                <a href="https://www.alcheme.io/" class="alcheme-logo" style="display:flex;flex-direction:row;align-items:center;gap:12px;user-select:none;text-decoration:none;cursor:pointer;">
                   <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
                     <defs><filter id="alch-gs"><feGaussianBlur stdDeviation=".9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="alch-gm"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="alch-gl"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
                     <circle cx="50" cy="50" r="47" fill="rgba(10,4,40,.55)" stroke="rgba(255,255,255,.18)" stroke-width="1.2"/><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.07)" stroke-width=".4"/>
@@ -1004,7 +1004,10 @@
                     <circle cx="50" cy="50" r="11" fill="#040115"/><circle cx="50" cy="50" r="11" fill="none" stroke="#00f0ff" stroke-width="2" filter="url(#alch-gs)"><animate attributeName="stroke-opacity" values=".5;1;.5" dur="3s" repeatCount="indefinite"/></circle>
                     <circle cx="50" cy="50" r="3.5" fill="#00f0ff" filter="url(#alch-gm)"><animate attributeName="r" values="2.8;4.2;2.8" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values=".75;1;.75" dur="3s" repeatCount="indefinite"/></circle>
                   </svg>
-                  <div class="alcheme-logo-texts"><div class="alcheme-logo-name">Alcheme</div><div class="alcheme-logo-sub">Know yourself · Transform</div></div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;">
+                    <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:.16em;line-height:1;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.95) 55%,rgba(167,139,250,.9) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;">Alcheme</div>
+                    <div style="font-family:'Raleway',sans-serif;font-size:7.5px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap;">Know yourself · Transform</div>
+                  </div>
                 </a>
 
                 <!-- Center Nav Links (desktop) -->
@@ -1596,6 +1599,57 @@
         </div>
     </footer>
 
+    <script>
+    (function initAlchemeLogo() {
+      var N = [
+        {x:50,y:8},{x:79.7,y:20.3},{x:92,y:50},{x:79.7,y:79.7},
+        {x:50,y:92},{x:20.3,y:79.7},{x:8,y:50},{x:20.3,y:20.3}
+      ];
+      var EDGES = [[0,3],[3,6],[6,1],[1,4],[4,7],[7,2],[2,5],[5,0]];
+      var SIGNAL_CFG = [
+        {edgeIdx:0,color:'#00f0ff',r:3.2,filter:'url(#alch-gm)',travelMs:1800,pauseMs:4800,delay:200},
+        {edgeIdx:2,color:'#00f0ff',r:3.2,filter:'url(#alch-gm)',travelMs:1900,pauseMs:5200,delay:2600},
+        {edgeIdx:4,color:'#00f0ff',r:3.2,filter:'url(#alch-gm)',travelMs:1700,pauseMs:5000,delay:4800},
+        {edgeIdx:6,color:'#00f0ff',r:3.2,filter:'url(#alch-gm)',travelMs:2000,pauseMs:5400,delay:7200},
+        {edgeIdx:1,color:'#c4b5fd',r:2.8,filter:'url(#alch-gs)',travelMs:2100,pauseMs:6200,delay:1400},
+        {edgeIdx:3,color:'#c4b5fd',r:2.8,filter:'url(#alch-gs)',travelMs:2200,pauseMs:6000,delay:3800},
+        {edgeIdx:5,color:'#c4b5fd',r:2.8,filter:'url(#alch-gs)',travelMs:2000,pauseMs:6400,delay:6000},
+        {edgeIdx:7,color:'#c4b5fd',r:2.8,filter:'url(#alch-gs)',travelMs:2300,pauseMs:5800,delay:8800}
+      ];
+      function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+      function start() {
+        var group = document.getElementById('alch-signals');
+        if (!group) return;
+        var ns = 'http://www.w3.org/2000/svg';
+        var signals = SIGNAL_CFG.map(function(cfg){
+          var edge = EDGES[cfg.edgeIdx];
+          var el = document.createElementNS(ns,'circle');
+          el.setAttribute('r',String(cfg.r));
+          el.setAttribute('fill',cfg.color);
+          el.setAttribute('filter',cfg.filter);
+          el.setAttribute('opacity','0');
+          el.setAttribute('cx',String(N[edge[0]].x));
+          el.setAttribute('cy',String(N[edge[0]].y));
+          group.appendChild(el);
+          return {cfg:cfg,edge:edge,phase:'pausing',pauseEnd:performance.now()+cfg.delay,startTime:0,el:el};
+        });
+        function tick(s,now){
+          if(s.phase==='pausing'){if(now>=s.pauseEnd){s.phase='traveling';s.startTime=now;}return;}
+          var tL=Math.min((now-s.startTime)/s.cfg.travelMs,1);
+          var tE=ease(tL);
+          var from=N[s.edge[0]],to=N[s.edge[1]];
+          s.el.setAttribute('cx',(from.x+(to.x-from.x)*tE).toFixed(3));
+          s.el.setAttribute('cy',(from.y+(to.y-from.y)*tE).toFixed(3));
+          var op=tL<.15?(tL/.15)*.72:tL>.8?((1-tL)/.2)*.72:.72;
+          s.el.setAttribute('opacity',op.toFixed(3));
+          if(tL>=1){s.el.setAttribute('opacity','0');s.el.setAttribute('cx',String(N[s.edge[0]].x));s.el.setAttribute('cy',String(N[s.edge[0]].y));s.phase='pausing';s.pauseEnd=now+s.cfg.pauseMs+Math.random()*800;}
+        }
+        function loop(now){signals.forEach(function(s){tick(s,now);});requestAnimationFrame(loop);}
+        requestAnimationFrame(loop);
+      }
+      if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',start);}else{start();}
+    })();
+    </script>
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
