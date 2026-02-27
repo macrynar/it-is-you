@@ -35,6 +35,19 @@ console.log('🔧 Supabase Config Check:', {
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 /**
+ * Exported anon key — used by Results components for direct fetch calls
+ */
+export const SUPABASE_ANON_KEY = supabaseAnonKey
+
+/**
+ * Returns the current session's access token (or the anon key as fallback)
+ */
+export const getAccessToken = async () => {
+  const { data: { session } } = await supabase.auth.getSession()
+  return session?.access_token || supabaseAnonKey
+}
+
+/**
  * Canonical app URL used for OAuth callback redirects.
  * In production this reads VITE_APP_URL from .env.production (https://it-is-you1.vercel.app).
  * Falls back to window.location.origin for local development / any other environment.
