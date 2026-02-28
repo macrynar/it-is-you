@@ -317,23 +317,33 @@ export default function Settings() {
     const file = e.target.files?.[0];
     if (!file || !user) return;
 
-    const ext = file.name.split('.').pop();
-    const path = `avatars/${user.id}.${ext}`;
+    const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
+    if (file.size > MAX_SIZE) {
+      toast('Plik jest za duży (max 5 MB)', 'error');
+      return;
+    }
+
+    const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+    const path = `${user.id}.${ext}`;
 
     try {
       const { error: uploadErr } = await supabase.storage
         .from('avatars')
-        .upload(path, file, { upsert: true });
+        .upload(path, file, { upsert: true, contentType: file.type });
       if (uploadErr) throw uploadErr;
 
       const { data } = supabase.storage.from('avatars').getPublicUrl(path);
-      const url = data.publicUrl;
+      // Add cache-bust so browsers don't serve stale image
+      const url = `${data.publicUrl}?t=${Date.now()}`;
       setAvatarUrl(url);
 
-      await supabase.auth.updateUser({ data: { avatar_url: url } });
+      await supabase.auth.updateUser({ data: { avatar_url: data.publicUrl } });
       toast('Zdjęcie profilowe zaktualizowane ✓');
     } catch (err: any) {
       toast(err.message || 'Błąd przy wgrywaniu zdjęcia', 'error');
+    } finally {
+      // Reset input so the same file can be re-selected if needed
+      e.target.value = '';
     }
   };
 
