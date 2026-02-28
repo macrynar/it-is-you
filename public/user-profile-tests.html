@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LCTSQBSBQ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-3LCTSQBSBQ');
-    </script>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alcheme - Testy Psychometryczne</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="Twój dashboard testów psychometrycznych. HEXACO, Enneagram, Wartości, Kariera, Mocne Strony i więcej." />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.alcheme.io/" />
+    <meta property="og:title" content="Alcheme – Testy Psychometryczne" />
+    <meta property="og:description" content="6 testów psychometrycznych + AI Karta Postaci. Poznaj swój HEXACO, Enneagram, wartości, talenty i ścieżkę kariery." />
+    <meta property="og:image" content="https://www.alcheme.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:site_name" content="Alcheme" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Alcheme – Testy Psychometryczne" />
+    <meta name="twitter:description" content="6 testów psychometrycznych + AI Karta Postaci. Poznaj swój HEXACO, Enneagram, wartości, talenty i ścieżkę kariery." />
+    <meta name="twitter:image" content="https://www.alcheme.io/og-image.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500;600;700;800&family=Cinzel:wght@600&family=Raleway:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/tw.css">
     <script>
-        window.tailwind = {
-        config: {
+        tailwind.config = {
             theme: {
                 extend: {
                     colors: {
@@ -49,9 +57,7 @@
                 }
             }
         }
-    }
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 0.8; }
@@ -273,44 +279,7 @@
         .theme-toggle.light .theme-icon-sun {
             opacity: 1;
         }
-
-        /* Nav */
-        .nav-neural {
-            background: rgba(3,0,20,0.82);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-            box-shadow: 0 1px 0 0 rgba(112,0,255,0.12);
-        }
-        .iiy-nav-link {
-            position: relative;
-            color: rgba(255,255,255,.5);
-            font-size: 13.5px;
-            font-weight: 600;
-            text-decoration: none;
-            padding: 4px 0;
-            transition: color .2s;
-            white-space: nowrap;
-            letter-spacing: .2px;
-            font-family: 'Space Grotesk', -apple-system, sans-serif;
-        }
-        .iiy-nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 1.5px;
-            border-radius: 2px;
-            background: linear-gradient(90deg, #00f0ff, #7000ff);
-            box-shadow: 0 0 8px rgba(0,240,255,.55);
-            transition: width .25s ease;
-        }
-        .iiy-nav-link:hover { color: rgba(255,255,255,.9); }
-        .iiy-nav-link:hover::after { width: 100%; }
-        .iiy-nav-link.active { color: #fff; }
-        .iiy-nav-link.active::after { width: 100%; }
-
+        
         /* Light Mode Styles */
         body.light-mode {
             background: #F8FAFC;
@@ -558,6 +527,15 @@
         .iiy-card.teal .iiy-card-meta      { color: rgba(45,212,191,0.6); }
         .iiy-card.teal .iiy-card-methodology { color: rgba(45,212,191,0.8); }
 
+        /* orange — DNA Kariery */
+        .iiy-card.orange::after { background: #f97316; }
+        .iiy-card.orange:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 0 0 1px rgba(249,115,22,0.4), 0 0 30px -4px rgba(249,115,22,0.3), 0 0 60px -8px rgba(249,115,22,0.18), 0 16px 48px -6px rgba(0,0,0,0.7); }
+        .iiy-card.orange .iiy-card-icon-wrap { background: rgba(249,115,22,0.15); border-color: rgba(249,115,22,0.3); }
+        .iiy-card.orange .iiy-card-icon      { color: #fb923c; }
+        .iiy-card.orange .iiy-card-tag       { color: #fb923c; border-color: rgba(249,115,22,0.35); background: rgba(249,115,22,0.1); }
+        .iiy-card.orange .iiy-card-meta      { color: rgba(251,146,60,0.6); }
+        .iiy-card.orange .iiy-card-methodology { color: rgba(251,146,60,0.8); }
+
         /* GLOW LINE */
         .iiy-card-glow {
           position: absolute; bottom: 0; left: 20%; right: 20%; height: 1px;
@@ -571,6 +549,7 @@
         .amber    .iiy-card-glow { background: #fbbf24;  box-shadow: 0 0 12px 3px rgba(245,158,11,0.6); }
         .emerald  .iiy-card-glow { background: #34d399;  box-shadow: 0 0 12px 3px rgba(16,185,129,0.6); }
         .teal     .iiy-card-glow { background: #2dd4bf;  box-shadow: 0 0 12px 3px rgba(20,184,166,0.6); }
+        .orange   .iiy-card-glow { background: #f97316;  box-shadow: 0 0 12px 3px rgba(249,115,22,0.6); }
 
         /* TOP ROW */
         .iiy-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
@@ -637,6 +616,8 @@
         .iiy-card-btn.primary-emerald:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 1px rgba(16,185,129,0.6), 0 0 28px -2px rgba(16,185,129,0.5), 0 8px 24px -4px rgba(0,0,0,0.6); }
         .iiy-card-btn.primary-teal    { background: linear-gradient(110deg, #134e4a 0%, #0d9488 55%, #2dd4bf 100%); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(20,184,166,0.25), 0 0 20px -2px rgba(20,184,166,0.3), 0 4px 16px -2px rgba(0,0,0,0.5); }
         .iiy-card-btn.primary-teal:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 1px rgba(20,184,166,0.6), 0 0 28px -2px rgba(20,184,166,0.5), 0 8px 24px -4px rgba(0,0,0,0.6); }
+        .iiy-card-btn.primary-orange  { background: linear-gradient(110deg, #7c2d12 0%, #ea580c 55%, #fb923c 100%); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(249,115,22,0.25), 0 0 20px -2px rgba(249,115,22,0.3), 0 4px 16px -2px rgba(0,0,0,0.5); }
+        .iiy-card-btn.primary-orange:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 1px rgba(249,115,22,0.6), 0 0 28px -2px rgba(249,115,22,0.5), 0 8px 24px -4px rgba(0,0,0,0.6); }
         /* Premium lock button — purple-golden gradient */
         .iiy-card-btn.premium-lock {
           background: linear-gradient(110deg, #4f22a0 0%, #7c3aed 40%, #d97706 100%);
@@ -661,6 +642,16 @@
           background: rgba(245,158,11,0.12);
           border: 1px solid rgba(245,158,11,0.4);
           box-shadow: 0 0 10px -2px rgba(245,158,11,0.4);
+          white-space: nowrap;
+        }
+        /* FREE badge */
+        .iiy-badge-free {
+          font-size: 9px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase;
+          padding: 3px 10px; border-radius: 999px;
+          color: #34d399;
+          background: rgba(52,211,153,0.1);
+          border: 1px solid rgba(52,211,153,0.35);
+          box-shadow: 0 0 8px -2px rgba(52,211,153,0.3);
           white-space: nowrap;
         }
         .iiy-card-btn-arrow { font-size: 16px; transition: transform 0.2s ease; }
@@ -690,80 +681,6 @@
         .iiy-logo.iiy-sm .iiy-sub { font-size: 7px; letter-spacing: 2.5px; }
         .iiy-logo.iiy-sm .iiy-divider { margin: 4px 0 3px; }
 
-        /* ── Mobile Nav ───────────────────────────────────────── */
-        .iiy-hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,.05);
-            border: 1px solid rgba(255,255,255,.1);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all .2s;
-            padding: 0;
-        }
-        .iiy-hamburger:hover { background: rgba(255,255,255,.1); border-color: rgba(99,102,241,.5); }
-        .iiy-hamburger span {
-            display: block;
-            width: 18px;
-            height: 2px;
-            background: rgba(255,255,255,.8);
-            border-radius: 2px;
-            transition: all .25s;
-        }
-        .iiy-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .iiy-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-        .iiy-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-        .iiy-mobile-menu {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            padding: 12px;
-            border-top: 1px solid rgba(255,255,255,.07);
-            background: rgba(15,7,40,.97);
-            backdrop-filter: blur(20px);
-        }
-        .iiy-mobile-menu.open { display: flex; }
-        .iiy-mobile-menu a, .iiy-mobile-menu button {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            border-radius: 10px;
-            border: none;
-            background: transparent;
-            color: rgba(255,255,255,.75);
-            font-size: 14px;
-            font-weight: 600;
-            font-family: 'Space Grotesk', sans-serif;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all .2s;
-            text-align: left;
-            width: 100%;
-        }
-        .iiy-mobile-menu a:hover, .iiy-mobile-menu button:hover {
-            background: rgba(99,102,241,.15);
-            color: #fff;
-        }
-        .iiy-mobile-menu a.active-mobile {
-            background: linear-gradient(135deg, rgba(99,102,241,.3), rgba(56,182,255,.2));
-            color: #fff;
-        }
-        .iiy-mobile-divider {
-            height: 1px;
-            background: rgba(255,255,255,.07);
-            margin: 4px 0;
-        }
-        @media (max-width: 767px) {
-            .iiy-hamburger { display: flex; }
-            .iiy-nav-tabs { display: none !important; }
-            .iiy-nav-desktop-actions { display: none !important; }
-        }
         /* ── Nav Tabs ─────────────────────────────────────────── */
         .iiy-nav-tabs {
             display: flex;
@@ -794,6 +711,35 @@
             color: #fff;
             box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 0 0 1px rgba(99,102,241,.3);
         }
+        /* ── Nav Links ─────────────────────────────────────────── */
+        .iiy-nav-link {
+            position: relative;
+            color: rgba(255,255,255,.5);
+            font-size: 13.5px;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 4px 0;
+            transition: color .2s;
+            white-space: nowrap;
+            letter-spacing: .2px;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+        }
+        .iiy-nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #00f0ff, #7000ff);
+            box-shadow: 0 0 8px rgba(0,240,255,.55);
+            transition: width .25s ease;
+        }
+        .iiy-nav-link:hover { color: rgba(255,255,255,.9); }
+        .iiy-nav-link:hover::after { width: 100%; }
+        .iiy-nav-link.active { color: #fff; }
+        .iiy-nav-link.active::after { width: 100%; }
         /* ── Character Card ───────────────────────────────────── */
         .cc-grid {
             display: grid;
@@ -1028,16 +974,20 @@
         @media (max-width:1100px) { .ch-bento { grid-template-columns:repeat(2,1fr); } .ch-t-radar { grid-column:1/-1; } .ch-t-str,.ch-t-dt { grid-column:span 2; } }
         @media (max-width:680px)  { .ch-bento { grid-template-columns:1fr; } .ch-t-hero,.ch-t-radar,.ch-t-enn,.ch-t-str,.ch-t-dt { grid-column:1/-1; } }
         /* ════════ END BENTO CSS ════════ */
+    .alcheme-logo{display:flex;align-items:center;gap:11px;cursor:default;user-select:none;text-decoration:none;}
+    .alcheme-logo-texts{display:flex;flex-direction:column;gap:2px;}
+    .alcheme-logo-name{font-family:'Cinzel',serif;font-size:17px;font-weight:600;letter-spacing:.14em;line-height:1;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.88) 55%,rgba(112,0,255,.75) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .alcheme-logo-sub{font-family:'Raleway',sans-serif;font-size:6.5px;font-weight:300;letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.28);padding-left:1px;}
     </style>
 </head>
 <body class="min-h-screen text-white grid-bg">
 
     <!-- NAVIGATION -->
-    <nav class="nav-neural sticky top-0 z-50">
+    <nav class="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 py-4">
             <div class="flex items-center justify-between">
                 <!-- Logo -->
-                <a href="https://www.alcheme.io/" class="alcheme-logo" style="display:flex;flex-direction:row;align-items:center;gap:12px;user-select:none;text-decoration:none;cursor:pointer;">
+                <a href="https://www.alcheme.io/" class="alcheme-logo">
                   <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
                     <defs><filter id="alch-gs"><feGaussianBlur stdDeviation=".9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="alch-gm"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="alch-gl"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
                     <circle cx="50" cy="50" r="47" fill="rgba(10,4,40,.55)" stroke="rgba(255,255,255,.18)" stroke-width="1.2"/><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.07)" stroke-width=".4"/>
@@ -1050,15 +1000,11 @@
                     <circle cx="50" cy="50" r="11" fill="#040115"/><circle cx="50" cy="50" r="11" fill="none" stroke="#00f0ff" stroke-width="2" filter="url(#alch-gs)"><animate attributeName="stroke-opacity" values=".5;1;.5" dur="3s" repeatCount="indefinite"/></circle>
                     <circle cx="50" cy="50" r="3.5" fill="#00f0ff" filter="url(#alch-gm)"><animate attributeName="r" values="2.8;4.2;2.8" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values=".75;1;.75" dur="3s" repeatCount="indefinite"/></circle>
                   </svg>
-                  <div style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;">
-                    <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:.16em;line-height:1;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.95) 55%,rgba(167,139,250,.9) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;">Alcheme</div>
-                    <div style="font-family:'Raleway',sans-serif;font-size:7.5px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap;">Know yourself · Transform</div>
-                  </div>
+                  <div class="alcheme-logo-texts"><div class="alcheme-logo-name">Alcheme</div><div class="alcheme-logo-sub">Know yourself · Transform</div></div>
                 </a>
 
                 <!-- Center Nav Links (desktop) -->
                 <div class="hidden md:flex items-center gap-8">
-                    <a class="iiy-nav-link" href="/baza-wiedzy/">Baza Wiedzy</a>
                     <a class="iiy-nav-link" href="/methodology">Metodologia</a>
                     <a class="iiy-nav-link" href="/pricing">Cennik</a>
                     <a class="iiy-nav-link" href="/character">Karta Postaci</a>
@@ -1068,6 +1014,15 @@
                 <!-- User Actions (desktop) -->
                 <div class="hidden md:flex items-center gap-2">
                     <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="Przełącz motyw">
+                        <div class="theme-toggle-slider"></div>
+                        <svg class="theme-icon theme-icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                        <svg class="theme-icon theme-icon-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </button>
                     <!-- Settings icon -->
                     <a href="/settings" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;color:rgba(255,255,255,.45);border:1px solid transparent;text-decoration:none;transition:all .2s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,.08)';this.style.borderColor='rgba(255,255,255,.1)';" onmouseout="this.style.color='rgba(255,255,255,.45)';this.style.background='';this.style.borderColor='transparent';" title="Ustawienia">
                         <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -1121,7 +1076,7 @@
     </nav>
 
     <!-- MAIN CONTENT -->
-    <main class="max-w-7xl mx-auto px-6 py-10">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10">
 
         <!-- TAB: TESTY (default) -->
         <div id="tab-tests">
@@ -1224,7 +1179,10 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                   </span>
                 </div>
-                <span id="hexaco-status" class="iiy-card-tag">Do Wykonania</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="hexaco-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
               </div>
               <div class="iiy-card-title">Rdzeń Osobowości</div>
               <div class="iiy-card-methodology">MODEL HEXACO-60</div>
@@ -1250,7 +1208,10 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                   </span>
                 </div>
-                <span id="enneagram-status" class="iiy-card-tag">Do Wykonania</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="enneagram-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
               </div>
               <div class="iiy-card-title">Silnik Motywacji</div>
               <div class="iiy-card-methodology">ENNEAGRAM RISO-HUDSON</div>
@@ -1297,7 +1258,7 @@
             </div>
 
             <!-- CARD 4: Strengths — amber -->
-            <div class="iiy-card amber" id="strengths-card" onclick="startStrengthsTest()">
+            <div class="iiy-card amber" onclick="startStrengthsTest()">
               <div class="iiy-card-glow"></div>
               <div class="iiy-card-top">
                 <div class="iiy-card-icon-wrap">
@@ -1334,7 +1295,10 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                   </span>
                 </div>
-                <span id="career-status" class="iiy-card-tag">Do Wykonania</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="career-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
               </div>
               <div class="iiy-card-title">Profil Kariery</div>
               <div class="iiy-card-methodology">HOLLAND CODE (RIASEC)</div>
@@ -1360,7 +1324,10 @@
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
                   </span>
                 </div>
-                <span id="values-status" class="iiy-card-tag">Do Wykonania</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="values-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
               </div>
               <div class="iiy-card-title">Kompas Wartości</div>
               <div class="iiy-card-methodology">SCHWARTZ VALUES (PVQ)</div>
@@ -1374,6 +1341,35 @@
               <div class="iiy-card-divider"></div>
               <button id="values-button" class="iiy-card-btn primary-teal">
                 Rozpocznij Test <span class="iiy-card-btn-arrow">›</span>
+              </button>
+            </div>
+
+            <!-- CARD 7: DNA Kariery — orange -->
+            <div class="iiy-card orange" onclick="startCareerDnaTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="career-dna-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
+              </div>
+              <div class="iiy-card-title">DNA Kariery</div>
+              <div class="iiy-card-methodology">CAREER DNA (AN/SO/CR/ST/LE/HO)</div>
+              <div class="iiy-card-desc">Odkryj naturalny profil Twoich predyspozycji zawodowych i zawody idealnie dopasowane do Twojego DNA.</div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>8 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>20 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="career-dna-button" class="iiy-card-btn primary-orange">
+                Odkryj DNA Kariery <span class="iiy-card-btn-arrow">›</span>
               </button>
             </div>
 
@@ -1459,7 +1455,7 @@
             <div style="display:flex;align-items:center;gap:10px;">
               <div class="ch-tb-pill"><div class="ch-tb-dot"></div><span id="ch-completion-pill">ŁADOWANIE PROFILU…</span></div>
             </div>
-            <div class="ch-tb-meta" id="ch-footer-id-top">CHAR-ID: ALC----- · Alcheme v2.0</div>
+            <div class="ch-tb-meta" id="ch-footer-id-top">CHAR-ID: PSY----- · PSYCHER v2.0</div>
           </div>
 
           <!-- BENTO GRID -->
@@ -1582,7 +1578,7 @@
             <!-- ── T4: ARSENAL / STRENGTHS 2×1 ── -->
             <div class="ch-tile ch-t-str">
               <div class="ch-tile-accent" style="background:linear-gradient(90deg,#fbbf24,#34d399);"></div>
-              <div class="ch-tl" style="display:flex;align-items:center;gap:8px;">// ⚡ ARSENAL · TOP TALENTY · STRENGTHS <span style="font-size:9px;background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.35);border-radius:4px;padding:1px 6px;font-family:monospace;">⭐ PREMIUM</span></div>
+              <div class="ch-tl">// ⚡ ARSENAL · TOP TALENTY · STRENGTHS</div>
               <div id="ch-str-content">
                 <div class="ch-empty-block"><div class="ch-empty-icon">⚡</div><div class="ch-empty-text">Wykonaj test Strengths aby odkryć swoje talenty</div><button class="ch-go-btn" onclick="startStrengthsTest()">Rozpocznij →</button></div>
               </div>
@@ -1591,7 +1587,7 @@
             <!-- ── T5: DARK TRIAD / SHADOW 2×1 ── -->
             <div class="ch-tile ch-t-dt" style="border-color:rgba(239,68,68,.14);">
               <div class="ch-tile-accent" style="background:linear-gradient(90deg,#ef4444,#f97316,#fbbf24);"></div>
-              <div class="ch-tl" style="color:rgba(239,68,68,.45);display:flex;align-items:center;gap:8px;">// ⚠ CIEMNA TRIADA · SD3 · OBSZARY CIENIA <span style="font-size:9px;background:rgba(239,68,68,0.12);color:#f87171;border:1px solid rgba(239,68,68,0.35);border-radius:4px;padding:1px 6px;font-family:monospace;">⭐ PREMIUM</span></div>
+              <div class="ch-tl" style="color:rgba(239,68,68,.45);">// ⚠ CIEMNA TRIADA · SD3 · OBSZARY CIENIA</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                 <div id="ch-dt-content">
                   <div class="ch-empty-block"><div class="ch-empty-icon">🌑</div><div class="ch-empty-text">Odblokuj test Dark Triad SD3 Premium aby zobaczyć analizę cienia</div><button class="ch-go-btn" onclick="startDarkTriadTest()">Odblokuj Premium →</button></div>
@@ -1605,7 +1601,7 @@
             <!-- ── T6: AI SYNTHESIS 4×1 ── -->
             <div class="ch-tile ch-t-synth">
               <div class="ch-tile-accent" style="background:linear-gradient(90deg,#6366f1,#38b6ff,#7b5ea7,#34d399);"></div>
-              <div class="ch-tl" style="display:flex;align-items:center;gap:8px;">// 🤖 ALCHEME AI INSIGHT · SYNTEZA · PROFIL KOMPLETNY <span style="font-size:9px;background:rgba(99,102,241,0.12);color:#818cf8;border:1px solid rgba(99,102,241,0.35);border-radius:4px;padding:1px 6px;font-family:monospace;">⭐ PREMIUM</span></div>
+              <div class="ch-tl">// 🤖 ALCHEME INSIGHT · SYNTEZA · PROFIL KOMPLETNY</div>
               <div id="ch-insight-content">
                 <div class="ch-empty-block"><div class="ch-empty-icon">🔮</div><div class="ch-empty-text">Synteza AI pojawi się po ukończeniu co najmniej 3 testów</div><button class="ch-go-btn" onclick="switchTab('tests')">Uzupełnij profil →</button></div>
               </div>
@@ -1615,98 +1611,31 @@
 
           <!-- TRAIT CHIPS -->
           <div style="margin-top:13px;" id="ch-traits-content"></div>
+
+          <!-- FOOTER -->
+          <div class="ch-footer" style="margin-top:13px;">
+            <div class="ch-fid" id="ch-footer-id">CHAR-ID: PSY----- · PSYCHER v2.0</div>
+            <div class="ch-ftests">PSYCHER v2.0</div>
+            <div class="ch-fver" id="ch-footer-date">BUILD DATE</div>
+          </div>
+
         </div><!-- /ch-sheet-wrapper -->
         </div><!-- /tab-character -->
 
+    </main>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl mt-16">
-    <div class="max-w-7xl mx-auto px-6 py-10">
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-8 mb-10">
-        <div class="col-span-2 md:col-span-1">
-          <a href="/" style="display:inline-block;margin-bottom:8px;text-decoration:none;">
-            <span style="font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:.14em;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.88) 55%,rgba(112,0,255,.75) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Alcheme</span>
-          </a>
-          <p class="text-slate-500 text-sm leading-relaxed">Naukowa diagnoza potencjalu w formie przystepnej grywalizacji.</p>
-          <a href="mailto:hello@alcheme.io" class="inline-block mt-4 text-sm text-cyan-400/80 hover:text-cyan-300 transition" style="text-decoration:none;">hello@alcheme.io</a>
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl mt-24">
+        <div class="max-w-7xl mx-auto px-6 py-10 text-center">
+            <p class="text-slate-500 text-sm">
+               &copy; 2026 <span class="text-brand-primary font-semibold">Alcheme</span> – Psychometric Engine. Wszystkie prawa zastrzeżone.
+            </p>
+            <p class="text-slate-600 text-xs mt-2">
+               <a href="/regulamin.pdf" target="_blank" rel="noopener" class="hover:text-slate-400 transition underline underline-offset-2">Regulamin Usługi</a>
+            </p>
         </div>
-        <div>
-          <h4 class="text-white font-bold text-sm mb-3">Projekt</h4>
-          <ul class="space-y-2 text-slate-500 text-sm" style="list-style:none;padding:0;margin:0;">
-            <li><a href="/" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Strona glowna</a></li>
-            <li><a href="/pricing" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Cennik</a></li>
-            <li><a href="/methodology" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Metodologia</a></li>
-            <li><a href="/user-profile-tests" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Testy</a></li>
-            <li><a href="/character" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Karta Postaci</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-white font-bold text-sm mb-3">Legal</h4>
-          <ul class="space-y-2 text-slate-500 text-sm" style="list-style:none;padding:0;margin:0;">
-            <li><a href="/privacy-policy" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Polityka Prywatnosci</a></li>
-            <li><a href="/regulamin.pdf" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Regulamin</a></li>
-            <li><a href="/privacy-policy#rodo" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">RODO</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
-        <span>&copy; 2026 Alcheme. All rights reserved.</span>
-        <span>Disclaimer: To narzedzie rozwojowe, nie diagnoza kliniczna.</span>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
-    <script>
-    (function initAlchemeLogo() {
-      var N = [
-        {x:50,y:8},{x:79.7,y:20.3},{x:92,y:50},{x:79.7,y:79.7},
-        {x:50,y:92},{x:20.3,y:79.7},{x:8,y:50},{x:20.3,y:20.3}
-      ];
-      var EDGES = [[0,3],[3,6],[6,1],[1,4],[4,7],[7,2],[2,5],[5,0]];
-      var SIGNAL_CFG = [
-        {edgeIdx:0,color:'#00f0ff',r:3.2,filter:'url(#alch-gm)',travelMs:1800,pauseMs:4800,delay:200},
-        {edgeIdx:2,color:'#00f0ff',r:3.2,filter:'url(#alch-gm)',travelMs:1900,pauseMs:5200,delay:2600},
-        {edgeIdx:4,color:'#00f0ff',r:3.2,filter:'url(#alch-gm)',travelMs:1700,pauseMs:5000,delay:4800},
-        {edgeIdx:6,color:'#00f0ff',r:3.2,filter:'url(#alch-gm)',travelMs:2000,pauseMs:5400,delay:7200},
-        {edgeIdx:1,color:'#c4b5fd',r:2.8,filter:'url(#alch-gs)',travelMs:2100,pauseMs:6200,delay:1400},
-        {edgeIdx:3,color:'#c4b5fd',r:2.8,filter:'url(#alch-gs)',travelMs:2200,pauseMs:6000,delay:3800},
-        {edgeIdx:5,color:'#c4b5fd',r:2.8,filter:'url(#alch-gs)',travelMs:2000,pauseMs:6400,delay:6000},
-        {edgeIdx:7,color:'#c4b5fd',r:2.8,filter:'url(#alch-gs)',travelMs:2300,pauseMs:5800,delay:8800}
-      ];
-      function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
-      function start() {
-        var group = document.getElementById('alch-signals');
-        if (!group) return;
-        var ns = 'http://www.w3.org/2000/svg';
-        var signals = SIGNAL_CFG.map(function(cfg){
-          var edge = EDGES[cfg.edgeIdx];
-          var el = document.createElementNS(ns,'circle');
-          el.setAttribute('r',String(cfg.r));
-          el.setAttribute('fill',cfg.color);
-          el.setAttribute('filter',cfg.filter);
-          el.setAttribute('opacity','0');
-          el.setAttribute('cx',String(N[edge[0]].x));
-          el.setAttribute('cy',String(N[edge[0]].y));
-          group.appendChild(el);
-          return {cfg:cfg,edge:edge,phase:'pausing',pauseEnd:performance.now()+cfg.delay,startTime:0,el:el};
-        });
-        function tick(s,now){
-          if(s.phase==='pausing'){if(now>=s.pauseEnd){s.phase='traveling';s.startTime=now;}return;}
-          var tL=Math.min((now-s.startTime)/s.cfg.travelMs,1);
-          var tE=ease(tL);
-          var from=N[s.edge[0]],to=N[s.edge[1]];
-          s.el.setAttribute('cx',(from.x+(to.x-from.x)*tE).toFixed(3));
-          s.el.setAttribute('cy',(from.y+(to.y-from.y)*tE).toFixed(3));
-          var op=tL<.15?(tL/.15)*.72:tL>.8?((1-tL)/.2)*.72:.72;
-          s.el.setAttribute('opacity',op.toFixed(3));
-          if(tL>=1){s.el.setAttribute('opacity','0');s.el.setAttribute('cx',String(N[s.edge[0]].x));s.el.setAttribute('cy',String(N[s.edge[0]].y));s.phase='pausing';s.pauseEnd=now+s.cfg.pauseMs+Math.random()*800;}
-        }
-        function loop(now){signals.forEach(function(s){tick(s,now);});requestAnimationFrame(loop);}
-        requestAnimationFrame(loop);
-      }
-      if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',start);}else{start();}
-    })();
-    </script>
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
@@ -1755,7 +1684,8 @@
          * Redirect user to Stripe Checkout.
          * Called from the Dark Triad locked button.
          */
-        window.handleUpgradeToPremium = async function() {
+        window.handleUpgradeToPremium = async function(buttonId) {
+            buttonId = buttonId || 'dark-triad-button';
             try {
                 const { data: { session } } = await supabase.auth.getSession();
                 if (!session?.access_token) {
@@ -1764,7 +1694,7 @@
                 }
 
                 // Show loading state on the button
-                const btn = document.getElementById('dark-triad-button');
+                const btn = document.getElementById(buttonId);
                 if (btn) { btn.textContent = 'Ładowanie...'; btn.disabled = true; }
 
                 const response = await fetch(
@@ -1774,9 +1704,8 @@
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${session.access_token}`,
-                            'apikey': supabaseKey,
                         },
-                        body: JSON.stringify({ price_id: 'price_1T4Ri9E8If9hyM30FgKn9jw7' }),
+                        body: JSON.stringify({}),
                     }
                 );
 
@@ -1791,7 +1720,7 @@
                 window.location.href = result.url;
             } catch (err) {
                 console.error('[handleUpgradeToPremium] Error:', err);
-                const btn = document.getElementById('dark-triad-button');
+                const btn = document.getElementById(buttonId);
                 if (btn) { btn.innerHTML = '🔒 Odblokuj Premium'; btn.disabled = false; }
                 alert('Wystąpił błąd. Spróbuj ponownie.');
             }
@@ -1805,15 +1734,28 @@
         function loadThemePreference() {
             const savedTheme = localStorage.getItem('theme');
             const toggle = document.getElementById('theme-toggle');
+            const toggleMobile = document.getElementById('theme-toggle-mobile');
             
             if (savedTheme === 'light') {
                 document.body.classList.add('light-mode');
                 if (toggle) toggle.classList.add('light');
+                if (toggleMobile) toggleMobile.classList.add('light');
             }
             
             console.log('Theme loaded:', savedTheme || 'dark (default)');
         }
         
+        // Toggle mobile hamburger menu
+        window.toggleMobileMenu = function() {
+            const menu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const closeIcon = document.getElementById('close-icon');
+            const isOpen = menu.style.display !== 'none';
+            menu.style.display = isOpen ? 'none' : 'block';
+            hamburgerIcon.style.display = isOpen ? 'block' : 'none';
+            closeIcon.style.display = isOpen ? 'none' : 'block';
+        }
+
         // Toggle theme function
         window.toggleTheme = function() {
             const body = document.body;
@@ -1837,18 +1779,7 @@
                 console.log('Switched to Light Mode');
             }
         }
-
-        // Toggle mobile hamburger menu
-        window.toggleMobileMenu = function() {
-            const menu = document.getElementById('mobile-menu');
-            const hamburgerIcon = document.getElementById('hamburger-icon');
-            const closeIcon = document.getElementById('close-icon');
-            const isOpen = menu.style.display !== 'none';
-            menu.style.display = isOpen ? 'none' : 'block';
-            hamburgerIcon.style.display = isOpen ? 'block' : 'none';
-            closeIcon.style.display = isOpen ? 'none' : 'block';
-        }
-
+        
         // Load theme immediately (before other scripts)
         loadThemePreference();
         
@@ -1868,19 +1799,29 @@
         // Check authentication
         async function checkAuth() {
             console.log('Checking auth...');
-            // Wait for Supabase to restore session from localStorage
+            // First attempt
             const { data: { session }, error } = await supabase.auth.getSession();
-            
-            console.log('Session check:', { session: session ? 'exists' : 'null', error, userId: session?.user?.id });
-            
-            if (error || !session) {
-                console.log('No valid session, redirecting to auth');
-                window.location.href = '/auth';
-                return false;
+            console.log('Session check (attempt 1):', { session: session ? 'exists' : 'null', error, userId: session?.user?.id });
+
+            if (!error && session) {
+                console.log('User authenticated:', session.user.id);
+                return true;
             }
-            
-            console.log('User authenticated:', session.user.id);
-            return true;
+
+            // Session may not have been restored from localStorage in time — retry after 1.5s
+            console.log('No session on first check, retrying in 1.5s...');
+            await new Promise(r => setTimeout(r, 1500));
+            const { data: { session: session2 }, error: error2 } = await supabase.auth.getSession();
+            console.log('Session check (attempt 2):', { session: session2 ? 'exists' : 'null', error: error2, userId: session2?.user?.id });
+
+            if (!error2 && session2) {
+                console.log('User authenticated on retry:', session2.user.id);
+                return true;
+            }
+
+            console.log('No valid session after retry, redirecting to auth');
+            window.location.href = '/auth';
+            return false;
         }
 
         // Logout function
@@ -1889,7 +1830,7 @@
             localStorage.removeItem('user_session');
             localStorage.removeItem('auth_token');
             localStorage.removeItem('has_profile');
-            window.location.href = '/';
+            window.location.href = 'https://www.alcheme.io/';
         }
 
         // Check if Strengths test is completed
@@ -2084,10 +2025,12 @@
 
         // Start Strengths test or view results
         window.startStrengthsTest = async function() {
+            // Premium-gated
             if (!window.userIsPremium) {
-                window.handleUpgradeToPremium('strengths-button');
+                await window.handleUpgradeToPremium('strengths-button');
                 return;
             }
+
             const completed = await checkStrengthsCompleted();
             
             if (completed) {
@@ -2116,6 +2059,35 @@
                 window.location.href = '/test/values/results';
             } else {
                 window.location.href = '/test?type=values';
+            }
+        }
+
+        // Check if Career DNA test is completed
+        async function checkCareerDnaCompleted() {
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError || !session) return false;
+                const { data, error } = await supabase
+                    .from('user_psychometrics')
+                    .select('id')
+                    .eq('user_id', session.user.id)
+                    .eq('test_type', 'CAREER_DNA')
+                    .limit(1);
+                if (error) { console.error('Error checking Career DNA completion:', error); return false; }
+                return data && data.length > 0;
+            } catch (err) {
+                console.error('Error in checkCareerDnaCompleted:', err);
+                return false;
+            }
+        }
+
+        // Start Career DNA test or view results
+        window.startCareerDnaTest = async function() {
+            const completed = await checkCareerDnaCompleted();
+            if (completed) {
+                window.location.href = '/test/career-dna/results';
+            } else {
+                window.location.href = '/test?type=career_dna';
             }
         }
 
@@ -2162,30 +2134,12 @@
             }
         }
 
-        // Update UI for Strengths test — PREMIUM GATED
+        // Update UI for Strengths test
         async function updateStrengthsUI() {
+            const completed = await checkStrengthsCompleted();
+            
             const statusEl = document.getElementById('strengths-status');
             const buttonEl = document.getElementById('strengths-button');
-
-            if (!window.userIsPremium) {
-                console.log('[strengths] Not premium — locking card');
-                if (statusEl) {
-                    statusEl.textContent = 'Zablokowany';
-                    statusEl.style.color = '#fbbf24';
-                    statusEl.style.borderColor = 'rgba(245,158,11,0.35)';
-                    statusEl.style.background = 'rgba(245,158,11,0.08)';
-                }
-                if (buttonEl) {
-                    buttonEl.textContent = '🔒 Odblokuj Premium';
-                    buttonEl.className = 'iiy-card-btn premium-lock';
-                    buttonEl.onclick = (e) => { e.stopPropagation(); window.handleUpgradeToPremium('strengths-button'); };
-                }
-                const cardEl = document.getElementById('strengths-card');
-                if (cardEl) cardEl.onclick = (e) => { window.handleUpgradeToPremium('strengths-button'); };
-                return;
-            }
-
-            const completed = await checkStrengthsCompleted();
             
             if (completed) {
                 if (statusEl) {
@@ -2225,6 +2179,23 @@
             const statusEl = document.getElementById('values-status');
             const buttonEl = document.getElementById('values-button');
             
+            if (completed) {
+                if (statusEl) {
+                    statusEl.textContent = 'Ukończony';
+                    statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)';
+                }
+                if (buttonEl) {
+                    buttonEl.innerHTML = '👁 Zobacz Wynik';
+                    buttonEl.className = 'iiy-card-btn ghost';
+                }
+            }
+        }
+
+        // Update UI for Career DNA test
+        async function updateCareerDnaUI() {
+            const completed = await checkCareerDnaCompleted();
+            const statusEl = document.getElementById('career-dna-status');
+            const buttonEl = document.getElementById('career-dna-button');
             if (completed) {
                 if (statusEl) {
                     statusEl.textContent = 'Ukończony';
@@ -2340,6 +2311,7 @@
             await updateStrengthsUI();
             await updateCareerUI();
             await updateValuesUI();
+            await updateCareerDnaUI();
             console.log('Dashboard initialized successfully');
         }
 
@@ -2383,7 +2355,8 @@
                 { name: 'Dark Triad', type: 'dark_triad', checkFn: checkDarkTriadCompleted, startFn: 'startDarkTriadTest' },
                 { name: 'Character Strengths', type: 'strengths', checkFn: checkStrengthsCompleted, startFn: 'startStrengthsTest' },
                 { name: 'Career Interests', type: 'career', checkFn: checkCareerCompleted, startFn: 'startCareerTest' },
-                { name: 'Personal Values', type: 'values', checkFn: checkValuesCompleted, startFn: 'startValuesTest' }
+                { name: 'Personal Values', type: 'values', checkFn: checkValuesCompleted, startFn: 'startValuesTest' },
+                { name: 'DNA Kariery', type: 'career_dna', checkFn: checkCareerDnaCompleted, startFn: 'startCareerDnaTest' }
             ];
 
             for (const test of tests) {
@@ -2536,7 +2509,7 @@
             // ── Name & ID ──────────────────────────────────────
             const userName = session.user.user_metadata?.full_name
                 || session.user.email?.split('@')[0]
-                || 'USER';
+                || 'PSYCHER';
             document.getElementById('ch-cname').textContent = userName.toUpperCase().substring(0, 14);
 
             // ── Avatar photo ───────────────────────────────────
@@ -2547,8 +2520,8 @@
                 chImg.style.display = '';  // SVG image element — remove display:none
             }
             const charHash = Math.abs(userName.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % 9000 + 1000;
-            const charId = `ALC-${charHash}-ALCHEME`;
-            document.getElementById('ch-footer-id').textContent = `CHAR-ID: ${charId} · Alcheme v2.0`;
+            const charId = `PSY-${charHash}-PSYCHER`;
+            document.getElementById('ch-footer-id').textContent = `CHAR-ID: ${charId} · PSYCHER v2.0`;
             document.getElementById('ch-footer-id-top').textContent = `CHAR-ID: ${charId}`;
             document.getElementById('ch-footer-date').textContent =
                 `BUILD ${new Date().toISOString().split('T')[0].replace(/-/g,'.')}`;
@@ -2963,7 +2936,6 @@
                                 headers: {
                                     'Content-Type': 'application/json',
                                     'Authorization': `Bearer ${session.access_token}`,
-                                    'apikey': supabaseKey,
                                 },
                                 body: JSON.stringify({ action: 'verify', session_id: sessionId }),
                             }
@@ -2971,9 +2943,8 @@
                         const result = await resp.json();
                         if (result.is_premium) {
                             window.userIsPremium = true;
-                            // Update card UIs immediately
+                            // Update Dark Triad card UI immediately
                             if (typeof updateDarkTriadUI === 'function') updateDarkTriadUI();
-                            if (typeof updateStrengthsUI === 'function') updateStrengthsUI();
                             if (typeof updateProfileHero === 'function') updateProfileHero(session.user);
                         }
                     }
@@ -3014,6 +2985,7 @@
             }
         })();
     </script>
+<script>(function(){var N=[{x:50,y:8},{x:79.7,y:20.3},{x:92,y:50},{x:79.7,y:79.7},{x:50,y:92},{x:20.3,y:79.7},{x:8,y:50},{x:20.3,y:20.3}],E=[[0,3],[3,6],[6,1],[1,4],[4,7],[7,2],[2,5],[5,0]],g=document.getElementById('alch-signals');if(!g)return;function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}var ns='http://www.w3.org/2000/svg',CFG=[{ei:0,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1800,p:4800,d:200},{ei:2,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1900,p:5200,d:2600},{ei:4,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1700,p:5000,d:4800},{ei:6,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:2000,p:5400,d:7200},{ei:1,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2100,p:6200,d:1400},{ei:3,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2200,p:6000,d:3800},{ei:5,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2000,p:6400,d:6000},{ei:7,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2300,p:5800,d:8800}],signals=CFG.map(function(c){var e=E[c.ei],el=document.createElementNS(ns,'circle');el.setAttribute('r',c.r);el.setAttribute('fill',c.c);el.setAttribute('filter',c.f);el.setAttribute('opacity','0');el.setAttribute('cx',N[e[0]].x);el.setAttribute('cy',N[e[0]].y);g.appendChild(el);return{c:c,e:e,ph:'pausing',pe:performance.now()+c.d,st:0,el:el};});(function loop(now){signals.forEach(function(s){if(s.ph==='pausing'){if(now>=s.pe){s.ph='traveling';s.st=now;}return;}var tL=Math.min((now-s.st)/s.c.t,1),tE=ease(tL),f=N[s.e[0]],to=N[s.e[1]],x=f.x+(to.x-f.x)*tE,y=f.y+(to.y-f.y)*tE,op=tL<.15?(tL/.15)*.72:tL>.8?((1-tL)/.2)*.72:.72;s.el.setAttribute('cx',x.toFixed(3));s.el.setAttribute('cy',y.toFixed(3));s.el.setAttribute('opacity',op.toFixed(3));if(tL>=1){s.el.setAttribute('opacity','0');s.el.setAttribute('cx',N[s.e[0]].x);s.el.setAttribute('cy',N[s.e[0]].y);s.ph='pausing';s.pe=now+s.c.p+Math.random()*800;}});requestAnimationFrame(loop);})(performance.now());})()</script>
 
 </body>
 </html>
