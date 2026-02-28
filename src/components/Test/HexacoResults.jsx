@@ -121,10 +121,6 @@ export default function HexacoResults() {
     generateInterpretation(results, { force: true });
   };
 
-  const handleRetake = () => {
-    if (confirm('Czy na pewno chcesz wykonać test ponownie?')) window.location.href = '/test';
-  };
-
   if (loading) return (
     <><style>{CSS}</style>
     <div className="hr-root" style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'100vh'}}>

@@ -7,6 +7,7 @@ import CharacterChatBubble from './CharacterChatBubble';
 import { getUserPremiumStatus, type UserPremiumStatus } from '../../lib/stripeService';
 import ValuesCircumplexChart, { SCHWARTZ_CIRCUMPLEX } from './ValuesCircumplexChart';
 import AlchemeLogo from '../AlchemeLogo';
+import ShareLinkModal from '../shared/ShareLinkModal';
 
 type CharacterCardContent = {
   archetype_name: string;
@@ -472,6 +473,15 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
   const [premiumStatus, setPremiumStatus] = useState<UserPremiumStatus | null>(null);
 
   const [shareLoading, setShareLoading] = useState(false);
+  const [shareToast, setShareToast] = useState<{type:'success'|'error'; msg:string}|null>(null);
+  const [shareLinkUrl, setShareLinkUrl] = useState<string|null>(null);
+
+  // Auto-dismiss share toast
+  useEffect(() => {
+    if (!shareToast) return;
+    const t = setTimeout(() => setShareToast(null), 3500);
+    return () => clearTimeout(t);
+  }, [shareToast]);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -645,12 +655,12 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
       try {
         await navigator.clipboard.writeText(url);
-        alert('Link do karty postaci skopiowany do schowka.');
+        setShareToast({ type: 'success', msg: 'Link skopiowany do schowka! 👍' });
       } catch {
-        window.prompt('Skopiuj link:', url);
+        setShareLinkUrl(url);
       }
     } catch {
-      alert('Nie udało się wygenerować linku do udostępnienia.');
+      setShareToast({ type: 'error', msg: 'Nie udało się wygenerować linku do udostępnienia.' });
     } finally {
       setShareLoading(false);
     }
@@ -1751,6 +1761,33 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
       </main>
 
       {!isPublic && !demoMode ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} /> : null}
+
+      {shareToast && (
+        <div style={{
+          position: 'fixed', bottom: 28, left: '50%', transform: 'translateX(-50%)',
+          zIndex: 9999,
+          background: shareToast.type === 'success'
+            ? 'linear-gradient(135deg,rgba(22,163,74,.95),rgba(21,128,61,.95))'
+            : 'linear-gradient(135deg,rgba(220,38,38,.95),rgba(185,28,28,.95))',
+          border: shareToast.type === 'success' ? '1px solid rgba(74,222,128,.35)' : '1px solid rgba(252,165,165,.3)',
+          borderRadius: 14,
+          padding: '13px 22px',
+          color: '#fff',
+          fontSize: 14,
+          fontWeight: 700,
+          fontFamily: '"Space Grotesk", system-ui, sans-serif',
+          boxShadow: shareToast.type === 'success' ? '0 8px 32px rgba(22,163,74,.4)' : '0 8px 32px rgba(220,38,38,.4)',
+          whiteSpace: 'nowrap',
+          animation: 'csToastIn .25s cubic-bezier(.34,1.56,.64,1)',
+        }}>
+          <style>{`@keyframes csToastIn { from { opacity:0; transform:translateX(-50%) translateY(14px) } to { opacity:1; transform:translateX(-50%) translateY(0) } }`}</style>
+          {shareToast.msg}
+        </div>
+      )}
+
+      {shareLinkUrl && (
+        <ShareLinkModal url={shareLinkUrl} onClose={() => setShareLinkUrl(null)} />
+      )}
 
     </div>
   );

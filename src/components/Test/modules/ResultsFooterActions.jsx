@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ConfirmModal from '../../shared/ConfirmModal';
 
 export default function ResultsFooterActions({
   dashboardHref = '/user-profile-tests.html',
@@ -36,14 +37,15 @@ export default function ResultsFooterActions({
     e.currentTarget.style.color = btnBase.color;
   };
 
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const go = (href) => {
     window.location.href = href;
   };
 
   const handleRetake = () => {
-    if (!confirmMessage || window.confirm(confirmMessage)) {
-      go(retakeHref);
-    }
+    if (!confirmMessage) { go(retakeHref); return; }
+    setShowConfirm(true);
   };
 
   return (
@@ -66,6 +68,14 @@ export default function ResultsFooterActions({
       >
         ↻ Ponów test
       </button>
+      {showConfirm && (
+        <ConfirmModal
+          message={confirmMessage}
+          confirmLabel="Tak, ponów test"
+          onConfirm={() => { setShowConfirm(false); go(retakeHref); }}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </div>
   );
 }

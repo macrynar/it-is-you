@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
-import { useIsMobile } from '../../../utils/useIsMobile';
 
 const DEFAULT_MAX_WIDTH = 1100;
 
@@ -24,12 +23,10 @@ export default function ResultsScaffold({
   confirmMessage = 'Czy na pewno chcesz wykonać test ponownie?',
   children,
 }) {
-  const isMobile = useIsMobile();
-
   const container = {
     maxWidth,
     margin: '0 auto',
-    padding: isMobile ? '24px 16px 60px' : '48px 32px 80px',
+    padding: '48px 32px 80px',
     position: 'relative',
     zIndex: 1,
   };
@@ -47,11 +44,11 @@ export default function ResultsScaffold({
   const navInner = {
     maxWidth,
     margin: '0 auto',
-    padding: isMobile ? '10px 16px' : '14px 32px',
+    padding: '14px 32px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 12,
+    gap: 16,
   };
 
   const navLeft = {
@@ -129,6 +126,8 @@ export default function ResultsScaffold({
     color: 'rgba(255,255,255,.26)',
   };
 
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const go = (href) => {
     window.location.href = href;
   };
@@ -136,9 +135,8 @@ export default function ResultsScaffold({
   const onBack = () => go(dashboardHref);
 
   const onRetake = () => {
-    if (!confirmMessage || window.confirm(confirmMessage)) {
-      go(retakeHref);
-    }
+    if (!confirmMessage) { go(retakeHref); return; }
+    setShowConfirm(true);
   };
 
   const onEnterLeft = (e) => {
@@ -168,13 +166,13 @@ export default function ResultsScaffold({
       <nav style={navShell}>
         <div style={navInner}>
           <button type="button" onClick={onBack} style={navLeft} onMouseEnter={onEnterLeft} onMouseLeave={onLeaveLeft}>
-            <ArrowLeft size={18} /> {isMobile ? 'Wróć' : 'Wróć do dashboardu'}
+            <ArrowLeft size={18} /> Wróć do dashboardu
           </button>
 
-          {!isMobile && <span style={navMid}>{navLabel}</span>}
+          <span style={navMid}>{navLabel}</span>
 
-          <button type="button" onClick={onRetake} style={{...navRight, padding: isMobile ? '7px 12px' : '8px 16px'}} onMouseEnter={onEnterRight} onMouseLeave={onLeaveRight}>
-            <RefreshCw size={15} /> {isMobile ? 'Ponów' : 'Ponów test'}
+          <button type="button" onClick={onRetake} style={navRight} onMouseEnter={onEnterRight} onMouseLeave={onLeaveRight}>
+            <RefreshCw size={15} /> Ponów test
           </button>
         </div>
       </nav>
@@ -191,6 +189,15 @@ export default function ResultsScaffold({
 
         {children}
       </div>
+      {showConfirm && (
+        <ConfirmModal
+          message={confirmMessage}
+          confirmLabel="Tak, ponów test"
+          accent={accent}
+          onConfirm={() => { setShowConfirm(false); go(retakeHref); }}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </>
   );
 }
