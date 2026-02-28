@@ -324,25 +324,30 @@ export default function Settings() {
     }
 
     const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-    const path = `${user.id}.${ext}`;
+    // Use folder-based path: {userId}/avatar.{ext}
+    // This matches the standard Supabase RLS policy pattern:
+    // (storage.foldername(name))[1] = auth.uid()::text
+    const path = `${user.id}/avatar.${ext}`;
 
     try {
       const { error: uploadErr } = await supabase.storage
         .from('avatars')
         .upload(path, file, { upsert: true, contentType: file.type });
-      if (uploadErr) throw uploadErr;
+      if (uploadErr) {
+        console.error('Storage upload error:', uploadErr);
+        throw new Error(uploadErr.message || `Upload failed (${(uploadErr as any).statusCode ?? 'unknown'})`);
+      }
 
       const { data } = supabase.storage.from('avatars').getPublicUrl(path);
-      // Add cache-bust so browsers don't serve stale image
       const url = `${data.publicUrl}?t=${Date.now()}`;
       setAvatarUrl(url);
 
       await supabase.auth.updateUser({ data: { avatar_url: data.publicUrl } });
       toast('Zdjęcie profilowe zaktualizowane ✓');
     } catch (err: any) {
+      console.error('Avatar upload failed:', err);
       toast(err.message || 'Błąd przy wgrywaniu zdjęcia', 'error');
     } finally {
-      // Reset input so the same file can be re-selected if needed
       e.target.value = '';
     }
   };
