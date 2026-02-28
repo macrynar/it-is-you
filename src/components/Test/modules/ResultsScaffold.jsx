@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 
 const DEFAULT_MAX_WIDTH = 1100;
