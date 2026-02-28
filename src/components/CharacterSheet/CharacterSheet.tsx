@@ -7,8 +7,6 @@ import CharacterChatBubble from './CharacterChatBubble';
 import { getUserPremiumStatus, type UserPremiumStatus } from '../../lib/stripeService';
 import ValuesCircumplexChart, { SCHWARTZ_CIRCUMPLEX } from './ValuesCircumplexChart';
 import AlchemeLogo from '../AlchemeLogo';
-import Navbar from '../shared/Navbar';
-import ShareLinkModal from '../shared/ShareLinkModal';
 
 type CharacterCardContent = {
   archetype_name: string;
@@ -474,15 +472,13 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
   const [premiumStatus, setPremiumStatus] = useState<UserPremiumStatus | null>(null);
 
   const [shareLoading, setShareLoading] = useState(false);
-  const [shareToast, setShareToast] = useState<{type:'success'|'error'; msg:string}|null>(null);
-  const [shareLinkUrl, setShareLinkUrl] = useState<string|null>(null);
 
-  // Auto-dismiss share toast
-  useEffect(() => {
-    if (!shareToast) return;
-    const t = setTimeout(() => setShareToast(null), 3500);
-    return () => clearTimeout(t);
-  }, [shareToast]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    const saved = (typeof window !== 'undefined' ? window.localStorage.getItem('theme') : null) ?? 'dark';
+    return saved === 'light' ? 'light' : 'dark';
+  });
 
   useEffect(() => {
     (async () => {
@@ -598,6 +594,16 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
     })();
   }, [authUser?.id]);
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    if (theme === 'light') document.body.classList.add('light-mode');
+    else document.body.classList.remove('light-mode');
+    try {
+      window.localStorage.setItem('theme', theme);
+    } catch {
+      // ignore
+    }
+  }, [theme]);
 
   /* DERIVED */
   const profileName = (profile?.full_name ?? '') as string;
@@ -607,6 +613,12 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
   const avatarUrl = (profileAvatar?.trim() || authUser?.user_metadata?.avatar_url || '') as string;
   const initials  = userName.split(' ').map((n:string) => n[0]).join('').toUpperCase().slice(0,2);
   const done      = CORE_TESTS.filter((k) => Boolean(raw[k])).length;
+
+  const TEST_NAMES: Record<string, string> = {
+    HEXACO: 'HEXACO', ENNEAGRAM: 'Enneagram', STRENGTHS: 'Mocne Strony',
+    CAREER: 'Kariera', DARK_TRIAD: 'Ciemna Triada', VALUES: 'Wartości',
+  };
+  const missedTests = (CORE_TESTS as ReadonlyArray<string>).filter((k) => !raw[k]);
 
   const isPremium = premiumStatus?.isPremium ?? Boolean(profile?.is_premium);
 
@@ -639,12 +651,12 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
       try {
         await navigator.clipboard.writeText(url);
-        setShareToast({ type: 'success', msg: 'Link skopiowany do schowka! 👍' });
+        alert('Link do karty postaci skopiowany do schowka.');
       } catch {
-        setShareLinkUrl(url);
+        window.prompt('Skopiuj link:', url);
       }
     } catch {
-      setShareToast({ type: 'error', msg: 'Nie udało się wygenerować linku do udostępnienia.' });
+      alert('Nie udało się wygenerować linku do udostępnienia.');
     } finally {
       setShareLoading(false);
     }
@@ -880,6 +892,27 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, authUser?.id, done, isPublic]);
 
+  /* Placeholder helpers — shown when llmContent is missing */
+  const noCardMsgFull: React.ReactNode = llmError ? (
+    <span>{llmError}</span>
+  ) : missedTests.length > 0 ? (
+    <a href="/user-profile-tests.html" style={{ color: 'inherit', textDecoration: 'none' }}>
+      Ukończ brakujące testy: <strong>{missedTests.map((k) => TEST_NAMES[k]).join(', ')}</strong> — po ich ukończeniu Karta Postaci wygeneruje się automatycznie →
+    </a>
+  ) : (
+    <span>Wszystkie testy ukończone — Karta Postaci jest właśnie generowana. Poczekaj chwilę lub odśwież stronę.</span>
+  );
+
+  const noCardMsgShort: React.ReactNode = llmError ? (
+    <span>{llmError}</span>
+  ) : missedTests.length > 0 ? (
+    <a href="/user-profile-tests.html" style={{ color: 'inherit', textDecoration: 'none' }}>
+      Ukończ pozostałe testy ({missedTests.map((k) => TEST_NAMES[k]).join(', ')}), aby wygenerować Kartę Postaci →
+    </a>
+  ) : (
+    <span>Karta Postaci jest generowana — odśwież stronę za chwilę.</span>
+  );
+
   /* LOADING */
   if (loading) return (
     <div className="min-h-screen bg-bg-main text-text-main flex items-center justify-center">
@@ -894,7 +927,117 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
     <div className={`min-h-screen bg-bg-main text-text-main bg-neural-gradient bg-fixed${demoMode ? ' demo-mode' : ''}`}>
       {/* TOP NAV */}
       {!demoMode && (!isPublic ? (
-        <Navbar isAuthenticated={true} activeLink="character" />
+      <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50 nav-neural">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-4">
+            {/* Logo */}
+            <AlchemeLogo href="/" size={32} />
+
+            {/* Center nav links — desktop only, page-level navigation */}
+            <div className="hidden md:flex items-center gap-8">
+              <a className="iiy-nav-link" href="/methodology">Metodologia</a>
+              <a className="iiy-nav-link" href="/pricing">Cennik</a>
+              <a className="iiy-nav-link active" href="/character">Karta Postaci</a>
+              <a className="iiy-nav-link" href="/user-profile-tests">Testy</a>
+            </div>
+
+            {/* Right utility actions — desktop */}
+            <div className="hidden md:flex items-center gap-2">
+              <button
+                type="button"
+                className={`theme-toggle ${theme === 'light' ? 'light' : ''}`}
+                onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
+                title="Przełącz motyw"
+              >
+                <div className="theme-toggle-slider" />
+                <svg className="theme-icon theme-icon-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+                <svg className="theme-icon theme-icon-sun" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </button>
+              <a
+                href="/settings"
+                className="flex items-center justify-center w-9 h-9 rounded-lg text-white/45 hover:text-white hover:bg-white/8 border border-transparent hover:border-white/10 transition-all"
+                title="Ustawienia"
+              >
+                <svg width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </a>
+              <button
+                type="button"
+                onClick={async () => { await supabase.auth.signOut(); window.location.href = '/'; }}
+                className="flex items-center justify-center w-9 h-9 rounded-lg text-white/45 hover:text-red-400 hover:bg-red-500/8 border border-transparent hover:border-red-500/20 transition-all"
+                title="Wyloguj"
+              >
+                <svg width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Hamburger — mobile */}
+            <button
+              type="button"
+              className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10 transition-all"
+              onClick={() => setMobileMenuOpen((o) => !o)}
+              aria-label="Menu"
+            >
+              {mobileMenuOpen ? (
+                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile dropdown */}
+        {mobileMenuOpen && (
+          <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(13,15,43,0.97)', backdropFilter: 'blur(20px)' }}>
+            <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
+              <a href="/settings" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Ustawienia</a>
+              <a href="/methodology" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Metodologia</a>
+              <a href="/pricing" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Cennik</a>
+              <a href="/character" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Karta Postaci</a>
+              <a href="/user-profile-tests" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Testy</a>
+              <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '4px 0' }} />
+              <div className="flex items-center justify-between px-4 py-2">
+                <span className="text-xs text-white/30 uppercase tracking-widest font-semibold">Motyw</span>
+                <button
+                  type="button"
+                  className={`theme-toggle ${theme === 'light' ? 'light' : ''}`}
+                  onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
+                  title="Przełącz motyw"
+                >
+                  <div className="theme-toggle-slider" />
+                  <svg className="theme-icon theme-icon-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                  <svg className="theme-icon theme-icon-sun" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={async () => { await supabase.auth.signOut(); window.location.href = '/'; }}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-400/80 hover:text-red-400 hover:bg-red-500/5 transition-all text-left"
+              >
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                Wyloguj
+              </button>
+            </div>
+          </div>
+        )}
+      </nav>
       ) : (
       <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50 nav-neural">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3">
@@ -1202,7 +1345,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                     ) : llmContent?.enneagram_motivation_text && !llmError ? (
                       <div className="mt-2 text-sm text-white/70 leading-relaxed">{llmContent.enneagram_motivation_text}</div>
                     ) : (
-                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
+                      <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
                     )}
                   </div>
                 </>
@@ -1259,7 +1402,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                     ) : llmContent?.strengths_top1_interpretation && !llmError ? (
                       <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.strengths_top1_interpretation}</div>
                     ) : (
-                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
+                      <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
                     )}
                   </div>
                 </>
@@ -1335,7 +1478,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                     ) : llmContent?.riasec_environment_text && !llmError ? (
                       <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.riasec_environment_text}</div>
                     ) : (
-                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
+                      <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
                     )}
                   </div>
                 </>
@@ -1392,7 +1535,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                     ) : llmContent?.schwartz_values_text && !llmError ? (
                       <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.schwartz_values_text}</div>
                     ) : (
-                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
+                      <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
                     )}
                   </div>
                 </>
@@ -1426,7 +1569,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy – wymaga regeneracji karty'}</div>
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{noCardMsgFull}</div>
               )}
             </section>
 
@@ -1452,7 +1595,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{noCardMsgFull}</div>
               )}
             </section>
 
@@ -1481,7 +1624,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{noCardMsgFull}</div>
               )}
             </section>
 
@@ -1506,7 +1649,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                   <p className="relative text-sm text-white/75 leading-relaxed">{llmContent.energy_why}</p>
                 </div>
               ) : (
-                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy – wymaga regeneracji karty'}</div>
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{noCardMsgFull}</div>
               )}
             </section>
 
@@ -1531,7 +1674,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy – wymaga regeneracji karty'}</div>
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{noCardMsgFull}</div>
               )}
             </section>
 
@@ -1556,7 +1699,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{llmError ?? 'Brak Analizy – wymaga regeneracji karty'}</div>
+                <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/45">{noCardMsgFull}</div>
               )}
             </section>
 
@@ -1620,7 +1763,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                     ) : llmContent?.darktriad_synthesis && !llmError ? (
                       <div className="mt-2 text-sm text-white/70 leading-relaxed">{llmContent.darktriad_synthesis}</div>
                     ) : (
-                      <div className="mt-2 text-sm text-white/45">{llmError ?? 'Brak Analizy'}</div>
+                      <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
                     )}
                   </div>
                 </>
@@ -1636,33 +1779,42 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
       {!isPublic && !demoMode ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} /> : null}
 
-      {shareToast && (
-        <div style={{
-          position: 'fixed', bottom: 28, left: '50%', transform: 'translateX(-50%)',
-          zIndex: 9999,
-          background: shareToast.type === 'success'
-            ? 'linear-gradient(135deg,rgba(22,163,74,.95),rgba(21,128,61,.95))'
-            : 'linear-gradient(135deg,rgba(220,38,38,.95),rgba(185,28,28,.95))',
-          border: shareToast.type === 'success' ? '1px solid rgba(74,222,128,.35)' : '1px solid rgba(252,165,165,.3)',
-          borderRadius: 14,
-          padding: '13px 22px',
-          color: '#fff',
-          fontSize: 14,
-          fontWeight: 700,
-          fontFamily: '"Space Grotesk", system-ui, sans-serif',
-          boxShadow: shareToast.type === 'success' ? '0 8px 32px rgba(22,163,74,.4)' : '0 8px 32px rgba(220,38,38,.4)',
-          whiteSpace: 'nowrap',
-          animation: 'csToastIn .25s cubic-bezier(.34,1.56,.64,1)',
-        }}>
-          <style>{`@keyframes csToastIn { from { opacity:0; transform:translateX(-50%) translateY(14px) } to { opacity:1; transform:translateX(-50%) translateY(0) } }`}</style>
-          {shareToast.msg}
+      {/* Footer */}
+      {!demoMode && <footer className="border-t border-white/5 bg-slate-950/80 py-6 sm:py-10 text-slate-500 text-sm mt-6 sm:mt-8">
+        <div className="max-w-5xl mx-auto px-3 sm:px-6 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
+          <div className="col-span-2 sm:col-span-1">
+            <span className="font-bold text-lg text-white tracking-tight block mb-3">Alcheme</span>
+            <p>Naukowa diagnoza potencjału w formie przystępnej grywalizacji.</p>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-3 text-sm">Metodologia</h4>
+            <ul className="space-y-1.5">
+              {[['HEXACO & Big Five', '/methodology#hexaco'], ['Enneagram RHETI', '/methodology#enneagram'], ['O*NET Database', '/methodology#career'], ['Dark Triad SD3', '/methodology#darktriad']].map(([l, href]) => (
+                <li key={l}><a href={href} className="hover:text-indigo-400 transition">{l}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-3 text-sm">Projekt</h4>
+            <ul className="space-y-1.5">
+              {[['Cennik', '/pricing'], ['Metodologia', '/methodology']].map(([l, href]) => (
+                <li key={l}><a href={href} className="hover:text-indigo-400 transition">{l}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-3 text-sm">Legal</h4>
+            <ul className="space-y-1.5">
+              {['Polityka Prywatności', 'Regulamin', 'RODO'].map((l) => (
+                <li key={l}><a href="#" className="hover:text-indigo-400 transition">{l}</a></li>
+              ))}
+            </ul>
+          </div>
         </div>
-      )}
-
-      {shareLinkUrl && (
-        <ShareLinkModal url={shareLinkUrl} onClose={() => setShareLinkUrl(null)} />
-      )}
-
+        <div className="max-w-5xl mx-auto px-3 sm:px-6 mt-6 sm:mt-8 pt-6 border-t border-white/5 text-center text-xs">
+          &copy; {new Date().getFullYear()} Alcheme. All rights reserved. Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.
+        </div>
+      </footer>}
     </div>
   );
 }
