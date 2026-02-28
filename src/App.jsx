@@ -302,7 +302,7 @@ function App() {
     }
     
     if (!user) {
-      sessionStorage.setItem('redirect_after_auth', '/test')
+      sessionStorage.setItem('redirect_after_auth', window.location.pathname + window.location.search)
       window.location.href = '/auth'
       return null
     }
