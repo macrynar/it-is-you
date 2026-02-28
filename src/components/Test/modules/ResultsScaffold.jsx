@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
+import { useIsMobile } from '../../../utils/useIsMobile';
+import ConfirmModal from '../../shared/ConfirmModal';
 
 const DEFAULT_MAX_WIDTH = 1100;
 
