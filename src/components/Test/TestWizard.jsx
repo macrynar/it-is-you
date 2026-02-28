@@ -6,6 +6,7 @@ import { DARK_TRIAD_TEST } from '../../data/tests/darkTriad.js';
 import { STRENGTHS_TEST } from '../../data/tests/strengths.js';
 import { CAREER_TEST } from '../../data/tests/career.js';
 import { VALUES_TEST } from '../../data/tests/values.js';
+import { CAREER_DNA_TEST } from '../../data/tests/careerDna.js';
 import { 
   calculateHexacoScore, 
   generateHexacoReport,
@@ -18,7 +19,9 @@ import {
   calculateCareerScore,
   generateCareerReport,
   calculateValuesScore,
-  generateValuesReport
+  generateValuesReport,
+  calculateCareerDnaScore,
+  generateCareerDnaReport,
 } from '../../utils/scoring.js';
 import { supabase } from '../../lib/supabaseClient.js';
 
@@ -41,6 +44,7 @@ const TEST_META = {
   strengths: { title: 'Mocne Strony', accent: '#FFB300' },
   career: { title: 'Profil Kariery (RIASEC)', accent: '#009688' },
   values: { title: 'Kompas Wartości (PVQ)', accent: '#00B8D4' },
+  career_dna: { title: 'DNA Kariery', accent: '#f97316' },
 };
 
 export default function TestWizard({ testType = 'hexaco' }) {
@@ -63,12 +67,15 @@ export default function TestWizard({ testType = 'hexaco' }) {
           ? CAREER_TEST
           : testType === 'values'
             ? VALUES_TEST
-            : HEXACO_TEST;
+            : testType === 'career_dna'
+              ? CAREER_DNA_TEST
+              : HEXACO_TEST;
   const isEnneagram = TEST_DATA.scale_type === 'forced_choice';
   const isDarkTriad = testType === 'dark_triad';
   const isStrengths = testType === 'strengths';
   const isCareer = testType === 'career';
   const isValues = testType === 'values';
+  const isCareerDna = testType === 'career_dna';
   const isLikert6 = TEST_DATA.scale_type === 'likert_6';
 
   const layoutMaxWidth = 'max-w-[1100px]';
@@ -146,6 +153,11 @@ export default function TestWizard({ testType = 'hexaco' }) {
         report = generateValuesReport(scores);
         dbTestType = 'VALUES';
         redirectPath = '/test/values/results';
+      } else if (isCareerDna) {
+        scores = calculateCareerDnaScore(responses);
+        report = generateCareerDnaReport(scores);
+        dbTestType = 'CAREER_DNA';
+        redirectPath = '/test/career-dna/results';
       } else {
         scores = calculateHexacoScore(responses);
         report = generateHexacoReport(scores);
@@ -211,6 +223,19 @@ export default function TestWizard({ testType = 'hexaco' }) {
           sorted_values: scores.sorted_values
         };
         dbPayload.raw_answers = responses;
+      } else if (isCareerDna) {
+        // Store Career DNA normalized scores
+        dbPayload.raw_scores = {
+          normalized_scores: scores.normalized_scores,
+          raw_scores: scores.raw_scores,
+          top1: scores.top1,
+          top2: scores.top2,
+          profile_key: scores.profile_key,
+          profile: scores.profile,
+          chart_data: scores.chart_data,
+          sorted_dimensions: scores.sorted_dimensions,
+        };
+        dbPayload.raw_answers = responses;
       } else {
         dbPayload.raw_scores = scores.raw_scores;
         dbPayload.percentile_scores = scores.percentile_scores;
@@ -247,6 +272,10 @@ export default function TestWizard({ testType = 'hexaco' }) {
         handleAnswer('a');
       } else if (isEnneagram && (e.key === 'b' || e.key === 'B')) {
         handleAnswer('b');
+      }
+      // For Career DNA: 'a'-'d' keys
+      else if (isCareerDna && ['a','b','c','d','A','B','C','D'].includes(e.key)) {
+        handleAnswer(e.key.toLowerCase());
       }
       // For HEXACO: number keys 1-5
       else if (!isEnneagram && !isLikert6 && e.key >= '1' && e.key <= '5') {
@@ -300,6 +329,8 @@ export default function TestWizard({ testType = 'hexaco' }) {
       return {
         label: valueInfo?.name || 'Wartości'
       };
+    } else if (isCareerDna) {
+      return { label: 'DNA Kariery' };
     } else {
       const dimensionInfo = TEST_DATA.dimensions.find(d => d.id === currentQuestion.dimension);
       return {
@@ -352,7 +383,56 @@ export default function TestWizard({ testType = 'hexaco' }) {
           </div>
 
           {/* Question UI */}
-          {isEnneagram ? (
+          {isCareerDna ? (
+            /* ── Career DNA: 4-choice A/B/C/D ── */
+            <div className="mb-3">
+              <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-xl p-4 mb-3">
+                <p className="text-base font-medium leading-relaxed text-white text-center">
+                  {currentQuestion.text}
+                </p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-3">
+                {currentQuestion.options.map((option) => {
+                  const key = option.label.toLowerCase();
+                  const isSelected = responses[currentQuestion.id] === key;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => handleAnswer(key)}
+                      className={`group p-4 rounded-xl transition-all duration-300 min-h-[90px] flex flex-row items-start gap-3 text-left ${
+                        isSelected
+                          ? 'border-2 bg-slate-900/50 scale-[1.01]'
+                          : 'border-2 border-slate-700 bg-slate-900/50 hover:border-slate-600 hover:bg-slate-900/70'
+                      }`}
+                      style={
+                        isSelected
+                          ? { borderColor: accent, backgroundColor: accentRgba(0.12), boxShadow: `0 0 24px ${accentRgba(0.2)}` }
+                          : undefined
+                      }
+                    >
+                      <div className="shrink-0 mt-0.5">
+                        <div
+                          className="w-7 h-7 rounded-full border-2 flex items-center justify-center font-bold text-xs transition-all duration-300"
+                          style={
+                            isSelected
+                              ? { borderColor: accent, backgroundColor: accent, color: '#fff' }
+                              : { borderColor: 'rgba(148,163,184,0.55)', color: 'rgba(148,163,184,0.75)' }
+                          }
+                        >
+                          {option.label}
+                        </div>
+                      </div>
+                      <p className={`text-sm leading-relaxed transition-colors duration-300 ${
+                        isSelected ? 'text-white font-medium' : 'text-slate-300 group-hover:text-white'
+                      }`}>
+                        {option.text}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : isEnneagram ? (
             <div className="mb-3">
               <h2 className="text-sm font-medium text-center text-slate-300 mb-3">
                 Która opcja bardziej do Ciebie pasuje?
@@ -512,6 +592,14 @@ export default function TestWizard({ testType = 'hexaco' }) {
                 <>
                   <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs">A</kbd>
                   <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs">B</kbd>
+                  <span>lub strzałki do nawigacji</span>
+                </>
+              ) : isCareerDna ? (
+                <>
+                  <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs">A</kbd>
+                  <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs">B</kbd>
+                  <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs">C</kbd>
+                  <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs">D</kbd>
                   <span>lub strzałki do nawigacji</span>
                 </>
               ) : (

@@ -1788,3 +1788,106 @@ export function generateValuesReport(scores) {
     }
   };
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DNA Kariery (Career DNA) – choice_4 format
+// ─────────────────────────────────────────────────────────────────────────────
+
+import { CAREER_DNA_TEST, CAREER_DNA_MAX_SCORES } from '../data/tests/careerDna.js';
+
+/**
+ * Calculate Career DNA scores from user responses.
+ * @param {Object} responses – { [questionId]: 'a'|'b'|'c'|'d' }
+ * @returns {Object} normalized scores and profile info
+ */
+export function calculateCareerDnaScore(responses) {
+  if (Object.keys(responses).length !== CAREER_DNA_TEST.question_count) {
+    throw new Error(
+      `Expected ${CAREER_DNA_TEST.question_count} responses, got ${Object.keys(responses).length}`
+    );
+  }
+
+  // Accumulate raw point totals per dimension
+  const raw = { AN: 0, SO: 0, CR: 0, ST: 0, LE: 0, HO: 0 };
+
+  CAREER_DNA_TEST.questions.forEach((question) => {
+    const answer = responses[question.id]; // 'a'|'b'|'c'|'d'
+    if (!answer) return;
+    const option = question.options.find((o) => o.label.toLowerCase() === answer.toLowerCase());
+    if (!option) return;
+    Object.entries(option.scores).forEach(([dim, pts]) => {
+      raw[dim] = (raw[dim] || 0) + pts;
+    });
+  });
+
+  // Clamp negatives to 0, normalize to 0-100
+  const normalized = {};
+  Object.keys(CAREER_DNA_MAX_SCORES).forEach((dim) => {
+    const clamped = Math.max(0, raw[dim]);
+    normalized[dim] = Math.min(100, Math.round((clamped / CAREER_DNA_MAX_SCORES[dim]) * 100));
+  });
+
+  // Determine top-2 dimensions for profile name
+  const sorted = Object.entries(normalized).sort((a, b) => b[1] - a[1]);
+  const top1 = sorted[0][0];
+  const top2 = sorted[1][0];
+
+  // Look up profile using canonical key (both orderings)
+  const profileKey =
+    CAREER_DNA_TEST.profiles[`${top1}+${top2}`]
+      ? `${top1}+${top2}`
+      : `${top2}+${top1}`;
+  const profile = CAREER_DNA_TEST.profiles[profileKey] || {
+    name: 'Nieznany Profil',
+    emoji: '🔮',
+    tagline: '',
+  };
+
+  // Chart-friendly array (ordered by dimension definition)
+  const chartData = CAREER_DNA_TEST.dimensions.map((d) => ({
+    id: d.id,
+    name: d.name,
+    value: normalized[d.id],
+    color: d.color,
+    icon: d.icon,
+  }));
+
+  return {
+    test_id: CAREER_DNA_TEST.test_id,
+    test_name: CAREER_DNA_TEST.test_name,
+    completed_at: new Date().toISOString(),
+    raw_scores: raw,
+    normalized_scores: normalized,
+    sorted_dimensions: sorted.map(([id, score]) => ({ id, score })),
+    top1,
+    top2,
+    profile_key: profileKey,
+    profile,
+    chart_data: chartData,
+  };
+}
+
+/**
+ * Generate a human-readable Career DNA report.
+ * @param {Object} scores – result of calculateCareerDnaScore
+ * @returns {Object} report object
+ */
+export function generateCareerDnaReport(scores) {
+  const dims = CAREER_DNA_TEST.dimensions;
+  const dimMap = Object.fromEntries(dims.map((d) => [d.id, d]));
+
+  return {
+    profile_name: scores.profile.name,
+    profile_emoji: scores.profile.emoji,
+    profile_tagline: scores.profile.tagline,
+    top_dimensions: scores.sorted_dimensions.slice(0, 3).map(({ id, score }) => ({
+      id,
+      name: dimMap[id]?.name,
+      score,
+      icon: dimMap[id]?.icon,
+      color: dimMap[id]?.color,
+    })),
+    all_dimensions: scores.chart_data,
+    summary: `Twój profil DNA Kariery: ${scores.profile.name}. ${scores.profile.tagline}`,
+  };
+}

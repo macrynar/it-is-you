@@ -7,10 +7,11 @@ import DarkTriadResults from './components/Test/DarkTriadResults'
 import StrengthsResults from './components/Test/StrengthsResults'
 import CareerResults from './components/Test/CareerResults'
 import ValuesResults from './components/Test/ValuesResults'
+import CareerDnaResults from './components/Test/CareerDnaResults'
 import Settings from './components/Settings/Settings'
 import CharacterSheet from './components/CharacterSheet/CharacterSheet'
 import { supabase, onAuthStateChange } from './lib/supabaseClient'
-import Layout from './components/shared/Layout'
+import Footer from './components/Footer'
 
 /**
  * Main App Component
@@ -113,7 +114,7 @@ function App() {
       return null
     }
     
-    return <Layout isAuthenticated={!!user} activeLink="tests"><HexacoResults /></Layout>
+    return <><HexacoResults /><Footer /></>
   }
 
   // Handle /test/enneagram/results route - show enneagram results
@@ -134,7 +135,7 @@ function App() {
       return null
     }
     
-    return <Layout isAuthenticated={!!user} activeLink="tests"><EnneagramResults /></Layout>
+    return <><EnneagramResults /><Footer /></>
   }
 
   // Handle /test/dark-triad/results route - show dark triad results
@@ -155,7 +156,7 @@ function App() {
       return null
     }
     
-    return <Layout isAuthenticated={!!user} activeLink="tests"><DarkTriadResults /></Layout>
+    return <><DarkTriadResults /><Footer /></>
   }
 
   // Handle /test/strengths/results route - show strengths results
@@ -176,7 +177,7 @@ function App() {
       return null
     }
     
-    return <Layout isAuthenticated={!!user} activeLink="tests"><StrengthsResults /></Layout>
+    return <><StrengthsResults /><Footer /></>
   }
 
   // Handle /test/career/results route - show career results
@@ -197,7 +198,7 @@ function App() {
       return null
     }
     
-    return <Layout isAuthenticated={!!user} activeLink="tests"><CareerResults /></Layout>
+    return <><CareerResults /><Footer /></>
   }
 
   // Handle /test/values/results route - show values results
@@ -218,17 +219,36 @@ function App() {
       return null
     }
     
-    return <Layout isAuthenticated={!!user} activeLink="tests"><ValuesResults /></Layout>
+    return <><ValuesResults /><Footer /></>
   }
 
-  // Handle public shared character card route
+  // Handle /test/career-dna/results route - show Career DNA results
+  if (currentRoute === '/test/career-dna/results' || currentRoute === '/test/career-dna/results/') {
+    if (loading) {
+      return (
+        <div className="min-h-screen bg-bg-main flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-text-muted">Ładowanie...</p>
+          </div>
+        </div>
+      )
+    }
+
+    if (!user) {
+      window.location.href = '/auth'
+      return null
+    }
+
+    return <><CareerDnaResults /><Footer /></>
+  }
   if (currentRoute.startsWith('/share/')) {
     const token = currentRoute.replace(/^\/share\/+/, '').split('/')[0]
     if (!token) {
       window.location.href = '/'
       return null
     }
-    return <Layout isAuthenticated={false}><CharacterSheet publicToken={token} /></Layout>
+    return <><CharacterSheet publicToken={token} /><Footer /></>
   }
 
   // Handle /demo-card route — CharacterSheet with hardcoded demo data (used for homepage iframe preview)
@@ -249,7 +269,7 @@ function App() {
       )
     }
     if (!user) { window.location.href = '/auth'; return null; }
-    return <Layout isAuthenticated={!!user} noNav={true}><CharacterSheet /></Layout>
+    return <><CharacterSheet /><Footer /></>
   }
 
   // Handle /settings route
@@ -265,7 +285,7 @@ function App() {
       )
     }
     if (!user) { window.location.href = '/auth'; return null; }
-    return <Layout isAuthenticated={!!user}><Settings /></Layout>
+    return <><Settings /><Footer /></>
   }
 
   // Handle /test route - require authentication & check for test type
@@ -291,7 +311,7 @@ function App() {
     const urlParams = new URLSearchParams(window.location.search)
     const testType = urlParams.get('type') || 'hexaco' // default to hexaco
     
-    return <><TestWizard testType={testType} /></>
+    return <><TestWizard testType={testType} /><Footer /></>
   }
 
   // Loading state or OAuth callback processing

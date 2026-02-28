@@ -422,6 +422,56 @@ Zasady:
 ${GLOBAL_GUIDELINES}`
   }
 
+  if (testType === 'CAREER_DNA') {
+    const rs = (_raw_scores as any) ?? {}
+    const norm = rs.normalized_scores ?? {}
+    const profile = rs.profile ?? {}
+    const sorted = (rs.sorted_dimensions as Array<{ id: string; score: number }>) ?? []
+
+    const DIM_NAMES: Record<string, string> = {
+      AN: 'Analityczność',
+      SO: 'Praca z ludźmi',
+      CR: 'Kreatywność',
+      ST: 'Ustrukturyzowanie',
+      LE: 'Przywództwo',
+      HO: 'Praktyczność',
+    }
+
+    const dimList = sorted.map(({ id, score }: { id: string; score: number }) =>
+      `${DIM_NAMES[id] ?? id}: ${score}%`
+    ).join('\n')
+
+    const profileName = profile.name ?? (report as any)?.profile_name ?? 'Nieznany'
+    const profileTagline = profile.tagline ?? (report as any)?.profile_tagline ?? ''
+
+    return `Jesteś ekspertem od doradztwa kariery. Na podstawie wyników testu DNA Kariery użytkownika, wygeneruj WYŁĄCZNIE odpowiedź jako obiekt JSON (bez żadnego dodatkowego tekstu, markdown ani wyjaśnień) w następującym formacie:
+
+{
+  "opis": "2-3 zdania opisujące tę osobę zawodowo, jej naturalne predyspozycje i styl pracy",
+  "zawody": [
+    { "nazwa": "Nazwa zawodu/roli", "uzasadnienie": "1 zdanie dlaczego pasuje do profilu" },
+    ... (6 zawodów łącznie)
+  ],
+  "kursy": [
+    { "nazwa": "Nazwa kursu", "platforma": "Udemy / Coursera / LinkedIn Learning / inne", "poziom": "Początkujący / Średniozaawansowany / Zaawansowany" },
+    ... (4 kursy łącznie)
+  ],
+  "czego_unikac": "1 zdanie opisujące typy ról lub środowisk pracy, które mogą nie odpowiadać temu profilowi"
+}
+
+Dane użytkownika:
+- Profil DNA Kariery: **${profileName}** — ${profileTagline}
+- Wyniki wymiarów (0-100%):
+${dimList}
+
+Zasady:
+- Odpowiedź MUSI być poprawnym JSON-em, bez żadnego tekstu przed ani po
+- Zawody powinny być konkretne i zróżnicowane (różne branże)
+- Kursy powinny być prawdziwymi, istniejącymi kursami z popularnych platform
+- Pisz po polsku, w stylu motywującym i profesjonalnym
+- Dopasuj rekomendacje ściśle do dominujących wymiarów (${sorted.slice(0,2).map((d: any) => DIM_NAMES[d.id] ?? d.id).join(', ')})`
+  }
+
   return `Napisz krótką interpretację wyników psychometrycznych dla testu "${testType}" w języku polskim.
 
 ${GLOBAL_GUIDELINES}`
