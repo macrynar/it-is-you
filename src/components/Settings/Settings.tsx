@@ -218,12 +218,6 @@ const CSS = `
 }
 `;
 
-// ─── Mock login history data ────────────────────────────────────────────────
-const LOGIN_HISTORY = [
-  { id: 1, date: '19 lut 2026, 14:32', device: 'Chrome / macOS', location: 'Warszawa, PL', current: true },
-  { id: 2, date: '18 lut 2026, 09:11', device: 'Safari / iOS 17', location: 'Kraków, PL', current: false },
-  { id: 3, date: '15 lut 2026, 22:48', device: 'Chrome / Windows 11', location: 'Gdańsk, PL', current: false },
-];
 
 // ─── Toggle component ───────────────────────────────────────────────────────
 function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) => void }) {
@@ -612,33 +606,6 @@ export default function Settings() {
         )}
       </div>
 
-      <div className="st-divider" />
-      <p className="st-section-title" style={{ marginTop: 24 }}>Historia logowań</p>
-
-      <div>
-        {LOGIN_HISTORY.map(entry => (
-          <div className="st-login-row" key={entry.id}>
-            <div style={{ fontSize: 22, flexShrink: 0, marginTop: 2 }}>
-              {entry.device.includes('iOS') || entry.device.includes('Android') ? '📱' : '💻'}
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-                <span style={{ fontSize: 14, fontWeight: 600, color: entry.current ? '#a5b4fc' : 'rgba(255,255,255,.8)' }}>
-                  {entry.device}
-                </span>
-                {entry.current && (
-                  <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 100, background: 'rgba(99,102,241,.2)', border: '1px solid rgba(99,102,241,.35)', color: '#a5b4fc', letterSpacing: '.5px' }}>
-                    AKTYWNA SESJA
-                  </span>
-                )}
-              </div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,.35)' }}>
-                {entry.date} · {entry.location}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 
