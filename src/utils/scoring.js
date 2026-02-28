@@ -1812,7 +1812,7 @@ export function calculateCareerDnaScore(responses) {
 
   CAREER_DNA_TEST.questions.forEach((question) => {
     const answer = responses[question.id]; // 'a'|'b'|'c'|'d'
-    if (!answer) return;
+    if (!answer || typeof answer !== 'string') return;
     const option = question.options.find((o) => o.label.toLowerCase() === answer.toLowerCase());
     if (!option) return;
     Object.entries(option.scores).forEach(([dim, pts]) => {

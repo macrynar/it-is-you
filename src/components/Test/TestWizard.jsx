@@ -278,12 +278,12 @@ export default function TestWizard({ testType = 'hexaco' }) {
         handleAnswer(e.key.toLowerCase());
       }
       // For HEXACO: number keys 1-5
-      else if (!isEnneagram && !isLikert6 && e.key >= '1' && e.key <= '5') {
+      else if (!isEnneagram && !isLikert6 && !isCareerDna && e.key >= '1' && e.key <= '5') {
         const value = parseInt(e.key);
         handleAnswer(value);
       }
       // For Values (6-point scale): number keys 1-6
-      else if (!isEnneagram && isLikert6 && e.key >= '1' && e.key <= '6') {
+      else if (!isEnneagram && isLikert6 && !isCareerDna && e.key >= '1' && e.key <= '6') {
         const value = parseInt(e.key);
         handleAnswer(value);
       }
