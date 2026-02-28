@@ -484,10 +484,6 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
     return () => clearTimeout(t);
   }, [shareToast]);
 
-
-    return saved === 'light' ? 'light' : 'dark';
-  });
-
   useEffect(() => {
     (async () => {
       setLoading(true);
