@@ -295,6 +295,8 @@ export default function CareerDnaResults() {
         badge="🧬 DNA Kariery"
         title={<>Twoje <span style={{ color: PAGE_ACCENT, textShadow: `0 0 24px ${ACCENT_GLOW}` }}>DNA Kariery</span></>}
         subtitle="Odkryj naturalny profil Twoich predyspozycji zawodowych."
+        retakeHref="/test?type=career_dna"
+        confirmMessage="Czy na pewno chcesz wykonać test DNA Kariery ponownie?"
       >
 
         {/* ── Profile hero card ──────────────────────────────────────────── */}
