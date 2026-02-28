@@ -1,6 +1,7 @@
 import React from 'react';
 import Footer from '../Footer';
 import { Lock, LogOut, User, AlertCircle } from 'lucide-react';
+import MainNav from '../shared/MainNav';
 import AlchemeLogo from '../AlchemeLogo';
 
 interface NewUserDashboardProps {
@@ -17,35 +18,7 @@ export default function NewUserDashboard({
   return (
     <div className="min-h-screen">
       {/* NAVBAR */}
-      <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <AlchemeLogo href="/" size={30} />
-
-          {/* Right Side */}
-          <div className="flex items-center gap-4">
-            {/* Account Status Badge */}
-            <span className="badge badge-pending">Konto Free</span>
-
-            {/* User Info */}
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-brand-gradient flex items-center justify-center ring-2 ring-brand-primary/30">
-                <User className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-sm font-medium text-slate-200 hidden sm:block">{username}</span>
-            </div>
-
-            {/* Logout Button */}
-            <button
-              onClick={onLogout}
-              className="btn-ghost p-2 rounded-lg"
-              title="Wyloguj się"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      </nav>
+      <MainNav activeLink="tests" />
 
       {/* MAIN CONTENT */}
       <main className="max-w-7xl mx-auto px-6 py-12">
