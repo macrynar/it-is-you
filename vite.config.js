@@ -26,6 +26,11 @@ export default defineConfig({
             req.url = '/app.html'
           }
 
+          // Serve index.html for baza-wiedzy directory paths (trailing slash or bare path)
+          if (!shouldRewriteToApp && url.startsWith('/baza-wiedzy') && !url.includes('.')) {
+            req.url = url.replace(/\/?$/, '/index.html')
+          }
+
           next()
         })
       },
