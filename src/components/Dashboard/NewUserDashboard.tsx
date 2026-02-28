@@ -1,7 +1,7 @@
 import React from 'react';
-import Footer from '../Footer';
+import Footer from '../shared/Footer';
 import { Lock, LogOut, User, AlertCircle } from 'lucide-react';
-import MainNav from '../shared/MainNav';
+import Navbar from '../shared/Navbar';
 import AlchemeLogo from '../AlchemeLogo';
 
 interface NewUserDashboardProps {
@@ -18,7 +18,7 @@ export default function NewUserDashboard({
   return (
     <div className="min-h-screen">
       {/* NAVBAR */}
-      <MainNav activeLink="tests" />
+      <Navbar isAuthenticated={true} activeLink="tests" />
 
       {/* MAIN CONTENT */}
       <main className="max-w-7xl mx-auto px-6 py-12">

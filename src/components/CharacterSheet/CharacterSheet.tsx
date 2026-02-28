@@ -7,7 +7,7 @@ import CharacterChatBubble from './CharacterChatBubble';
 import { getUserPremiumStatus, type UserPremiumStatus } from '../../lib/stripeService';
 import ValuesCircumplexChart, { SCHWARTZ_CIRCUMPLEX } from './ValuesCircumplexChart';
 import AlchemeLogo from '../AlchemeLogo';
-import MainNav from '../shared/MainNav';
+import Navbar from '../shared/Navbar';
 import ShareLinkModal from '../shared/ShareLinkModal';
 
 type CharacterCardContent = {
@@ -910,7 +910,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
     <div className={`min-h-screen bg-bg-main text-text-main bg-neural-gradient bg-fixed${demoMode ? ' demo-mode' : ''}`}>
       {/* TOP NAV */}
       {!demoMode && (!isPublic ? (
-        <MainNav activeLink="character" theme={theme} onThemeToggle={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))} />
+        <Navbar isAuthenticated={true} activeLink="character" theme={theme} onThemeToggle={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))} />
       ) : (
       <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50 nav-neural">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3">

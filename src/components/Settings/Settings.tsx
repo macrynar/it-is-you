@@ -837,26 +837,25 @@ export default function Settings() {
         </div>
       )}
 
-      {/* ── Navigation bar ── */}
-      <nav style={{
-        position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(13,15,43,.8)', backdropFilter: 'blur(20px)',
+      {/* ── Page sub-header ── */}
+      <div style={{
         borderBottom: '1px solid rgba(255,255,255,.07)',
         padding: '0 24px',
+        background: 'rgba(13,15,43,.4)',
       }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', height: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <button
-            onClick={() => window.location.href = '/user-profile-tests.html'}
-            style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', color: 'rgba(255,255,255,.5)', cursor: 'pointer', fontSize: 14, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, padding: '6px 10px', borderRadius: 8, transition: 'color .2s' }}
+            onClick={() => window.location.href = '/user-profile-tests'}
+            style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', color: 'rgba(255,255,255,.4)', cursor: 'pointer', fontSize: 13, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600, padding: '6px 10px', borderRadius: 8, transition: 'color .2s' }}
             onMouseEnter={e => (e.target as HTMLElement).style.color = '#fff'}
-            onMouseLeave={e => (e.target as HTMLElement).style.color = 'rgba(255,255,255,.5)'}
+            onMouseLeave={e => (e.target as HTMLElement).style.color = 'rgba(255,255,255,.4)'}
           >
             ← Wróć
           </button>
-          <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: '.5px' }}>Ustawienia konta</span>
+          <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '.5px', color: 'rgba(255,255,255,.7)' }}>Ustawienia konta</span>
           <div style={{ width: 80 }} />
         </div>
-      </nav>
+      </div>
 
       {/* ── Mobile tab pills ── */}
       <div className="st-mobile-tabs" style={{ padding: '16px 20px 0', position: 'relative', zIndex: 1 }}>

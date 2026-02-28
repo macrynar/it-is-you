@@ -10,7 +10,7 @@ import ValuesResults from './components/Test/ValuesResults'
 import Settings from './components/Settings/Settings'
 import CharacterSheet from './components/CharacterSheet/CharacterSheet'
 import { supabase, onAuthStateChange } from './lib/supabaseClient'
-import Footer from './components/Footer'
+import Layout from './components/shared/Layout'
 
 /**
  * Main App Component
@@ -113,7 +113,7 @@ function App() {
       return null
     }
     
-    return <><HexacoResults /><Footer /></>
+    return <Layout isAuthenticated={!!user} activeLink="tests"><HexacoResults /></Layout>
   }
 
   // Handle /test/enneagram/results route - show enneagram results
@@ -134,7 +134,7 @@ function App() {
       return null
     }
     
-    return <><EnneagramResults /><Footer /></>
+    return <Layout isAuthenticated={!!user} activeLink="tests"><EnneagramResults /></Layout>
   }
 
   // Handle /test/dark-triad/results route - show dark triad results
@@ -155,7 +155,7 @@ function App() {
       return null
     }
     
-    return <><DarkTriadResults /><Footer /></>
+    return <Layout isAuthenticated={!!user} activeLink="tests"><DarkTriadResults /></Layout>
   }
 
   // Handle /test/strengths/results route - show strengths results
@@ -176,7 +176,7 @@ function App() {
       return null
     }
     
-    return <><StrengthsResults /><Footer /></>
+    return <Layout isAuthenticated={!!user} activeLink="tests"><StrengthsResults /></Layout>
   }
 
   // Handle /test/career/results route - show career results
@@ -197,7 +197,7 @@ function App() {
       return null
     }
     
-    return <><CareerResults /><Footer /></>
+    return <Layout isAuthenticated={!!user} activeLink="tests"><CareerResults /></Layout>
   }
 
   // Handle /test/values/results route - show values results
@@ -218,7 +218,7 @@ function App() {
       return null
     }
     
-    return <><ValuesResults /><Footer /></>
+    return <Layout isAuthenticated={!!user} activeLink="tests"><ValuesResults /></Layout>
   }
 
   // Handle public shared character card route
@@ -228,7 +228,7 @@ function App() {
       window.location.href = '/'
       return null
     }
-    return <><CharacterSheet publicToken={token} /><Footer /></>
+    return <Layout isAuthenticated={false}><CharacterSheet publicToken={token} /></Layout>
   }
 
   // Handle /demo-card route — CharacterSheet with hardcoded demo data (used for homepage iframe preview)
@@ -249,7 +249,7 @@ function App() {
       )
     }
     if (!user) { window.location.href = '/auth'; return null; }
-    return <><CharacterSheet /><Footer /></>
+    return <Layout isAuthenticated={!!user} noNav={true}><CharacterSheet /></Layout>
   }
 
   // Handle /settings route
@@ -265,7 +265,7 @@ function App() {
       )
     }
     if (!user) { window.location.href = '/auth'; return null; }
-    return <><Settings /><Footer /></>
+    return <Layout isAuthenticated={!!user}><Settings /></Layout>
   }
 
   // Handle /test route - require authentication & check for test type
@@ -291,7 +291,7 @@ function App() {
     const urlParams = new URLSearchParams(window.location.search)
     const testType = urlParams.get('type') || 'hexaco' // default to hexaco
     
-    return <><TestWizard testType={testType} /><Footer /></>
+    return <><TestWizard testType={testType} /></>
   }
 
   // Loading state or OAuth callback processing
