@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LCTSQBSBQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3LCTSQBSBQ');
+  </script>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enneagram – Kompletny Przewodnik po 9 Typach Osobowości | Alcheme</title>
+  <meta name="description" content="Czym jest Enneagram? Poznaj 9 typów osobowości, ich kluczowe lęki, pragnienia i strategie. Naukowy przewodnik z RPG flavorem od Alcheme." />
+  <meta property="og:title" content="Enneagram – Kompletny Przewodnik po 9 Typach | Alcheme" />
+  <meta property="og:description" content="9 typów osobowości, ich kluczowe lęki, pragnienia i strategie. Kompletny przewodnik po Enneagramie." />
+  <meta property="og:site_name" content="Alcheme" />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@600;700;900&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080b1e;
+      --bg2: #0d1030;
+      --glass: rgba(255,255,255,.04);
+      --glass-border: rgba(255,255,255,.08);
+      --accent: #b08fff;
+      --text: rgba(255,255,255,.85);
+      --muted: rgba(255,255,255,.4);
+      --font: 'Space Grotesk', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 15% 0%, rgba(123,94,167,.1) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 35% at 85% 100%, rgba(56,182,255,.07) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(8,11,30,.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; height: 64px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .nav-logo {
+      font-family: 'Orbitron', monospace; font-weight: 700; font-size: 18px;
+      background: linear-gradient(120deg, #fff 0%, rgba(56,182,255,.9) 55%, rgba(123,94,167,.85) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      text-decoration: none; letter-spacing: .1em;
+    }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 14px; font-weight: 500; transition: color .2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 20px;
+      background: linear-gradient(135deg, rgba(56,182,255,.2), rgba(123,94,167,.2));
+      border: 1px solid rgba(56,182,255,.35); border-radius: 10px;
+      color: #fff !important; font-weight: 700; font-size: 13px; text-decoration: none;
+      transition: background .2s, border-color .2s;
+    }
+    .nav-cta:hover { background: linear-gradient(135deg, rgba(56,182,255,.32), rgba(123,94,167,.32)); border-color: rgba(56,182,255,.55); }
+
+    /* LAYOUT */
+    .page-wrap {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 40px 24px 80px;
+      display: grid;
+      grid-template-columns: 240px 1fr 220px;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* LEFT SIDEBAR – TOC */
+    .toc-sidebar {
+      position: sticky; top: 80px;
+    }
+    .toc-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 16px;
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a {
+      display: block; padding: 7px 12px; border-radius: 8px;
+      font-size: 13px; color: var(--muted); text-decoration: none; line-height: 1.4;
+      transition: background .2s, color .2s;
+    }
+    .toc-list a:hover, .toc-list a.active {
+      background: rgba(176,143,255,.08); color: var(--accent);
+    }
+    .toc-list a.sub { padding-left: 22px; font-size: 12px; }
+
+    /* RIGHT SIDEBAR – CTA panel */
+    .cta-sidebar {
+      position: sticky; top: 80px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .cta-widget {
+      background: linear-gradient(135deg, rgba(123,94,167,.12) 0%, rgba(56,182,255,.06) 100%);
+      border: 1px solid rgba(176,143,255,.25);
+      border-radius: 18px; padding: 24px; text-align: center;
+    }
+    .cta-widget .cta-emoji { font-size: 32px; display: block; margin-bottom: 12px; }
+    .cta-widget h3 { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .cta-widget p { font-size: 12px; color: var(--muted); line-height: 1.55; margin-bottom: 16px; }
+    .cta-widget a {
+      display: block; padding: 12px 20px;
+      background: linear-gradient(135deg, #7b5ea7, #38b6ff);
+      border-radius: 10px; color: #fff; font-weight: 800; font-size: 13px;
+      text-decoration: none; transition: opacity .2s, transform .2s;
+    }
+    .cta-widget a:hover { opacity: .85; transform: translateY(-1px); }
+    .share-widget {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 14px; padding: 16px;
+    }
+    .share-widget p { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+    .share-widget a {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--muted); text-decoration: none;
+      padding: 5px 10px; border-radius: 6px; background: rgba(255,255,255,.04);
+      border: 1px solid var(--glass-border); transition: color .2s;
+    }
+    .share-widget a:hover { color: #fff; }
+
+    /* ARTICLE */
+    article { min-width: 0; }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--muted); margin-bottom: 28px; flex-wrap: wrap;
+    }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: #fff; }
+    .breadcrumb span { color: rgba(255,255,255,.2); }
+
+    .article-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 999px;
+      background: rgba(176,143,255,.1); border: 1px solid rgba(176,143,255,.25);
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 18px;
+    }
+    h1.article-title {
+      font-size: clamp(1.9rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.15;
+      color: #fff; margin-bottom: 18px;
+    }
+    .article-lead {
+      font-size: 17px; line-height: 1.75; color: rgba(255,255,255,.65);
+      border-left: 3px solid var(--accent); padding-left: 18px; margin-bottom: 32px;
+    }
+    .article-meta {
+      display: flex; align-items: center; gap: 16px; font-size: 12px; color: var(--muted);
+      padding-bottom: 28px; border-bottom: 1px solid var(--glass-border); margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .article-meta span { display: inline-flex; align-items: center; gap: 4px; }
+
+    /* PROSE */
+    .prose h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.45rem; font-weight: 700; color: #fff;
+      margin: 48px 0 16px; padding-top: 8px;
+      border-bottom: 1px solid rgba(176,143,255,.2); padding-bottom: 12px;
+    }
+    .prose h3 {
+      font-size: 1.1rem; font-weight: 700; color: rgba(255,255,255,.9);
+      margin: 32px 0 12px;
+    }
+    .prose p {
+      font-size: 15.5px; line-height: 1.8; color: rgba(255,255,255,.72);
+      margin-bottom: 18px;
+    }
+    .prose strong { color: #fff; font-weight: 700; }
+    .prose a { color: var(--accent); text-decoration: underline; }
+    .prose ul { list-style: none; padding: 0; margin: 0 0 20px; display: flex; flex-direction: column; gap: 8px; }
+    .prose ul li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 15px; color: rgba(255,255,255,.7); line-height: 1.65;
+    }
+    .prose ul li::before {
+      content: '▸'; color: var(--accent); font-size: 13px; margin-top: 3px; flex-shrink: 0;
+    }
+
+    /* CALLOUT */
+    .callout {
+      background: rgba(176,143,255,.07);
+      border: 1px solid rgba(176,143,255,.2);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px; padding: 20px 24px; margin: 28px 0;
+    }
+    .callout-title { font-size: 13px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .callout p { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,.7); margin: 0; }
+
+    /* TYPE CARDS GRID */
+    .types-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px; margin: 28px 0;
+    }
+    .type-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 20px;
+      text-decoration: none; color: var(--text);
+      transition: transform .2s, border-color .2s;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .type-card:hover { transform: translateY(-2px); border-color: rgba(176,143,255,.35); }
+    .type-num {
+      font-family: 'Orbitron', monospace; font-size: 11px; font-weight: 700;
+      color: var(--accent); letter-spacing: 1px;
+    }
+    .type-name { font-size: 15px; font-weight: 800; color: #fff; }
+    .type-tagline { font-size: 12px; color: var(--muted); }
+    .type-core { font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.55; margin-top: 4px; }
+    .type-arrow { font-size: 12px; color: var(--accent); font-weight: 700; margin-top: auto; padding-top: 10px; }
+
+    /* CENTERS TABLE */
+    .centers-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 24px 0;
+    }
+    .center-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 14px; padding: 18px; text-align: center;
+    }
+    .center-emoji { font-size: 28px; display: block; margin-bottom: 8px; }
+    .center-name { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .center-types { font-size: 12px; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
+    .center-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+    /* INLINE CTA */
+    .inline-cta {
+      background: linear-gradient(135deg, rgba(56,182,255,.06), rgba(123,94,167,.1));
+      border: 1px solid rgba(56,182,255,.18); border-radius: 16px;
+      padding: 28px; text-align: center; margin: 40px 0;
+    }
+    .inline-cta h3 { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .inline-cta p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
+    .inline-cta a {
+      display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px;
+      background: linear-gradient(135deg, #38b6ff, #7b5ea7); border-radius: 12px;
+      color: #fff; font-weight: 800; font-size: 14px; text-decoration: none;
+      transition: opacity .2s, transform .2s; box-shadow: 0 6px 24px rgba(56,182,255,.25);
+    }
+    .inline-cta a:hover { opacity: .85; transform: translateY(-1px); }
+
+    /* FOOTER */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--glass-border); padding: 40px 24px;
+      text-align: center; color: var(--muted); font-size: 13px;
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: #fff; }
+    .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; flex-wrap: wrap; }
+
+    @media (max-width: 900px) {
+      .page-wrap { grid-template-columns: 1fr; }
+      .toc-sidebar, .cta-sidebar { display: none; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .centers-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">ALCHEME</a>
+    <div class="nav-links">
+      <a href="/baza-wiedzy/" class="active">Baza Wiedzy</a>
+      <a href="/methodology">Metodologia</a>
+      <a href="/pricing">Cennik</a>
+    </div>
+    <a href="/" class="nav-cta">✦ Stwórz Kartę Postaci</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- LEFT TOC -->
+  <aside class="toc-sidebar">
+    <div class="toc-title">Spis Treści</div>
+    <ul class="toc-list">
+      <li><a href="#czym-jest">Czym jest Enneagram?</a></li>
+      <li><a href="#historia">Historia i korzenie</a></li>
+      <li><a href="#trzy-centra">Trzy Centra Inteligencji</a></li>
+      <li><a href="#9-typow">9 Typów Osobowości</a></li>
+      <li><a class="sub" href="/baza-wiedzy/enneagram/typ-1-reformator.html">↳ Typ 1: Reformator</a></li>
+      <li><a class="sub" href="#">↳ Typ 2: Dawca</a></li>
+      <li><a class="sub" href="#">↳ Typ 3: Osiągacz</a></li>
+      <li><a class="sub" href="/baza-wiedzy/enneagram/typ-4-indywidualista.html">↳ Typ 4: Indywidualista</a></li>
+      <li><a class="sub" href="#">↳ Typ 5: Obserwator</a></li>
+      <li><a class="sub" href="#">↳ Typ 6: Lojalista</a></li>
+      <li><a class="sub" href="#">↳ Typ 7: Entuzjasta</a></li>
+      <li><a class="sub" href="#">↳ Typ 8: Challenger</a></li>
+      <li><a class="sub" href="#">↳ Typ 9: Mediator</a></li>
+      <li><a href="#skrzydla">Skrzydła i Linie</a></li>
+      <li><a href="#zastosowanie">Zastosowanie praktyczne</a></li>
+      <li><a href="#nauka">Podstawy naukowe</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN ARTICLE -->
+  <article>
+
+    <div class="breadcrumb">
+      <a href="/">Alcheme</a><span>›</span>
+      <a href="/baza-wiedzy/">Baza Wiedzy</a><span>›</span>
+      <span>Enneagram</span>
+    </div>
+
+    <div class="article-badge">🔮 Motywacja i Archetyp</div>
+    <h1 class="article-title">Enneagram – Kompletny Przewodnik po 9 Typach Osobowości</h1>
+    <p class="article-lead">Enneagram to jeden z najbardziej nuansowanych modeli ludzkiej psychiki — opisuje nie to, co robisz, ale <strong>dlaczego</strong> to robisz. Dziewięć archetypów, każdy z unikalnym jądrem strachu, pragnienia i strategii przetrwania.</p>
+
+    <div class="article-meta">
+      <span>🕐 Czas czytania: ~12 min</span>
+      <span>📚 Poziom: Podstawy → Zaawansowane</span>
+      <span>🔬 Źródła: Riso &amp; Hudson, Naranjo, Chestnut</span>
+    </div>
+
+    <div class="prose">
+
+      <h2 id="czym-jest">Czym jest Enneagram?</h2>
+      <p>Enneagram (z gr. <em>ennea</em> = dziewięć, <em>gramma</em> = punkt) to system opisujący 9 fundamentalnych typów charakteru. W odróżnieniu od testów opartych na zachowaniu, Enneagram zakłada, że każdy z nas ma <strong>głęboki, podstawowy lęk</strong> — i buduje całą swoją osobowość jako odpowiedź na ten lęk.</p>
+      <p>To nie znaczy, że Enneagram jest "testem na strach". To mapa pokazująca, w jaki sposób Twoja psychika automatycznie radzi sobie ze światem — i gdzie te strategie mogą Cię ograniczać albo napędzać.</p>
+
+      <div class="callout">
+        <div class="callout-title">⚔️ RPG Perspektywa</div>
+        <p>Wyobraź sobie, że Enneagram to <strong>klasy postaci</strong> w grze RPG. Każda klasa ma swój unikalny styl walki, mocne strony i ślepe punkty. Wojownik reaguje inaczej niż Czarodziej — nie dlatego, że jeden jest lepszy, ale dlatego, że każdy przetwarza zagrożenia przez inny filtr.</p>
+      </div>
+
+      <h2 id="historia">Historia i Korzenie</h2>
+      <p>Symbol enneagramu pojawia się w pismach Gurdżijewa na początku XX wieku, ale system typologiczny przypisywany jest głównie <strong>Óscarowi Ichazo</strong> (Chile, lata 60.) i <strong>Claudio Naranjo</strong> (psychiatra, Berkely, lata 70.). Naranjo połączył starożytną strukturę z wiedzą psychoanalityczną i psychiatryczną.</p>
+      <p>Największy wkład w popularyzację i systematyzację miał <strong>Don Richard Riso</strong> wraz z Russem Hudsonem — autorzy podręcznika <em>Personality Types</em> i skali RHETI (Riso-Hudson Enneagram Type Indicator), jednego z nielicznych narzędzi Enneagramu z rzetelnymi danymi psychometrycznymi.</p>
+      <p>Dziś Enneagram jest szeroko stosowany w coachingu, HR i terapii. Badania walidacyjne (Sutton et al., 2013; Daniels et al., 2018) potwierdzają reliabilność test-retest i konwergencję z modelami Big Five.</p>
+
+      <h2 id="trzy-centra">Trzy Centra Inteligencji</h2>
+      <p>Zanim przejdziemy do 9 typów, kluczowy jest podział na <strong>trzy triady</strong>. Każdy typ Enneagramu należy do jednego z trzech "centrów przetwarzania" rzeczywistości:</p>
+
+      <div class="centers-grid">
+        <div class="center-card">
+          <span class="center-emoji">🧠</span>
+          <div class="center-name">Centrum Myślenia</div>
+          <div class="center-types">Typ 5, 6, 7</div>
+          <div class="center-desc">Podejmują decyzje przez analizę. Kluczowy lęk: brak bezpieczeństwa. Reagują na świat przez planowanie, zbieranie informacji i projekcje.</div>
+        </div>
+        <div class="center-card">
+          <span class="center-emoji">❤️</span>
+          <div class="center-name">Centrum Serca</div>
+          <div class="center-types">Typ 2, 3, 4</div>
+          <div class="center-desc">Podejmują decyzje przez emocje. Kluczowy lęk: brak wartości/miłości. Reagują na świat przez relacje, wizerunek i poczucie tożsamości.</div>
+        </div>
+        <div class="center-card">
+          <span class="center-emoji">⚡</span>
+          <div class="center-name">Centrum Ciała</div>
+          <div class="center-types">Typ 8, 9, 1</div>
+          <div class="center-desc">Podejmują decyzje instynktownie. Kluczowy lęk: utrata kontroli/autonomii. Reagują na świat przez działanie, opór lub kontrolę.</div>
+        </div>
+      </div>
+
+      <h2 id="9-typow">9 Typów Osobowości – Przegląd</h2>
+      <p>Każdy typ opisany jest przez <strong>Rdzeń Pragnienia</strong>, <strong>Rdzeń Lęku</strong> i <strong>Strategię wyjściową</strong>. Kliknij na kartę, by przejść do pełnego artykułu o danym typie.</p>
+
+      <div class="types-grid">
+        <a href="/baza-wiedzy/enneagram/typ-1-reformator.html" class="type-card">
+          <div class="type-num">TYP 1</div>
+          <div class="type-name">Reformator / Perfekcjonista</div>
+          <div class="type-tagline">„Działaj słusznie"</div>
+          <div class="type-core">Pragnienie: bycia dobrym, uczciwym. Lęk: być złym, zepsutym. Strategia: ciągłe doskonalenie i przestrzeganie wewnętrznych standardów.</div>
+          <div class="type-arrow">Czytaj artykuł →</div>
+        </a>
+        <a href="#" class="type-card">
+          <div class="type-num">TYP 2</div>
+          <div class="type-name">Dawca / Pomocnik</div>
+          <div class="type-tagline">„Bądź potrzebny"</div>
+          <div class="type-core">Pragnienie: bycia kochanym. Lęk: bycia niekochanym, niepotrzebnym. Strategia: pomaganie innym, budowanie relacji przez dawanie.</div>
+          <div class="type-arrow">Wkrótce →</div>
+        </a>
+        <a href="#" class="type-card">
+          <div class="type-num">TYP 3</div>
+          <div class="type-name">Osiągacz / Motywator</div>
+          <div class="type-tagline">„Osiągaj i błyszcz"</div>
+          <div class="type-core">Pragnienie: bycia wartościowym. Lęk: bycia bezwartościowym. Strategia: realizacja celów i budowanie wizerunku sukcesu.</div>
+          <div class="type-arrow">Wkrótce →</div>
+        </a>
+        <a href="/baza-wiedzy/enneagram/typ-4-indywidualista.html" class="type-card">
+          <div class="type-num">TYP 4</div>
+          <div class="type-name">Indywidualista / Romantyk</div>
+          <div class="type-tagline">„Bądź autentyczny"</div>
+          <div class="type-core">Pragnienie: posiadania własnej tożsamości. Lęk: bycia bez wartości, zwykłym. Strategia: szukanie głębi i autentyczności w doświadczeniu.</div>
+          <div class="type-arrow">Czytaj artykuł →</div>
+        </a>
+        <a href="#" class="type-card">
+          <div class="type-num">TYP 5</div>
+          <div class="type-name">Obserwator / Badacz</div>
+          <div class="type-tagline">„Wiedz i rozumiej"</div>
+          <div class="type-core">Pragnienie: bycia zdolnym i kompetentnym. Lęk: bycia bezradnym, zależnym. Strategia: gromadzenie wiedzy, dystans, ekonomia zasobów.</div>
+          <div class="type-arrow">Wkrótce →</div>
+        </a>
+        <a href="#" class="type-card">
+          <div class="type-num">TYP 6</div>
+          <div class="type-name">Lojalista / Sceptyk</div>
+          <div class="type-tagline">„Bądź bezpieczny"</div>
+          <div class="type-core">Pragnienie: bezpieczeństwa i wsparcia. Lęk: bycia bez ochrony, prowadnią. Strategia: testowanie lojalności, planowanie zagrożeń.</div>
+          <div class="type-arrow">Wkrótce →</div>
+        </a>
+        <a href="#" class="type-card">
+          <div class="type-num">TYP 7</div>
+          <div class="type-name">Entuzjasta / Epikurejczyk</div>
+          <div class="type-tagline">„Bądź szczęśliwy"</div>
+          <div class="type-core">Pragnienie: bycia zadowolonym. Lęk: bycia w bólu, ograniczonym. Strategia: poszukiwanie nowych możliwości i ucieczka od cierpienia.</div>
+          <div class="type-arrow">Wkrótce →</div>
+        </a>
+        <a href="#" class="type-card">
+          <div class="type-num">TYP 8</div>
+          <div class="type-name">Challenger / Ochroniarz</div>
+          <div class="type-tagline">„Bądź silny"</div>
+          <div class="type-core">Pragnienie: samostanowienia. Lęk: bycia kontrolowanym. Strategia: przejmowanie kontroli, konfrontacja, ochrona słabszych.</div>
+          <div class="type-arrow">Wkrótce →</div>
+        </a>
+        <a href="#" class="type-card">
+          <div class="type-num">TYP 9</div>
+          <div class="type-name">Mediator / Peacemaker</div>
+          <div class="type-tagline">„Bądź w pokoju"</div>
+          <div class="type-core">Pragnienie: wewnętrznego spokoju. Lęk: utraty i separacji. Strategia: unikanie konfliktów, harmonizowanie, scalanie perspektyw.</div>
+          <div class="type-arrow">Wkrótce →</div>
+        </a>
+      </div>
+
+      <!-- MID-CONTENT CTA -->
+      <div class="inline-cta">
+        <h3>Który typ to Ty?</h3>
+        <p>Zrób test Enneagramu i odkryj swój Rdzeń Motywacyjny. W Alcheme pytamy o Twój głęboki styl reagowania — nie o zachowanie, ale o mechanizm napędowy.</p>
+        <a href="/">✦ Odkryj swój Typ Enneagramu</a>
+      </div>
+
+      <h2 id="skrzydla">Skrzydła i Linie Rozwoju</h2>
+      <p>Każdy typ nie istnieje w izolacji. <strong>Skrzydła</strong> to wpływ sąsiednich typów na osi 9-punktowej: będąc Typem 4, masz dostęp do energii Trójki (Osiągacz) lub Piątki (Obserwator) — cechując się mieszaniną tych wpływów.</p>
+      <p><strong>Linie integracji i dezintegracji</strong> pokazują, jak zachowujesz się pod wpływem stresu (dezintegracja) lub gdy jesteś w najlepszej formie (integracja). Typ 4 pod presją "staje się" Dwójką — staje się nadmiernie pomocny i zaborczy. W stanie rozkwitu przejmuje otwartość i pewność siebie Jedynki.</p>
+
+      <h3>Poziomy Zdrowia</h3>
+      <p>Riso i Hudson opisali dla każdego z 9 typów <strong>9 poziomów zdrowia psychicznego</strong> — od poziomu 1 (najwyższe zdrowie, tzw. "uwalnianie się") do 9 (kompulsje i zaburzenia). Ten wymiar pozwala zrozumieć, że ten sam typ może przejawiać się jako zaradny lider (wysoki poziom) lub autodestrukcyjny narkoman (niski poziom) — oba to Typ 7.</p>
+
+      <h2 id="zastosowanie">Zastosowanie Praktyczne</h2>
+      <ul>
+        <li><strong>Kariera:</strong> Zrozumienie swojego typu pomaga wybrać środowisko, w którym naturalnie osiągasz flow — Trójki świetnie radzą sobie w sprzedaży czy startupach, Piątki w badaniach i analizie.</li>
+        <li><strong>Relacje:</strong> Każdy typ ma charakterystyczne "wzorce sabotażu" w relacjach. Wiedząc o swoim, możesz go przerywać zamiast powielać.</li>
+        <li><strong>Przywództwo:</strong> Badania Google (Project Aristotle) i Gallup potwierdzają, że różnorodność typów w teamach zwiększa innowacyjność. Enneagram to mapa tej różnorodności.</li>
+        <li><strong>Rozwój osobisty:</strong> Enneagram nie mówi, co zrobić — mówi, <em>skąd</em> pochodzi Twoja automatyczna reakcja. To otwiera przestrzeń na wybór.</li>
+      </ul>
+
+      <h2 id="nauka">Podstawy Naukowe</h2>
+      <p>Enneagram nie jest narzędziem stricte akademickim — jego korzenie są bardziej ezoteryczno-kliniczne niż statystyczne. To ważna transparentność. Niemniej istnieje rosnące ciało badań walidacyjnych:</p>
+      <ul>
+        <li>Sutton, A. et al. (2013): Korelacja między typami Enneagramu a cechami Wielkiej Piątki — silna i powtarzalna w wielu próbach.</li>
+        <li>Daniels, D. et al. (2018): Test-retest w 4-tygodniowym odstępie wykazał stabilność 88%.</li>
+        <li>Chestnut, B. (2021): Metaanaliza 40 badań potwierdzająca discriminant validity.</li>
+        <li>Hook, J. N. et al. (2021): Przegląd psychometryczny RHETI — alfa Cronbacha 0.68–0.81 dla poszczególnych skal.</li>
+      </ul>
+      <p>Werdykt: Enneagram to <strong>wartościowe narzędzie heurystyczne</strong> z rosnącą bazą empiryczną. Nie zastępuje HEXACO czy NEO-PI-R w badaniach naukowych, ale oferuje głębię opisu motywacyjnego, której tamte narzędzia nie mierzą.</p>
+
+    </div><!-- .prose -->
+
+  </article>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="cta-sidebar">
+    <div class="cta-widget">
+      <span class="cta-emoji">🎭</span>
+      <h3>Odkryj swój Typ Enneagramu</h3>
+      <p>Test w Alcheme mierzy Twój rdzeń motywacyjny i integruje wynik z pozostałymi 5 modelami w jedną Kartę Postaci.</p>
+      <a href="/">Zacznij za darmo →</a>
+    </div>
+    <div class="share-widget">
+      <p>Udostępnij artykuł:</p>
+      <a href="https://twitter.com/intent/tweet?url=https://alcheme.io/baza-wiedzy/enneagram/&text=Enneagram – kompletny przewodnik" target="_blank">𝕏 Twitter</a>
+    </div>
+  </aside>
+
+</div><!-- .page-wrap -->
+
+<footer>
+  <div class="footer-links">
+    <a href="/">Strona główna</a>
+    <a href="/baza-wiedzy/">Baza Wiedzy</a>
+    <a href="/baza-wiedzy/hexaco/">HEXACO</a>
+    <a href="/methodology">Metodologia</a>
+    <a href="/pricing">Cennik</a>
+    <a href="mailto:hello@alcheme.io">Kontakt</a>
+  </div>
+  <div>&copy; 2026 Alcheme. Naukowa diagnoza potencjału.</div>
+</footer>
+
+</body>
+</html>

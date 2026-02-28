@@ -365,6 +365,7 @@
                 </style>
 
                 <div id="nav-links" class="hidden md:flex items-center gap-8">
+                    <a href="/baza-wiedzy/" class="iiy-nav-link">Baza Wiedzy</a>
                     <a href="/methodology" class="iiy-nav-link">Metodologia</a>
                     <a href="/#features" class="iiy-nav-link">Korzyści</a>
                     <a href="/pricing" class="iiy-nav-link">Cennik</a>
@@ -1371,7 +1372,8 @@
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
       document.getElementById('nav-links').innerHTML = `
-        <a href="/methodology" class="iiy-nav-link">Metodologia</a>
+        <a href="/baza-wiedzy/" class="iiy-nav-link">Baza Wiedzy</a>
+                    <a href="/methodology" class="iiy-nav-link">Metodologia</a>
         <a href="/pricing" class="iiy-nav-link">Cennik</a>
         <a href="/character" class="iiy-nav-link">Karta Postaci</a>
         <a href="/user-profile-tests" class="iiy-nav-link">Moje testy</a>

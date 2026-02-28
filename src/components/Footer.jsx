@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/5 bg-black/30 backdrop-blur-xl mt-16">
       <div className="max-w-7xl mx-auto px-6 py-10">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
 
           {/* Col 1 – brand + contact */}
           <div className="col-span-2 md:col-span-1">
@@ -41,6 +41,22 @@ export default function Footer() {
                 ['Metodologia',    '/methodology'],
                 ['Testy',          '/user-profile-tests'],
                 ['Karta Postaci',  '/character'],
+              ].map(([label, href]) => (
+                <li key={label}><a href={href} className="hover:text-indigo-400 transition">{label}</a></li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Col 3 – Baza Wiedzy */}
+          <div>
+            <h4 className="text-white font-bold mb-3 text-sm">Baza Wiedzy</h4>
+            <ul className="space-y-1.5 text-slate-500 text-sm" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {[
+                ['Wszystkie Modele',  '/baza-wiedzy/'],
+                ['Enneagram',         '/baza-wiedzy/enneagram/'],
+                ['HEXACO',            '/baza-wiedzy/hexaco/'],
+                ['Typ 1: Reformator', '/baza-wiedzy/enneagram/typ-1-reformator.html'],
+                ['Typ 4: Indywidualista', '/baza-wiedzy/enneagram/typ-4-indywidualista.html'],
               ].map(([label, href]) => (
                 <li key={label}><a href={href} className="hover:text-indigo-400 transition">{label}</a></li>
               ))}

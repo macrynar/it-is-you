@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LCTSQBSBQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3LCTSQBSBQ');
+  </script>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HEXACO – Kompletny Przewodnik po 6 Wymiarach Osobowości | Alcheme</title>
+  <meta name="description" content="Czym jest HEXACO? Poznaj 6 wymiarów osobowości (Big Six) z kluczową rolą wymiaru Uczciwość-Pokora (H). Naukowy przewodnik z badaniami i interpretacjami od Alcheme." />
+  <meta property="og:title" content="HEXACO – Kompletny Przewodnik po 6 Wymiarach Osobowości | Alcheme" />
+  <meta property="og:description" content="HEXACO to naukowy następca Big Five z 6 wymiarami osobowości. Poznaj H, E, X, A, C, O i dlaczego Uczciwość-Pokora zmienia wszystko." />
+  <meta property="og:site_name" content="Alcheme" />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@600;700;900&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080b1e;
+      --glass: rgba(255,255,255,.04);
+      --glass-border: rgba(255,255,255,.08);
+      --accent: #38b6ff;
+      --text: rgba(255,255,255,.85);
+      --muted: rgba(255,255,255,.4);
+      --font: 'Space Grotesk', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background: radial-gradient(ellipse 65% 45% at 20% 0%, rgba(56,182,255,.07) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 35% at 85% 100%, rgba(123,94,167,.07) 0%, transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(8,11,30,.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); padding: 0 24px; }
+    .nav-inner { max-width: 1200px; margin: 0 auto; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .nav-logo { font-family: 'Orbitron', monospace; font-weight: 700; font-size: 18px; background: linear-gradient(120deg, #fff 0%, rgba(56,182,255,.9) 55%, rgba(123,94,167,.85) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; letter-spacing: .1em; }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .nav-cta { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; background: linear-gradient(135deg, rgba(56,182,255,.2), rgba(123,94,167,.2)); border: 1px solid rgba(56,182,255,.35); border-radius: 10px; color: #fff !important; font-weight: 700; font-size: 13px; text-decoration: none; }
+
+    .page-wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; display: grid; grid-template-columns: 240px 1fr 220px; gap: 48px; align-items: start; }
+    .toc-sidebar { position: sticky; top: 80px; }
+    .toc-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc-list a { display: block; padding: 7px 12px; border-radius: 8px; font-size: 13px; color: var(--muted); text-decoration: none; line-height: 1.4; transition: background .2s, color .2s; }
+    .toc-list a:hover { background: rgba(56,182,255,.08); color: var(--accent); }
+    .toc-list a.sub { padding-left: 22px; font-size: 12px; }
+    .cta-sidebar { position: sticky; top: 80px; display: flex; flex-direction: column; gap: 16px; }
+    .cta-widget { background: linear-gradient(135deg, rgba(56,182,255,.08) 0%, rgba(123,94,167,.06) 100%); border: 1px solid rgba(56,182,255,.2); border-radius: 18px; padding: 24px; text-align: center; }
+    .cta-widget .cta-emoji { font-size: 32px; display: block; margin-bottom: 12px; }
+    .cta-widget h3 { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .cta-widget p { font-size: 12px; color: var(--muted); line-height: 1.55; margin-bottom: 16px; }
+    .cta-widget a { display: block; padding: 12px 20px; background: linear-gradient(135deg, #38b6ff, #7b5ea7); border-radius: 10px; color: #fff; font-weight: 800; font-size: 13px; text-decoration: none; transition: opacity .2s, transform .2s; }
+    .cta-widget a:hover { opacity: .85; transform: translateY(-1px); }
+
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); margin-bottom: 28px; flex-wrap: wrap; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; }
+    .breadcrumb a:hover { color: #fff; }
+    .breadcrumb span { color: rgba(255,255,255,.2); }
+
+    .article-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 999px; background: rgba(56,182,255,.08); border: 1px solid rgba(56,182,255,.2); font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 18px; }
+    h1.article-title { font-size: clamp(1.9rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.15; color: #fff; margin-bottom: 18px; }
+    .article-lead { font-size: 17px; line-height: 1.75; color: rgba(255,255,255,.65); border-left: 3px solid var(--accent); padding-left: 18px; margin-bottom: 32px; }
+    .article-meta { display: flex; align-items: center; gap: 16px; font-size: 12px; color: var(--muted); padding-bottom: 28px; border-bottom: 1px solid var(--glass-border); margin-bottom: 40px; flex-wrap: wrap; }
+
+    /* HEXACO DIMENSION CARDS */
+    .dim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin: 28px 0; }
+    .dim-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 18px; padding: 22px; transition: border-color .2s, transform .2s;
+    }
+    .dim-card:hover { transform: translateY(-2px); }
+    .dim-letter { font-family: 'Orbitron', monospace; font-size: 40px; font-weight: 900; line-height: 1; margin-bottom: 10px; }
+    .dim-name { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .dim-eng { font-size: 12px; color: var(--muted); margin-bottom: 10px; font-style: italic; }
+    .dim-desc { font-size: 13.5px; color: rgba(255,255,255,.6); line-height: 1.6; }
+    .dim-high-low { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .dim-pole { background: rgba(255,255,255,.04); border-radius: 8px; padding: 8px 10px; font-size: 11.5px; }
+    .dim-pole .pole-label { font-weight: 700; font-size: 10px; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 3px; }
+    .dim-pole .pole-text { color: rgba(255,255,255,.55); line-height: 1.4; }
+    .dim-card.h { --dc: #38b6ff; } .dim-card.e { --dc: #fb7185; } .dim-card.x { --dc: #fbbf24; }
+    .dim-card.a { --dc: #34d399; } .dim-card.c { --dc: #818cf8; } .dim-card.o { --dc: #f472b6; }
+    .dim-card:hover { border-color: var(--dc); }
+    .dim-letter { color: var(--dc, var(--accent)); }
+    .dim-pole .pole-label { color: var(--dc, var(--accent)); }
+
+    /* PROSE */
+    .prose h2 { font-family: 'Cinzel', serif; font-size: 1.35rem; font-weight: 700; color: #fff; margin: 44px 0 14px; border-bottom: 1px solid rgba(56,182,255,.15); padding-bottom: 10px; }
+    .prose h3 { font-size: 1.05rem; font-weight: 700; color: rgba(255,255,255,.9); margin: 28px 0 10px; }
+    .prose p { font-size: 15.5px; line-height: 1.8; color: rgba(255,255,255,.72); margin-bottom: 16px; }
+    .prose strong { color: #fff; font-weight: 700; }
+    .prose ul { list-style: none; padding: 0; margin: 0 0 20px; display: flex; flex-direction: column; gap: 8px; }
+    .prose ul li { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; color: rgba(255,255,255,.7); line-height: 1.65; }
+    .prose ul li::before { content: '▸'; color: var(--accent); font-size: 13px; margin-top: 3px; flex-shrink: 0; }
+    .callout { background: rgba(56,182,255,.05); border: 1px solid rgba(56,182,255,.18); border-left: 4px solid var(--accent); border-radius: 12px; padding: 20px 24px; margin: 24px 0; }
+    .callout-title { font-size: 12px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .callout p { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,.65); margin: 0; }
+
+    /* COMPARE TABLE */
+    .comparison-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; }
+    .comparison-table th { background: rgba(56,182,255,.08); color: var(--accent); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 10px 14px; text-align: left; }
+    .comparison-table td { padding: 10px 14px; border-bottom: 1px solid var(--glass-border); color: rgba(255,255,255,.65); line-height: 1.5; }
+    .comparison-table tr:last-child td { border-bottom: none; }
+    .comparison-table td:first-child { color: #fff; font-weight: 700; }
+    .comparison-table { border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; }
+
+    .inline-cta { background: linear-gradient(135deg, rgba(56,182,255,.06), rgba(123,94,167,.1)); border: 1px solid rgba(56,182,255,.18); border-radius: 16px; padding: 28px; text-align: center; margin: 40px 0; }
+    .inline-cta h3 { font-size: 1.15rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .inline-cta p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
+    .inline-cta a { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; background: linear-gradient(135deg, #38b6ff, #7b5ea7); border-radius: 12px; color: #fff; font-weight: 800; font-size: 14px; text-decoration: none; transition: opacity .2s, transform .2s; }
+    .inline-cta a:hover { opacity: .85; transform: translateY(-1px); }
+
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--glass-border); padding: 40px 24px; text-align: center; color: var(--muted); font-size: 13px; }
+    footer a { color: var(--muted); text-decoration: none; } footer a:hover { color: #fff; }
+    .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; flex-wrap: wrap; }
+
+    @media (max-width: 900px) { .page-wrap { grid-template-columns: 1fr; } .toc-sidebar, .cta-sidebar { display: none; } }
+    @media (max-width: 640px) { .nav-links { display: none; } .dim-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">ALCHEME</a>
+    <div class="nav-links">
+      <a href="/baza-wiedzy/" class="active">Baza Wiedzy</a>
+      <a href="/methodology">Metodologia</a>
+      <a href="/pricing">Cennik</a>
+    </div>
+    <a href="/" class="nav-cta">✦ Stwórz Kartę Postaci</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <aside class="toc-sidebar">
+    <div class="toc-title">Spis Treści</div>
+    <ul class="toc-list">
+      <li><a href="#czym-jest">Czym jest HEXACO?</a></li>
+      <li><a href="#historia">Historia modelu</a></li>
+      <li><a href="#6-wymiarow">6 Wymiarów</a></li>
+      <li><a class="sub" href="#h">H – Uczciwość-Pokora</a></li>
+      <li><a class="sub" href="#e">E – Emocjonalność</a></li>
+      <li><a class="sub" href="#x">X – Ekstrawersja</a></li>
+      <li><a class="sub" href="#a">A – Ugodowość</a></li>
+      <li><a class="sub" href="#c">C – Sumienność</a></li>
+      <li><a class="sub" href="#o">O – Otwartość</a></li>
+      <li><a href="#vs-big5">HEXACO vs Big Five</a></li>
+      <li><a href="#zastosowanie">Zastosowanie</a></li>
+      <li><a href="#nauka">Podstawy Naukowe</a></li>
+    </ul>
+  </aside>
+
+  <article>
+    <div class="breadcrumb">
+      <a href="/">Alcheme</a><span>›</span>
+      <a href="/baza-wiedzy/">Baza Wiedzy</a><span>›</span>
+      <span>HEXACO</span>
+    </div>
+
+    <div class="article-badge">🧬 Osobowość · Big Six</div>
+    <h1 class="article-title">HEXACO – Kompletny Przewodnik po 6 Wymiarach Osobowości</h1>
+    <p class="article-lead">HEXACO to naukowy następca modelu Big Five. Sześć fundamentalnych czynników osobowości z istotnym dodatkiem: wymiarem <strong>Uczciwość-Pokora (H)</strong>, pomijanym przez starsze modele, a kluczowym dla rozumienia zachowań etycznych, korupcji i ciemnej triady.</p>
+
+    <div class="article-meta">
+      <span>🕐 Czas czytania: ~10 min</span>
+      <span>📚 Poziom: Podstawy → Zaawansowane</span>
+      <span>🔬 Źródła: Ashton &amp; Lee, 2007–2024</span>
+    </div>
+
+    <div class="prose">
+
+      <h2 id="czym-jest">Czym jest HEXACO?</h2>
+      <p>HEXACO (wymawiane: <em>hex-a-ko</em>) to skrót od sześciu wymiarów osobowości: <strong>H</strong>onesty-Humility, <strong>E</strong>motionality, e<strong>X</strong>traversion, <strong>A</strong>greeableness, <strong>C</strong>onscientiousness, <strong>O</strong>penness to Experience. Model opracowali kanadyjscy psycholodzy <strong>Michael Ashton i Kibeom Lee</strong> na początku lat 2000.</p>
+      <p>HEXACO jest wynikiem cross-kulturowych analiz leksykalnych — badacze przeszukali słowniki wielu języków (angielski, niderlandzki, koreański, węgierski, polski i inne) w poszukiwaniu przymiotników opisujących cechy osobowości. Konsekwentnie pojawiało się <strong>sześć czynników</strong> — nie pięć, jak w klasycznym modelu Big Five.</p>
+
+      <div class="callout">
+        <div class="callout-title">🔬 Dlaczego nie Big Five?</div>
+        <p>Big Five (NEO-PI-R) przez dekady był złotym standardem. Problem: <strong>nie wyodrębnił wystarczająco dobrze uczciwości i pokory jako oddzielnego wymiaru</strong> — te cechy były "rozproszone" między Ugodowością a Neurotycznością. HEXACO naprawia ten błąd, tworząc wymiar H, który okazał się najsilniejszym predyktorem zachowań nieetycznych i Dark Triad.</p>
+      </div>
+
+      <h2 id="historia">Historia Modelu</h2>
+      <p>Pierwsze prace Ashtona i Lee pojawiły się w <em>Journal of Personality</em> w 2001 roku. Przez kolejną dekadę przeprowadzili analizy leksykalne w ponad 12 językach — angielskim, niderlandzkim, flamandzkim, polskim, koreańskim, węgierskim, tureckim, filipińskim, itd. We wszystkich pojawił się szósty czynnik, najlepiej opisany jako uczciwość i pokora (ang. Honesty-Humility).</p>
+      <p>W 2004 wprowadzili <strong>HEXACO-PI</strong> (Personality Inventory) — kwestionariusz 200 itemów. W 2009 opublikowano krótszą, 100-itemową wersję HEXACO-PI-R, a w 2017 zrewidowaną wersję 60-itemową HEXACO-60, powszechnie stosowaną w badaniach.</p>
+      <p>Dziś HEXACO jest standardem w badaniach nad ciemną triadą (Dark Triad), korupcją, przestępczością białych kołnierzyków, narcyzmem i zachowaniami organizacyjnymi — bo wymiar H okazał się tam wyjątkowo predyktywny.</p>
+
+      <h2 id="6-wymiarow">6 Wymiarów HEXACO</h2>
+      <p>Każdy wymiar opisuje kontinuum między dwoma końcami. Twój wynik pokazuje, gdzie na tym kontinuum naturalnie się lokalizujesz. Żaden koniec nie jest "dobry" ani "zły" — kontekst decyduje o użyteczności.</p>
+    </div>
+
+    <!-- DIMENSION CARDS -->
+    <div class="dim-grid">
+      <div class="dim-card h" id="h">
+        <div class="dim-letter">H</div>
+        <div class="dim-name">Uczciwość–Pokora</div>
+        <div class="dim-eng">Honesty-Humility</div>
+        <div class="dim-desc">Szczerość, rzetelność, lojalność i skromność. Osoby o wysokim H nie manipulują innymi dla zysku, nie nadużywają władzy i nie czują się lepsze od innych. Kluczowy predyktor zachowań nieetycznych.</div>
+        <div class="dim-high-low">
+          <div class="dim-pole">
+            <div class="pole-label">Wysoki H</div>
+            <div class="pole-text">Szczery, skromny, uczciwy w negocjacjach</div>
+          </div>
+          <div class="dim-pole">
+            <div class="pole-label">Niski H</div>
+            <div class="pole-text">Makiaweliczny, narcystyczny, skłonny do manipulacji</div>
+          </div>
+        </div>
+      </div>
+      <div class="dim-card e" id="e">
+        <div class="dim-letter">E</div>
+        <div class="dim-name">Emocjonalność</div>
+        <div class="dim-eng">Emotionality</div>
+        <div class="dim-desc">Wrażliwość emocjonalna, empatia, lęk i potrzeba wsparcia emocjonalnego. Odpowiada w przybliżeniu Neurotyczności z Big Five, ale z silniejszym akcentem na troskę o innych i potrzebę bliskości.</div>
+        <div class="dim-high-low">
+          <div class="dim-pole">
+            <div class="pole-label">Wysoki E</div>
+            <div class="pole-text">Wrażliwy, empatyczny, potrzebuje wsparcia emocjonalnego</div>
+          </div>
+          <div class="dim-pole">
+            <div class="pole-label">Niski E</div>
+            <div class="pole-text">Odporny, niezależny, odcięty emocjonalnie od innych</div>
+          </div>
+        </div>
+      </div>
+      <div class="dim-card x" id="x">
+        <div class="dim-letter">X</div>
+        <div class="dim-name">Ekstrawersja</div>
+        <div class="dim-eng">eXtraversion</div>
+        <div class="dim-desc">Towarzyskość, pewność siebie społeczna, gadatliwość i pozytywne emocje w kontaktach. Zbliżone do Ekstrawersji z Big Five, uzupełnione o poczucie własnej wartości społecznej.</div>
+        <div class="dim-high-low">
+          <div class="dim-pole">
+            <div class="pole-label">Wysoki X</div>
+            <div class="pole-text">Towarzyski, energiczny, pewny siebie w grupie</div>
+          </div>
+          <div class="dim-pole">
+            <div class="pole-label">Niski X</div>
+            <div class="pole-text">Introwertyczny, cichy, preferuje pracę w samotności</div>
+          </div>
+        </div>
+      </div>
+      <div class="dim-card a" id="a">
+        <div class="dim-letter">A</div>
+        <div class="dim-name">Ugodowość</div>
+        <div class="dim-eng">Agreeableness</div>
+        <div class="dim-desc">Tolerancja, łagodność i skłonność do kompromisu. W HEXACO Ugodowość jest węższa niż w Big Five — skupia się na zarządzaniu interpersonalnym gniewem i skłonności do przebaczania.</div>
+        <div class="dim-high-low">
+          <div class="dim-pole">
+            <div class="pole-label">Wysokie A</div>
+            <div class="pole-text">Cierpliwy, wyrozumiały, skłonny do przebaczania</div>
+          </div>
+          <div class="dim-pole">
+            <div class="pole-label">Niskie A</div>
+            <div class="pole-text">Krytyczny, nietolerancyjny, twardy w negocjacjach</div>
+          </div>
+        </div>
+      </div>
+      <div class="dim-card c" id="c">
+        <div class="dim-letter">C</div>
+        <div class="dim-name">Sumienność</div>
+        <div class="dim-eng">Conscientiousness</div>
+        <div class="dim-desc">Organizacja, pracowitość, samodyscyplina i perfekcjonizm. Najsilniejszy predyktor sukcesu zawodowego ze wszystkich wymiarów — zarówno w Big Five, jak i HEXACO.</div>
+        <div class="dim-high-low">
+          <div class="dim-pole">
+            <div class="pole-label">Wysoka C</div>
+            <div class="pole-text">Zorganizowany, systematyczny, dotrzymuje terminów</div>
+          </div>
+          <div class="dim-pole">
+            <div class="pole-label">Niska C</div>
+            <div class="pole-text">Spontaniczny, elastyczny, trudności z deadline'ami</div>
+          </div>
+        </div>
+      </div>
+      <div class="dim-card o" id="o">
+        <div class="dim-letter">O</div>
+        <div class="dim-name">Otwartość na Doświadczenie</div>
+        <div class="dim-eng">Openness to Experience</div>
+        <div class="dim-desc">Ciekawość intelektualna, wrażliwość estetyczna, oryginalność i wyobraźnia. Identyczna z Otwartością z Big Five — predyktor kreatywności i myślenia abstrakcyjnego.</div>
+        <div class="dim-high-low">
+          <div class="dim-pole">
+            <div class="pole-label">Wysoka O</div>
+            <div class="pole-text">Kreatywny, ciekawy, lubi eksperymentowanie</div>
+          </div>
+          <div class="dim-pole">
+            <div class="pole-label">Niska O</div>
+            <div class="pole-text">Konwencjonalny, praktyczny, preferuje sprawdzone metody</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+
+      <h2 id="vs-big5">HEXACO a Big Five — Porównanie</h2>
+      <p>Wiele osób zna Model Pięciu Czynników (Big Five / NEO-PI-R). Jak HEXACO się różni?</p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Cecha</th>
+            <th>Big Five (NEO-PI-R)</th>
+            <th>HEXACO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Liczba wymiarów</td>
+            <td>5 (O, C, E, A, N)</td>
+            <td>6 (H, E, X, A, C, O)</td>
+          </tr>
+          <tr>
+            <td>Uczciwość i etyka</td>
+            <td>Rozproszone w A i N</td>
+            <td>Oddzielny wymiar H — wyraźnie mierzony</td>
+          </tr>
+          <tr>
+            <td>Predykcja Dark Triad</td>
+            <td>Słabsza (brakuje H)</td>
+            <td>Silna — H koreluje -0.6 z Makiawelizmem</td>
+          </tr>
+          <tr>
+            <td>Korelacje międzyjęzykowe</td>
+            <td>Silne w culturach zachodnich</td>
+            <td>Replikowany w 12+ językach i kulturach</td>
+          </tr>
+          <tr>
+            <td>Podstawa leksykalna</td>
+            <td>Anglojęzyczna głównie</td>
+            <td>Cross-kulturowa (PL, KR, HU, NL, TR...)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Werdykt: dla badań nad etyką, korupcją i ciemną stroną osobowości, HEXACO jest wyraźnie lepszym narzędziem. Dla ogólnych predykcji zawodowych i klinicznych oba modele są porównywalne.</p>
+
+      <div class="inline-cta">
+        <h3>Poznaj swój profil HEXACO</h3>
+        <p>Alcheme mierzy wszystkie 6 wymiarów HEXACO i integruje je z Twoją Kartą Postaci zasilaną przez AI. Dowiedz się, gdzie jesteś na każdym z czynników i co to oznacza w praktyce.</p>
+        <a href="/">✦ Zrób test HEXACO w Alcheme</a>
+      </div>
+
+      <h2 id="zastosowanie">Zastosowanie Praktyczne</h2>
+      <ul>
+        <li><strong>Selekcja i rekrutacja:</strong> Badania pokazują, że Sumienność (C) i Uczciwość-Pokora (H) przewidują lojalność wobec organizacji, minimalizując ryzyko zachowań nieetycznych i freeriderstwa.</li>
+        <li><strong>Zarządzanie zespołami:</strong> Wiedza o profilu HEXACO pomaga dobierać role — osoby z niską Ugodowością (A) świetnie negocjują, ale mogą tworzyć napięcia wewnątrz teamu.</li>
+        <li><strong>Prewencja korupcji i nieetycznych zachowań:</strong> Wymiar H jest silniejszym predyktorem zachowań korupcyjnych niż jakikolwiek czynnik Big Five.</li>
+        <li><strong>Coaching i development:</strong> Profile HEXACO pomagają identyfikować "ślepe punkty" — np. osoba z niską Otwartością w roli innowatora.</li>
+        <li><strong>Psychoterapia:</strong> HEXACO dobrze mapuje do klasycznych zaburzeń osobowości — Emocjonalność koreluje z borderline, niski H z narcyzmem i psychopatią.</li>
+      </ul>
+
+      <h2 id="nauka">Podstawy Naukowe</h2>
+      <p>HEXACO jest jednym z lepiej zwalidowanych modeli osobowości we współczesnej psychologii:</p>
+      <ul>
+        <li>Ashton, M.C. &amp; Lee, K. (2007). <em>Empirical, theoretical, and practical advantages of the HEXACO model of personality structure.</em> Personality and Social Psychology Review.</li>
+        <li>Alfa Cronbacha poszczególnych skal: 0.77–0.86 (HEXACO-PI-R, 100 itemów).</li>
+        <li>Test-retest po 4 tygodniach: korelacje 0.82–0.91 dla wszystkich 6 skal.</li>
+        <li>Wymiar H jest najsilniejszym predyktorem Makiawelizmu (r = -.60), Narcyzmu (r = -.55) i Psychopatii (r = -.56) ze wszystkich czynników HEXACO i Big Five łącznie.</li>
+        <li>Replikacja czynnikowa w 12 językach (Ashton et al., 2004) — cross-kulturowe potwierdzenie stabilności struktury.</li>
+      </ul>
+
+    </div>
+  </article>
+
+  <aside class="cta-sidebar">
+    <div class="cta-widget">
+      <span class="cta-emoji">🧬</span>
+      <h3>Poznaj swój profil HEXACO</h3>
+      <p>Test w Alcheme mierzy wszystkie 6 wymiarów i integruje je z pozostałymi modelami w Twoją Kartę Postaci.</p>
+      <a href="/">Zacznij za darmo →</a>
+    </div>
+  </aside>
+
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="/">Strona główna</a>
+    <a href="/baza-wiedzy/">Baza Wiedzy</a>
+    <a href="/baza-wiedzy/enneagram/">Enneagram</a>
+    <a href="/methodology">Metodologia</a>
+    <a href="mailto:hello@alcheme.io">Kontakt</a>
+  </div>
+  <div>&copy; 2026 Alcheme. Naukowa diagnoza potencjału.</div>
+</footer>
+
+</body>
+</html>

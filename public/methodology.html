@@ -154,6 +154,7 @@
 
         <!-- Desktop nav — public by default, JS swaps if logged in -->
         <div class="hidden md:flex items-center gap-8" id="nav-links">
+          <a href="/baza-wiedzy/" class="iiy-nav-link">Baza Wiedzy</a>
           <a href="/methodology" class="iiy-nav-link active">Metodologia</a>
           <a href="/pricing" class="iiy-nav-link">Cennik</a>
         </div>
@@ -697,7 +698,8 @@
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
       document.getElementById('nav-links').innerHTML = `
-        <a href="/methodology" class="iiy-nav-link active">Metodologia</a>
+        <a href="/baza-wiedzy/" class="iiy-nav-link">Baza Wiedzy</a>
+          <a href="/methodology" class="iiy-nav-link active">Metodologia</a>
         <a href="/pricing" class="iiy-nav-link">Cennik</a>
         <a href="/character" class="iiy-nav-link">Karta Postaci</a>
         <a href="/user-profile-tests" class="iiy-nav-link">Moje testy</a>
