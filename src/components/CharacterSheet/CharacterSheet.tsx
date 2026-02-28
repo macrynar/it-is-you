@@ -485,8 +485,6 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
   }, [shareToast]);
 
 
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    const saved = (typeof window !== 'undefined' ? window.localStorage.getItem('theme') : null) ?? 'dark';
     return saved === 'light' ? 'light' : 'dark';
   });
 
@@ -604,16 +602,6 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
     })();
   }, [authUser?.id]);
 
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    if (theme === 'light') document.body.classList.add('light-mode');
-    else document.body.classList.remove('light-mode');
-    try {
-      window.localStorage.setItem('theme', theme);
-    } catch {
-      // ignore
-    }
-  }, [theme]);
 
   /* DERIVED */
   const profileName = (profile?.full_name ?? '') as string;
@@ -910,7 +898,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
     <div className={`min-h-screen bg-bg-main text-text-main bg-neural-gradient bg-fixed${demoMode ? ' demo-mode' : ''}`}>
       {/* TOP NAV */}
       {!demoMode && (!isPublic ? (
-        <Navbar isAuthenticated={true} activeLink="character" theme={theme} onThemeToggle={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))} />
+        <Navbar isAuthenticated={true} activeLink="character" />
       ) : (
       <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50 nav-neural">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3">
