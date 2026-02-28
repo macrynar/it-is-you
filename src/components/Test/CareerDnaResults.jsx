@@ -23,7 +23,7 @@ const getDim = (id) => DIM_COLORS[id] || DIM_COLORS.HO;
 
 // ── Radar (hexagon) SVG ─────────────────────────────────────────────────────
 const DIM_ORDER = ['AN', 'SO', 'CR', 'ST', 'LE', 'HO'];
-const CX = 190, CY = 190, R_MAX = 140;
+const CX = 290, CY = 220, R_MAX = 145;
 
 function radPt(i, pct) {
   const a = (i * 60 - 90) * (Math.PI / 180);
@@ -35,12 +35,12 @@ function ring(pct) {
 }
 
 const LABELS = [
-  { id: 'AN', lx: 190, ly: 26  },
-  { id: 'SO', lx: 354, ly: 93  },
-  { id: 'CR', lx: 354, ly: 287 },
-  { id: 'ST', lx: 190, ly: 354 },
-  { id: 'LE', lx: 26,  ly: 287 },
-  { id: 'HO', lx: 26,  ly: 93  },
+  { id: 'AN', lx: 290, ly: 38  },
+  { id: 'SO', lx: 448, ly: 128 },
+  { id: 'CR', lx: 448, ly: 314 },
+  { id: 'ST', lx: 290, ly: 402 },
+  { id: 'LE', lx: 132, ly: 314 },
+  { id: 'HO', lx: 132, ly: 128 },
 ];
 const DIM_META = Object.fromEntries(
   CAREER_DNA_TEST.dimensions.map((d) => [d.id, d])
@@ -57,7 +57,7 @@ function HexRadar({ data }) {
   }, []);
 
   return (
-    <svg viewBox="0 0 380 380" style={{ width: '100%', maxWidth: 380, display: 'block', margin: '0 auto' }}>
+    <svg viewBox="0 0 580 440" style={{ width: '100%', maxWidth: 580, display: 'block', margin: '0 auto' }}>
       {/* rings */}
       {[20, 40, 60, 80, 100].map((p) => (
         <polygon key={p} points={ring(p)} fill="none" stroke="rgba(255,255,255,.06)" strokeWidth={1} />
@@ -94,7 +94,7 @@ function HexRadar({ data }) {
       {LABELS.map(({ id, lx, ly }) => {
         const meta = DIM_META[id];
         const score = scoreMap[id] ?? 0;
-        const anchor = lx < 100 ? 'end' : lx > 280 ? 'start' : 'middle';
+        const anchor = lx < 160 ? 'end' : lx > 420 ? 'start' : 'middle';
         return (
           <g key={id}>
             <text x={lx} y={ly} textAnchor={anchor} fill="rgba(255,255,255,.55)" fontSize={11} fontWeight={600} fontFamily="'Space Grotesk', sans-serif">{meta?.icon} {meta?.name}</text>
@@ -118,7 +118,7 @@ function DimBar({ dim, score, rank }) {
   }, [score, rank]);
 
   return (
-    <div style={{ background: d.bg, border: `1px solid ${d.color}22`, borderRadius: 16, padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <div className="cdr-dim-bar" style={{ '--dim-glow': d.glow, background: d.bg, border: `1px solid ${d.color}22`, borderRadius: 16, padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: 8 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 18 }}>{meta?.icon}</span>
@@ -148,8 +148,12 @@ const CSS = `
 .cdr-job-card:hover{background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.28);}
 .cdr-course-card{border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:14px 16px;transition:background .2s,border-color .2s;}
 .cdr-course-card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);}
-.cdr-two-col{display:grid;grid-template-columns:1fr 380px;gap:20px;margin-bottom:24px;}
+.cdr-two-col{display:grid;grid-template-columns:1.55fr 1fr;gap:20px;margin-bottom:24px;align-items:start;}
 @media(max-width:900px){.cdr-two-col{grid-template-columns:1fr;}}
+.cdr-dim-bar{cursor:default;transition:transform .22s ease,box-shadow .22s ease;}
+.cdr-dim-bar:hover{transform:translateY(-2px) scale(1.015);box-shadow:0 6px 28px -4px var(--dim-glow,rgba(249,115,22,.35));}
+.cdr-dim-card{cursor:default;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;}
+.cdr-dim-card:hover{transform:translateY(-3px);box-shadow:0 10px 36px -6px var(--dim-glow,rgba(249,115,22,.4));}
 .cdr-jobs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
 @media(max-width:580px){.cdr-jobs-grid{grid-template-columns:1fr;}}
 .cdr-courses-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
@@ -319,18 +323,18 @@ export default function CareerDnaResults() {
 
         {/* ── Two-column: radar + bars ────────────────────────────────────── */}
         <div className="cdr-two-col cdr-fade" style={{ animationDelay: '.15s' }}>
-          {/* bars column */}
+          {/* radar column — bigger, left */}
+          <div className="cdr-glass" style={{ padding: '28px 24px' }}>
+            <h2 style={{ margin: '0 0 10px', fontSize: '1rem', fontWeight: 700, color: 'rgba(255,255,255,.85)', textAlign: 'center' }}>Radar Predyspozycji</h2>
+            <HexRadar data={all_dimensions} />
+          </div>
+
+          {/* bars column — smaller, right */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <h2 style={{ margin: '0 0 14px', fontSize: '1rem', fontWeight: 700, color: 'rgba(255,255,255,.85)' }}>Profil Kompetencji</h2>
             {dimsSortedByScore.map((dim, i) => (
               <DimBar key={dim.id} dim={CAREER_DNA_TEST.dimensions.find(d => d.id === dim.id)} score={dim.value} rank={i} />
             ))}
-          </div>
-
-          {/* radar column */}
-          <div className="cdr-glass" style={{ padding: '28px 22px' }}>
-            <h2 style={{ margin: '0 0 18px', fontSize: '1rem', fontWeight: 700, color: 'rgba(255,255,255,.85)', textAlign: 'center' }}>Radar Predyspozycji</h2>
-            <HexRadar data={all_dimensions} />
           </div>
         </div>
 
@@ -342,7 +346,7 @@ export default function CareerDnaResults() {
               const meta = DIM_META[dim.id];
               const d = getDim(dim.id);
               return (
-                <div key={dim.id} className="cdr-glass" style={{ padding: '18px 20px' }}>
+                <div key={dim.id} className="cdr-glass cdr-dim-card" style={{ '--dim-glow': getDim(dim.id).glow, padding: '18px 20px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                     <span style={{ fontSize: 22 }}>{meta?.icon}</span>
                     <div>
