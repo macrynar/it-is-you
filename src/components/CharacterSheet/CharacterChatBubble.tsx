@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import { supabase, SUPABASE_ANON_KEY, getAccessToken } from '../../lib/supabaseClient.js'
+import { useIsMobile } from '../../utils/useIsMobile'
 
 type ChatMsg = {
   role: 'user' | 'assistant'
@@ -7,6 +8,7 @@ type ChatMsg = {
 }
 
 export default function CharacterChatBubble({ profileContext, isPremium = false }: { profileContext: string; isPremium?: boolean }) {
+  const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<ChatMsg[]>([
     {
@@ -88,80 +90,134 @@ export default function CharacterChatBubble({ profileContext, isPremium = false 
 
   return (
     <>
-      {/* DOCKED ISLAND (bottom-center, input always visible) */}
+      {/* ── BOTTOM ISLAND (closed state) ── */}
       {!open && (
         <div className="fixed inset-x-0 bottom-4 z-[60] flex justify-center px-3">
           <div className="w-[min(820px,calc(100vw-24px))] card-neural card-neural-highlight overflow-hidden">
             <div className="h-[3px] bg-gradient-to-r from-brand-primary/50 via-brand-secondary/40 to-brand-primary/50" />
-            <div className="px-4 py-3 flex items-center gap-3">
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="relative w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-                  <span aria-hidden="true" className="absolute -inset-2 bg-brand-primary/20 blur-lg animate-pulse" />
-                  <span aria-hidden="true" className="relative w-2.5 h-2.5 rounded-full bg-brand-primary/80 shadow" />
+
+            {isMobile ? (
+              /* ── MOBILE layout: two stacked rows ── */
+              <div className="px-3 pt-2.5 pb-3 flex flex-col gap-2">
+                {/* row 1: avatar + label */}
+                <div className="flex items-center gap-2">
+                  <div className="relative w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <span aria-hidden="true" className="absolute -inset-2 bg-brand-primary/20 blur-lg animate-pulse" />
+                    <span aria-hidden="true" className="relative w-2 h-2 rounded-full bg-brand-primary/80" />
+                  </div>
+                  <span className="text-[10px] tracking-[2px] font-mono text-white/45 uppercase">AI&nbsp;Psychoassistant&nbsp;—&nbsp;Alex</span>
                 </div>
-                <div className="min-w-0">
-                  <div className="text-[10px] tracking-[2px] font-mono text-white/45">AI PSYCHOASSISTANT</div>
-                  <div className="text-xs text-white/70 truncate">Zapytaj o pracę, relacje, kierunek rozwoju…</div>
+                {/* row 2: input */}
+                <div className="flex items-center gap-2">
+                  {isPremium ? (
+                    <>
+                      <input
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
+                        placeholder="Zapytaj o siebie…"
+                        className="flex-1 min-w-0 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/85 placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                        disabled={loading}
+                      />
+                      <button type="button" onClick={send} disabled={!canSend} className="btn-neural disabled:opacity-50 flex-shrink-0">
+                        →
+                      </button>
+                    </>
+                  ) : (
+                    <a href="/pricing" className="flex-1 flex items-center gap-2 px-3 py-2 rounded-xl no-underline" style={{background:'rgba(245,158,11,.08)',border:'1px solid rgba(245,158,11,.25)',color:'rgba(255,255,255,.55)',fontSize:12}}>
+                      <span>&#x1F512;</span>
+                      <span>Chat tylko dla <strong style={{color:'#f59e0b'}}>Premium</strong></span>
+                      <span style={{marginLeft:'auto',fontSize:11,color:'#f59e0b',fontWeight:700}}>Ulepsz →</span>
+                    </a>
+                  )}
                 </div>
               </div>
+            ) : (
+              /* ── DESKTOP layout: single row ── */
+              <div className="px-4 py-3 flex items-center gap-3">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="relative w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <span aria-hidden="true" className="absolute -inset-2 bg-brand-primary/20 blur-lg animate-pulse" />
+                    <span aria-hidden="true" className="relative w-2.5 h-2.5 rounded-full bg-brand-primary/80 shadow" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10px] tracking-[2px] font-mono text-white/45">AI PSYCHOASSISTANT</div>
+                    <div className="text-xs text-white/70 truncate">Zapytaj o pracę, relacje, kierunek rozwoju…</div>
+                  </div>
+                </div>
 
-              <div className="flex-1" />
+                <div className="flex-1" />
 
-              <div className="flex items-center gap-2 w-[min(520px,55vw)]">
-                {isPremium ? (
-                  <>
-                    <input
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault()
-                          send()
-                        }
-                      }}
-                      placeholder="Napisz pytanie…"
-                      className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/85 placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
-                      disabled={loading}
-                    />
-                    <button type="button" onClick={send} disabled={!canSend} className="btn-neural disabled:opacity-50">
-                      Zapytaj
-                    </button>
-                  </>
-                ) : (
-                  <a href="/pricing" className="flex-1 flex items-center gap-2 px-4 py-2 rounded-xl no-underline" style={{background:'rgba(245,158,11,.08)',border:'1px solid rgba(245,158,11,.25)',color:'rgba(255,255,255,.55)',fontSize:13}}>
-                    <span style={{fontSize:14}}>&#x1F512;</span>
-                    <span>Chat AI dostępny dla <strong style={{color:'#f59e0b'}}>Premium</strong></span>
-                    <span style={{marginLeft:'auto',fontSize:12,color:'#f59e0b',fontWeight:700}}>Ulepsz konto →</span>
-                  </a>
-                )}
+                <div className="flex items-center gap-2 w-[min(520px,55vw)]">
+                  {isPremium ? (
+                    <>
+                      <input
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
+                        placeholder="Napisz pytanie…"
+                        className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/85 placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                        disabled={loading}
+                      />
+                      <button type="button" onClick={send} disabled={!canSend} className="btn-neural disabled:opacity-50">
+                        Zapytaj
+                      </button>
+                    </>
+                  ) : (
+                    <a href="/pricing" className="flex-1 flex items-center gap-2 px-4 py-2 rounded-xl no-underline" style={{background:'rgba(245,158,11,.08)',border:'1px solid rgba(245,158,11,.25)',color:'rgba(255,255,255,.55)',fontSize:13}}>
+                      <span style={{fontSize:14}}>&#x1F512;</span>
+                      <span>Chat AI dostępny dla <strong style={{color:'#f59e0b'}}>Premium</strong></span>
+                      <span style={{marginLeft:'auto',fontSize:12,color:'#f59e0b',fontWeight:700}}>Ulepsz konto →</span>
+                    </a>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}
 
-      {/* SIDE PANEL (opens after first message) */}
+      {/* ── CHAT PANEL (open state) ── */}
+      {/* Mobile: full-screen overlay  |  Desktop: right sidebar */}
       <div
+        style={isMobile ? {} : undefined}
         className={
-          open
-            ? 'fixed right-4 bottom-4 top-20 z-[70] w-[420px] max-w-[calc(100vw-24px)] transition-transform duration-300'
-            : 'fixed right-4 bottom-4 top-20 z-[70] w-[420px] max-w-[calc(100vw-24px)] translate-x-[110%] transition-transform duration-300 pointer-events-none'
+          isMobile
+            ? open
+              ? 'fixed inset-0 z-[70] transition-transform duration-300'
+              : 'fixed inset-0 z-[70] translate-y-[110%] transition-transform duration-300 pointer-events-none'
+            : open
+              ? 'fixed right-4 bottom-4 top-20 z-[70] w-[420px] max-w-[calc(100vw-24px)] transition-transform duration-300'
+              : 'fixed right-4 bottom-4 top-20 z-[70] w-[420px] max-w-[calc(100vw-24px)] translate-x-[110%] transition-transform duration-300 pointer-events-none'
         }
       >
         <div className="h-full card-neural overflow-hidden flex flex-col">
           <div className="h-[3px] bg-gradient-to-r from-brand-primary/50 via-brand-secondary/40 to-brand-primary/50" />
 
-          <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <div className="text-[10px] tracking-[2px] font-mono text-white/45">AI PSYCHOASSISTANT</div>
-              <div className="text-sm font-semibold text-white/80 truncate">Alex</div>
+          {/* Header */}
+          <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between gap-3 flex-shrink-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="relative w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
+                <span aria-hidden="true" className="absolute -inset-2 bg-brand-primary/20 blur-lg animate-pulse" />
+                <span aria-hidden="true" className="relative w-2 h-2 rounded-full bg-brand-primary/80" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[10px] tracking-[2px] font-mono text-white/45">AI PSYCHOASSISTANT</div>
+                <div className="text-sm font-semibold text-white/80">Alex</div>
+              </div>
             </div>
-            <button type="button" onClick={() => setOpen(false)} className="btn-ghost-neural px-3" aria-label="Zminimalizuj czat">
-              Minimalizuj
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="btn-ghost-neural px-3 flex-shrink-0"
+              aria-label="Zminimalizuj czat"
+            >
+              {isMobile ? '✕ Zamknij' : 'Minimalizuj'}
             </button>
           </div>
 
-          <div ref={scrollRef} className="flex-1 overflow-auto px-4 py-4 space-y-3">
+          {/* Messages */}
+          <div ref={scrollRef} className="flex-1 overflow-y-auto overflow-x-hidden px-4 py-4 space-y-3">
             {messages.map((m, idx) => (
               <div key={idx} className={m.role === 'user' ? 'flex justify-end' : 'flex justify-start'}>
                 <div
@@ -170,7 +226,7 @@ export default function CharacterChatBubble({ profileContext, isPremium = false 
                       ? 'max-w-[85%] rounded-2xl rounded-br-md bg-brand-primary/15 border border-brand-primary/25 text-white/85 px-3 py-2 text-sm leading-relaxed'
                       : 'max-w-[85%] rounded-2xl rounded-bl-md bg-white/5 border border-white/10 text-white/75 px-3 py-2 text-sm leading-relaxed'
                   }
-                  style={{ whiteSpace: 'pre-wrap' }}
+                  style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
                 >
                   {m.content}
                 </div>
@@ -178,31 +234,27 @@ export default function CharacterChatBubble({ profileContext, isPremium = false 
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="max-w-[85%] rounded-2xl rounded-bl-md bg-white/5 border border-white/10 text-white/55 px-3 py-2 text-sm">
+                <div className="rounded-2xl rounded-bl-md bg-white/5 border border-white/10 text-white/55 px-3 py-2 text-sm">
                   Piszę…
                 </div>
               </div>
             )}
           </div>
 
-          <div className="px-4 py-3 border-t border-white/10">
+          {/* Input footer */}
+          <div className="px-4 py-3 border-t border-white/10 flex-shrink-0">
             {error && <div className="mb-2 text-xs text-status-danger/80">{error}</div>}
             {isPremium ? (
               <div className="flex gap-2">
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault()
-                      send()
-                    }
-                  }}
+                  onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
                   placeholder="Napisz wiadomość…"
-                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/85 placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                  className="flex-1 min-w-0 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/85 placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
                   disabled={loading}
                 />
-                <button type="button" onClick={send} disabled={!canSend} className="btn-neural disabled:opacity-50">
+                <button type="button" onClick={send} disabled={!canSend} className="btn-neural disabled:opacity-50 flex-shrink-0">
                   Wyślij
                 </button>
               </div>
