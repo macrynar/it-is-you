@@ -1,5 +1,6 @@
 import React from 'react';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, Lock } from 'lucide-react';
+import { useIsPremium } from '../../utils/useIsPremium';
 
 /**
  * Renders a GPT markdown interpretation with styled sections.
@@ -95,6 +96,7 @@ export default function AiInterpretation({
   accentGlow = 'rgba(162,155,254,.4)',
   testLabel = 'Twojego profilu',
 }) {
+  const { isPremium } = useIsPremium();
   const shimmerStyle = {
     background: 'linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.05) 75%)',
     backgroundSize: '600px 100%',
@@ -117,12 +119,22 @@ export default function AiInterpretation({
           </div>
         </div>
         {interpretation && !loading && (
-          <button onClick={onRegenerate}
-            style={{ display:'flex', alignItems:'center', gap:6, fontSize:12, color:'rgba(255,255,255,.4)', background:'rgba(255,255,255,.05)', border:'1px solid rgba(255,255,255,.1)', borderRadius:8, padding:'7px 14px', cursor:'pointer', fontFamily:'inherit', fontWeight:600 }}
-            onMouseEnter={e => { e.currentTarget.style.color = accentColor; e.currentTarget.style.borderColor = `${accentColor}66`; }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,.4)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.1)'; }}>
-            <RefreshCw size={12}/> Regeneruj
-          </button>
+          isPremium ? (
+            <button onClick={onRegenerate}
+              style={{ display:'flex', alignItems:'center', gap:6, fontSize:12, color:'rgba(255,255,255,.4)', background:'rgba(255,255,255,.05)', border:'1px solid rgba(255,255,255,.1)', borderRadius:8, padding:'7px 14px', cursor:'pointer', fontFamily:'inherit', fontWeight:600 }}
+              onMouseEnter={e => { e.currentTarget.style.color = accentColor; e.currentTarget.style.borderColor = `${accentColor}66`; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,.4)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.1)'; }}>
+              <RefreshCw size={12}/> Regeneruj
+            </button>
+          ) : (
+            <a href="/pricing"
+              title="Dostępne dla użytkowników Premium"
+              style={{ display:'flex', alignItems:'center', gap:6, fontSize:12, color:'rgba(255,255,255,.2)', background:'rgba(255,255,255,.03)', border:'1px solid rgba(255,255,255,.07)', borderRadius:8, padding:'7px 14px', cursor:'pointer', fontFamily:'inherit', fontWeight:600, textDecoration:'none' }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#f59e0b'; e.currentTarget.style.borderColor = 'rgba(245,158,11,.4)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,.2)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,.07)'; }}>
+              <Lock size={11}/> Regeneruj <span style={{fontSize:10,letterSpacing:'.05em',color:'#f59e0b'}}>PREMIUM</span>
+            </a>
+          )
         )}
       </div>
 

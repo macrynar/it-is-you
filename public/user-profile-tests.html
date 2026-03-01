@@ -1485,7 +1485,7 @@
               <div class="ch-tl" style="color:rgba(239,68,68,.45);">// ⚠ CIEMNA TRIADA · SD3 · OBSZARY CIENIA</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                 <div id="ch-dt-content">
-                  <div class="ch-empty-block"><div class="ch-empty-icon">🌑</div><div class="ch-empty-text">Odblokuj test Dark Triad SD3 Premium aby zobaczyć analizę cienia</div><button class="ch-go-btn" onclick="startDarkTriadTest()">Odblokuj Premium →</button></div>
+                  <div class="ch-empty-block"><div class="ch-empty-icon">🌑</div><div class="ch-empty-text">Wykonaj test Dark Triad SD3 aby zobaczyć analizę cienia</div><button class="ch-go-btn" onclick="startDarkTriadTest()">Wykonaj test →</button></div>
                 </div>
                 <div id="ch-shadow-content">
                   <div class="ch-empty-block"><div class="ch-empty-icon">🌘</div><div class="ch-empty-text">Obszary cienia pojawią się po ukończeniu testów Dark Triad i HEXACO</div></div>
@@ -1904,12 +1904,6 @@
 
         // Start Strengths test or view results
         window.startStrengthsTest = async function() {
-            // Premium-gated
-            if (!window.userIsPremium) {
-                await window.handleUpgradeToPremium('strengths-button');
-                return;
-            }
-
             const completed = await checkStrengthsCompleted();
             
             if (completed) {
@@ -1970,14 +1964,8 @@
             }
         }
 
-        // Start Dark Triad test or view results — PREMIUM GATED
+        // Start Dark Triad test or view results
         window.startDarkTriadTest = async function() {
-            // Block non-premium users
-            if (!window.userIsPremium) {
-                await window.handleUpgradeToPremium();
-                return;
-            }
-
             const completed = await checkDarkTriadCompleted();
             
             if (completed) {
@@ -2087,28 +2075,11 @@
             }
         }
 
-        // Update UI for Dark Triad test — PREMIUM GATED
+        // Update UI for Dark Triad test
         async function updateDarkTriadUI() {
             const statusEl = document.getElementById('dark-triad-status');
             const buttonEl = document.getElementById('dark-triad-button');
-            const cardEl   = document.getElementById('dark-triad-card');
 
-            if (!window.userIsPremium) {
-                // Locked: show upgrade CTA
-                if (statusEl) {
-                    statusEl.textContent = 'Zablokowany';
-                    statusEl.style.color = '#fbbf24';
-                    statusEl.style.borderColor = 'rgba(245,158,11,0.35)';
-                    statusEl.style.background = 'rgba(245,158,11,0.08)';
-                }
-                if (buttonEl) {
-                    buttonEl.innerHTML = '🔒 Odblokuj Premium';
-                    buttonEl.className = 'iiy-card-btn premium-lock';
-                }
-                return;
-            }
-
-            // Premium user: show normal completion state
             const completed = await checkDarkTriadCompleted();
             
             if (completed) {
@@ -2123,7 +2094,7 @@
                     buttonEl.className = 'iiy-card-btn ghost';
                 }
             }
-            // If not completed, button stays as default "Zbadaj Cień"
+            // If not completed, button stays as default
         }
 
         // Update UI for Enneagram test

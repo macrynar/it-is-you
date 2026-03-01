@@ -1731,7 +1731,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
       </main>
 
-      {!isPublic && !demoMode ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} /> : null}
+      {!isPublic && !demoMode ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} isPremium={isPremium} /> : null}
 
       {/* Footer */}
       {!demoMode && <footer className="border-t border-white/5 bg-slate-950/80 py-6 sm:py-10 text-slate-500 text-sm mt-6 sm:mt-8">

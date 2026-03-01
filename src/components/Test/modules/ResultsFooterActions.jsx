@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { Lock, RefreshCw } from 'lucide-react';
 import ConfirmModal from '../../shared/ConfirmModal';
+import { useIsPremium } from '../../../utils/useIsPremium';
 
 export default function ResultsFooterActions({
   dashboardHref = '/user-profile-tests.html',
@@ -38,12 +40,14 @@ export default function ResultsFooterActions({
   };
 
   const [showConfirm, setShowConfirm] = useState(false);
+  const { isPremium } = useIsPremium();
 
   const go = (href) => {
     window.location.href = href;
   };
 
   const handleRetake = () => {
+    if (!isPremium) { window.location.href = '/pricing'; return; }
     if (!confirmMessage) { go(retakeHref); return; }
     setShowConfirm(true);
   };
@@ -62,11 +66,11 @@ export default function ResultsFooterActions({
       <button
         type="button"
         onClick={handleRetake}
-        style={btnBase}
-        onMouseEnter={onEnter}
-        onMouseLeave={onLeave}
-      >
-        ↻ Ponów test
+        style={isPremium ? btnBase : {...btnBase, color:'rgba(255,255,255,.3)', borderColor:'rgba(255,255,255,.07)'}}
+        onMouseEnter={isPremium ? onEnter : e=>{e.currentTarget.style.color='#f59e0b';e.currentTarget.style.borderColor='rgba(245,158,11,.3)';}}
+        onMouseLeave={isPremium ? onLeave : e=>{e.currentTarget.style.color='rgba(255,255,255,.3)';e.currentTarget.style.borderColor='rgba(255,255,255,.07)';}}
+        title={isPremium ? undefined : 'Dostępne dla użytkowników Premium'}>
+        {isPremium ? <RefreshCw size={14}/> : <Lock size={14}/>} Ponów test{!isPremium && <span style={{fontSize:10,letterSpacing:'.05em',color:'#f59e0b',marginLeft:4}}>PREMIUM</span>}
       </button>
       {showConfirm && (
         <ConfirmModal

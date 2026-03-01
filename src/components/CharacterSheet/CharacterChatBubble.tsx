@@ -6,7 +6,7 @@ type ChatMsg = {
   content: string
 }
 
-export default function CharacterChatBubble({ profileContext }: { profileContext: string }) {
+export default function CharacterChatBubble({ profileContext, isPremium = false }: { profileContext: string; isPremium?: boolean }) {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<ChatMsg[]>([
     {
@@ -108,22 +108,32 @@ export default function CharacterChatBubble({ profileContext }: { profileContext
               <div className="flex-1" />
 
               <div className="flex items-center gap-2 w-[min(520px,55vw)]">
-                <input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault()
-                      send()
-                    }
-                  }}
-                  placeholder="Napisz pytanie…"
-                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/85 placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
-                  disabled={loading}
-                />
-                <button type="button" onClick={send} disabled={!canSend} className="btn-neural disabled:opacity-50">
-                  Zapytaj
-                </button>
+                {isPremium ? (
+                  <>
+                    <input
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault()
+                          send()
+                        }
+                      }}
+                      placeholder="Napisz pytanie…"
+                      className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/85 placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                      disabled={loading}
+                    />
+                    <button type="button" onClick={send} disabled={!canSend} className="btn-neural disabled:opacity-50">
+                      Zapytaj
+                    </button>
+                  </>
+                ) : (
+                  <a href="/pricing" className="flex-1 flex items-center gap-2 px-4 py-2 rounded-xl no-underline" style={{background:'rgba(245,158,11,.08)',border:'1px solid rgba(245,158,11,.25)',color:'rgba(255,255,255,.55)',fontSize:13}}>
+                    <span style={{fontSize:14}}>&#x1F512;</span>
+                    <span>Chat AI dostępny dla <strong style={{color:'#f59e0b'}}>Premium</strong></span>
+                    <span style={{marginLeft:'auto',fontSize:12,color:'#f59e0b',fontWeight:700}}>Ulepsz konto →</span>
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -177,24 +187,32 @@ export default function CharacterChatBubble({ profileContext }: { profileContext
 
           <div className="px-4 py-3 border-t border-white/10">
             {error && <div className="mb-2 text-xs text-status-danger/80">{error}</div>}
-            <div className="flex gap-2">
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault()
-                    send()
-                  }
-                }}
-                placeholder="Napisz wiadomość…"
-                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/85 placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
-                disabled={loading}
-              />
-              <button type="button" onClick={send} disabled={!canSend} className="btn-neural disabled:opacity-50">
-                Wyślij
-              </button>
-            </div>
+            {isPremium ? (
+              <div className="flex gap-2">
+                <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault()
+                      send()
+                    }
+                  }}
+                  placeholder="Napisz wiadomość…"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white/85 placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                  disabled={loading}
+                />
+                <button type="button" onClick={send} disabled={!canSend} className="btn-neural disabled:opacity-50">
+                  Wyślij
+                </button>
+              </div>
+            ) : (
+              <a href="/pricing" className="flex items-center gap-2 px-4 py-3 rounded-xl no-underline" style={{background:'rgba(245,158,11,.08)',border:'1px solid rgba(245,158,11,.25)',color:'rgba(255,255,255,.55)',fontSize:13}}>
+                <span style={{fontSize:16}}>&#x1F512;</span>
+                <span>Chat AI dostępny dla <strong style={{color:'#f59e0b'}}>Premium</strong></span>
+                <span style={{marginLeft:'auto',fontSize:12,color:'#f59e0b',fontWeight:700}}>Ulepsz konto →</span>
+              </a>
+            )}
           </div>
         </div>
       </div>
