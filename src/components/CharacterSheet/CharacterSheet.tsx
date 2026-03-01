@@ -475,11 +475,6 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    const saved = (typeof window !== 'undefined' ? window.localStorage.getItem('theme') : null) ?? 'dark';
-    return saved === 'light' ? 'light' : 'dark';
-  });
-
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -593,17 +588,6 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
       if (!error) setProfile(data ?? null);
     })();
   }, [authUser?.id]);
-
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    if (theme === 'light') document.body.classList.add('light-mode');
-    else document.body.classList.remove('light-mode');
-    try {
-      window.localStorage.setItem('theme', theme);
-    } catch {
-      // ignore
-    }
-  }, [theme]);
 
   /* DERIVED */
   const profileName = (profile?.full_name ?? '') as string;
@@ -935,6 +919,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
             {/* Center nav links — desktop only, page-level navigation */}
             <div className="hidden md:flex items-center gap-8">
+              <a className="iiy-nav-link" href="/baza-wiedzy/">Baza Wiedzy</a>
               <a className="iiy-nav-link" href="/methodology">Metodologia</a>
               <a className="iiy-nav-link" href="/pricing">Cennik</a>
               <a className="iiy-nav-link active" href="/character">Karta Postaci</a>
@@ -943,20 +928,6 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
             {/* Right utility actions — desktop */}
             <div className="hidden md:flex items-center gap-2">
-              <button
-                type="button"
-                className={`theme-toggle ${theme === 'light' ? 'light' : ''}`}
-                onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
-                title="Przełącz motyw"
-              >
-                <div className="theme-toggle-slider" />
-                <svg className="theme-icon theme-icon-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-                <svg className="theme-icon theme-icon-sun" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </button>
               <a
                 href="/settings"
                 className="flex items-center justify-center w-9 h-9 rounded-lg text-white/45 hover:text-white hover:bg-white/8 border border-transparent hover:border-white/10 transition-all"
@@ -1003,29 +974,12 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
         {mobileMenuOpen && (
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(13,15,43,0.97)', backdropFilter: 'blur(20px)' }}>
             <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
-              <a href="/settings" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Ustawienia</a>
+              <a href="/baza-wiedzy/" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Baza Wiedzy</a>
               <a href="/methodology" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Metodologia</a>
               <a href="/pricing" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Cennik</a>
               <a href="/character" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Karta Postaci</a>
               <a href="/user-profile-tests" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style={{ textDecoration: 'none' }}>Testy</a>
               <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '4px 0' }} />
-              <div className="flex items-center justify-between px-4 py-2">
-                <span className="text-xs text-white/30 uppercase tracking-widest font-semibold">Motyw</span>
-                <button
-                  type="button"
-                  className={`theme-toggle ${theme === 'light' ? 'light' : ''}`}
-                  onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
-                  title="Przełącz motyw"
-                >
-                  <div className="theme-toggle-slider" />
-                  <svg className="theme-icon theme-icon-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                  </svg>
-                  <svg className="theme-icon theme-icon-sun" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </button>
-              </div>
               <button
                 type="button"
                 onClick={async () => { await supabase.auth.signOut(); window.location.href = '/'; }}
