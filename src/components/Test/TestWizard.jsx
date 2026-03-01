@@ -435,7 +435,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
           ) : isEnneagram ? (
             <div className="mb-3">
               <h2 className="text-sm font-medium text-center text-slate-300 mb-3">
-                Która opcja bardziej do Ciebie pasuje?
+                {currentQuestion.prompt ?? 'Która opcja bardziej do Ciebie pasuje?'}
               </h2>
               <div className="grid md:grid-cols-2 gap-3">
                 {/* Option A */}

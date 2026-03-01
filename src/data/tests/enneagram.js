@@ -127,9 +127,10 @@ export const ENNEAGRAM_TEST = {
     },
     {
       id: "enn_006",
-      option_a: "Biorę sprawy w swoje ręce i czuję się komfortowo z konfrontacją",
+      prompt: "Które zdanie lepiej Cię opisuje?",
+      option_a: "Lubię działać bezpośrednio i nie boję się konfrontacji",
       scores_a: { 8: 2, 9: 0 },
-      option_b: "Preferuję harmonię i unikam konfrontacji",
+      option_b: "Zależy mi na zgodzie i staram się unikać konfliktów",
       scores_b: { 8: 0, 9: 2 }
     },
     {
@@ -148,9 +149,10 @@ export const ENNEAGRAM_TEST = {
     },
     {
       id: "enn_009",
-      option_a: "Odczuwam rzeczy głęboko i mam bogate życie emocjonalne",
+      prompt: "Które zdanie lepiej Cię opisuje?",
+      option_a: "Przeżywam rzeczy głęboko i mam bogate życie wewnętrzne",
       scores_a: { 4: 2, 7: 0 },
-      option_b: "Wolę pozostać pozytywny",
+      option_b: "Wolę skupiać się na tym, co pozytywne",
       scores_b: { 4: 0, 7: 2 }
     },
     {
@@ -246,9 +248,10 @@ export const ENNEAGRAM_TEST = {
     },
     {
       id: "enn_023",
-      option_a: "Czuję się fundamentalnie inny niż inni",
+      prompt: "Które zdanie lepiej Cię opisuje?",
+      option_a: "Czuję, że jestem inny niż większość ludzi",
       scores_a: { 4: 2, 6: 0 },
-      option_b: "Cenię dostosowanie się i przynależność",
+      option_b: "Ważne jest dla mnie poczucie przynależności do grupy",
       scores_b: { 4: 0, 6: 2 }
     },
     {
