@@ -5,7 +5,6 @@
  *   isAuthenticated  — when true, shows full app links + settings/logout actions
  *                      when false, shows public links + "Zaloguj się" CTA
  *   activeLink       — key of the currently active nav item (for underline highlight)
- *   theme / onThemeToggle — optional theme toggle (rendered only when both provided)
  */
 import { useState } from 'react';
 import AlchemeLogo from '../AlchemeLogo';
@@ -59,37 +58,18 @@ const CloseIcon = () => (
   </svg>
 );
 
-const MoonIcon = () => (
-  <svg className="theme-icon theme-icon-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round"
-      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-  </svg>
-);
-
-const SunIcon = () => (
-  <svg className="theme-icon theme-icon-sun" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round"
-      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-  </svg>
-);
-
 // ─── Props ───────────────────────────────────────────────────────────────────
 export interface NavbarProps {
   /** Whether user is authenticated. Controls links shown & right-side actions. */
   isAuthenticated?: boolean;
   /** Key of the current page — highlights the matching nav link */
   activeLink?: NavKey;
-  /** Current color theme; passing undefined hides the toggle */
-  theme?: 'dark' | 'light';
-  onThemeToggle?: () => void;
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
 export default function Navbar({
   isAuthenticated = false,
   activeLink,
-  theme,
-  onThemeToggle,
 }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -127,20 +107,6 @@ export default function Navbar({
 
           {/* ── Desktop: right actions ── */}
           <div className="hidden md:flex items-center gap-2">
-            {/* theme toggle — only when controlled from outside */}
-            {theme !== undefined && onThemeToggle && (
-              <button
-                type="button"
-                className={`theme-toggle${theme === 'light' ? ' light' : ''}`}
-                onClick={onThemeToggle}
-                title="Przełącz motyw"
-              >
-                <div className="theme-toggle-slider" />
-                <MoonIcon />
-                <SunIcon />
-              </button>
-            )}
-
             {isAuthenticated ? (
               <>
                 <a href="/settings" className={iconBtn} title="Ustawienia">
@@ -212,22 +178,6 @@ export default function Navbar({
                 >
                   <SettingsIcon /> Ustawienia
                 </a>
-
-                {theme !== undefined && onThemeToggle && (
-                  <div className="flex items-center justify-between px-4 py-2">
-                    <span className="text-xs text-white/30 uppercase tracking-widest font-semibold">Motyw</span>
-                    <button
-                      type="button"
-                      className={`theme-toggle${theme === 'light' ? ' light' : ''}`}
-                      onClick={onThemeToggle}
-                      title="Przełącz motyw"
-                    >
-                      <div className="theme-toggle-slider" />
-                      <MoonIcon />
-                      <SunIcon />
-                    </button>
-                  </div>
-                )}
 
                 <button
                   type="button"

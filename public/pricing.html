@@ -219,12 +219,32 @@
         </div>
 
         <!-- Nav actions — public by default, JS swaps to logged-in actions -->
-        <div id="nav-actions" class="flex items-center gap-4">
-          <a href="/auth" class="text-sm font-medium text-slate-400 hover:text-white transition-colors hidden sm:block">Zaloguj</a>
+        <div id="nav-actions" class="hidden md:flex items-center gap-4">
+          <a href="/auth" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Zaloguj</a>
           <a href="/auth" class="bg-white text-slate-950 px-6 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-50 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)]">
             Wykonaj test
           </a>
         </div>
+
+        <!-- Hamburger (mobile only) -->
+        <button id="hamburger-btn" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10 transition-all" onclick="toggleMobileMenu()" aria-label="Menu">
+          <svg id="hamburger-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg id="close-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" style="display:none;border-top:1px solid rgba(255,255,255,0.06);background:rgba(13,15,43,0.97);backdrop-filter:blur(20px);">
+      <div id="mobile-menu-content" class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
+        <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
+        <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
+        <div style="height:1px;background:rgba(255,255,255,0.06);margin:4px 0;"></div>
+        <a href="/auth" class="flex items-center justify-center gap-2 mb-2 py-3 rounded-xl text-sm font-semibold text-white transition-all" style="text-decoration:none;background:linear-gradient(120deg,rgba(112,0,255,.75),rgba(0,200,220,.8));">Zaloguj się</a>
       </div>
     </div>
   </nav>
@@ -627,12 +647,17 @@
           <a href="/user-profile-tests" class="iiy-nav-link">Moje testy</a>
         `;
         document.getElementById('nav-actions').innerHTML = `
-          <button id="nav-theme-btn" class="theme-toggle" onclick="this.classList.toggle('light')" title="Przełącz motyw">
-            <div class="theme-toggle-slider"></div>
-            ${MOON_SVG}${SUN_SVG}
-          </button>
           <a href="/settings" class="nav-icon-btn" title="Ustawienia">${SETTINGS_SVG}</a>
-          <button class="nav-icon-btn logout" onclick="(async()=>{const s=createClient('https://uvzilorpyuqicuwkufky.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA');await s.auth.signOut();location.href='/'})()" title="Wyloguj">${LOGOUT_SVG}</button>
+          <button class="nav-icon-btn logout" onclick="(async()=>{const s=createClient('https://uvzilorpyuqicuwkufky.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA');await s.auth.signOut();location.href='/'})(" title="Wyloguj">${LOGOUT_SVG}</button>
+        `;
+        document.getElementById('mobile-menu-content').innerHTML = `
+          <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
+          <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
+          <a href="/character" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Karta Postaci</a>
+          <a href="/user-profile-tests" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Moje testy</a>
+          <div style="height:1px;background:rgba(255,255,255,0.06);margin:4px 0;"></div>
+          <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Ustawienia</a>
+          <button onclick="(async()=>{const s=createClient('https://uvzilorpyuqicuwkufky.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA');await s.auth.signOut();location.href='/'})(" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-400/80 hover:text-red-400 hover:bg-red-500/5 transition-all text-left w-full" style="background:none;border:none;cursor:pointer;font-family:inherit;">Wyloguj</button>
         `;
       }
     })();
@@ -667,6 +692,15 @@
         btn.disabled = false;
         setTimeout(() => { btn.textContent = 'Odblokuj Premium →'; }, 3000);
       }
+    };
+    window.toggleMobileMenu = function() {
+      const menu = document.getElementById('mobile-menu');
+      const hamburgerIcon = document.getElementById('hamburger-icon');
+      const closeIcon = document.getElementById('close-icon');
+      const isOpen = menu.style.display !== 'none';
+      menu.style.display = isOpen ? 'none' : 'block';
+      hamburgerIcon.style.display = isOpen ? 'block' : 'none';
+      closeIcon.style.display = isOpen ? 'none' : 'block';
     };
   </script>
 

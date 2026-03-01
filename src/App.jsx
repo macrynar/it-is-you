@@ -11,7 +11,7 @@ import CareerDnaResults from './components/Test/CareerDnaResults'
 import Settings from './components/Settings/Settings'
 import CharacterSheet from './components/CharacterSheet/CharacterSheet'
 import { supabase, onAuthStateChange } from './lib/supabaseClient'
-import Footer from './components/Footer'
+import Footer from './components/shared/Footer'
 
 /**
  * Main App Component

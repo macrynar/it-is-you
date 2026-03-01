@@ -140,13 +140,30 @@
         <a href="/methodology" class="iiy-nav-link">Metodologia</a>
         <a href="/pricing" class="iiy-nav-link">Cennik</a>
       </div>
-      <div class="flex items-center gap-4" id="nav-actions">
-        <a href="/auth" class="text-sm font-medium text-slate-400 hover:text-white transition-colors hidden sm:block">Zaloguj</a>
-        <a href="/auth" class="bg-white text-slate-950 px-6 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-50 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)]">Wykonaj test</a>
+      <div class="hidden md:flex items-center gap-4" id="nav-actions">
+        <a href="/auth" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Zaloguj</a>
+        <a href="/auth" class="bg-white text-slate-950 px-6 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-50 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.25)]">Wykonaj test</a>
       </div>
+      <!-- Hamburger (mobile only) -->
+      <button id="hamburger-btn" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10 transition-all" onclick="toggleMobileMenu()" aria-label="Menu">
+        <svg id="hamburger-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="close-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" style="display:none;border-top:1px solid rgba(255,255,255,0.06);background:rgba(13,15,43,0.97);backdrop-filter:blur(20px);">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
+      <a href="/baza-wiedzy/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Baza Wiedzy</a>
+      <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
+      <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:4px 0;"></div>
+      <a href="/auth" class="flex items-center justify-center gap-2 mb-2 py-3 rounded-xl text-sm font-semibold text-white transition-all" style="text-decoration:none;background:linear-gradient(120deg,rgba(112,0,255,.75),rgba(0,200,220,.8));">Zaloguj się</a>
+      <a href="/auth" class="flex items-center justify-center gap-2 mb-2 py-3 rounded-xl text-sm font-bold text-slate-950 bg-white hover:bg-indigo-50 transition-all" style="text-decoration:none;">Wykonaj test</a>
     </div>
   </div>
 </nav>
+<script>function toggleMobileMenu(){var m=document.getElementById('mobile-menu'),h=document.getElementById('hamburger-icon'),c=document.getElementById('close-icon'),isOpen=m.style.display!=='none';m.style.display=isOpen?'none':'block';h.style.display=isOpen?'block':'none';c.style.display=isOpen?'none':'block';}</script>
 
 <div class="page-wrap">
 

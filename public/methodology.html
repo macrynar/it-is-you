@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3LCTSQBSBQ"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-3LCTSQBSBQ');
-  </script>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -154,17 +146,36 @@
 
         <!-- Desktop nav — public by default, JS swaps if logged in -->
         <div class="hidden md:flex items-center gap-8" id="nav-links">
-          <a href="/baza-wiedzy/" class="iiy-nav-link">Baza Wiedzy</a>
           <a href="/methodology" class="iiy-nav-link active">Metodologia</a>
           <a href="/pricing" class="iiy-nav-link">Cennik</a>
         </div>
 
-        <div class="flex items-center gap-4" id="nav-actions">
-          <a href="/auth" class="text-sm font-medium text-slate-400 hover:text-white transition-colors hidden sm:block">Zaloguj</a>
+        <div class="hidden md:flex items-center gap-4" id="nav-actions">
+          <a href="/auth" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Zaloguj</a>
           <a href="/auth" class="bg-white text-slate-950 px-6 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-50 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)]">
             Wykonaj test
           </a>
         </div>
+
+        <!-- Hamburger (mobile only) -->
+        <button id="hamburger-btn" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10 transition-all" onclick="toggleMobileMenu()" aria-label="Menu">
+          <svg id="hamburger-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg id="close-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" style="display:none;border-top:1px solid rgba(255,255,255,0.06);background:rgba(13,15,43,0.97);backdrop-filter:blur(20px);">
+      <div id="mobile-menu-content" class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
+        <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
+        <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
+        <div style="height:1px;background:rgba(255,255,255,0.06);margin:4px 0;"></div>
+        <a href="/auth" class="flex items-center justify-center gap-2 mb-2 py-3 rounded-xl text-sm font-semibold text-white transition-all" style="text-decoration:none;background:linear-gradient(120deg,rgba(112,0,255,.75),rgba(0,200,220,.8));">Zaloguj się</a>
       </div>
     </div>
   </nav>
@@ -637,49 +648,15 @@
     </div>
   </section>
 
-    <!-- FOOTER -->
-  <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl mt-16">
-    <div class="max-w-7xl mx-auto px-6 py-10">
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-8 mb-10">
-
-        <!-- Col 1 – brand + contact -->
-        <div class="col-span-2 md:col-span-1">
-          <a href="/" style="display:inline-block;margin-bottom:8px;text-decoration:none;">
-            <span style="font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:.14em;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.88) 55%,rgba(112,0,255,.75) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Alcheme</span>
-          </a>
-          <p class="text-slate-500 text-sm leading-relaxed">Naukowa diagnoza potencjału w formie przystępnej grywalizacji.</p>
-          <a href="mailto:hello@alcheme.io" class="inline-block mt-4 text-sm text-cyan-400/80 hover:text-cyan-300 transition" style="text-decoration:none;">hello@alcheme.io</a>
-        </div>
-
-        <!-- Col 3 – Projekt -->
-        <div>
-          <h4 class="text-white font-bold text-sm mb-3">Projekt</h4>
-          <ul class="space-y-2 text-slate-500 text-sm" style="list-style:none;padding:0;margin:0;">
-            <li><a href="/"                     class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Strona główna</a></li>
-            <li><a href="/pricing"              class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Cennik</a></li>
-            <li><a href="/methodology"          class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Metodologia</a></li>
-            <li><a href="/user-profile-tests"   class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Testy</a></li>
-            <li><a href="/character"            class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Karta Postaci</a></li>
-          </ul>
-        </div>
-
-        <!-- Col 4 – Legal -->
-        <div>
-          <h4 class="text-white font-bold text-sm mb-3">Legal</h4>
-          <ul class="space-y-2 text-slate-500 text-sm" style="list-style:none;padding:0;margin:0;">
-            <li><a href="/privacy-policy"    class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Polityka Prywatności</a></li>
-            <li><a href="/regulamin.pdf" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Regulamin</a></li>
-            <li><a href="/privacy-policy#rodo" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">RODO</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-      <!-- Bottom bar -->
-      <div class="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
-        <span>&copy; 2026 Alcheme. All rights reserved.</span>
-        <span>Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.</span>
-      </div>
+  <!-- FOOTER -->
+  <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-6 py-8 text-center">
+      <p class="text-slate-500 text-sm">
+        &copy; 2026 <span class="text-indigo-400 font-semibold">Alcheme</span> – Psychometric Engine. Wszystkie prawa zastrzeżone.
+      </p>
+      <p class="text-slate-600 text-xs mt-2">
+        <a href="/regulamin.pdf" target="_blank" rel="noopener noreferrer" class="hover:text-slate-400 transition underline underline-offset-2">Regulamin Usługi</a>
+      </p>
     </div>
   </footer>
 
@@ -694,19 +671,29 @@
     // Adapt nav for logged-in users
     const SETTINGS_SVG = `<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`;
     const LOGOUT_SVG = `<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>`;
+    const MOON_SVG = `<svg class="theme-icon theme-icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`;
+    const SUN_SVG = `<svg class="theme-icon theme-icon-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`;
 
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
       document.getElementById('nav-links').innerHTML = `
-        <a href="/baza-wiedzy/" class="iiy-nav-link">Baza Wiedzy</a>
-          <a href="/methodology" class="iiy-nav-link active">Metodologia</a>
+        <a href="/methodology" class="iiy-nav-link active">Metodologia</a>
         <a href="/pricing" class="iiy-nav-link">Cennik</a>
         <a href="/character" class="iiy-nav-link">Karta Postaci</a>
         <a href="/user-profile-tests" class="iiy-nav-link">Moje testy</a>
       `;
       document.getElementById('nav-actions').innerHTML = `
         <a href="/settings" class="nav-icon-btn" title="Ustawienia">${SETTINGS_SVG}</a>
-        <button class="nav-icon-btn logout" onclick="(async()=>{const s=createClient('https://uvzilorpyuqicuwkufky.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA');await s.auth.signOut();location.href='/'})()" title="Wyloguj">${LOGOUT_SVG}</button>
+        <button class="nav-icon-btn logout" onclick="(async()=>{const s=createClient('https://uvzilorpyuqicuwkufky.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA');await s.auth.signOut();location.href='/'})(" title="Wyloguj">${LOGOUT_SVG}</button>
+      `;
+      document.getElementById('mobile-menu-content').innerHTML = `
+        <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
+        <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
+        <a href="/character" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Karta Postaci</a>
+        <a href="/user-profile-tests" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Moje testy</a>
+        <div style="height:1px;background:rgba(255,255,255,0.06);margin:4px 0;"></div>
+        <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Ustawienia</a>
+        <button onclick="(async()=>{const s=createClient('https://uvzilorpyuqicuwkufky.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA');await s.auth.signOut();location.href='/'})(" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-400/80 hover:text-red-400 hover:bg-red-500/5 transition-all text-left w-full" style="background:none;border:none;cursor:pointer;font-family:inherit;">Wyloguj</button>
       `;
     }
   </script>
@@ -716,6 +703,15 @@
       document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
       el.classList.add('active');
     }
+    window.toggleMobileMenu = function() {
+      const menu = document.getElementById('mobile-menu');
+      const hamburgerIcon = document.getElementById('hamburger-icon');
+      const closeIcon = document.getElementById('close-icon');
+      const isOpen = menu.style.display !== 'none';
+      menu.style.display = isOpen ? 'none' : 'block';
+      hamburgerIcon.style.display = isOpen ? 'block' : 'none';
+      closeIcon.style.display = isOpen ? 'none' : 'block';
+    };
   </script>
 </body>
 </html>
