@@ -25,39 +25,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500;600;700;800&family=Cinzel:wght@600&family=Raleway:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/tw.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'bg-deep':         '#030014',
-                        'bg-surface':      '#0f0728',
-                        'neon-primary':    '#7000ff',
-                        'neon-cyan':       '#00f0ff',
-                        'neon-pink':       '#ff005c',
-                        'brand-primary':   '#7000ff',
-                        'brand-secondary': '#00f0ff',
-                        'brand-accent':    '#ff005c',
-                        'bg-main':         '#030014',
-                        'status-success':  '#10b981',
-                        'status-danger':   '#ff005c',
-                        'text-main':       '#f8fafc',
-                        'text-muted':      '#94a3b8',
-                    },
-                    boxShadow: {
-                        'glow-primary':    '0 0 20px -5px rgba(112,0,255,0.5)',
-                        'glow-primary-lg': '0 0 40px -5px rgba(112,0,255,0.6)',
-                        'glow-cyan':       '0 0 20px -5px rgba(0,240,255,0.5)',
-                        'glow-pink':       '0 0 20px -5px rgba(255,0,92,0.5)',
-                        'glow-danger':     '0 0 20px -5px rgba(255,0,92,0.5)',
-                    },
-                    backgroundImage: {
-                        'neural-gradient': 'radial-gradient(circle at 50% 0%, #2a1b5e 0%, transparent 60%), radial-gradient(circle at 100% 0%, #1a0b38 0%, transparent 40%)',
-                    },
-                }
-            }
-        }
-    </script>
+
     <style>
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 0.8; }
@@ -1686,17 +1654,6 @@
             }
         };
         
-        // ============================================
-        // THEME TOGGLE FUNCTIONALITY
-        // ============================================
-        
-        // Load theme preference on page load
-        function loadThemePreference() {
-            const savedTheme = localStorage.getItem('theme');}
-            
-            console.log('Theme loaded:', savedTheme || 'dark (default)');
-        }
-        
         // Toggle mobile hamburger menu
         window.toggleMobileMenu = function() {
             const menu = document.getElementById('mobile-menu');
@@ -1707,26 +1664,8 @@
             hamburgerIcon.style.display = isOpen ? 'block' : 'none';
             closeIcon.style.display = isOpen ? 'none' : 'block';
         }
+        
 
-        // Toggle theme function
-        window.toggleTheme = function() {
-            const body = document.body;} else {
-                // Switch to Light Mode
-                body.classList.add('light-mode');
-                if (toggle) toggle.classList.add('light');
-                if (toggleMobile) toggleMobile.classList.add('light');
-                localStorage.setItem('theme', 'light');
-                console.log('Switched to Light Mode');
-            }
-        }
-        
-        // Load theme immediately (before other scripts)
-        loadThemePreference();
-        
-        // ============================================
-        // END THEME TOGGLE
-        // ============================================
-        
         // Debug: Check localStorage keys
         console.log('LocalStorage keys:', Object.keys(localStorage));
         const supabaseKeys = Object.keys(localStorage).filter(k => k.includes('supabase') || k.includes('sb-'));
