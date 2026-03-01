@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, RefreshCw, Lock } from 'lucide-react';
 import { useIsMobile } from '../../../utils/useIsMobile';
 import { useIsPremium } from '../../../utils/useIsPremium';
+import ConfirmModal from '../../shared/ConfirmModal';
 
 const DEFAULT_MAX_WIDTH = 1100;
 
@@ -27,6 +28,7 @@ export default function ResultsScaffold({
 }) {
   const isMobile = useIsMobile();
   const { isPremium } = useIsPremium();
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const container = {
     maxWidth,
@@ -139,9 +141,8 @@ export default function ResultsScaffold({
 
   const onRetake = () => {
     if (!isPremium) { window.location.href = '/pricing'; return; }
-    if (!confirmMessage || window.confirm(confirmMessage)) {
-      go(retakeHref);
-    }
+    if (!confirmMessage) { go(retakeHref); return; }
+    setShowConfirm(true);
   };
 
   const onEnterLeft = (e) => {
@@ -185,6 +186,15 @@ export default function ResultsScaffold({
           </button>
         </div>
       </nav>
+
+      {showConfirm && (
+        <ConfirmModal
+          message={confirmMessage}
+          confirmLabel="Tak, ponów test"
+          onConfirm={() => { setShowConfirm(false); go(retakeHref); }}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
 
       <div style={container}>
         <header style={{ textAlign: 'center', marginBottom: 36 }}>
