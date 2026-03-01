@@ -219,66 +219,9 @@
         }
         
         /* Theme Toggle Animation */
-        .theme-toggle {
-            position: relative;
-            width: 60px;
-            height: 32px;
-            background: rgba(30, 41, 59, 0.6);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
         
-        .theme-toggle:hover {
-            background: rgba(15, 7, 40, 0.9);
-            border-color: rgba(112, 0, 255, 0.5);
-        }
-
-        .theme-toggle-slider {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, #7000ff, #00f0ff);
-            border-radius: 50%;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(112, 0, 255, 0.5);
-        }
         
-        .theme-toggle.light .theme-toggle-slider {
-            transform: translateX(28px);
-            background: linear-gradient(135deg, #F59E0B, #EAB308);
-            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
-        }
         
-        .theme-icon {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 16px;
-            height: 16px;
-            transition: opacity 0.3s ease;
-        }
-        
-        .theme-icon-moon {
-            left: 8px;
-            opacity: 1;
-        }
-        
-        .theme-icon-sun {
-            right: 8px;
-            opacity: 0.4;
-        }
-        
-        .theme-toggle.light .theme-icon-moon {
-            opacity: 0.4;
-        }
-        
-        .theme-toggle.light .theme-icon-sun {
-            opacity: 1;
-        }
         
         /* Light Mode Styles */
         body.light-mode {
@@ -987,7 +930,7 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 py-4">
             <div class="flex items-center justify-between">
                 <!-- Logo -->
-                <a href="https://www.alcheme.io/" class="alcheme-logo">
+                <a href="/" class="alcheme-logo">
                   <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
                     <defs><filter id="alch-gs"><feGaussianBlur stdDeviation=".9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="alch-gm"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="alch-gl"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
                     <circle cx="50" cy="50" r="47" fill="rgba(10,4,40,.55)" stroke="rgba(255,255,255,.18)" stroke-width="1.2"/><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.07)" stroke-width=".4"/>
@@ -1005,6 +948,7 @@
 
                 <!-- Center Nav Links (desktop) -->
                 <div class="hidden md:flex items-center gap-8">
+                    <a class="iiy-nav-link" href="/baza-wiedzy/">Baza Wiedzy</a>
                     <a class="iiy-nav-link" href="/methodology">Metodologia</a>
                     <a class="iiy-nav-link" href="/pricing">Cennik</a>
                     <a class="iiy-nav-link" href="/character">Karta Postaci</a>
@@ -1044,6 +988,7 @@
         <div id="mobile-menu" style="display:none;border-top:1px solid rgba(255,255,255,0.06);background:rgba(13,15,43,0.97);backdrop-filter:blur(20px);">
             <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-2">
                 <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Ustawienia</a>
+                <a href="/baza-wiedzy/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Baza Wiedzy</a>
                 <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
                 <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
                 <a href="/character" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Karta Postaci</a>
@@ -1607,16 +1552,49 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl mt-24">
-        <div class="max-w-7xl mx-auto px-6 py-10 text-center">
-            <p class="text-slate-500 text-sm">
-               &copy; 2026 <span class="text-brand-primary font-semibold">Alcheme</span> – Psychometric Engine. Wszystkie prawa zastrzeżone.
-            </p>
-            <p class="text-slate-600 text-xs mt-2">
-               <a href="/regulamin.pdf" target="_blank" rel="noopener" class="hover:text-slate-400 transition underline underline-offset-2">Regulamin Usługi</a>
-            </p>
+      <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl mt-16">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+        <div class="col-span-2 md:col-span-1">
+          <a href="/" style="display:inline-block;margin-bottom:8px;text-decoration:none;">
+            <span style="font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:.14em;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.88) 55%,rgba(112,0,255,.75) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Alcheme</span>
+          </a>
+          <p style="color:rgba(100,116,139,1);font-size:14px;line-height:1.6;">Naukowa diagnoza potencjału w formie przystępnej grywalizacji.</p>
+          <a href="mailto:hello@alcheme.io" style="display:inline-block;margin-top:16px;font-size:14px;color:rgba(34,211,238,.8);text-decoration:none;">hello@alcheme.io</a>
         </div>
-    </footer>
+        <div>
+          <h4 style="color:#fff;font-weight:700;margin-bottom:12px;font-size:14px;">Projekt</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+            <li><a href="/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Strona główna</a></li>
+            <li><a href="/pricing" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Cennik</a></li>
+            <li><a href="/methodology" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Metodologia</a></li>
+            <li><a href="/user-profile-tests" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Testy</a></li>
+            <li><a href="/character" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Karta Postaci</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#fff;font-weight:700;margin-bottom:12px;font-size:14px;">Baza Wiedzy</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+            <li><a href="/baza-wiedzy/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Wszystkie modele</a></li>
+            <li><a href="/baza-wiedzy/enneagram/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Enneagram</a></li>
+            <li><a href="/baza-wiedzy/hexaco/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">HEXACO</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#fff;font-weight:700;margin-bottom:12px;font-size:14px;">Legal</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+            <li><a href="/privacy-policy" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Polityka Prywatności</a></li>
+            <li><a href="/regulamin.pdf" target="_blank" rel="noopener noreferrer" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Regulamin</a></li>
+            <li><a href="/privacy-policy#rodo" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">RODO</a></li>
+          </ul>
+        </div>
+      </div>
+      <div style="border-top:1px solid rgba(255,255,255,0.05);padding-top:24px;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:space-between;" class="sm:flex-row">
+        <span style="color:rgba(100,116,139,1);font-size:12px;">&copy; 2026 Alcheme. All rights reserved.</span>
+        <span style="color:rgba(100,116,139,1);font-size:12px;">Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.</span>
+      </div>
+    </div>
+  </footer>
 
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -1714,15 +1692,7 @@
         
         // Load theme preference on page load
         function loadThemePreference() {
-            const savedTheme = localStorage.getItem('theme');
-            const toggle = document.getElementById('theme-toggle');
-            const toggleMobile = document.getElementById('theme-toggle-mobile');
-            
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-mode');
-                if (toggle) toggle.classList.add('light');
-                if (toggleMobile) toggleMobile.classList.add('light');
-            }
+            const savedTheme = localStorage.getItem('theme');}
             
             console.log('Theme loaded:', savedTheme || 'dark (default)');
         }
@@ -1740,19 +1710,7 @@
 
         // Toggle theme function
         window.toggleTheme = function() {
-            const body = document.body;
-            const toggle = document.getElementById('theme-toggle');
-            const toggleMobile = document.getElementById('theme-toggle-mobile');
-            const isLightMode = body.classList.contains('light-mode');
-            
-            if (isLightMode) {
-                // Switch to Dark Mode
-                body.classList.remove('light-mode');
-                if (toggle) toggle.classList.remove('light');
-                if (toggleMobile) toggleMobile.classList.remove('light');
-                localStorage.setItem('theme', 'dark');
-                console.log('Switched to Dark Mode');
-            } else {
+            const body = document.body;} else {
                 // Switch to Light Mode
                 body.classList.add('light-mode');
                 if (toggle) toggle.classList.add('light');

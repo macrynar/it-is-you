@@ -80,27 +80,6 @@
     .iiy-nav-link.active { color: #fff; }
     .iiy-nav-link.active::after { width: 100%; }
 
-    .theme-toggle {
-      position: relative; width: 60px; height: 32px;
-      background: rgba(30,41,59,0.6); border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.1);
-      cursor: pointer; transition: all 0.3s ease; flex-shrink: 0;
-    }
-    .theme-toggle:hover { background: rgba(15,7,40,0.9); border-color: rgba(112,0,255,0.5); }
-    .theme-toggle-slider {
-      position: absolute; top: 3px; left: 3px;
-      width: 24px; height: 24px;
-      background: linear-gradient(135deg,#7000ff,#00f0ff);
-      border-radius: 50%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-      box-shadow: 0 2px 8px rgba(112,0,255,0.5);
-    }
-    .theme-toggle.light .theme-toggle-slider { transform: translateX(28px); background: linear-gradient(135deg,#F59E0B,#EAB308); box-shadow: 0 2px 8px rgba(245,158,11,0.4); }
-    .theme-icon { position: absolute; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; transition: opacity 0.3s ease; }
-    .theme-icon-moon { left: 8px; opacity: 1; }
-    .theme-icon-sun { right: 8px; opacity: 0.4; }
-    .theme-toggle.light .theme-icon-moon { opacity: 0.4; }
-    .theme-toggle.light .theme-icon-sun { opacity: 1; }
-
     .nav-icon-btn {
       display: flex; align-items: center; justify-content: center;
       width: 36px; height: 36px; border-radius: 8px;
@@ -213,18 +192,15 @@
 
         <!-- Nav links — public by default, JS swaps to logged-in links -->
         <div id="nav-links" class="hidden md:flex items-center gap-8">
+          <a href="/baza-wiedzy/" class="iiy-nav-link">Baza Wiedzy</a>
           <a href="/methodology" class="iiy-nav-link">Metodologia</a>
-          <a href="/#features" class="iiy-nav-link">Korzyści</a>
           <a href="/pricing" class="iiy-nav-link active">Cennik</a>
         </div>
 
         <!-- Nav actions — public by default, JS swaps to logged-in actions -->
         <div id="nav-actions" class="hidden md:flex items-center gap-4">
-          <a href="/auth" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Zaloguj</a>
-          <a href="/auth" class="bg-white text-slate-950 px-6 py-2.5 rounded-full text-sm font-bold hover:bg-indigo-50 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)]">
-            Wykonaj test
-          </a>
-        </div>
+        <a href="/auth" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all" style="background:linear-gradient(120deg,rgba(112,0,255,.75) 0%,rgba(0,200,220,.8) 100%);box-shadow:0 0 18px -4px rgba(0,240,255,.35);text-decoration:none;">Zaloguj się <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
 
         <!-- Hamburger (mobile only) -->
         <button id="hamburger-btn" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-white/10 bg-white/5 text-white/70 hover:text-white hover:bg-white/10 transition-all" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -241,7 +217,8 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu" style="display:none;border-top:1px solid rgba(255,255,255,0.06);background:rgba(13,15,43,0.97);backdrop-filter:blur(20px);">
       <div id="mobile-menu-content" class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
-        <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
+      <a href="/baza-wiedzy/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Baza Wiedzy</a>
+      <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
         <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
         <div style="height:1px;background:rgba(255,255,255,0.06);margin:4px 0;"></div>
         <a href="/auth" class="flex items-center justify-center gap-2 mb-2 py-3 rounded-xl text-sm font-semibold text-white transition-all" style="text-decoration:none;background:linear-gradient(120deg,rgba(112,0,255,.75),rgba(0,200,220,.8));">Zaloguj się</a>
@@ -608,14 +585,47 @@
   </section>
 
   <!-- FOOTER -->
-  <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl">
-    <div class="max-w-7xl mx-auto px-6 py-8 text-center">
-      <p class="text-slate-500 text-sm">
-        &copy; 2026 <span class="text-purple-400 font-semibold">Alcheme</span> – Psychometric Engine. Wszystkie prawa zastrzeżone.
-      </p>
-      <p class="text-slate-600 text-xs mt-2">
-        <a href="/regulamin.pdf" target="_blank" rel="noopener noreferrer" class="hover:text-slate-400 transition underline underline-offset-2">Regulamin Usługi</a>
-      </p>
+    <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl mt-16">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+        <div class="col-span-2 md:col-span-1">
+          <a href="/" style="display:inline-block;margin-bottom:8px;text-decoration:none;">
+            <span style="font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:.14em;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.88) 55%,rgba(112,0,255,.75) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Alcheme</span>
+          </a>
+          <p style="color:rgba(100,116,139,1);font-size:14px;line-height:1.6;">Naukowa diagnoza potencjału w formie przystępnej grywalizacji.</p>
+          <a href="mailto:hello@alcheme.io" style="display:inline-block;margin-top:16px;font-size:14px;color:rgba(34,211,238,.8);text-decoration:none;">hello@alcheme.io</a>
+        </div>
+        <div>
+          <h4 style="color:#fff;font-weight:700;margin-bottom:12px;font-size:14px;">Projekt</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+            <li><a href="/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Strona główna</a></li>
+            <li><a href="/pricing" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Cennik</a></li>
+            <li><a href="/methodology" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Metodologia</a></li>
+            <li><a href="/user-profile-tests" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Testy</a></li>
+            <li><a href="/character" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Karta Postaci</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#fff;font-weight:700;margin-bottom:12px;font-size:14px;">Baza Wiedzy</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+            <li><a href="/baza-wiedzy/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Wszystkie modele</a></li>
+            <li><a href="/baza-wiedzy/enneagram/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Enneagram</a></li>
+            <li><a href="/baza-wiedzy/hexaco/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">HEXACO</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#fff;font-weight:700;margin-bottom:12px;font-size:14px;">Legal</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+            <li><a href="/privacy-policy" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Polityka Prywatności</a></li>
+            <li><a href="/regulamin.pdf" target="_blank" rel="noopener noreferrer" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Regulamin</a></li>
+            <li><a href="/privacy-policy#rodo" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">RODO</a></li>
+          </ul>
+        </div>
+      </div>
+      <div style="border-top:1px solid rgba(255,255,255,0.05);padding-top:24px;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:space-between;" class="sm:flex-row">
+        <span style="color:rgba(100,116,139,1);font-size:12px;">&copy; 2026 Alcheme. All rights reserved.</span>
+        <span style="color:rgba(100,116,139,1);font-size:12px;">Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.</span>
+      </div>
     </div>
   </footer>
 
@@ -634,13 +644,12 @@
     const ICON_OUT = "this.style.color='rgba(255,255,255,.45)';this.style.background='';this.style.borderColor='transparent';";
     const SETTINGS_SVG = `<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`;
     const LOGOUT_SVG = `<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>`;
-    const MOON_SVG = `<svg class="theme-icon theme-icon-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`;
-    const SUN_SVG = `<svg class="theme-icon theme-icon-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`;
 
     (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
         document.getElementById('nav-links').innerHTML = `
+        <a href="/baza-wiedzy/" class="iiy-nav-link">Baza Wiedzy</a>
           <a href="/methodology" class="iiy-nav-link">Metodologia</a>
           <a href="/pricing" class="iiy-nav-link active">Cennik</a>
           <a href="/character" class="iiy-nav-link">Karta Postaci</a>
@@ -651,6 +660,7 @@
           <button class="nav-icon-btn logout" onclick="(async()=>{const s=createClient('https://uvzilorpyuqicuwkufky.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2emlsb3JweXVxaWN1d2t1Zmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDQzNTAsImV4cCI6MjA4NjkyMDM1MH0.jNIkqASHNl_7WbLq0jBZ86kRDmRP2jzIbI-db9l9teA');await s.auth.signOut();location.href='/'})(" title="Wyloguj">${LOGOUT_SVG}</button>
         `;
         document.getElementById('mobile-menu-content').innerHTML = `
+        <a href="/baza-wiedzy/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Baza Wiedzy</a>
           <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
           <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
           <a href="/character" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Karta Postaci</a>

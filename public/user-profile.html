@@ -228,23 +228,6 @@
     .iiy-nav-link:hover::after { width: 100%; }
     .iiy-nav-link.active { color: #fff; }
     .iiy-nav-link.active::after { width: 100%; }
-    .theme-toggle {
-        position: relative; width: 60px; height: 32px;
-        background: rgba(30,41,59,.6); border-radius: 16px;
-        border: 1px solid rgba(255,255,255,.1); cursor: pointer; transition: all .3s;
-    }
-    .theme-toggle:hover { background: rgba(15,7,40,.9); border-color: rgba(112,0,255,.5); }
-    .theme-toggle-slider {
-        position: absolute; top: 3px; left: 3px; width: 24px; height: 24px;
-        background: linear-gradient(135deg,#7000ff,#00f0ff); border-radius: 50%;
-        transition: transform .3s cubic-bezier(.4,0,.2,1); box-shadow: 0 2px 8px rgba(112,0,255,.5);
-    }
-    .theme-toggle.light .theme-toggle-slider { transform: translateX(28px); background: linear-gradient(135deg,#F59E0B,#EAB308); box-shadow: 0 2px 8px rgba(245,158,11,.4); }
-    .theme-icon { position: absolute; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; transition: opacity .3s; }
-    .theme-icon-moon { left: 8px; opacity: 1; }
-    .theme-icon-sun { right: 8px; opacity: .4; }
-    .theme-toggle.light .theme-icon-moon { opacity: .4; }
-    .theme-toggle.light .theme-icon-sun { opacity: 1; }
     </style>
 </head>
 <body>
@@ -299,15 +282,11 @@
         <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu" style="display:none;border-top:1px solid rgba(255,255,255,0.06);background:rgba(13,15,43,0.97);backdrop-filter:blur(20px);">
           <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
-            <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Ustawienia</a>
-            <a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
+            <a href="/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Ustawienia</a><a href="/baza-wiedzy/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Baza Wiedzy</a><a href="/methodology" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Metodologia</a>
             <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Cennik</a>
             <a href="/character" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Karta Postaci</a>
             <a href="/user-profile-tests" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:text-white hover:bg-white/5 transition-all" style="text-decoration:none;">Testy</a>
             <div style="height:1px;background:rgba(255,255,255,0.06);margin:4px 0;"></div>
-            <div class="flex items-center justify-between px-4 py-2">
-              <span class="text-xs text-white/30 uppercase tracking-widest font-semibold">Motyw</span>
-            </div>
             <button onclick="logout()" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-400/80 hover:text-red-400 hover:bg-red-500/5 transition-all text-left"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>Wyloguj</button>
           </div>
         </div>
@@ -1646,47 +1625,46 @@
     </main>
 
       <!-- FOOTER -->
-  <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl mt-16">
+    <footer class="border-t border-white/5 bg-black/30 backdrop-blur-xl mt-16">
     <div class="max-w-7xl mx-auto px-6 py-10">
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-8 mb-10">
-
-        <!-- Col 1 – brand + contact -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
         <div class="col-span-2 md:col-span-1">
           <a href="/" style="display:inline-block;margin-bottom:8px;text-decoration:none;">
             <span style="font-family:'Cinzel',serif;font-size:18px;font-weight:600;letter-spacing:.14em;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.88) 55%,rgba(112,0,255,.75) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Alcheme</span>
           </a>
-          <p class="text-slate-500 text-sm leading-relaxed">Naukowa diagnoza potencjału w formie przystępnej grywalizacji.</p>
-          <a href="mailto:hello@alcheme.io" class="inline-block mt-4 text-sm text-cyan-400/80 hover:text-cyan-300 transition" style="text-decoration:none;">hello@alcheme.io</a>
+          <p style="color:rgba(100,116,139,1);font-size:14px;line-height:1.6;">Naukowa diagnoza potencjału w formie przystępnej grywalizacji.</p>
+          <a href="mailto:hello@alcheme.io" style="display:inline-block;margin-top:16px;font-size:14px;color:rgba(34,211,238,.8);text-decoration:none;">hello@alcheme.io</a>
         </div>
-
-        <!-- Col 3 – Projekt -->
         <div>
-          <h4 class="text-white font-bold text-sm mb-3">Projekt</h4>
-          <ul class="space-y-2 text-slate-500 text-sm" style="list-style:none;padding:0;margin:0;">
-            <li><a href="/"                     class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Strona główna</a></li>
-            <li><a href="/pricing"              class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Cennik</a></li>
-            <li><a href="/methodology"          class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Metodologia</a></li>
-            <li><a href="/user-profile-tests"   class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Testy</a></li>
-            <li><a href="/character"            class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Karta Postaci</a></li>
+          <h4 style="color:#fff;font-weight:700;margin-bottom:12px;font-size:14px;">Projekt</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+            <li><a href="/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Strona główna</a></li>
+            <li><a href="/pricing" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Cennik</a></li>
+            <li><a href="/methodology" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Metodologia</a></li>
+            <li><a href="/user-profile-tests" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Testy</a></li>
+            <li><a href="/character" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Karta Postaci</a></li>
           </ul>
         </div>
-
-        <!-- Col 4 – Legal -->
         <div>
-          <h4 class="text-white font-bold text-sm mb-3">Legal</h4>
-          <ul class="space-y-2 text-slate-500 text-sm" style="list-style:none;padding:0;margin:0;">
-            <li><a href="/privacy-policy"    class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Polityka Prywatności</a></li>
-            <li><a href="/regulamin.pdf" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">Regulamin</a></li>
-            <li><a href="/privacy-policy#rodo" class="hover:text-indigo-400 transition" style="text-decoration:none;color:inherit;">RODO</a></li>
+          <h4 style="color:#fff;font-weight:700;margin-bottom:12px;font-size:14px;">Baza Wiedzy</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+            <li><a href="/baza-wiedzy/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Wszystkie modele</a></li>
+            <li><a href="/baza-wiedzy/enneagram/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Enneagram</a></li>
+            <li><a href="/baza-wiedzy/hexaco/" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">HEXACO</a></li>
           </ul>
         </div>
-
+        <div>
+          <h4 style="color:#fff;font-weight:700;margin-bottom:12px;font-size:14px;">Legal</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+            <li><a href="/privacy-policy" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Polityka Prywatności</a></li>
+            <li><a href="/regulamin.pdf" target="_blank" rel="noopener noreferrer" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">Regulamin</a></li>
+            <li><a href="/privacy-policy#rodo" style="color:rgba(100,116,139,1);font-size:14px;text-decoration:none;" onmouseover="this.style.color='#818cf8'" onmouseout="this.style.color='rgba(100,116,139,1)'">RODO</a></li>
+          </ul>
+        </div>
       </div>
-
-      <!-- Bottom bar -->
-      <div class="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
-        <span>&copy; 2026 Alcheme. All rights reserved.</span>
-        <span>Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.</span>
+      <div style="border-top:1px solid rgba(255,255,255,0.05);padding-top:24px;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:space-between;" class="sm:flex-row">
+        <span style="color:rgba(100,116,139,1);font-size:12px;">&copy; 2026 Alcheme. All rights reserved.</span>
+        <span style="color:rgba(100,116,139,1);font-size:12px;">Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.</span>
       </div>
     </div>
   </footer>
@@ -1832,15 +1810,10 @@
 
         function toggleTheme() {
             const body = document.body;
-            const isLight = body.classList.toggle('light-mode');
-            const toggles = document.querySelectorAll('.theme-toggle');
-            toggles.forEach(t => t.classList.toggle('light', isLight));
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        }
+            const isLight = body.classList.toggle('light-mode');}
         (function() {
             if (localStorage.getItem('theme') === 'light') {
                 document.body.classList.add('light-mode');
-                document.querySelectorAll('.theme-toggle').forEach(t => t.classList.add('light'));
             }
         })();
     </script>
