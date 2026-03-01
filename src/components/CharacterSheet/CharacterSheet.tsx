@@ -1733,42 +1733,6 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
       {!isPublic && !demoMode ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} isPremium={isPremium} /> : null}
 
-      {/* Footer */}
-      {!demoMode && <footer className="border-t border-white/5 bg-slate-950/80 py-6 sm:py-10 text-slate-500 text-sm mt-6 sm:mt-8">
-        <div className="max-w-5xl mx-auto px-3 sm:px-6 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
-          <div className="col-span-2 sm:col-span-1">
-            <span className="font-bold text-lg text-white tracking-tight block mb-3">Alcheme</span>
-            <p>Naukowa diagnoza potencjału w formie przystępnej grywalizacji.</p>
-          </div>
-          <div>
-            <h4 className="text-white font-bold mb-3 text-sm">Metodologia</h4>
-            <ul className="space-y-1.5">
-              {[['HEXACO & Big Five', '/methodology#hexaco'], ['Enneagram RHETI', '/methodology#enneagram'], ['O*NET Database', '/methodology#career'], ['Dark Triad SD3', '/methodology#darktriad']].map(([l, href]) => (
-                <li key={l}><a href={href} className="hover:text-indigo-400 transition">{l}</a></li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-white font-bold mb-3 text-sm">Projekt</h4>
-            <ul className="space-y-1.5">
-              {[['Cennik', '/pricing'], ['Metodologia', '/methodology']].map(([l, href]) => (
-                <li key={l}><a href={href} className="hover:text-indigo-400 transition">{l}</a></li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-white font-bold mb-3 text-sm">Legal</h4>
-            <ul className="space-y-1.5">
-              {['Polityka Prywatności', 'Regulamin', 'RODO'].map((l) => (
-                <li key={l}><a href="#" className="hover:text-indigo-400 transition">{l}</a></li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="max-w-5xl mx-auto px-3 sm:px-6 mt-6 sm:mt-8 pt-6 border-t border-white/5 text-center text-xs">
-          &copy; {new Date().getFullYear()} Alcheme. All rights reserved. Disclaimer: To narzędzie rozwojowe, nie diagnoza kliniczna.
-        </div>
-      </footer>}
     </div>
   );
 }
