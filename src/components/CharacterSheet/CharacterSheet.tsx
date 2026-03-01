@@ -7,6 +7,8 @@ import CharacterChatBubble from './CharacterChatBubble';
 import { getUserPremiumStatus, type UserPremiumStatus } from '../../lib/stripeService';
 import ValuesCircumplexChart, { SCHWARTZ_CIRCUMPLEX } from './ValuesCircumplexChart';
 import AlchemeLogo from '../AlchemeLogo';
+import ShareLinkModal from '../shared/ShareLinkModal';
+import Toast from '../shared/Toast';
 
 type CharacterCardContent = {
   archetype_name: string;
@@ -472,6 +474,8 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
   const [premiumStatus, setPremiumStatus] = useState<UserPremiumStatus | null>(null);
 
   const [shareLoading, setShareLoading] = useState(false);
+  const [shareModalUrl, setShareModalUrl] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -635,12 +639,12 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
       try {
         await navigator.clipboard.writeText(url);
-        alert('Link do karty postaci skopiowany do schowka.');
+        setToast({ type: 'success', msg: 'Link skopiowany do schowka!' });
       } catch {
-        window.prompt('Skopiuj link:', url);
+        setShareModalUrl(url);
       }
     } catch {
-      alert('Nie udało się wygenerować linku do udostępnienia.');
+      setToast({ type: 'error', msg: 'Nie udało się wygenerować linku do udostępnienia.' });
     } finally {
       setShareLoading(false);
     }
@@ -1732,6 +1736,9 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
       </main>
 
       {!isPublic && !demoMode ? <CharacterChatBubble profileContext={JSON.stringify(characterCardInput)} isPremium={isPremium} /> : null}
+
+      {shareModalUrl && <ShareLinkModal url={shareModalUrl} onClose={() => setShareModalUrl(null)} />}
+      {toast && <Toast type={toast.type} message={toast.msg} onDone={() => setToast(null)} />}
 
     </div>
   );

@@ -128,6 +128,8 @@ export default function ValuesResults() {
     await generateInterpretation(rawScores, report, { force: true });
   };
 
+  const handleRetakeTest = () => { window.location.href = '/test?type=values'; };
+
   // Custom tooltip for chart
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) return null;

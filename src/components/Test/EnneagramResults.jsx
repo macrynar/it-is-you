@@ -283,6 +283,8 @@ export default function EnneagramResults() {
     generateInterpretation(results, { force: true });
   };
 
+  const handleRetake = () => { window.location.href = '/test?type=enneagram'; };
+
   /* ── Loading ── */
   if (loading) return (
     <><style>{CSS}</style>

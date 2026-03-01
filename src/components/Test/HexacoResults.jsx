@@ -121,6 +121,8 @@ export default function HexacoResults() {
     generateInterpretation(results, { force: true });
   };
 
+  const handleRetake = () => { window.location.href = '/test'; };
+
   if (loading) return (
     <><style>{CSS}</style>
     <div className="hr-root" style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'100vh'}}>
