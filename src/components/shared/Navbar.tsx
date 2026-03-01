@@ -90,7 +90,7 @@ export default function Navbar({
         <div className="flex items-center justify-between gap-4">
 
           {/* ── Logo ── */}
-          <AlchemeLogo href="/" size={32} />
+          <AlchemeLogo href="/" size={38} />
 
           {/* ── Desktop: centre links ── */}
           <div className="hidden md:flex items-center gap-8">

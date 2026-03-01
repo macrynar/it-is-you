@@ -915,7 +915,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between gap-4">
             {/* Logo */}
-            <AlchemeLogo href="/" size={32} />
+            <AlchemeLogo href="/" size={38} />
 
             {/* Center nav links — desktop only, page-level navigation */}
             <div className="hidden md:flex items-center gap-8">
@@ -996,7 +996,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
       <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-xl sticky top-0 z-50 nav-neural">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3">
           <div className="flex items-center justify-between gap-4">
-            <AlchemeLogo href="/" size={32} />
+            <AlchemeLogo href="/" size={38} />
             <a
               href="/auth"
               className="inline-flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white transition-all"

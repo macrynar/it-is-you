@@ -188,11 +188,11 @@ export default function AlchemeLogo({ size = 46, href = '/', className = '' }: P
         }}>Alcheme</div>
         <div style={{
           fontFamily: "'Raleway', sans-serif",
-          fontSize: '7.5px',
+          fontSize: '8px',
           fontWeight: 300,
-          letterSpacing: '.28em',
+          letterSpacing: '.32em',
           textTransform: 'uppercase',
-          color: 'rgba(255,255,255,.55)',
+          color: 'rgba(255,255,255,.6)',
           whiteSpace: 'nowrap',
         }}>Know yourself · Transform</div>
       </div>
