@@ -1142,6 +1142,20 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                               </svg>
                               {llmLoading ? 'Generuję…' : 'Odśwież'}
                             </button>
+
+                            {llmContent && (
+                              <a
+                                href="/share-center"
+                                className="iiy-cs-btn iiy-cs-btn-ghost"
+                                style={{ textDecoration:'none', display:'inline-flex', alignItems:'center', gap:6 }}
+                                title="Eksportuj profil na Social Media lub stopkę maila"
+                              >
+                                <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true" style={{width:15,height:15}}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                </svg>
+                                Eksportuj
+                              </a>
+                            )}
                           </>
                         )}
                       </div>

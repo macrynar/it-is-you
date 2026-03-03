@@ -10,6 +10,7 @@ import ValuesResults from './components/Test/ValuesResults'
 import CareerDnaResults from './components/Test/CareerDnaResults'
 import Settings from './components/Settings/Settings'
 import CharacterSheet from './components/CharacterSheet/CharacterSheet'
+import ShareCenter from './components/ShareCenter/ShareCenter'
 import { supabase, onAuthStateChange } from './lib/supabaseClient'
 import Footer from './components/shared/Footer'
 
@@ -249,6 +250,12 @@ function App() {
       return null
     }
     return <><CharacterSheet publicToken={token} /><Footer /></>
+  }
+
+  // /share-center – export & share module
+  if (currentRoute === '/share-center' || currentRoute === '/share-center/') {
+    if (!user) { window.location.href = '/auth'; return null; }
+    return <ShareCenter />
   }
 
   // Handle /demo-card route — CharacterSheet with hardcoded demo data (used for homepage iframe preview)
