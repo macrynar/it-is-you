@@ -5,24 +5,27 @@ interface ProfessionalBadgeProps {
   archetypeName: string;
   archetypeSubtitle: string;
   userName: string;
-  energyBoosters: string[];
+  workPreference: string;
+  workConstraint: string;
+  commsStyle: string;
+  deepWorkHours: string;
   shareUrl: string;
 }
 
 /** Generates inline-CSS HTML string that works in Gmail / Outlook */
-function buildEmailHtml(opts: { archetypeName: string; archetypeSubtitle: string; userName: string; energyBoosters: string[]; shareUrl: string }) {
-  const bars = [
-    { label: 'Energia', value: opts.energyBoosters[0] ?? '—' },
-    { label: 'Komunikacja', value: opts.energyBoosters[1] ?? '—' },
+function buildEmailHtml(opts: { archetypeName: string; archetypeSubtitle: string; userName: string; workPreference: string; workConstraint: string; commsStyle: string; deepWorkHours: string; shareUrl: string }) {
+  const rows = [
+    { label: '🚀 Tryb pracy', value: opts.workPreference },
+    { label: '⚠️ Unikaj', value: opts.workConstraint },
   ];
-  const barsHtml = bars.map(b => `
+  const barsHtml = rows.map(b => `
     <tr>
       <td style="padding:2px 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#64748b;white-space:nowrap;padding-right:10px;">${b.label}:</td>
       <td style="padding:2px 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#94a3b8;">${b.value}</td>
     </tr>`).join('');
 
   return `<!-- Alcheme Professional Badge -->
-<table cellpadding="0" cellspacing="0" border="0" style="background:#0f172a;border-radius:10px;border:1px solid #1e293b;max-width:600px;width:100%;font-family:Arial,Helvetica,sans-serif;">
+<table cellpadding="0" cellspacing="0" border="0" style="background:#0f172a;border-radius:10px;border-left:3px solid #7c3aed;border-top:1px solid #1e293b;border-right:1px solid #1e293b;border-bottom:1px solid #1e293b;max-width:600px;width:100%;font-family:Arial,Helvetica,sans-serif;">
   <tr>
     <td style="padding:14px 18px;vertical-align:middle;border-right:1px solid #1e293b;width:52px;">
       <div style="width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;text-align:center;padding:10px;box-sizing:border-box;">⚡</div>
@@ -36,7 +39,7 @@ function buildEmailHtml(opts: { archetypeName: string; archetypeSubtitle: string
       <table cellpadding="0" cellspacing="0" border="0">${barsHtml}</table>
     </td>
     <td style="padding:12px 18px;vertical-align:middle;text-align:center;white-space:nowrap;">
-      <a href="${opts.shareUrl}" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:8px;color:#fff;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:0.03em;">Read my<br>User Manual →</a>
+      <a href="${opts.shareUrl}" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:8px;color:#fff;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:0.03em;">Unlock collaboration<br>Cheat Sheet →</a>
     </td>
   </tr>
 </table>`;
@@ -46,14 +49,17 @@ export default function ProfessionalBadge({
   archetypeName,
   archetypeSubtitle,
   userName,
-  energyBoosters,
+  workPreference,
+  workConstraint,
+  commsStyle,
+  deepWorkHours,
   shareUrl,
 }: ProfessionalBadgeProps) {
   const [toast, setToast] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
   const [copied, setCopied] = useState(false);
   const [activeVariant, setActiveVariant] = useState<'banner' | 'compact'>('banner');
 
-  const htmlCode = buildEmailHtml({ archetypeName, archetypeSubtitle, userName, energyBoosters, shareUrl });
+  const htmlCode = buildEmailHtml({ archetypeName, archetypeSubtitle, userName, workPreference, workConstraint, commsStyle, deepWorkHours, shareUrl });
 
   const copyHtml = async () => {
     try {
@@ -65,11 +71,6 @@ export default function ProfessionalBadge({
       setToast({ type: 'error', msg: 'Kopiowanie nie powiodło się. Zaznacz kod ręcznie.' });
     }
   };
-
-  const bars = [
-    { label: 'Energia', value: energyBoosters[0] ?? '—' },
-    { label: 'Komunikacja', value: energyBoosters[1] ?? '—' },
-  ];
 
   return (
     <div style={{ fontFamily: "'Space Grotesk',sans-serif" }}>
@@ -99,8 +100,8 @@ export default function ProfessionalBadge({
         {/* preview wrapper with dark bg */}
         <div style={{ background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:16, padding:'28px 24px', display:'flex', alignItems:'center', justifyContent:'center', overflow:'auto' }}>
           {activeVariant === 'banner' ? (
-            /* Banner variant */
-            <div style={{ background:'#0f172a', borderRadius:10, border:'1px solid #1e293b', display:'flex', alignItems:'stretch', maxWidth:580, width:'100%', overflow:'hidden' }}>
+            /* Banner variant — Operator's Manual */
+            <div style={{ background:'#0f172a', borderRadius:10, borderLeft:'3px solid #7c3aed', border:'1px solid #1e293b', display:'flex', alignItems:'stretch', maxWidth:580, width:'100%', overflow:'hidden' }}>
               {/* icon col */}
               <div style={{ padding:'14px 16px', borderRight:'1px solid #1e293b', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                 <div style={{ width:46, height:46, borderRadius:10, background:'linear-gradient(135deg,#4f46e5,#7c3aed)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:22 }}>
@@ -113,32 +114,36 @@ export default function ProfessionalBadge({
                 <div style={{ fontSize:12, fontWeight:700, color:'#7c3aed', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:2 }}>{archetypeName}</div>
                 <div style={{ fontSize:11, color:'#64748b', maxWidth:180, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{archetypeSubtitle}</div>
               </div>
-              {/* power bars */}
-              <div style={{ padding:'12px 14px', borderRight:'1px solid #1e293b', display:'flex', flexDirection:'column', justifyContent:'center', gap:4, flexShrink:0 }}>
-                {bars.map(b => (
-                  <div key={b.label} style={{ display:'flex', gap:8, alignItems:'center' }}>
-                    <span style={{ fontSize:11, color:'#64748b', whiteSpace:'nowrap' }}>{b.label}:</span>
-                    <span style={{ fontSize:11, color:'#94a3b8', maxWidth:120, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{b.value}</span>
-                  </div>
-                ))}
+              {/* work style rows */}
+              <div style={{ padding:'12px 14px', borderRight:'1px solid #1e293b', display:'flex', flexDirection:'column', justifyContent:'center', gap:5, flexShrink:0 }}>
+                <div style={{ display:'flex', gap:8, alignItems:'flex-start' }}>
+                  <span style={{ fontSize:11, color:'#64748b', whiteSpace:'nowrap' }}>🚀 Tryb pracy:</span>
+                  <span style={{ fontSize:11, color:'#94a3b8', maxWidth:130, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{workPreference}</span>
+                </div>
+                <div style={{ display:'flex', gap:8, alignItems:'flex-start' }}>
+                  <span style={{ fontSize:11, color:'#64748b', whiteSpace:'nowrap' }}>⚠️ Unikaj:</span>
+                  <span style={{ fontSize:11, color:'#94a3b8', maxWidth:130, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{workConstraint}</span>
+                </div>
               </div>
               {/* CTA */}
               <div style={{ padding:'12px 16px', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                 <a href={shareUrl} onClick={e=>e.preventDefault()} style={{ display:'inline-block', padding:'8px 14px', background:'linear-gradient(135deg,#4f46e5,#7c3aed)', borderRadius:8, color:'#fff', fontSize:12, fontWeight:700, textDecoration:'none', textAlign:'center', lineHeight:1.4 }}>
-                  Read my<br />User Manual →
+                  Unlock collaboration<br />Cheat Sheet →
                 </a>
               </div>
             </div>
           ) : (
             /* Compact / Slack variant */
-            <div style={{ background:'#1e293b', borderRadius:10, border:'1px solid #334155', padding:'12px 16px', display:'flex', alignItems:'center', gap:12, maxWidth:340, width:'100%' }}>
+            <div style={{ background:'#1e293b', borderRadius:10, borderLeft:'3px solid #7c3aed', border:'1px solid #334155', padding:'12px 16px', display:'flex', alignItems:'center', gap:12, maxWidth:340, width:'100%', overflow:'hidden' }}>
               <div style={{ width:36, height:36, borderRadius:8, background:'linear-gradient(135deg,#4f46e5,#7c3aed)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, flexShrink:0 }}>⚡</div>
               <div style={{ minWidth:0, flex:1 }}>
                 <div style={{ fontSize:13, fontWeight:700, color:'#f1f5f9', marginBottom:1 }}>{userName}</div>
-                <div style={{ fontSize:11, color:'#7c3aed', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em' }}>{archetypeName}</div>
+                <div style={{ fontSize:11, color:'#7c3aed', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.07em', marginBottom:4 }}>{archetypeName}</div>
+                <div style={{ fontSize:11, color:'#64748b' }}>⚡ Deep Work: <span style={{ color:'#94a3b8' }}>{deepWorkHours}</span></div>
+                <div style={{ fontSize:11, color:'#64748b' }}>💬 <span style={{ color:'#94a3b8' }}>{commsStyle}</span></div>
               </div>
-              <a href={shareUrl} onClick={e=>e.preventDefault()} style={{ fontSize:11, color:'#818cf8', textDecoration:'none', fontWeight:600, whiteSpace:'nowrap' }}>
-                User Manual →
+              <a href={shareUrl} onClick={e=>e.preventDefault()} style={{ fontSize:11, color:'#818cf8', textDecoration:'none', fontWeight:600, whiteSpace:'nowrap', flexShrink:0 }}>
+                Cheat Sheet →
               </a>
             </div>
           )}

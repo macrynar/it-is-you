@@ -3,6 +3,7 @@ import { supabase, getAccessToken, SUPABASE_ANON_KEY } from '../../lib/supabaseC
 import SocialShare from './SocialShare';
 import ProfessionalBadge from './ProfessionalBadge';
 import AlchemeLogo from '../AlchemeLogo';
+import { getInsight } from '../../data/characterInsights';
 
 type Tab = 'social' | 'badge';
 
@@ -117,6 +118,7 @@ export default function ShareCenter() {
   );
 
   const shareUrl = shareToken ? `${window.location.origin}/share/${shareToken}` : window.location.origin;
+  const insight = getInsight(llmContent.archetype_name);
 
   const TABS: { id: Tab; emoji: string; label: string; desc: string }[] = [
     { id:'social', emoji:'📱', label:'Social Media Wrapped', desc:'Instagram Stories · Feed' },
@@ -207,10 +209,13 @@ export default function ShareCenter() {
               archetypeSubtitle={llmContent.archetype_subtitle}
               tags={llmContent.tags_fundamental ?? []}
               hexacoScores={hexacoScores}
-              superpower={llmContent.portrait_superpowers ?? ''}
               energyBoosters={llmContent.energy_boosters ?? []}
-              energyDrainers={llmContent.energy_drainers ?? []}
               userName={userName}
+              roastLine={insight.roastLine}
+              superpowerLine={insight.superpowerLine}
+              kryptoniteLine={insight.kryptoniteLine}
+              mostLikelyTo={insight.mostLikelyTo}
+              leastLikelyTo={insight.leastLikelyTo}
             />
           )}
           {tab === 'badge' && (
@@ -218,7 +223,10 @@ export default function ShareCenter() {
               archetypeName={llmContent.archetype_name}
               archetypeSubtitle={llmContent.archetype_subtitle}
               userName={userName}
-              energyBoosters={llmContent.energy_boosters ?? []}
+              workPreference={insight.workPreference}
+              workConstraint={insight.workConstraint}
+              commsStyle={insight.commsStyle}
+              deepWorkHours={insight.deepWorkHours}
               shareUrl={shareUrl}
             />
           )}
