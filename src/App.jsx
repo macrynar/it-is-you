@@ -254,6 +254,16 @@ function App() {
 
   // /share-center – export & share module
   if (currentRoute === '/share-center' || currentRoute === '/share-center/') {
+    if (loading) {
+      return (
+        <div className="min-h-screen bg-bg-main flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-text-muted">Ładowanie...</p>
+          </div>
+        </div>
+      )
+    }
     if (!user) { window.location.href = '/auth'; return null; }
     return <ShareCenter />
   }
