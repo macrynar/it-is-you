@@ -16,7 +16,9 @@
     { "source": "/character", "destination": "/app.html" },
     { "source": "/character/:path*", "destination": "/app.html" },
     { "source": "/demo-card", "destination": "/app.html" },
-    { "source": "/demo-card/:path*", "destination": "/app.html" }
+    { "source": "/demo-card/:path*", "destination": "/app.html" },
+    { "source": "/share-center", "destination": "/app.html" },
+    { "source": "/share-center/:path*", "destination": "/app.html" }
   ],
   "headers": [
     {

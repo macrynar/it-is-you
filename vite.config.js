@@ -15,6 +15,8 @@ export default defineConfig({
             url === '/character' ||
             url.startsWith('/character/') ||
             url.startsWith('/share/') ||
+            url === '/share-center' ||
+            url.startsWith('/share-center/') ||
             url === '/settings' ||
             url.startsWith('/settings/') ||
             url === '/test' ||
@@ -24,11 +26,6 @@ export default defineConfig({
 
           if (shouldRewriteToApp) {
             req.url = '/app.html'
-          }
-
-          // Serve index.html for baza-wiedzy directory paths (trailing slash or bare path)
-          if (!shouldRewriteToApp && url.startsWith('/baza-wiedzy') && !url.includes('.')) {
-            req.url = url.replace(/\/?$/, '/index.html')
           }
 
           next()
