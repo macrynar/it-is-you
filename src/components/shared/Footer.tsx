@@ -19,9 +19,9 @@ const BAZA_LINKS: [string, string][] = [
 ];
 
 const LEGAL_LINKS: [string, string, boolean?][] = [
-  ['Polityka Prywatności', '/privacy-policy'],
-  ['Regulamin',            '/regulamin.pdf', true],
-  ['RODO',                 '/privacy-policy#rodo'],
+  ['Polityka Prywatności', '/polityka-prywatnosci.pdf', true],
+  ['Regulamin',            '/regulamin.pdf',            true],
+  ['Polityka Cookies',     '/polityka-cookies.pdf',    true],
 ];
 
 function FooterLink({ href, label, external }: { href: string; label: string; external?: boolean }) {
