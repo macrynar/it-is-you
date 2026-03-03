@@ -13,33 +13,24 @@ interface ProfessionalBadgeProps {
 }
 
 /** Generates inline-CSS HTML string that works in Gmail / Outlook */
-function buildEmailHtml(opts: { archetypeName: string; archetypeSubtitle: string; userName: string; workPreference: string; workConstraint: string; commsStyle: string; deepWorkHours: string; shareUrl: string }) {
-  const rows = [
-    { label: '🚀 Tryb pracy', value: opts.workPreference },
-    { label: '⚠️ Unikaj', value: opts.workConstraint },
-  ];
-  const barsHtml = rows.map(b => `
-    <tr>
-      <td style="padding:2px 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#64748b;white-space:nowrap;padding-right:10px;">${b.label}:</td>
-      <td style="padding:2px 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#94a3b8;">${b.value}</td>
-    </tr>`).join('');
-
+function buildEmailHtml(opts: { archetypeName: string; archetypeSubtitle: string; userName: string; commsStyle: string; deepWorkHours: string; shareUrl: string }) {
   return `<!-- Alcheme Professional Badge -->
-<table cellpadding="0" cellspacing="0" border="0" style="background:#0f172a;border-radius:10px;border-left:3px solid #7c3aed;border-top:1px solid #1e293b;border-right:1px solid #1e293b;border-bottom:1px solid #1e293b;max-width:600px;width:100%;font-family:Arial,Helvetica,sans-serif;">
+<table cellpadding="0" cellspacing="0" border="0" style="background:#0f172a;border-radius:10px;border-top:1px solid #1e293b;border-right:1px solid #1e293b;border-bottom:1px solid #1e293b;border-left:3px solid #7c3aed;max-width:520px;width:100%;font-family:Arial,Helvetica,sans-serif;">
   <tr>
-    <td style="padding:14px 18px;vertical-align:middle;border-right:1px solid #1e293b;width:52px;">
-      <div style="width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;text-align:center;padding:10px;box-sizing:border-box;">⚡</div>
+    <td style="padding:14px 16px;vertical-align:middle;border-right:1px solid #1e293b;width:50px;">
+      <div style="width:42px;height:42px;border-radius:9px;background:linear-gradient(135deg,#4f46e5,#7c3aed);text-align:center;line-height:42px;font-size:20px;">⚡</div>
     </td>
     <td style="padding:12px 16px;vertical-align:middle;border-right:1px solid #1e293b;">
-      <div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:700;color:#f1f5f9;margin-bottom:2px;">${opts.userName}</div>
-      <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#7c3aed;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">${opts.archetypeName}</div>
-      <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#64748b;margin-top:2px;">${opts.archetypeSubtitle}</div>
+      <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;color:#f1f5f9;white-space:nowrap;">${opts.userName}</div>
+      <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#7c3aed;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">${opts.archetypeName}</div>
+      <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;color:#475569;margin-top:2px;white-space:nowrap;">${opts.archetypeSubtitle}</div>
     </td>
-    <td style="padding:12px 14px;vertical-align:middle;border-right:1px solid #1e293b;">
-      <table cellpadding="0" cellspacing="0" border="0">${barsHtml}</table>
+    <td style="padding:12px 16px;vertical-align:middle;border-right:1px solid #1e293b;">
+      <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;color:#64748b;margin-bottom:4px;">⏱ Deep work: <span style="color:#94a3b8;">${opts.deepWorkHours}</span></div>
+      <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;color:#64748b;">💬 Komunikacja: <span style="color:#94a3b8;">${opts.commsStyle}</span></div>
     </td>
-    <td style="padding:12px 18px;vertical-align:middle;text-align:center;white-space:nowrap;">
-      <a href="${opts.shareUrl}" style="display:inline-block;padding:8px 14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:8px;color:#fff;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:0.03em;">Unlock collaboration<br>Cheat Sheet →</a>
+    <td style="padding:12px 14px;vertical-align:middle;text-align:center;white-space:nowrap;">
+      <a href="${opts.shareUrl}" style="display:inline-block;padding:8px 13px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:8px;color:#fff;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:700;text-decoration:none;letter-spacing:0.02em;white-space:nowrap;">Collaboration<br>Cheat Sheet →</a>
     </td>
   </tr>
 </table>`;
@@ -59,7 +50,7 @@ export default function ProfessionalBadge({
   const [copied, setCopied] = useState(false);
   const [activeVariant, setActiveVariant] = useState<'banner' | 'compact'>('banner');
 
-  const htmlCode = buildEmailHtml({ archetypeName, archetypeSubtitle, userName, workPreference, workConstraint, commsStyle, deepWorkHours, shareUrl });
+  const htmlCode = buildEmailHtml({ archetypeName, archetypeSubtitle, userName, commsStyle, deepWorkHours, shareUrl });
 
   const copyHtml = async () => {
     try {
@@ -100,35 +91,27 @@ export default function ProfessionalBadge({
         {/* preview wrapper with dark bg */}
         <div style={{ background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:16, padding:'28px 24px', display:'flex', alignItems:'center', justifyContent:'center', overflow:'auto' }}>
           {activeVariant === 'banner' ? (
-            /* Banner variant — Operator's Manual */
-            <div style={{ background:'#0f172a', borderRadius:10, borderLeft:'3px solid #7c3aed', border:'1px solid #1e293b', display:'flex', alignItems:'stretch', maxWidth:580, width:'100%', overflow:'hidden' }}>
-              {/* icon col */}
-              <div style={{ padding:'14px 16px', borderRight:'1px solid #1e293b', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <div style={{ width:46, height:46, borderRadius:10, background:'linear-gradient(135deg,#4f46e5,#7c3aed)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:22 }}>
-                  ⚡
-                </div>
+            /* Banner variant */
+            <div style={{ background:'#0f172a', borderRadius:10, borderTop:'1px solid #1e293b', borderRight:'1px solid #1e293b', borderBottom:'1px solid #1e293b', borderLeft:'3px solid #7c3aed', display:'flex', alignItems:'stretch', maxWidth:520, width:'100%', overflow:'hidden' }}>
+              {/* icon */}
+              <div style={{ padding:'14px 14px', borderRight:'1px solid #1e293b', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <div style={{ width:42, height:42, borderRadius:9, background:'linear-gradient(135deg,#4f46e5,#7c3aed)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>⚡</div>
               </div>
-              {/* name + archetype */}
-              <div style={{ padding:'12px 16px', borderRight:'1px solid #1e293b', flex:1, minWidth:0 }}>
-                <div style={{ fontSize:15, fontWeight:700, color:'#f1f5f9', marginBottom:1 }}>{userName}</div>
-                <div style={{ fontSize:12, fontWeight:700, color:'#7c3aed', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:2 }}>{archetypeName}</div>
-                <div style={{ fontSize:11, color:'#64748b', maxWidth:180, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{archetypeSubtitle}</div>
+              {/* identity */}
+              <div style={{ padding:'12px 14px', borderRight:'1px solid #1e293b', flexShrink:0, minWidth:120 }}>
+                <div style={{ fontSize:14, fontWeight:700, color:'#f1f5f9', whiteSpace:'nowrap' }}>{userName}</div>
+                <div style={{ fontSize:11, fontWeight:700, color:'#7c3aed', textTransform:'uppercase', letterSpacing:'0.08em', marginTop:2 }}>{archetypeName}</div>
+                <div style={{ fontSize:10, color:'#475569', marginTop:2, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:130 }}>{archetypeSubtitle}</div>
               </div>
-              {/* work style rows */}
-              <div style={{ padding:'12px 14px', borderRight:'1px solid #1e293b', display:'flex', flexDirection:'column', justifyContent:'center', gap:5, flexShrink:0 }}>
-                <div style={{ display:'flex', gap:8, alignItems:'flex-start' }}>
-                  <span style={{ fontSize:11, color:'#64748b', whiteSpace:'nowrap' }}>🚀 Tryb pracy:</span>
-                  <span style={{ fontSize:11, color:'#94a3b8', maxWidth:130, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{workPreference}</span>
-                </div>
-                <div style={{ display:'flex', gap:8, alignItems:'flex-start' }}>
-                  <span style={{ fontSize:11, color:'#64748b', whiteSpace:'nowrap' }}>⚠️ Unikaj:</span>
-                  <span style={{ fontSize:11, color:'#94a3b8', maxWidth:130, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{workConstraint}</span>
-                </div>
+              {/* stats */}
+              <div style={{ padding:'12px 14px', borderRight:'1px solid #1e293b', display:'flex', flexDirection:'column', justifyContent:'center', gap:6, flex:1, minWidth:0 }}>
+                <div style={{ fontSize:11, color:'#64748b' }}>⏱ Deep work: <span style={{ color:'#94a3b8' }}>{deepWorkHours}</span></div>
+                <div style={{ fontSize:11, color:'#64748b' }}>💬 Komunikacja: <span style={{ color:'#94a3b8' }}>{commsStyle}</span></div>
               </div>
               {/* CTA */}
-              <div style={{ padding:'12px 16px', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                <a href={shareUrl} onClick={e=>e.preventDefault()} style={{ display:'inline-block', padding:'8px 14px', background:'linear-gradient(135deg,#4f46e5,#7c3aed)', borderRadius:8, color:'#fff', fontSize:12, fontWeight:700, textDecoration:'none', textAlign:'center', lineHeight:1.4 }}>
-                  Unlock collaboration<br />Cheat Sheet →
+              <div style={{ padding:'12px 14px', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <a href={shareUrl} onClick={e=>e.preventDefault()} style={{ display:'inline-block', padding:'8px 12px', background:'linear-gradient(135deg,#4f46e5,#7c3aed)', borderRadius:8, color:'#fff', fontSize:11, fontWeight:700, textDecoration:'none', textAlign:'center', lineHeight:1.5, whiteSpace:'nowrap' }}>
+                  Collaboration<br />Cheat Sheet →
                 </a>
               </div>
             </div>
