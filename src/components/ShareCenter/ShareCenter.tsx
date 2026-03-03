@@ -168,20 +168,6 @@ export default function ShareCenter() {
           </p>
         </div>
 
-        {/* archetype pill */}
-        <div style={{ display:'flex', justifyContent:'center', marginBottom:40 }}>
-          <div style={{ display:'flex', alignItems:'center', gap:14, padding:'14px 24px', borderRadius:16, background:'rgba(124,58,237,0.12)', border:'1px solid rgba(124,58,237,0.28)' }}>
-            <div style={{ width:44, height:44, borderRadius:12, background:'linear-gradient(135deg,#7c3aed,#6d28d9)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:22 }}>⚡</div>
-            <div>
-              <div style={{ fontSize:18, fontWeight:800, color:'#fff', letterSpacing:'-0.01em' }}>{llmContent.archetype_name}</div>
-              <div style={{ fontSize:12, color:'rgba(255,255,255,0.45)', marginTop:2 }}>{llmContent.archetype_subtitle}</div>
-            </div>
-            <div style={{ marginLeft:8, fontSize:12, color:'rgba(255,255,255,0.3)', borderLeft:'1px solid rgba(255,255,255,0.1)', paddingLeft:14 }}>
-              {userName}
-            </div>
-          </div>
-        </div>
-
         {/* tabs */}
         <div style={{ display:'flex', gap:12, marginBottom:40, flexWrap:'wrap' }}>
           {TABS.map(t => (
@@ -211,6 +197,7 @@ export default function ShareCenter() {
               hexacoScores={hexacoScores}
               energyBoosters={llmContent.energy_boosters ?? []}
               userName={userName}
+              shareUrl={shareUrl}
               roastLine={insight.roastLine}
               superpowerLine={insight.superpowerLine}
               kryptoniteLine={insight.kryptoniteLine}
