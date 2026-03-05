@@ -6,7 +6,10 @@ import {
   signInWithApple, 
   signInWithEmail,
   signUpWithEmail,
-  signInWithMagicLink 
+  signInWithMagicLink,
+  resetPasswordForEmail,
+  updateUserPassword,
+  supabase,
 } from '../../lib/supabaseClient'
 
 /**
@@ -23,10 +26,13 @@ import {
  */
 export default function AuthModal({ onAuthSuccess = () => {} }) {
   // ============ STATE MANAGEMENT ============
-  const [currentTab, setCurrentTab] = useState('login') // 'login', 'signup', 'magic-link'
+  const [currentTab, setCurrentTab] = useState('login') // 'login', 'signup', 'magic-link', 'forgot-password', 'update-password'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
   const [generalError, setGeneralError] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
 
@@ -37,6 +43,8 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     apple: false,
     email: false,
     magicLink: false,
+    resetPassword: false,
+    updatePassword: false,
   })
 
   const signalGroupRef = useRef(null)
@@ -120,7 +128,21 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     setSuccessMessage(null)
     setEmail('')
     setPassword('')
+    setNewPassword('')
+    setConfirmPassword('')
   }, [currentTab])
+
+  // Detect PASSWORD_RECOVERY event (user clicked reset link in email)
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setCurrentTab('update-password')
+        setGeneralError(null)
+        setSuccessMessage(null)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [])
 
   // ============ HELPER FUNCTIONS ============
   const setLoading = (provider, isLoading) => {
@@ -291,6 +313,67 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     }
   }
 
+  const handleForgotPassword = async (e) => {
+    e.preventDefault()
+    setGeneralError(null)
+    setSuccessMessage(null)
+
+    if (!email) {
+      setGeneralError('Podaj adres email')
+      return
+    }
+    if (!email.includes('@')) {
+      setGeneralError('Podaj prawidłowy adres email')
+      return
+    }
+
+    setLoading('resetPassword', true)
+    const { error } = await resetPasswordForEmail(email)
+    setLoading('resetPassword', false)
+
+    if (error) {
+      setGeneralError(`Błąd: ${error.message}`)
+    } else {
+      setSuccessMessage('Link do resetowania hasła został wysłany! Sprawdź skrzynkę pocztową i kliknij link w emailu.')
+      setEmail('')
+    }
+  }
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault()
+    setGeneralError(null)
+    setSuccessMessage(null)
+
+    if (!newPassword || !confirmPassword) {
+      setGeneralError('Wypełnij oba pola')
+      return
+    }
+    if (newPassword.length < 6) {
+      setGeneralError('Hasło musi mieć co najmniej 6 znaków')
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      setGeneralError('Hasła nie są identyczne')
+      return
+    }
+
+    setLoading('updatePassword', true)
+    const { error } = await updateUserPassword(newPassword)
+    setLoading('updatePassword', false)
+
+    if (error) {
+      setGeneralError(`Błąd: ${error.message}`)
+    } else {
+      setSuccessMessage('Hasło zostało zmienione! Możesz się teraz zalogować.')
+      setNewPassword('')
+      setConfirmPassword('')
+      setTimeout(() => {
+        setCurrentTab('login')
+        setSuccessMessage(null)
+      }, 3000)
+    }
+  }
+
   const handleMagicLink = async (e) => {
     e.preventDefault()
     setGeneralError(null)
@@ -404,7 +487,8 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
 
         {/* Glass Panel */}
         <div className="glass-panel p-8 rounded-2xl">
-          {/* Tabs */}
+          {/* Tabs — hidden on password recovery screens */}
+          {currentTab !== 'forgot-password' && currentTab !== 'update-password' && (
           <div className="flex gap-2 mb-8 bg-slate-900/20 p-1 rounded-lg">
             <button
               onClick={() => setCurrentTab('login')}
@@ -437,6 +521,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
               Magic Link
             </button>
           </div>
+          )}
 
           {/* Error Message */}
           {generalError && (
@@ -454,8 +539,9 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
             </div>
           )}
 
-          {/* Social Login Buttons */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
+          {/* Social Login Buttons — hidden on password recovery screens */}
+          {currentTab !== 'forgot-password' && currentTab !== 'update-password' && (
+            <div className="grid grid-cols-3 gap-3 mb-6">
             {/* Google */}
             <button
               onClick={handleGoogleSignIn}
@@ -513,8 +599,10 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
               )}
             </button>
           </div>
+          )}
 
-          {/* Divider */}
+          {/* Divider — hidden on password recovery screens */}
+          {currentTab !== 'forgot-password' && currentTab !== 'update-password' && (
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-slate-700/50"></div>
@@ -523,6 +611,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
               <span className="px-2 bg-gradient-to-b from-slate-900 to-slate-800 text-slate-400">lub</span>
             </div>
           </div>
+          )}
 
           {/* Email/Password Login */}
           {currentTab === 'login' && (
@@ -574,6 +663,17 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
                 </div>
               </div>
 
+              {/* Forgot password link */}
+              <div className="text-right -mt-1">
+                <button
+                  type="button"
+                  onClick={() => setCurrentTab('forgot-password')}
+                  className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+                >
+                  Zapomniałem hasła
+                </button>
+              </div>
+
               {/* Submit Button */}
               <button
                 type="submit"
@@ -587,6 +687,115 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
                   </>
                 ) : (
                   'Zaloguj się'
+                )}
+              </button>
+            </form>
+          )}
+
+          {/* Forgot Password */}
+          {currentTab === 'forgot-password' && (
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+              <p className="text-sm text-slate-400 mb-4">
+                Podaj swój email, a wyślemy Ci link do zresetowania hasła.
+              </p>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-2">Email</label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="twoj@email.com"
+                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg pl-10 pr-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-neon-primary/50 focus:ring-1 focus:ring-neon-primary/30 transition-all"
+                    disabled={isAnyLoading}
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isAnyLoading}
+                className="btn-neural w-full disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loadingStates.resetPassword ? (
+                  <>
+                    <Loader className="w-4 h-4 animate-spin-slow" />
+                    Wysyłanie...
+                  </>
+                ) : (
+                  'Wyślij link do resetowania'
+                )}
+              </button>
+
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => setCurrentTab('login')}
+                  className="text-xs text-slate-500 hover:text-slate-400 transition-colors"
+                >
+                  ← Powrót do logowania
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* Update Password (after clicking reset link in email) */}
+          {currentTab === 'update-password' && (
+            <form onSubmit={handleUpdatePassword} className="space-y-4">
+              <p className="text-sm text-slate-400 mb-4">
+                Ustaw nowe hasło do swojego konta.
+              </p>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-2">Nowe hasło (min. 6 znaków)</label>
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? 'text' : 'password'}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg px-4 py-3 pr-10 text-white placeholder-slate-600 focus:outline-none focus:border-neon-primary/50 focus:ring-1 focus:ring-neon-primary/30 transition-all"
+                    disabled={isAnyLoading}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-400"
+                    disabled={isAnyLoading}
+                  >
+                    {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-2">Potwierdź nowe hasło</label>
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? 'text' : 'password'}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full bg-slate-900/30 border border-slate-700/50 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-neon-primary/50 focus:ring-1 focus:ring-neon-primary/30 transition-all"
+                    disabled={isAnyLoading}
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isAnyLoading}
+                className="btn-neural w-full disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loadingStates.updatePassword ? (
+                  <>
+                    <Loader className="w-4 h-4 animate-spin-slow" />
+                    Zapisywanie...
+                  </>
+                ) : (
+                  'Zapisz nowe hasło'
                 )}
               </button>
             </form>
