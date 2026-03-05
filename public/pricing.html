@@ -681,19 +681,53 @@
         return;
       }
 
+      // Check if already premium before attempting checkout
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('is_premium')
+        .eq('id', session.user.id)
+        .single();
+
+      if (profileData?.is_premium) {
+        window.location.href = '/user-profile-tests';
+        return;
+      }
+
       btn.textContent = 'Przekierowuję do płatności...';
       btn.disabled = true;
 
       try {
-        const { data, error } = await supabase.functions.invoke('create-checkout-session', {
-          body: {}
-        });
+        // Use raw fetch to get proper error messages from the edge function
+        const response = await fetch(
+          'https://uvzilorpyuqicuwkufky.supabase.co/functions/v1/create-checkout-session',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${session.access_token}`,
+              'apikey': SUPABASE_ANON_KEY,
+            },
+            body: JSON.stringify({}),
+          }
+        );
 
-        if (error || !data?.url) {
-          throw new Error(error?.message || 'Brak URL sesji');
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          const serverMsg = result?.error || `Błąd serwera (${response.status})`;
+          // If somehow already premium, redirect to profile
+          if (response.status === 400 && result?.error?.toLowerCase().includes('premium')) {
+            window.location.href = '/user-profile-tests';
+            return;
+          }
+          throw new Error(serverMsg);
         }
 
-        window.location.href = data.url;
+        if (!result.url) {
+          throw new Error('Brak URL sesji płatności — spróbuj ponownie.');
+        }
+
+        window.location.href = result.url;
       } catch (err) {
         console.error('Checkout error:', err);
         btn.textContent = 'Błąd — spróbuj ponownie';
