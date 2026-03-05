@@ -889,6 +889,61 @@
     .alcheme-logo-texts{display:flex;flex-direction:column;gap:2px;}
     .alcheme-logo-name{font-family:'Cinzel',serif;font-size:17px;font-weight:600;letter-spacing:.14em;line-height:1;background:linear-gradient(120deg,#fff 0%,rgba(0,240,255,.88) 55%,rgba(112,0,255,.75) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
     .alcheme-logo-sub{font-family:'Raleway',sans-serif;font-size:6.5px;font-weight:300;letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.28);padding-left:1px;}
+
+    /* ====== DISCLAIMER MODAL ====== */
+    #disclaimer-overlay{
+        display:none;position:fixed;inset:0;z-index:9999;
+        background:rgba(4,1,21,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+        align-items:center;justify-content:center;padding:16px;
+    }
+    #disclaimer-overlay.open{display:flex;}
+    #disclaimer-box{
+        position:relative;width:100%;max-width:440px;
+        background:linear-gradient(160deg,rgba(30,22,60,.97) 0%,rgba(15,12,40,.97) 100%);
+        border:1px solid rgba(112,0,255,.35);border-radius:20px;
+        box-shadow:0 0 0 1px rgba(0,240,255,.06),0 24px 64px -8px rgba(0,0,0,.7),0 0 40px -8px rgba(112,0,255,.25);
+        padding:32px 28px 28px;
+        animation:disc-in .22s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @media(max-width:480px){#disclaimer-box{padding:24px 18px 20px;border-radius:16px;}}
+    @keyframes disc-in{from{opacity:0;transform:scale(.92) translateY(12px)}to{opacity:1;transform:none}}
+    #disclaimer-box .disc-icon{
+        width:48px;height:48px;border-radius:12px;margin:0 auto 18px;
+        background:rgba(112,0,255,.12);border:1px solid rgba(112,0,255,.3);
+        display:flex;align-items:center;justify-content:center;font-size:22px;
+    }
+    #disclaimer-box h3{
+        font-family:'Cinzel',serif;font-size:15px;font-weight:600;letter-spacing:.08em;
+        color:#fff;text-align:center;margin:0 0 6px;
+    }
+    #disclaimer-box .disc-sub{
+        font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(0,240,255,.55);
+        text-align:center;margin:0 0 20px;
+    }
+    #disclaimer-box .disc-body{
+        font-size:13.5px;line-height:1.65;color:rgba(203,213,225,.85);
+        background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+        border-radius:10px;padding:14px 16px;margin-bottom:22px;
+    }
+    #disclaimer-box .disc-body strong{color:rgba(255,255,255,.95);}
+    #disclaimer-btn-confirm{
+        width:100%;padding:13px;border-radius:10px;border:none;cursor:pointer;
+        background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;
+        font-size:14px;font-weight:700;letter-spacing:.03em;
+        box-shadow:0 0 20px rgba(99,102,241,.4);transition:opacity .18s,transform .12s;
+    }
+    #disclaimer-btn-confirm:hover{opacity:.88;transform:translateY(-1px);}
+    #disclaimer-btn-cancel{
+        display:block;width:100%;margin-top:10px;padding:8px;
+        background:none;border:none;cursor:pointer;
+        font-size:12px;color:rgba(148,163,184,.6);transition:color .15s;
+    }
+    #disclaimer-btn-cancel:hover{color:rgba(148,163,184,1);}
+    #disclaimer-close{
+        position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;
+        color:rgba(148,163,184,.4);font-size:20px;line-height:1;transition:color .15s;
+    }
+    #disclaimer-close:hover{color:rgba(148,163,184,.9);}
     </style>
 </head>
 <body class="min-h-screen text-white grid-bg">
@@ -1900,6 +1955,31 @@
             }
         }
 
+        // ====== DISCLAIMER MODAL LOGIC ======
+        var _pendingTestUrl = null;
+        window.launchTest = function(url) {
+            _pendingTestUrl = url;
+            document.getElementById('disclaimer-overlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        };
+        window.confirmDisclaimer = function() {
+            closeDisclaimer();
+            if (_pendingTestUrl) window.location.href = _pendingTestUrl;
+        };
+        window.closeDisclaimer = function() {
+            document.getElementById('disclaimer-overlay').classList.remove('open');
+            document.body.style.overflow = '';
+            _pendingTestUrl = null;
+        };
+        // Close on overlay click outside box
+        document.getElementById('disclaimer-overlay').addEventListener('click', function(e) {
+            if (e.target === this) window.closeDisclaimer();
+        });
+        // Close on Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') window.closeDisclaimer();
+        });
+
         // Start Strengths test or view results
         window.startStrengthsTest = async function() {
             const completed = await checkStrengthsCompleted();
@@ -1907,7 +1987,7 @@
             if (completed) {
                 window.location.href = '/test/strengths/results';
             } else {
-                window.location.href = '/test?type=strengths';
+                launchTest('/test?type=strengths');
             }
         }
 
@@ -1918,7 +1998,7 @@
             if (completed) {
                 window.location.href = '/test/career/results';
             } else {
-                window.location.href = '/test?type=career';
+                launchTest('/test?type=career');
             }
         }
 
@@ -1929,7 +2009,7 @@
             if (completed) {
                 window.location.href = '/test/values/results';
             } else {
-                window.location.href = '/test?type=values';
+                launchTest('/test?type=values');
             }
         }
 
@@ -1958,7 +2038,7 @@
             if (completed) {
                 window.location.href = '/test/career-dna/results';
             } else {
-                window.location.href = '/test?type=career_dna';
+                launchTest('/test?type=career_dna');
             }
         }
 
@@ -1969,7 +2049,7 @@
             if (completed) {
                 window.location.href = '/test/dark-triad/results';
             } else {
-                window.location.href = '/test?type=dark_triad';
+                launchTest('/test?type=dark_triad');
             }
         }
 
@@ -1980,7 +2060,7 @@
             if (completed) {
                 window.location.href = '/test/enneagram/results';
             } else {
-                window.location.href = '/test?type=enneagram';
+                launchTest('/test?type=enneagram');
             }
         }
 
@@ -1994,8 +2074,8 @@
                 console.log('Test completed, redirecting to results');
                 window.location.href = '/test/hexaco/results';
             } else {
-                console.log('Test not completed, redirecting to test');
-                window.location.href = '/test';
+                console.log('Test not completed, showing disclaimer');
+                launchTest('/test');
             }
         }
 
@@ -2833,6 +2913,22 @@
             }
         })();
     </script>
+<!-- DISCLAIMER MODAL -->
+<div id="disclaimer-overlay" role="dialog" aria-modal="true" aria-labelledby="disc-title">
+  <div id="disclaimer-box">
+    <button id="disclaimer-close" onclick="closeDisclaimer()" aria-label="Zamknij">&times;</button>
+    <div class="disc-icon">&#9888;&#65039;</div>
+    <h3 id="disc-title">Przed rozpocz&#x119;ciem testu</h3>
+    <p class="disc-sub">Informacja o charakterze narz&#x119;dzia</p>
+    <div class="disc-body">
+      Rozumiem, &#x17C;e <strong>Alcheme jest narz&#x119;dziem rozwojowym i edukacyjnym</strong>, a nie diagnoz&#x105; psychologiczn&#x105;, psychiatryczn&#x105;, medyczn&#x105; ani us&#x142;ug&#x105; terapeutyczn&#x105;.<br><br>
+      Wyniki, profil i odpowiedzi AI <strong>nie zast&#x119;puj&#x105; specjalisty</strong>.
+    </div>
+    <button id="disclaimer-btn-confirm" onclick="confirmDisclaimer()">Rozumiem &mdash; rozpocznij test</button>
+    <button id="disclaimer-btn-cancel" onclick="closeDisclaimer()">Anuluj</button>
+  </div>
+</div>
+
 <script>(function(){var N=[{x:50,y:8},{x:79.7,y:20.3},{x:92,y:50},{x:79.7,y:79.7},{x:50,y:92},{x:20.3,y:79.7},{x:8,y:50},{x:20.3,y:20.3}],E=[[0,3],[3,6],[6,1],[1,4],[4,7],[7,2],[2,5],[5,0]],g=document.getElementById('alch-signals');if(!g)return;function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}var ns='http://www.w3.org/2000/svg',CFG=[{ei:0,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1800,p:4800,d:200},{ei:2,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1900,p:5200,d:2600},{ei:4,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:1700,p:5000,d:4800},{ei:6,c:'#00f0ff',r:3.2,f:'url(#alch-gm)',t:2000,p:5400,d:7200},{ei:1,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2100,p:6200,d:1400},{ei:3,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2200,p:6000,d:3800},{ei:5,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2000,p:6400,d:6000},{ei:7,c:'#c4b5fd',r:2.8,f:'url(#alch-gs)',t:2300,p:5800,d:8800}],signals=CFG.map(function(c){var e=E[c.ei],el=document.createElementNS(ns,'circle');el.setAttribute('r',c.r);el.setAttribute('fill',c.c);el.setAttribute('filter',c.f);el.setAttribute('opacity','0');el.setAttribute('cx',N[e[0]].x);el.setAttribute('cy',N[e[0]].y);g.appendChild(el);return{c:c,e:e,ph:'pausing',pe:performance.now()+c.d,st:0,el:el};});(function loop(now){signals.forEach(function(s){if(s.ph==='pausing'){if(now>=s.pe){s.ph='traveling';s.st=now;}return;}var tL=Math.min((now-s.st)/s.c.t,1),tE=ease(tL),f=N[s.e[0]],to=N[s.e[1]],x=f.x+(to.x-f.x)*tE,y=f.y+(to.y-f.y)*tE,op=tL<.15?(tL/.15)*.72:tL>.8?((1-tL)/.2)*.72:.72;s.el.setAttribute('cx',x.toFixed(3));s.el.setAttribute('cy',y.toFixed(3));s.el.setAttribute('opacity',op.toFixed(3));if(tL>=1){s.el.setAttribute('opacity','0');s.el.setAttribute('cx',N[s.e[0]].x);s.el.setAttribute('cy',N[s.e[0]].y);s.ph='pausing';s.pe=now+s.c.p+Math.random()*800;}});requestAnimationFrame(loop);})(performance.now());})()</script>
 
 </body>
