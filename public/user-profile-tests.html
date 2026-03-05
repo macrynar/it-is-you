@@ -1893,39 +1893,23 @@
         }
         
 
-        // Debug: Check localStorage keys
-        console.log('LocalStorage keys:', Object.keys(localStorage));
-        const supabaseKeys = Object.keys(localStorage).filter(k => k.includes('supabase') || k.includes('sb-'));
-        console.log('Supabase-related keys:', supabaseKeys);
-        supabaseKeys.forEach(key => {
-            const value = localStorage.getItem(key);
-            console.log(`  ${key}:`, value?.substring(0, 100) + '...');
-        });
-
         // Check authentication
         async function checkAuth() {
-            console.log('Checking auth...');
             // First attempt
             const { data: { session }, error } = await supabase.auth.getSession();
-            console.log('Session check (attempt 1):', { session: session ? 'exists' : 'null', error, userId: session?.user?.id });
 
             if (!error && session) {
-                console.log('User authenticated:', session.user.id);
                 return true;
             }
 
-            // Session may not have been restored from localStorage in time — retry after 1.5s
-            console.log('No session on first check, retrying in 1.5s...');
+            // Session may not have been restored in time — retry after 1.5s
             await new Promise(r => setTimeout(r, 1500));
             const { data: { session: session2 }, error: error2 } = await supabase.auth.getSession();
-            console.log('Session check (attempt 2):', { session: session2 ? 'exists' : 'null', error: error2, userId: session2?.user?.id });
 
             if (!error2 && session2) {
-                console.log('User authenticated on retry:', session2.user.id);
                 return true;
             }
 
-            console.log('No valid session after retry, redirecting to auth');
             window.location.href = '/auth';
             return false;
         }
@@ -2099,8 +2083,6 @@
                     console.log('No active session found');
                     return false;
                 }
-
-                console.log('Checking test completion for user:', session.user.id);
 
                 const { data, error } = await supabase
                     .from('user_psychometrics')

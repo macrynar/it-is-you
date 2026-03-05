@@ -265,11 +265,6 @@ export default function AuthModal({ onAuthSuccess = () => {}, initialTab = 'logi
       setGeneralError('Potwierdź swój email przed zalogowaniem. Sprawdź skrzynkę pocztową.')
       setLoading('email', false)
     } else {
-      // Store auth data in localStorage
-      localStorage.setItem('auth_token', data.session.access_token || 'authenticated')
-      localStorage.setItem('user_email', data.user?.email || '')
-      localStorage.setItem('user_session', JSON.stringify(data.user))
-      
       setSuccessMessage('Zalogowano! Przekierowuję...')
       setTimeout(() => {
         redirectAfterAuth()
@@ -308,10 +303,6 @@ export default function AuthModal({ onAuthSuccess = () => {}, initialTab = 'logi
       // Check if email confirmation is required
       if (data.session) {
         // Session exists - user can login immediately
-        localStorage.setItem('auth_token', data.session.access_token || 'authenticated')
-        localStorage.setItem('user_email', data.user?.email || '')
-        localStorage.setItem('user_session', JSON.stringify(data.user))
-        
         setSuccessMessage('Konto utworzone! Przekierowuję...')
         setTimeout(() => {
           redirectAfterAuth()

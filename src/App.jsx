@@ -48,35 +48,26 @@ function App() {
       }
 
       setIsCallbackRoute(true)
-      // Supabase will set the session automatically
-      // Just redirect after a moment
-      setTimeout(() => {
-        const session = localStorage.getItem('user_session')
-        const intendedDestination = sessionStorage.getItem('redirect_after_auth')
-        const redirectUrl = intendedDestination || '/user-profile-tests.html'
-        
-        if (intendedDestination) {
-          sessionStorage.removeItem('redirect_after_auth')
-        }
-        
+      // Supabase SDK will set the session automatically via the hash fragment.
+      // Poll getSession() instead of reading our own localStorage key.
+      const intendedDestination = sessionStorage.getItem('redirect_after_auth')
+      const redirectUrl = intendedDestination || '/user-profile-tests.html'
+      if (intendedDestination) {
+        sessionStorage.removeItem('redirect_after_auth')
+      }
+
+      const checkInterval = setInterval(async () => {
+        const { data: { session } } = await supabase.auth.getSession()
         if (session) {
+          clearInterval(checkInterval)
           window.location.href = redirectUrl
-        } else {
-          // Wait a bit longer for session to be set
-          const checkInterval = setInterval(() => {
-            const storedSession = localStorage.getItem('user_session')
-            if (storedSession) {
-              clearInterval(checkInterval)
-              window.location.href = redirectUrl
-            }
-          }, 500)
-          // Fallback after 5s – redirect to auth so the user is not stuck
-          setTimeout(() => {
-            clearInterval(checkInterval)
-            window.location.href = '/auth'
-          }, 5000)
         }
       }, 500)
+      // Fallback after 5s – redirect to auth so the user is not stuck
+      setTimeout(() => {
+        clearInterval(checkInterval)
+        window.location.href = '/auth'
+      }, 5000)
       return
     }
   }, [])
@@ -106,15 +97,8 @@ function App() {
       setUser(session?.user || null)
       setLoading(false)
       
-      if (event === 'SIGNED_IN') {
-        console.log('User signed in:', session?.user?.email)
-        // Store session in localStorage for later access
-        localStorage.setItem('user_session', JSON.stringify(session?.user))
-        localStorage.setItem('auth_token', session?.access_token || 'authenticated')
-      } else if (event === 'SIGNED_OUT') {
-        console.log('User signed out')
-        localStorage.removeItem('user_session')
-        localStorage.removeItem('auth_token')
+      if (event === 'SIGNED_OUT') {
+        localStorage.removeItem('has_profile')
       }
     })
 
@@ -459,8 +443,6 @@ function App() {
               <button
                 onClick={async () => {
                   await supabase.auth.signOut()
-                  localStorage.removeItem('user_session')
-                  localStorage.removeItem('auth_token')
                   setUser(null)
                   window.location.href = '/index2.html'
                 }}
