@@ -1323,6 +1323,180 @@
               </button>
             </div>
 
+            <!-- EQ tile -->
+            <div class="iiy-card cyan" onclick="startEqTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="eq-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
+              </div>
+              <div class="iiy-card-title">Inteligencja Emocjonalna</div>
+              <div class="iiy-card-methodology">EQ (SA/SR/EM/SS/MO)</div>
+              <div class="iiy-card-desc">Zmierz swoją inteligencję emocjonalną — zdolność rozpoznawania uczuć, empatii i budowania relacji.</div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>10 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>40 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="eq-button" class="iiy-card-btn primary">
+                Zbadaj EQ <span class="iiy-card-btn-arrow">›</span>
+              </button>
+            </div>
+
+            <!-- Attachment Style tile -->
+            <div class="iiy-card pink" onclick="startAttachmentTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="attachment-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
+              </div>
+              <div class="iiy-card-title">Styl Przywiązania</div>
+              <div class="iiy-card-methodology">Teoria Przywiązania (SEC/ANX/AVO/DIS)</div>
+              <div class="iiy-card-desc">Odkryj swój wzorzec przywiązania w relacjach — bezpieczny, lękowy, unikający czy zdezorganizowany.</div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>8 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>36 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="attachment-button" class="iiy-card-btn primary-pink">
+                Zbadaj Przywiązanie <span class="iiy-card-btn-arrow">›</span>
+              </button>
+            </div>
+
+            <!-- Defense Mechanisms tile -->
+            <div class="iiy-card violet" onclick="startDefenseTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="defense-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
+              </div>
+              <div class="iiy-card-title">Mechanizmy Obronne</div>
+              <div class="iiy-card-methodology">Psychodynamika (MAT/NEU/IMM/PRI)</div>
+              <div class="iiy-card-desc">Zidentyfikuj swoje mechanizmy obronne — od dojrzałych po prymitywne. Zrozum, jak chronisz swoją psychikę.</div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>9 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>36 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="defense-button" class="iiy-card-btn primary">
+                Odkryj Mechanizmy <span class="iiy-card-btn-arrow">›</span>
+              </button>
+            </div>
+
+            <!-- Mental Toughness tile -->
+            <div class="iiy-card amber" onclick="startMentalToughnessTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="mental-toughness-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
+              </div>
+              <div class="iiy-card-title">Odporność Psychiczna</div>
+              <div class="iiy-card-methodology">Model 4C (CO/CM/CH/CF)</div>
+              <div class="iiy-card-desc">Oceń swoją odporność psychiczną w 4 wymiarach: kontrola, zaangażowanie, wyzwanie i pewność siebie.</div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>10 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>40 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="mental-toughness-button" class="iiy-card-btn primary-amber">
+                Zbadaj Odporność <span class="iiy-card-btn-arrow">›</span>
+              </button>
+            </div>
+
+            <!-- Meaning & Spirituality tile -->
+            <div class="iiy-card fuchsia" onclick="startMeaningTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="meaning-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
+              </div>
+              <div class="iiy-card-title">Sens i Duchowość</div>
+              <div class="iiy-card-methodology">STS / LOT (PU/TR/EX/DC)</div>
+              <div class="iiy-card-desc">Zbadaj swoje poczucie sensu, transcendencji i egzystencjalnej głębi — co nadaje Twojemu życiu znaczenie.</div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>8 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>32 pytania</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="meaning-button" class="iiy-card-btn primary-fuchsia">
+                Odkryj Sens <span class="iiy-card-btn-arrow">›</span>
+              </button>
+            </div>
+
+            <!-- Motivation Engine tile -->
+            <div class="iiy-card emerald" onclick="startMotivationTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="motivation-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
+              </div>
+              <div class="iiy-card-title">Silnik Motywacji</div>
+              <div class="iiy-card-methodology">McClelland + SDT (8 napędów)</div>
+              <div class="iiy-card-desc">Odkryj 8 kluczowych napędów motywacyjnych — co naprawdę Cię pcha do działania, a co wyczerpuje energię.</div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>10 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>40 pytań</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="motivation-button" class="iiy-card-btn primary-emerald">
+                Odkryj Motywację <span class="iiy-card-btn-arrow">›</span>
+              </button>
+            </div>
+
           </div>
         </section>
 
@@ -2079,6 +2253,186 @@
             }
         }
 
+        // ---- EQ ----
+        async function checkEqCompleted() {
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError || !session) return false;
+                const { data, error } = await supabase
+                    .from('user_psychometrics')
+                    .select('id')
+                    .eq('user_id', session.user.id)
+                    .eq('test_type', 'EQ')
+                    .limit(1);
+                if (error) { console.error('Error checking EQ completion:', error); return false; }
+                return data && data.length > 0;
+            } catch (err) { console.error('Error in checkEqCompleted:', err); return false; }
+        }
+        window.startEqTest = async function() {
+            const completed = await checkEqCompleted();
+            if (completed) { window.location.href = '/test/eq/results'; }
+            else { launchTest('/test?type=emotional_intelligence'); }
+        }
+        async function updateEqUI() {
+            const completed = await checkEqCompleted();
+            const statusEl = document.getElementById('eq-status');
+            const buttonEl = document.getElementById('eq-button');
+            if (completed) {
+                if (statusEl) { statusEl.textContent = 'Ukończony'; statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)'; }
+                if (buttonEl) { buttonEl.innerHTML = '👁 Zobacz Wynik'; buttonEl.className = 'iiy-card-btn ghost'; }
+            }
+        }
+
+        // ---- Attachment Style ----
+        async function checkAttachmentCompleted() {
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError || !session) return false;
+                const { data, error } = await supabase
+                    .from('user_psychometrics')
+                    .select('id')
+                    .eq('user_id', session.user.id)
+                    .eq('test_type', 'ATTACHMENT')
+                    .limit(1);
+                if (error) { console.error('Error checking Attachment completion:', error); return false; }
+                return data && data.length > 0;
+            } catch (err) { console.error('Error in checkAttachmentCompleted:', err); return false; }
+        }
+        window.startAttachmentTest = async function() {
+            const completed = await checkAttachmentCompleted();
+            if (completed) { window.location.href = '/test/attachment/results'; }
+            else { launchTest('/test?type=attachment_style'); }
+        }
+        async function updateAttachmentUI() {
+            const completed = await checkAttachmentCompleted();
+            const statusEl = document.getElementById('attachment-status');
+            const buttonEl = document.getElementById('attachment-button');
+            if (completed) {
+                if (statusEl) { statusEl.textContent = 'Ukończony'; statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)'; }
+                if (buttonEl) { buttonEl.innerHTML = '👁 Zobacz Wynik'; buttonEl.className = 'iiy-card-btn ghost'; }
+            }
+        }
+
+        // ---- Defense Mechanisms ----
+        async function checkDefenseCompleted() {
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError || !session) return false;
+                const { data, error } = await supabase
+                    .from('user_psychometrics')
+                    .select('id')
+                    .eq('user_id', session.user.id)
+                    .eq('test_type', 'DEFENSE')
+                    .limit(1);
+                if (error) { console.error('Error checking Defense completion:', error); return false; }
+                return data && data.length > 0;
+            } catch (err) { console.error('Error in checkDefenseCompleted:', err); return false; }
+        }
+        window.startDefenseTest = async function() {
+            const completed = await checkDefenseCompleted();
+            if (completed) { window.location.href = '/test/defense/results'; }
+            else { launchTest('/test?type=defense_mechanisms'); }
+        }
+        async function updateDefenseUI() {
+            const completed = await checkDefenseCompleted();
+            const statusEl = document.getElementById('defense-status');
+            const buttonEl = document.getElementById('defense-button');
+            if (completed) {
+                if (statusEl) { statusEl.textContent = 'Ukończony'; statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)'; }
+                if (buttonEl) { buttonEl.innerHTML = '👁 Zobacz Wynik'; buttonEl.className = 'iiy-card-btn ghost'; }
+            }
+        }
+
+        // ---- Mental Toughness ----
+        async function checkMentalToughnessCompleted() {
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError || !session) return false;
+                const { data, error } = await supabase
+                    .from('user_psychometrics')
+                    .select('id')
+                    .eq('user_id', session.user.id)
+                    .eq('test_type', 'MENTAL_TOUGHNESS')
+                    .limit(1);
+                if (error) { console.error('Error checking Mental Toughness completion:', error); return false; }
+                return data && data.length > 0;
+            } catch (err) { console.error('Error in checkMentalToughnessCompleted:', err); return false; }
+        }
+        window.startMentalToughnessTest = async function() {
+            const completed = await checkMentalToughnessCompleted();
+            if (completed) { window.location.href = '/test/mental-toughness/results'; }
+            else { launchTest('/test?type=mental_toughness'); }
+        }
+        async function updateMentalToughnessUI() {
+            const completed = await checkMentalToughnessCompleted();
+            const statusEl = document.getElementById('mental-toughness-status');
+            const buttonEl = document.getElementById('mental-toughness-button');
+            if (completed) {
+                if (statusEl) { statusEl.textContent = 'Ukończony'; statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)'; }
+                if (buttonEl) { buttonEl.innerHTML = '👁 Zobacz Wynik'; buttonEl.className = 'iiy-card-btn ghost'; }
+            }
+        }
+
+        // ---- Meaning & Spirituality ----
+        async function checkMeaningCompleted() {
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError || !session) return false;
+                const { data, error } = await supabase
+                    .from('user_psychometrics')
+                    .select('id')
+                    .eq('user_id', session.user.id)
+                    .eq('test_type', 'MEANING')
+                    .limit(1);
+                if (error) { console.error('Error checking Meaning completion:', error); return false; }
+                return data && data.length > 0;
+            } catch (err) { console.error('Error in checkMeaningCompleted:', err); return false; }
+        }
+        window.startMeaningTest = async function() {
+            const completed = await checkMeaningCompleted();
+            if (completed) { window.location.href = '/test/meaning/results'; }
+            else { launchTest('/test?type=meaning_spirituality'); }
+        }
+        async function updateMeaningUI() {
+            const completed = await checkMeaningCompleted();
+            const statusEl = document.getElementById('meaning-status');
+            const buttonEl = document.getElementById('meaning-button');
+            if (completed) {
+                if (statusEl) { statusEl.textContent = 'Ukończony'; statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)'; }
+                if (buttonEl) { buttonEl.innerHTML = '👁 Zobacz Wynik'; buttonEl.className = 'iiy-card-btn ghost'; }
+            }
+        }
+
+        // ---- Motivation Engine ----
+        async function checkMotivationCompleted() {
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError || !session) return false;
+                const { data, error } = await supabase
+                    .from('user_psychometrics')
+                    .select('id')
+                    .eq('user_id', session.user.id)
+                    .eq('test_type', 'MOTIVATION')
+                    .limit(1);
+                if (error) { console.error('Error checking Motivation completion:', error); return false; }
+                return data && data.length > 0;
+            } catch (err) { console.error('Error in checkMotivationCompleted:', err); return false; }
+        }
+        window.startMotivationTest = async function() {
+            const completed = await checkMotivationCompleted();
+            if (completed) { window.location.href = '/test/motivation/results'; }
+            else { launchTest('/test?type=motivation_engine'); }
+        }
+        async function updateMotivationUI() {
+            const completed = await checkMotivationCompleted();
+            const statusEl = document.getElementById('motivation-status');
+            const buttonEl = document.getElementById('motivation-button');
+            if (completed) {
+                if (statusEl) { statusEl.textContent = 'Ukończony'; statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)'; }
+                if (buttonEl) { buttonEl.innerHTML = '👁 Zobacz Wynik'; buttonEl.className = 'iiy-card-btn ghost'; }
+            }
+        }
+
         // Update UI for Strengths test
         async function updateStrengthsUI() {
             const completed = await checkStrengthsCompleted();
@@ -2240,6 +2594,12 @@
             await updateCareerUI();
             await updateValuesUI();
             await updateCareerDnaUI();
+            await updateEqUI();
+            await updateAttachmentUI();
+            await updateDefenseUI();
+            await updateMentalToughnessUI();
+            await updateMeaningUI();
+            await updateMotivationUI();
             console.log('Dashboard initialized successfully');
         }
 

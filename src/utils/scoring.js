@@ -1891,3 +1891,411 @@ export function generateCareerDnaReport(scores) {
     summary: `Twój profil DNA Kariery: ${scores.profile.name}. ${scores.profile.tagline}`,
   };
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EMOTIONAL INTELLIGENCE (EQ) SCORING
+// ─────────────────────────────────────────────────────────────────────────────
+
+import { EQ_TEST } from '../data/tests/emotionalIntelligence.js';
+
+export function calculateEQScore(responses) {
+  if (Object.keys(responses).length !== EQ_TEST.question_count) {
+    throw new Error(`Expected ${EQ_TEST.question_count} responses, got ${Object.keys(responses).length}`);
+  }
+
+  const dimScores = {};
+  const dimCounts = {};
+  EQ_TEST.dimensions.forEach(d => { dimScores[d.id] = 0; dimCounts[d.id] = 0; });
+
+  EQ_TEST.questions.forEach(q => {
+    const r = responses[q.id];
+    if (r === undefined || r === null) throw new Error(`Missing response for ${q.id}`);
+    const score = q.reverse ? (6 - r) : r;
+    dimScores[q.dimension] += score;
+    dimCounts[q.dimension]++;
+  });
+
+  const averages = {};
+  const percentiles = {};
+  EQ_TEST.dimensions.forEach(d => {
+    averages[d.id] = dimScores[d.id] / dimCounts[d.id];
+    percentiles[d.id] = ((averages[d.id] - 1) / 4) * 100;
+  });
+
+  const totalEQ = Object.values(averages).reduce((s, v) => s + v, 0) / EQ_TEST.dimensions.length;
+
+  return {
+    test_id: EQ_TEST.test_id,
+    test_name: EQ_TEST.test_name,
+    completed_at: new Date().toISOString(),
+    raw_scores: averages,
+    percentile_scores: percentiles,
+    total_eq: parseFloat(totalEQ.toFixed(2)),
+    raw_answers: responses,
+  };
+}
+
+export function generateEQReport(scores) {
+  const levelFor = avg => avg >= 4.0 ? 'high' : avg >= 2.5 ? 'medium' : 'low';
+  const labels = { high: 'Wysoki', medium: 'Średni', low: 'Niski' };
+
+  const dimensions = EQ_TEST.dimensions.map(d => ({
+    id: d.id,
+    name: d.name,
+    name_en: d.name_en,
+    icon: d.icon,
+    description: d.description,
+    raw_score: parseFloat(scores.raw_scores[d.id].toFixed(2)),
+    percentile: Math.round(scores.percentile_scores[d.id]),
+    level: levelFor(scores.raw_scores[d.id]),
+    level_label: labels[levelFor(scores.raw_scores[d.id])],
+  }));
+
+  const eqLevel = levelFor(scores.total_eq);
+
+  return {
+    test_id: scores.test_id,
+    test_name: scores.test_name,
+    completed_at: scores.completed_at,
+    total_eq: scores.total_eq,
+    eq_level: eqLevel,
+    eq_level_label: labels[eqLevel],
+    dimensions,
+    summary: `Twój ogólny wynik EQ wynosi ${scores.total_eq.toFixed(2)}/5.00 (poziom: ${labels[eqLevel]}).`,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ATTACHMENT STYLE SCORING
+// ─────────────────────────────────────────────────────────────────────────────
+
+import { ATTACHMENT_TEST } from '../data/tests/attachmentStyle.js';
+
+export function calculateAttachmentScore(responses) {
+  if (Object.keys(responses).length !== ATTACHMENT_TEST.question_count) {
+    throw new Error(`Expected ${ATTACHMENT_TEST.question_count} responses, got ${Object.keys(responses).length}`);
+  }
+
+  const dimSums = {};
+  const dimCounts = {};
+  ATTACHMENT_TEST.dimensions.forEach(d => { dimSums[d.id] = 0; dimCounts[d.id] = 0; });
+
+  ATTACHMENT_TEST.questions.forEach(q => {
+    const r = responses[q.id];
+    if (r === undefined || r === null) throw new Error(`Missing response for ${q.id}`);
+    dimSums[q.dimension] += r;
+    dimCounts[q.dimension]++;
+  });
+
+  const averages = {};
+  ATTACHMENT_TEST.dimensions.forEach(d => {
+    averages[d.id] = parseFloat((dimSums[d.id] / dimCounts[d.id]).toFixed(2));
+  });
+
+  // Dominant style = highest average
+  const sortedStyles = Object.entries(averages).sort((a, b) => b[1] - a[1]);
+  const dominantStyleId = sortedStyles[0][0];
+  const dominantStyle = ATTACHMENT_TEST.dimensions.find(d => d.id === dominantStyleId);
+
+  return {
+    test_id: ATTACHMENT_TEST.test_id,
+    test_name: ATTACHMENT_TEST.test_name,
+    completed_at: new Date().toISOString(),
+    raw_scores: averages,
+    sorted_styles: sortedStyles.map(([id, score]) => ({
+      id,
+      score,
+      ...ATTACHMENT_TEST.dimensions.find(d => d.id === id),
+    })),
+    dominant_style: { ...dominantStyle, score: averages[dominantStyleId] },
+    raw_answers: responses,
+  };
+}
+
+export function generateAttachmentReport(scores) {
+  return {
+    test_id: scores.test_id,
+    test_name: scores.test_name,
+    completed_at: scores.completed_at,
+    dominant_style: scores.dominant_style,
+    sorted_styles: scores.sorted_styles,
+    raw_scores: scores.raw_scores,
+    summary: `Twój dominujący styl przywiązania to: ${scores.dominant_style.name}.`,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DEFENSE MECHANISMS SCORING
+// ─────────────────────────────────────────────────────────────────────────────
+
+import { DEFENSE_TEST } from '../data/tests/defenseMechanisms.js';
+
+export function calculateDefenseScore(responses) {
+  if (Object.keys(responses).length !== DEFENSE_TEST.question_count) {
+    throw new Error(`Expected ${DEFENSE_TEST.question_count} responses, got ${Object.keys(responses).length}`);
+  }
+
+  const dimSums = {};
+  const dimCounts = {};
+  DEFENSE_TEST.dimensions.forEach(d => { dimSums[d.id] = 0; dimCounts[d.id] = 0; });
+
+  DEFENSE_TEST.questions.forEach(q => {
+    const r = responses[q.id];
+    if (r === undefined || r === null) throw new Error(`Missing response for ${q.id}`);
+    dimSums[q.dimension] += r;
+    dimCounts[q.dimension]++;
+  });
+
+  const averages = {};
+  DEFENSE_TEST.dimensions.forEach(d => {
+    averages[d.id] = parseFloat((dimSums[d.id] / dimCounts[d.id]).toFixed(2));
+  });
+
+  // Maturity index: (mature*2 - immature - primitive) / 2
+  const maturityIndex = parseFloat(((averages.mature * 2 - averages.immature - averages.primitive) / 2).toFixed(2));
+
+  const sortedMechanisms = DEFENSE_TEST.dimensions
+    .map(d => ({ ...d, score: averages[d.id] }))
+    .sort((a, b) => b.score - a.score);
+
+  return {
+    test_id: DEFENSE_TEST.test_id,
+    test_name: DEFENSE_TEST.test_name,
+    completed_at: new Date().toISOString(),
+    raw_scores: averages,
+    maturity_index: maturityIndex,
+    sorted_mechanisms: sortedMechanisms,
+    dominant_mechanism: sortedMechanisms[0],
+    raw_answers: responses,
+  };
+}
+
+export function generateDefenseReport(scores) {
+  const maturityLabel = scores.maturity_index >= 1.5 ? 'Dojrzały profil' :
+    scores.maturity_index >= 0 ? 'Mieszany profil' : 'Niedojrzały profil';
+
+  return {
+    test_id: scores.test_id,
+    test_name: scores.test_name,
+    completed_at: scores.completed_at,
+    raw_scores: scores.raw_scores,
+    maturity_index: scores.maturity_index,
+    maturity_label: maturityLabel,
+    sorted_mechanisms: scores.sorted_mechanisms,
+    dominant_mechanism: scores.dominant_mechanism,
+    summary: `Twój profil mechanizmów obrony: ${maturityLabel}. Indeks dojrzałości: ${scores.maturity_index}.`,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MENTAL TOUGHNESS (4C) SCORING
+// ─────────────────────────────────────────────────────────────────────────────
+
+import { MENTAL_TOUGHNESS_TEST } from '../data/tests/mentalToughness.js';
+
+export function calculateMentalToughnessScore(responses) {
+  if (Object.keys(responses).length !== MENTAL_TOUGHNESS_TEST.question_count) {
+    throw new Error(`Expected ${MENTAL_TOUGHNESS_TEST.question_count} responses, got ${Object.keys(responses).length}`);
+  }
+
+  const dimScores = {};
+  const dimCounts = {};
+  MENTAL_TOUGHNESS_TEST.dimensions.forEach(d => { dimScores[d.id] = 0; dimCounts[d.id] = 0; });
+
+  MENTAL_TOUGHNESS_TEST.questions.forEach(q => {
+    const r = responses[q.id];
+    if (r === undefined || r === null) throw new Error(`Missing response for ${q.id}`);
+    const score = q.reverse ? (6 - r) : r;
+    dimScores[q.dimension] += score;
+    dimCounts[q.dimension]++;
+  });
+
+  const averages = {};
+  const percentiles = {};
+  MENTAL_TOUGHNESS_TEST.dimensions.forEach(d => {
+    averages[d.id] = parseFloat((dimScores[d.id] / dimCounts[d.id]).toFixed(2));
+    percentiles[d.id] = Math.round(((averages[d.id] - 1) / 4) * 100);
+  });
+
+  const totalMT = parseFloat((Object.values(averages).reduce((s, v) => s + v, 0) / MENTAL_TOUGHNESS_TEST.dimensions.length).toFixed(2));
+
+  return {
+    test_id: MENTAL_TOUGHNESS_TEST.test_id,
+    test_name: MENTAL_TOUGHNESS_TEST.test_name,
+    completed_at: new Date().toISOString(),
+    raw_scores: averages,
+    percentile_scores: percentiles,
+    total_mt: totalMT,
+    raw_answers: responses,
+  };
+}
+
+export function generateMentalToughnessReport(scores) {
+  const levelFor = avg => avg >= 4.0 ? 'high' : avg >= 2.5 ? 'medium' : 'low';
+  const labels = { high: 'Wysoki', medium: 'Średni', low: 'Niski' };
+
+  const dimensions = MENTAL_TOUGHNESS_TEST.dimensions.map(d => ({
+    id: d.id,
+    name: d.name,
+    name_en: d.name_en,
+    icon: d.icon,
+    description: d.description,
+    raw_score: scores.raw_scores[d.id],
+    percentile: scores.percentile_scores[d.id],
+    level: levelFor(scores.raw_scores[d.id]),
+    level_label: labels[levelFor(scores.raw_scores[d.id])],
+  }));
+
+  const mtLevel = levelFor(scores.total_mt);
+
+  return {
+    test_id: scores.test_id,
+    test_name: scores.test_name,
+    completed_at: scores.completed_at,
+    total_mt: scores.total_mt,
+    mt_level: mtLevel,
+    mt_level_label: labels[mtLevel],
+    dimensions,
+    summary: `Twój ogólny wynik odporności psychicznej: ${scores.total_mt}/5.00 (${labels[mtLevel]}).`,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MEANING & SPIRITUALITY SCORING
+// ─────────────────────────────────────────────────────────────────────────────
+
+import { MEANING_TEST } from '../data/tests/meaningSprituality.js';
+
+export function calculateMeaningScore(responses) {
+  if (Object.keys(responses).length !== MEANING_TEST.question_count) {
+    throw new Error(`Expected ${MEANING_TEST.question_count} responses, got ${Object.keys(responses).length}`);
+  }
+
+  const dimScores = {};
+  const dimCounts = {};
+  MEANING_TEST.dimensions.forEach(d => { dimScores[d.id] = 0; dimCounts[d.id] = 0; });
+
+  MEANING_TEST.questions.forEach(q => {
+    const r = responses[q.id];
+    if (r === undefined || r === null) throw new Error(`Missing response for ${q.id}`);
+    const score = q.reverse ? (7 - r) : r;
+    dimScores[q.dimension] += score;
+    dimCounts[q.dimension]++;
+  });
+
+  const averages = {};
+  const percentiles = {};
+  MEANING_TEST.dimensions.forEach(d => {
+    averages[d.id] = parseFloat((dimScores[d.id] / dimCounts[d.id]).toFixed(2));
+    percentiles[d.id] = Math.round(((averages[d.id] - 1) / 5) * 100);
+  });
+
+  const totalMeaning = parseFloat((Object.values(averages).reduce((s, v) => s + v, 0) / MEANING_TEST.dimensions.length).toFixed(2));
+
+  return {
+    test_id: MEANING_TEST.test_id,
+    test_name: MEANING_TEST.test_name,
+    completed_at: new Date().toISOString(),
+    raw_scores: averages,
+    percentile_scores: percentiles,
+    total_meaning: totalMeaning,
+    raw_answers: responses,
+  };
+}
+
+export function generateMeaningReport(scores) {
+  const levelFor = avg => avg >= 4.5 ? 'high' : avg >= 3.0 ? 'medium' : 'low';
+  const labels = { high: 'Wysoki', medium: 'Średni', low: 'Niski' };
+
+  const dimensions = MEANING_TEST.dimensions.map(d => ({
+    id: d.id,
+    name: d.name,
+    name_en: d.name_en,
+    icon: d.icon,
+    description: d.description,
+    raw_score: scores.raw_scores[d.id],
+    percentile: scores.percentile_scores[d.id],
+    level: levelFor(scores.raw_scores[d.id]),
+    level_label: labels[levelFor(scores.raw_scores[d.id])],
+  }));
+
+  const meaningLevel = levelFor(scores.total_meaning);
+
+  return {
+    test_id: scores.test_id,
+    test_name: scores.test_name,
+    completed_at: scores.completed_at,
+    total_meaning: scores.total_meaning,
+    meaning_level: meaningLevel,
+    meaning_level_label: labels[meaningLevel],
+    dimensions,
+    summary: `Twój ogólny wynik sensu i duchowości: ${scores.total_meaning}/6.00 (${labels[meaningLevel]}).`,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MOTIVATION ENGINE SCORING
+// ─────────────────────────────────────────────────────────────────────────────
+
+import { MOTIVATION_TEST } from '../data/tests/motivationEngine.js';
+
+export function calculateMotivationScore(responses) {
+  if (Object.keys(responses).length !== MOTIVATION_TEST.question_count) {
+    throw new Error(`Expected ${MOTIVATION_TEST.question_count} responses, got ${Object.keys(responses).length}`);
+  }
+
+  const dimScores = {};
+  const dimCounts = {};
+  MOTIVATION_TEST.dimensions.forEach(d => { dimScores[d.id] = 0; dimCounts[d.id] = 0; });
+
+  MOTIVATION_TEST.questions.forEach(q => {
+    const r = responses[q.id];
+    if (r === undefined || r === null) throw new Error(`Missing response for ${q.id}`);
+    dimScores[q.dimension] += r;
+    dimCounts[q.dimension]++;
+  });
+
+  const averages = {};
+  MOTIVATION_TEST.dimensions.forEach(d => {
+    averages[d.id] = parseFloat((dimScores[d.id] / dimCounts[d.id]).toFixed(2));
+  });
+
+  const sorted = Object.entries(averages).sort((a, b) => b[1] - a[1]);
+  const topDrives = sorted.slice(0, 3).map(([id]) => ({
+    id,
+    ...MOTIVATION_TEST.dimensions.find(d => d.id === id),
+    score: averages[id],
+  }));
+  const shadowDrive = {
+    id: sorted[sorted.length - 1][0],
+    ...MOTIVATION_TEST.dimensions.find(d => d.id === sorted[sorted.length - 1][0]),
+    score: averages[sorted[sorted.length - 1][0]],
+  };
+
+  return {
+    test_id: MOTIVATION_TEST.test_id,
+    test_name: MOTIVATION_TEST.test_name,
+    completed_at: new Date().toISOString(),
+    raw_scores: averages,
+    sorted_drives: sorted.map(([id, score]) => ({
+      id, score,
+      ...MOTIVATION_TEST.dimensions.find(d => d.id === id),
+    })),
+    top_drives: topDrives,
+    shadow_drive: shadowDrive,
+    raw_answers: responses,
+  };
+}
+
+export function generateMotivationReport(scores) {
+  return {
+    test_id: scores.test_id,
+    test_name: scores.test_name,
+    completed_at: scores.completed_at,
+    raw_scores: scores.raw_scores,
+    sorted_drives: scores.sorted_drives,
+    top_drives: scores.top_drives,
+    shadow_drive: scores.shadow_drive,
+    summary: `Twoje główne siły napędowe: ${scores.top_drives.map(d => d.name).join(', ')}. Cień: ${scores.shadow_drive.name}.`,
+  };
+}

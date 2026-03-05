@@ -8,6 +8,12 @@ import StrengthsResults from './components/Test/StrengthsResults'
 import CareerResults from './components/Test/CareerResults'
 import ValuesResults from './components/Test/ValuesResults'
 import CareerDnaResults from './components/Test/CareerDnaResults'
+import EqResults from './components/Test/EqResults'
+import AttachmentResults from './components/Test/AttachmentResults'
+import DefenseResults from './components/Test/DefenseResults'
+import MentalToughnessResults from './components/Test/MentalToughnessResults'
+import MeaningResults from './components/Test/MeaningResults'
+import MotivationResults from './components/Test/MotivationResults'
 import Settings from './components/Settings/Settings'
 import CharacterSheet from './components/CharacterSheet/CharacterSheet'
 import ShareCenter from './components/ShareCenter/ShareCenter'
@@ -243,6 +249,49 @@ function App() {
 
     return <><CareerDnaResults /><Footer /></>
   }
+
+  // Handle /test/eq/results
+  if (currentRoute === '/test/eq/results' || currentRoute === '/test/eq/results/') {
+    if (loading) return <div className="min-h-screen bg-bg-main flex items-center justify-center"><div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin" /></div>
+    if (!user) { window.location.href = '/auth'; return null; }
+    return <><EqResults /><Footer /></>
+  }
+
+  // Handle /test/attachment/results
+  if (currentRoute === '/test/attachment/results' || currentRoute === '/test/attachment/results/') {
+    if (loading) return <div className="min-h-screen bg-bg-main flex items-center justify-center"><div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin" /></div>
+    if (!user) { window.location.href = '/auth'; return null; }
+    return <><AttachmentResults /><Footer /></>
+  }
+
+  // Handle /test/defense/results
+  if (currentRoute === '/test/defense/results' || currentRoute === '/test/defense/results/') {
+    if (loading) return <div className="min-h-screen bg-bg-main flex items-center justify-center"><div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin" /></div>
+    if (!user) { window.location.href = '/auth'; return null; }
+    return <><DefenseResults /><Footer /></>
+  }
+
+  // Handle /test/mental-toughness/results
+  if (currentRoute === '/test/mental-toughness/results' || currentRoute === '/test/mental-toughness/results/') {
+    if (loading) return <div className="min-h-screen bg-bg-main flex items-center justify-center"><div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin" /></div>
+    if (!user) { window.location.href = '/auth'; return null; }
+    return <><MentalToughnessResults /><Footer /></>
+  }
+
+  // Handle /test/meaning/results
+  if (currentRoute === '/test/meaning/results' || currentRoute === '/test/meaning/results/') {
+    if (loading) return <div className="min-h-screen bg-bg-main flex items-center justify-center"><div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin" /></div>
+    if (!user) { window.location.href = '/auth'; return null; }
+    return <><MeaningResults /><Footer /></>
+  }
+
+  // Handle /test/motivation/results
+  if (currentRoute === '/test/motivation/results' || currentRoute === '/test/motivation/results/') {
+    if (loading) return <div className="min-h-screen bg-bg-main flex items-center justify-center"><div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin" /></div>
+    if (!user) { window.location.href = '/auth'; return null; }
+    return <><MotivationResults /><Footer /></>
+  }
+
   if (currentRoute.startsWith('/share/')) {
     const token = currentRoute.replace(/^\/share\/+/, '').split('/')[0]
     if (!token) {

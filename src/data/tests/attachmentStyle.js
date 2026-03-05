@@ -1,0 +1,97 @@
+/**
+ * Attachment Style Test
+ * 36 questions, 4 dimensions, Likert 1-6 scale
+ * Based on Adult Attachment theory (Hazan & Shaver, Bartholomew)
+ */
+
+export const ATTACHMENT_TEST = {
+  test_id: 'attachment_style_36',
+  test_name: 'Styl Przywiązania',
+  test_type: 'attachment_style',
+  time_estimate_minutes: 10,
+  question_count: 36,
+  scale_type: 'likert_6',
+  scale_labels: {
+    1: 'Zdecydowanie się nie zgadzam',
+    2: 'Raczej się nie zgadzam',
+    3: 'Trochę się nie zgadzam',
+    4: 'Trochę się zgadzam',
+    5: 'Raczej się zgadzam',
+    6: 'Zdecydowanie się zgadzam',
+  },
+  dimensions: [
+    {
+      id: 'secure',
+      name: 'Bezpieczny',
+      name_en: 'Secure',
+      description: 'Komfort z bliskością i niezależnością; zaufanie do siebie i innych.',
+      icon: '🏡',
+    },
+    {
+      id: 'anxious',
+      name: 'Lękowo-Ambiwalentny',
+      name_en: 'Anxious-Ambivalent',
+      description: 'Intensywna potrzeba bliskości połączona z lękiem przed porzuceniem.',
+      icon: '😟',
+    },
+    {
+      id: 'avoidant',
+      name: 'Unikający',
+      name_en: 'Avoidant',
+      description: 'Dyskomfort wobec bliskości; silna potrzeba niezależności.',
+      icon: '🚪',
+    },
+    {
+      id: 'disorganized',
+      name: 'Zdezorganizowany',
+      name_en: 'Disorganized',
+      description: 'Mieszane i niespójne wzorce w relacjach; trudność w regulacji emocji.',
+      icon: '🌀',
+    },
+  ],
+  questions: [
+    // Secure (sc_001 – sc_009)
+    { id: 'sc_001', text: 'Łatwo mi się zbliżać do innych i zaufać im.', dimension: 'secure', reverse: false },
+    { id: 'sc_002', text: 'Czuję się komfortowo, gdy polegam na innych i gdy inni polegają na mnie.', dimension: 'secure', reverse: false },
+    { id: 'sc_003', text: 'Nie martwię się nadmiernie, że zostanę porzucony(-a) lub odrzucony(-a).', dimension: 'secure', reverse: false },
+    { id: 'sc_004', text: 'W relacjach czuję się bezpiecznie, nawet gdy mój partner(-ka) potrzebuje chwili dla siebie.', dimension: 'secure', reverse: false },
+    { id: 'sc_005', text: 'Potrafię otwartie mówić o swoich potrzebach emocjonalnych.', dimension: 'secure', reverse: false },
+    { id: 'sc_006', text: 'Ufam, że ludzie bliscy mi nie skontaktują się ze mną po prostu dlatego, że są zajęci.', dimension: 'secure', reverse: false },
+    { id: 'sc_007', text: 'Relacje z innymi przychodzą mi naturalnie i nie wymagają dużego wysiłku.', dimension: 'secure', reverse: false },
+    { id: 'sc_008', text: 'Nawet po kłótni czuję się pewny(-a), że relacja jest bezpieczna.', dimension: 'secure', reverse: false },
+    { id: 'sc_009', text: 'Łatwo mi wyrażać ciepło i uczucie w bliskich relacjach.', dimension: 'secure', reverse: false },
+
+    // Anxious (ax_001 – ax_009)
+    { id: 'ax_001', text: 'Martwię się, że inni naprawdę mnie nie lubią, gdy nie odpowiadają szybko na wiadomości.', dimension: 'anxious', reverse: false },
+    { id: 'ax_002', text: 'Silnie pragnę bliskich relacji, ale jednocześnie boję się, że nie są permanentne.', dimension: 'anxious', reverse: false },
+    { id: 'ax_003', text: 'Kiedy ktoś bliski nie kontaktuje się ze mną przez jakiś czas, zaczynam się niepokoić.', dimension: 'anxious', reverse: false },
+    { id: 'ax_004', text: 'Często zastanawiam się, czy naprawdę jestem ważny(-a) dla moich bliskich.', dimension: 'anxious', reverse: false },
+    { id: 'ax_005', text: 'Czuję się niespokojny(-a), gdy mój partner(-ka) spędza czas bez mnie.', dimension: 'anxious', reverse: false },
+    { id: 'ax_006', text: 'Zależy mi na maksymalnej bliskości w relacjach, co czasami odstrasza innych.', dimension: 'anxious', reverse: false },
+    { id: 'ax_007', text: 'Łatwo czuję się zazdrosny(-a) lub zagrożony(-a) w relacjach.', dimension: 'anxious', reverse: false },
+    { id: 'ax_008', text: 'Obawiam się, że gdy ludzie mnie lepiej poznają, przestaną mnie lubić.', dimension: 'anxious', reverse: false },
+    { id: 'ax_009', text: 'Szukam ciągłego potwierdzenia, że jestem kochany(-a) i akceptowany(-a).', dimension: 'anxious', reverse: false },
+
+    // Avoidant (av_001 – av_009)
+    { id: 'av_001', text: 'Wolę polegać na sobie niż na innych.', dimension: 'avoidant', reverse: false },
+    { id: 'av_002', text: 'Czuję się niekomfortowo, gdy ludzie chcą być ze mną zbyt blisko.', dimension: 'avoidant', reverse: false },
+    { id: 'av_003', text: 'Trudno mi w pełni otworzyć się na kogoś, nawet gdy bardzo na tym zależy drugiej osobie.', dimension: 'avoidant', reverse: false },
+    { id: 'av_004', text: 'Wolę więcej przestrzeni i niezależności niż intymności w relacjach.', dimension: 'avoidant', reverse: false },
+    { id: 'av_005', text: 'Kiedy ktoś chce zbyt wiele ode mnie emocjonalnie, instynktownie się wycofuję.', dimension: 'avoidant', reverse: false },
+    { id: 'av_006', text: 'Czuję się silniejszy(-a) i bezpieczniejszy(-a), gdy nie jestem emocjonalnie zależny(-a) od innych.', dimension: 'avoidant', reverse: false },
+    { id: 'av_007', text: 'Wyrażanie uczuć słowami jest dla mnie trudne i raczej tego unikam.', dimension: 'avoidant', reverse: false },
+    { id: 'av_008', text: 'Wolę zachowywać dystans emocjonalny nawet od osób, na których mi zależy.', dimension: 'avoidant', reverse: false },
+    { id: 'av_009', text: 'Bliskie relacje wydają się bardziej źródłem stresu niż wsparcia.', dimension: 'avoidant', reverse: false },
+
+    // Disorganized (di_001 – di_009)
+    { id: 'di_001', text: 'W bliskich relacjach jednocześnie pragnę bliskości i boję się jej.', dimension: 'disorganized', reverse: false },
+    { id: 'di_002', text: 'Moje reakcje emocjonalne w relacjach są często dla mnie samego(-ej) zaskakujące i niezrozumiałe.', dimension: 'disorganized', reverse: false },
+    { id: 'di_003', text: 'Bliskie relacje wzbudzają u mnie zarówno poczucie bezpieczeństwa, jak i lęk.', dimension: 'disorganized', reverse: false },
+    { id: 'di_004', text: 'Czasami zachowuję się w relacjach w sposób, którego później żałuję i nie rozumiem.', dimension: 'disorganized', reverse: false },
+    { id: 'di_005', text: 'Nie wiem, czego właściwie chcę od bliskich relacji — często się to zmienia.', dimension: 'disorganized', reverse: false },
+    { id: 'di_006', text: 'Moje wzorce w relacjach są niespójne — raz chcę zbliżenia, raz izolacji.', dimension: 'disorganized', reverse: false },
+    { id: 'di_007', text: 'Czuję, że moje potrzeby emocjonalne są ze sobą sprzeczne.', dimension: 'disorganized', reverse: false },
+    { id: 'di_008', text: 'Trudno mi zaufać komukolwiek, bo jednocześnie tego pragnę i się tego boję.', dimension: 'disorganized', reverse: false },
+    { id: 'di_009', text: 'W stresujących momentach w relacji nie wiem, jak się zachować.', dimension: 'disorganized', reverse: false },
+  ],
+};

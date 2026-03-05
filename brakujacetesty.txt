@@ -1,0 +1,617 @@
+{
+  "version": "1.0.0",
+  "language": "pl",
+  "tests": [
+
+    {
+      "id": "emotional_intelligence",
+      "name": "Inteligencja Emocjonalna",
+      "subtitle": "EQ PROFILE",
+      "description": "Odkryj jak rozumiesz, regulujesz i wykorzystujesz emocje swoje i innych ludzi.",
+      "duration_min": 12,
+      "question_count": 40,
+      "scale": "1-5",
+      "scale_labels": {
+        "1": "Zdecydowanie nie",
+        "2": "Raczej nie",
+        "3": "Trudno powiedzieć",
+        "4": "Raczej tak",
+        "5": "Zdecydowanie tak"
+      },
+      "dimensions": [
+        { "id": "self_awareness", "name": "Samoświadomość Emocjonalna" },
+        { "id": "self_regulation", "name": "Regulacja Emocji" },
+        { "id": "empathy", "name": "Empatia" },
+        { "id": "social_skills", "name": "Kompetencje Społeczne" },
+        { "id": "motivation", "name": "Motywacja Wewnętrzna" }
+      ],
+      "questions": [
+        { "id": 1, "dimension": "self_awareness", "reverse": false, "text": "Potrafię nazwać dokładnie to, co czuję, zanim jeszcze powiem to komuś innemu." },
+        { "id": 2, "dimension": "self_awareness", "reverse": false, "text": "Zauważam jak moje ciało reaguje, gdy coś mnie emocjonalnie porusza." },
+        { "id": 3, "dimension": "self_awareness", "reverse": true, "text": "Często dopiero po czasie uświadamiam sobie, że byłem zdenerwowany lub smutny." },
+        { "id": 4, "dimension": "self_awareness", "reverse": false, "text": "Rozumiem, które sytuacje wywołują u mnie konkretne emocje i dlaczego." },
+        { "id": 5, "dimension": "self_awareness", "reverse": false, "text": "Potrafię odróżnić, kiedy jestem zmęczony od kiedy jestem naprawdę smutny." },
+        { "id": 6, "dimension": "self_awareness", "reverse": true, "text": "Moje nastroje zmieniają się dla mnie samego bez wyraźnego powodu." },
+        { "id": 7, "dimension": "self_awareness", "reverse": false, "text": "Wiem, kiedy emocje zaczynają wpływać na jakość moich decyzji." },
+        { "id": 8, "dimension": "self_awareness", "reverse": false, "text": "Potrafię ocenić swój aktualny stan emocjonalny na skali od 1 do 10 bez zastanowienia." },
+
+        { "id": 9, "dimension": "self_regulation", "reverse": false, "text": "Gdy coś mnie wytrąci z równowagi, potrafię wrócić do spokoju bez pomocy innych." },
+        { "id": 10, "dimension": "self_regulation", "reverse": true, "text": "Kiedy jestem zły, mówię lub robię rzeczy, których później żałuję." },
+        { "id": 11, "dimension": "self_regulation", "reverse": false, "text": "Potrafię wstrzymać reakcję emocjonalną, gdy sytuacja tego wymaga." },
+        { "id": 12, "dimension": "self_regulation", "reverse": false, "text": "Stres nie paraliżuje mnie — traktuję go jako sygnał, że coś wymaga uwagi." },
+        { "id": 13, "dimension": "self_regulation", "reverse": true, "text": "Trudne emocje potrafią mnie pochłonąć na cały dzień." },
+        { "id": 14, "dimension": "self_regulation", "reverse": false, "text": "Potrafię świadomie zmienić perspektywę gdy widzę, że moje emocje mnie zaślepiają." },
+        { "id": 15, "dimension": "self_regulation", "reverse": false, "text": "Mam swoje sposoby na reset emocjonalny i korzystam z nich skutecznie." },
+        { "id": 16, "dimension": "self_regulation", "reverse": true, "text": "Pod wpływem silnych emocji moje myślenie staje się chaotyczne." },
+
+        { "id": 17, "dimension": "empathy", "reverse": false, "text": "Wyczuwam, kiedy komuś jest ciężko, nawet jeśli nic nie mówi." },
+        { "id": 18, "dimension": "empathy", "reverse": false, "text": "Potrafię zrozumieć punkt widzenia kogoś, z kim się całkowicie nie zgadzam." },
+        { "id": 19, "dimension": "empathy", "reverse": true, "text": "Kiedy ktoś płacze przy mnie, czuję się niekomfortowo i nie wiem jak reagować." },
+        { "id": 20, "dimension": "empathy", "reverse": false, "text": "Zauważam subtelne zmiany w nastroju bliskich mi osób." },
+        { "id": 21, "dimension": "empathy", "reverse": false, "text": "Potrafię słuchać kogoś w bólu bez natychmiastowego szukania rozwiązania." },
+        { "id": 22, "dimension": "empathy", "reverse": true, "text": "Denerwuje mnie gdy ktoś nadmiernie przeżywa coś, co mnie samemu nie wydaje się wielkie." },
+        { "id": 23, "dimension": "empathy", "reverse": false, "text": "Ludzie mówią mi, że czują się przy mnie wysłuchani." },
+        { "id": 24, "dimension": "empathy", "reverse": false, "text": "Instynktownie dopasowuję ton rozmowy do stanu emocjonalnego drugiej osoby." },
+
+        { "id": 25, "dimension": "social_skills", "reverse": false, "text": "Potrafię rozładować napięcie w grupie, gdy atmosfera staje się ciężka." },
+        { "id": 26, "dimension": "social_skills", "reverse": false, "text": "Kiedy dochodzi do konfliktu, szukam rozwiązania które uwzględnia obie strony." },
+        { "id": 27, "dimension": "social_skills", "reverse": true, "text": "Trudno mi przekonać kogoś do czegoś, gdy jest emocjonalnie nakręcony." },
+        { "id": 28, "dimension": "social_skills", "reverse": false, "text": "Potrafię przekazać trudną informację tak, żeby druga osoba jej nie odebrała jako ataku." },
+        { "id": 29, "dimension": "social_skills", "reverse": false, "text": "Buduję zaufanie w relacjach w sposób naturalny i nieusilny." },
+        { "id": 30, "dimension": "social_skills", "reverse": true, "text": "Kiedy się nie zgadzam, rozmowa szybko staje się konfrontacją." },
+        { "id": 31, "dimension": "social_skills", "reverse": false, "text": "Potrafię zmotywować kogoś do działania przez odwołanie się do jego emocji." },
+        { "id": 32, "dimension": "social_skills", "reverse": false, "text": "Wiem jak dać komuś feedback tak, żeby go rozwinął, a nie zdemotywował." },
+
+        { "id": 33, "dimension": "motivation", "reverse": false, "text": "Działam wytrwale nawet gdy rezultaty nie są od razu widoczne." },
+        { "id": 34, "dimension": "motivation", "reverse": false, "text": "Porażka zwiększa moją chęć zrozumienia co poszło nie tak, a nie rezygnacji." },
+        { "id": 35, "dimension": "motivation", "reverse": true, "text": "Potrzebuję zewnętrznej nagrody lub uznania, żeby utrzymać zaangażowanie." },
+        { "id": 36, "dimension": "motivation", "reverse": false, "text": "Mam poczucie, że to co robię ma sens — nawet w trudnych momentach." },
+        { "id": 37, "dimension": "motivation", "reverse": false, "text": "Wewnętrzny standard jakości pcha mnie do przodu bardziej niż presja z zewnątrz." },
+        { "id": 38, "dimension": "motivation", "reverse": true, "text": "Gdy nikt mnie nie kontroluje, moja produktywność spada." },
+        { "id": 39, "dimension": "motivation", "reverse": false, "text": "Potrafię zachować entuzjazm do projektu nawet gdy trwa znacznie dłużej niż planowałem." },
+        { "id": 40, "dimension": "motivation", "reverse": false, "text": "Sam wyznaczam sobie ambitne cele i traktuję je poważnie." }
+      ],
+      "scoring": {
+        "method": "dimension_average",
+        "reverse_scoring": { "1": 5, "2": 4, "3": 3, "4": 2, "5": 1 },
+        "dimension_score": "average of question scores within dimension (1-5)",
+        "total_eq_score": "average of all 5 dimension scores",
+        "interpretation": {
+          "per_dimension": {
+            "1.0-2.4": "Obszar do rozwoju",
+            "2.5-3.4": "Rozwijający się",
+            "3.5-4.2": "Kompetentny",
+            "4.3-5.0": "Mistrzowski"
+          },
+          "total": {
+            "1.0-2.4": "Niska inteligencja emocjonalna — emocje często przeszkadzają w relacjach i decyzjach",
+            "2.5-3.4": "Przeciętna — świadomość jest, ale regulacja i empatia wymagają pracy",
+            "3.5-4.2": "Wysoka — emocje są zasobem, nie przeszkodą",
+            "4.3-5.0": "Bardzo wysoka — naturalna zdolność do rozumienia i prowadzenia ludzi"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "attachment_style",
+      "name": "Styl Przywiązania",
+      "subtitle": "ATTACHMENT PROFILE",
+      "description": "Odkryj wzorzec który rządzą twoimi bliskimi relacjami — romantycznymi, przyjaźniami i zawodowymi.",
+      "duration_min": 8,
+      "question_count": 36,
+      "scale": "1-6",
+      "scale_labels": {
+        "1": "Zupełnie nie opisuje mnie",
+        "2": "Słabo opisuje mnie",
+        "3": "Raczej nie opisuje",
+        "4": "Raczej opisuje",
+        "5": "Dobrze opisuje mnie",
+        "6": "Idealnie opisuje mnie"
+      },
+      "dimensions": [
+        { "id": "secure", "name": "Bezpieczny" },
+        { "id": "anxious", "name": "Lękowo-Ambiwalentny" },
+        { "id": "avoidant", "name": "Unikający" },
+        { "id": "disorganized", "name": "Zdezorganizowany" }
+      ],
+      "questions": [
+        { "id": 1, "dimension": "secure", "reverse": false, "text": "Czuję się komfortowo, gdy ktoś bliski mi jest na mnie emocjonalnie zależny." },
+        { "id": 2, "dimension": "secure", "reverse": false, "text": "Gdy potrzebuję wsparcia, bez problemu proszę o nie osoby, którym ufam." },
+        { "id": 3, "dimension": "secure", "reverse": false, "text": "Nie boję się bliskości — potrafię być zarówno niezależny jak i głęboko połączony z drugą osobą." },
+        { "id": 4, "dimension": "secure", "reverse": false, "text": "Kiedy dochodzi do konfliktu w relacji, wierzę że da się go rozwiązać bez utraty więzi." },
+        { "id": 5, "dimension": "secure", "reverse": false, "text": "Czuję się bezpiecznie gdy partner lub bliski jest daleko — nie potrzebuję ciągłego potwierdzenia." },
+        { "id": 6, "dimension": "secure", "reverse": false, "text": "W relacjach czuję się wystarczający — nie muszę ciągle zasługiwać na miłość lub akceptację." },
+        { "id": 7, "dimension": "secure", "reverse": false, "text": "Potrafię być wrażliwy i otwarty z kimś bliskim bez poczucia że tracę kontrolę." },
+        { "id": 8, "dimension": "secure", "reverse": false, "text": "Przerwy i samotność ładują moje baterie, ale powrót do bliskich jest dla mnie naturalnie radosny." },
+        { "id": 9, "dimension": "secure", "reverse": false, "text": "Gdy ktoś kogo lubię jest w złym nastroju, nie zakładam automatycznie że to moja wina." },
+
+        { "id": 10, "dimension": "anxious", "reverse": false, "text": "Często zastanawiam się czy bliskie mi osoby naprawdę mnie lubią tak jak mówią." },
+        { "id": 11, "dimension": "anxious", "reverse": false, "text": "Kiedy ktoś bliski nie odpisuje przez dłuższy czas, zaczyna mnie to niepokoić." },
+        { "id": 12, "dimension": "anxious", "reverse": false, "text": "Mam tendencję do intensywnego przeżywania relacji — bardziej niż druga strona." },
+        { "id": 13, "dimension": "anxious", "reverse": false, "text": "Boję się, że jeśli będę zbyt szczery ze swoimi potrzebami, odpychę od siebie ludzi." },
+        { "id": 14, "dimension": "anxious", "reverse": false, "text": "Potrzebuję częstego zapewnienia, że relacja jest dobra i że nic się nie zmieniło." },
+        { "id": 15, "dimension": "anxious", "reverse": false, "text": "Gdy ktoś staje się dla mnie ważny, szybko zaczynam się bać że go stracę." },
+        { "id": 16, "dimension": "anxious", "reverse": false, "text": "W relacjach częściej daję niż biorę — jakby musiałem zasłużyć na obecność drugiej osoby." },
+        { "id": 17, "dimension": "anxious", "reverse": false, "text": "Zmiana w zachowaniu kogoś bliskiego wywołuje we mnie lawinę myśli o tym co poszło nie tak." },
+        { "id": 18, "dimension": "anxious", "reverse": false, "text": "Trudno mi się uspokoić po kłótni z kimś bliskim, nawet gdy formalnie wszystko jest już dobrze." },
+
+        { "id": 19, "dimension": "avoidant", "reverse": false, "text": "Gdy ktoś zbliża się do mnie emocjonalnie zbyt szybko, instynktownie się wycofuję." },
+        { "id": 20, "dimension": "avoidant", "reverse": false, "text": "Wolę rozwiązywać swoje problemy sam niż angażować w nie kogoś bliskiego." },
+        { "id": 21, "dimension": "avoidant", "reverse": false, "text": "Relacje które wymagają dużo emocjonalnego zaangażowania szybko mnie wyczerpują." },
+        { "id": 22, "dimension": "avoidant", "reverse": false, "text": "Mam trudność z mówieniem wprost o tym czego potrzebuję od drugiej osoby." },
+        { "id": 23, "dimension": "avoidant", "reverse": false, "text": "Gdy czuję że ktoś jest ode mnie zbyt zależny, zaczynam szukać dystansu." },
+        { "id": 24, "dimension": "avoidant", "reverse": false, "text": "Moje najbliższe relacje są mniej bliskie niż relacje innych ludzi których obserwuję." },
+        { "id": 25, "dimension": "avoidant", "reverse": false, "text": "Niezależność jest dla mnie wartością nadrzędną — nawet w bliskich relacjach." },
+        { "id": 26, "dimension": "avoidant", "reverse": false, "text": "Gdy jestem w trudnej sytuacji emocjonalnej, instynktem jest dla mnie izolacja." },
+        { "id": 27, "dimension": "avoidant", "reverse": false, "text": "Dbanie o własną przestrzeń i prywatność jest dla mnie nienaruszalną granicą." },
+
+        { "id": 28, "dimension": "disorganized", "reverse": false, "text": "Zdarza mi się jednocześnie bardzo pragnąć bliskości i jej się bać." },
+        { "id": 29, "dimension": "disorganized", "reverse": false, "text": "W relacjach bywam nieprzewidywalny dla siebie samego — nie zawsze wiem jak zareaguję." },
+        { "id": 30, "dimension": "disorganized", "reverse": false, "text": "Osoby, które są mi najbliższe, czasem wydają mi się jednocześnie źródłem komfortu i zagrożenia." },
+        { "id": 31, "dimension": "disorganized", "reverse": false, "text": "Moje relacje mają tendencję do skrajności — albo bardzo intensywne, albo nagle zrywane." },
+        { "id": 32, "dimension": "disorganized", "reverse": false, "text": "Gdy czuję się bardzo blisko z kimś, pojawia się we mnie niepokój który trudno wytłumaczyć." },
+        { "id": 33, "dimension": "disorganized", "reverse": false, "text": "Zdarzają mi się momenty gdy nie wiem czego właściwie chcę od bliskiej relacji." },
+        { "id": 34, "dimension": "disorganized", "reverse": false, "text": "Czasem zachowuję się w relacji w sposób który potem sam sobie nie potrafię wyjaśnić." },
+        { "id": 35, "dimension": "disorganized", "reverse": false, "text": "Moje wzorce w relacjach są dla mnie samego trudne do przewidzenia." },
+        { "id": 36, "dimension": "disorganized", "reverse": false, "text": "W bliskich relacjach zdarzają mi się gwałtowne zmiany nastroju bez oczywistego wyzwalacza." }
+      ],
+      "scoring": {
+        "method": "dominant_style",
+        "dimension_score": "sum of questions within dimension",
+        "primary_style": "dimension with highest score",
+        "secondary_style": "dimension with second highest score",
+        "score_ranges": {
+          "secure": { "min": 9, "max": 54 },
+          "anxious": { "min": 9, "max": 54 },
+          "avoidant": { "min": 9, "max": 54 },
+          "disorganized": { "min": 9, "max": 54 }
+        },
+        "interpretation": {
+          "secure": "Bezpieczny styl przywiązania — budujesz relacje oparte na zaufaniu i zdrowej wzajemności. Bliskość nie budzi lęku, dystans nie budzi paniki.",
+          "anxious": "Lękowo-Ambiwalentny styl — głęboko pragniesz bliskości, ale jednocześnie boisz się ją stracić. Relacje są dla ciebie intensywne i często wyczerpujące.",
+          "avoidant": "Unikający styl — cenisz autonomię i wewnętrzną niezależność. Bliskość aktywuje w tobie mechanizm ochronny, który oddala cię od innych.",
+          "disorganized": "Zdezorganizowany styl — pragniesz i boisz się bliskości jednocześnie. Twoje relacje mogą być nieprzewidywalne i intensywne — często jako echo wczesnodziecięcych doświadczeń."
+        }
+      }
+    },
+
+    {
+      "id": "defense_mechanisms",
+      "name": "Wzorce Obronne",
+      "subtitle": "DEFENSE STYLE PROFILE",
+      "description": "Odkryj jak twój umysł broni się przed bólem, lękiem i trudnymi prawdami o sobie.",
+      "duration_min": 10,
+      "question_count": 36,
+      "scale": "1-5",
+      "scale_labels": {
+        "1": "Zupełnie mnie nie opisuje",
+        "2": "Rzadko tak reaguję",
+        "3": "Czasem tak reaguję",
+        "4": "Często tak reaguję",
+        "5": "To mój typowy wzorzec"
+      },
+      "dimensions": [
+        { "id": "mature", "name": "Mechanizmy Dojrzałe" },
+        { "id": "neurotic", "name": "Mechanizmy Neurotyczne" },
+        { "id": "immature", "name": "Mechanizmy Niedojrzałe" },
+        { "id": "primitive", "name": "Mechanizmy Prymitywne" }
+      ],
+      "questions": [
+        { "id": 1, "dimension": "mature", "reverse": false, "text": "Gdy mam trudny problem, potrafię go na chwilę odłożyć i wrócić do niego z nową perspektywą." },
+        { "id": 2, "dimension": "mature", "reverse": false, "text": "Zamiast wyładowywać złość na ludziach, potrafię ją przekształcić w coś produktywnego — sport, tworzenie, działanie." },
+        { "id": 3, "dimension": "mature", "reverse": false, "text": "Kiedy czuję się przytłoczony, potrafię zachować spokój i myśleć racjonalnie." },
+        { "id": 4, "dimension": "mature", "reverse": false, "text": "Trudne tematy w relacjach wolę omówić wprost, nawet jeśli to niewygodne." },
+        { "id": 5, "dimension": "mature", "reverse": false, "text": "Z trudnych doświadczeń wyciągam wnioski, które realnie zmieniają moje zachowanie." },
+        { "id": 6, "dimension": "mature", "reverse": false, "text": "Potrafię śmiać się z siebie — humor pomaga mi radzić sobie z własną niedoskonałością." },
+        { "id": 7, "dimension": "mature", "reverse": false, "text": "Kiedy tracę coś ważnego, potrafię to opłakać i przejść dalej bez utknięcia w żalu." },
+        { "id": 8, "dimension": "mature", "reverse": false, "text": "Pomaganie innym jest dla mnie sposobem na nadanie sensu własnym trudnościom." },
+        { "id": 9, "dimension": "mature", "reverse": false, "text": "Zamiast reagować impulsywnie, zatrzymuję się i sprawdzam swoje intencje." },
+
+        { "id": 10, "dimension": "neurotic", "reverse": false, "text": "Gdy coś idzie nie tak, mam tendencję do katastrofizowania i wyobrażania sobie najgorszych scenariuszy." },
+        { "id": 11, "dimension": "neurotic", "reverse": false, "text": "Zdarza mi się tłumaczyć swoje działania tak długo, aż brzmi to przekonująco — nawet gdy tak naprawdę nie wiem dlaczego tak zrobiłem." },
+        { "id": 12, "dimension": "neurotic", "reverse": false, "text": "Kiedy dzieje się coś złego, często obwiniam siebie bardziej niż wynikałoby to z faktów." },
+        { "id": 13, "dimension": "neurotic", "reverse": false, "text": "Zamiast poczuć złość, częściej odczuwam smutek lub zmęczenie." },
+        { "id": 14, "dimension": "neurotic", "reverse": false, "text": "Moje myśli potrafią krążyć w kółko wokół jednego problemu bez dojścia do rozwiązania." },
+        { "id": 15, "dimension": "neurotic", "reverse": false, "text": "Kiedy coś idzie nie tak, szukam logicznego wyjaśnienia zanim pozwolę sobie na emocje." },
+        { "id": 16, "dimension": "neurotic", "reverse": false, "text": "Moje emocje bywają skierowane na coś innego niż ich prawdziwe źródło." },
+        { "id": 17, "dimension": "neurotic", "reverse": false, "text": "Mam tendencję do stawiania sobie bardzo wysokich wymagań i surowego oceniania gdy ich nie spełniam." },
+        { "id": 18, "dimension": "neurotic", "reverse": false, "text": "Gdy czuję lęk, skupiam się na szczegółach i kontroli otoczenia." },
+
+        { "id": 19, "dimension": "immature", "reverse": false, "text": "Zdarza mi się zachowywać jak ktoś o wiele młodszy gdy jestem pod dużym stresem." },
+        { "id": 20, "dimension": "immature", "reverse": false, "text": "Kiedy ktoś mnie skrzywdzi, potrafię zachowywać się chłodno i obojętnie bez wyjaśnienia dlaczego." },
+        { "id": 21, "dimension": "immature", "reverse": false, "text": "Zdarza mi się przypisywać swoje myśli lub uczucia innym ludziom." },
+        { "id": 22, "dimension": "immature", "reverse": false, "text": "Gdy coś jest bolesne, potrafię działać tak, jakby to w ogóle się nie wydarzyło." },
+        { "id": 23, "dimension": "immature", "reverse": false, "text": "Czasem fantazjuję o idealnym życiu jako sposób na ucieczkę od trudnej rzeczywistości." },
+        { "id": 24, "dimension": "immature", "reverse": false, "text": "Gdy jestem zraniony, zdarza mi się reagować złością skierowaną na kogoś innego niż winowajca." },
+        { "id": 25, "dimension": "immature", "reverse": false, "text": "Gdy coś mi grozi, mam tendencję do wycofania się i izolowania." },
+        { "id": 26, "dimension": "immature", "reverse": false, "text": "Miewam skrajnie różne oceny tej samej osoby — raz idealizuję, innym razem całkowicie deprecjonuję." },
+        { "id": 27, "dimension": "immature", "reverse": false, "text": "Zdarza mi się zachowywać prowokacyjnie lub dramatycznie, gdy potrzebuję uwagi." },
+
+        { "id": 28, "dimension": "primitive", "reverse": false, "text": "Zdarza mi się całkowicie zaprzeczać rzeczywistości gdy jest zbyt trudna do przyjęcia." },
+        { "id": 29, "dimension": "primitive", "reverse": false, "text": "Gdy coś jest bardzo bolesne, potrafię zachowywać się tak jakby to się w ogóle nie wydarzyło — nawet przez długi czas." },
+        { "id": 30, "dimension": "primitive", "reverse": false, "text": "W ekstremalnym stresie moje myślenie i zachowanie staje się chaotyczne." },
+        { "id": 31, "dimension": "primitive", "reverse": false, "text": "Bywają momenty gdy działam impulsywnie i dopiero po wszystkim rozumiem co zrobiłem." },
+        { "id": 32, "dimension": "primitive", "reverse": false, "text": "Gdy czuję się zagrożony, mój umysł potrafi zniekształcić fakty tak, żeby pasowały do moich lęków." },
+        { "id": 33, "dimension": "primitive", "reverse": false, "text": "Zdarza mi się widzieć siebie lub innych jako wyłącznie dobrych albo wyłącznie złych — bez półcieni." },
+        { "id": 34, "dimension": "primitive", "reverse": false, "text": "Pod bardzo dużym stresem moje emocje wymykają się spod kontroli w sposób który mnie potem zaskakuje." },
+        { "id": 35, "dimension": "primitive", "reverse": false, "text": "Bywają okresy gdy czuję się odłączony od siebie — jakbym obserwował siebie z zewnątrz." },
+        { "id": 36, "dimension": "primitive", "reverse": false, "text": "Moje reakcje na zagrożenie bywają niewspółmierne do jego rzeczywistej skali." }
+      ],
+      "scoring": {
+        "method": "defense_profile",
+        "dimension_score": "average of questions within dimension (1-5)",
+        "maturity_index": "(mature_score * 2 - immature_score - primitive_score) / 2",
+        "interpretation": {
+          "mature": {
+            "3.5-5.0": "Dojrzały profil obronny — radzisz sobie z trudnościami w sposób konstruktywny i adaptacyjny",
+            "2.0-3.4": "Mieszany profil — masz dostęp do dojrzałych mechanizmów, ale pod presją pojawiają się mniej adaptacyjne wzorce",
+            "1.0-1.9": "Słabo rozwinięte mechanizmy dojrzałe — obszar do pracy terapeutycznej lub coachingowej"
+          },
+          "immature_primitive_combined": {
+            "high": "Wysoki poziom pierwotnych i niedojrzałych mechanizmów — sygnał traumy lub niezaspokojonego wczesnego przywiązania",
+            "medium": "Umiarkowany poziom — pojawiają się sytuacyjnie, szczególnie pod dużym stresem",
+            "low": "Niski poziom — rzadko uciekasz się do prymitywnych mechanizmów obronnych"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "mental_toughness",
+      "name": "Odporność Psychiczna",
+      "subtitle": "MENTAL TOUGHNESS PROFILE",
+      "description": "Sprawdź jak reagujesz na presję, porażkę i zmianę — czy jesteś skałą czy gąbką.",
+      "duration_min": 10,
+      "question_count": 40,
+      "scale": "1-5",
+      "scale_labels": {
+        "1": "Zdecydowanie nie",
+        "2": "Raczej nie",
+        "3": "Neutralnie",
+        "4": "Raczej tak",
+        "5": "Zdecydowanie tak"
+      },
+      "dimensions": [
+        { "id": "control", "name": "Poczucie Kontroli" },
+        { "id": "commitment", "name": "Zaangażowanie" },
+        { "id": "challenge", "name": "Postawa wobec Wyzwań" },
+        { "id": "confidence", "name": "Pewność Siebie" }
+      ],
+      "questions": [
+        { "id": 1, "dimension": "control", "reverse": false, "text": "Wierzę że mam realny wpływ na to jak potoczy się moje życie." },
+        { "id": 2, "dimension": "control", "reverse": true, "text": "Gdy coś idzie nie tak, często czuję że jestem bezsilny wobec okoliczności." },
+        { "id": 3, "dimension": "control", "reverse": false, "text": "Nawet w chaosie potrafię znaleźć aspekty sytuacji nad którymi mam kontrolę i skupić się na nich." },
+        { "id": 4, "dimension": "control", "reverse": false, "text": "Zarządzam swoimi emocjami tak dobrze, że rzadko przekładają się one negatywnie na moją efektywność." },
+        { "id": 5, "dimension": "control", "reverse": true, "text": "Zbyt wiele rzeczy w moim życiu zależy od szczęścia lub decyzji innych." },
+        { "id": 6, "dimension": "control", "reverse": false, "text": "Moje samopoczucie nie jest uzależnione od zewnętrznych okoliczności — potrafię regulować je świadomie." },
+        { "id": 7, "dimension": "control", "reverse": false, "text": "Gdy tracę kontrolę nad sytuacją, skupiam się na tym co mogę kontrolować — swoją reakcję." },
+        { "id": 8, "dimension": "control", "reverse": true, "text": "Zewnętrzna presja często powoduje, że zaczynam wątpić we własne decyzje." },
+        { "id": 9, "dimension": "control", "reverse": false, "text": "Traktuję stres jako informację, a nie jako zagrożenie." },
+        { "id": 10, "dimension": "control", "reverse": false, "text": "Wiem jak wrócić do równowagi po trudnym dniu — i robię to skutecznie." },
+
+        { "id": 11, "dimension": "commitment", "reverse": false, "text": "Gdy raz się do czegoś zobowiążę, trudno mnie wybić z tego kursu." },
+        { "id": 12, "dimension": "commitment", "reverse": true, "text": "Gdy projekt staje się trudny lub nudny, moja motywacja szybko spada." },
+        { "id": 13, "dimension": "commitment", "reverse": false, "text": "Potrafię długo pracować na cel który jest odległy w czasie." },
+        { "id": 14, "dimension": "commitment", "reverse": false, "text": "Moje zobowiązania wobec innych są dla mnie wiążące nawet gdy nikt nie patrzy." },
+        { "id": 15, "dimension": "commitment", "reverse": true, "text": "Gdy napotykam poważną przeszkodę, zaczynam kwestionować czy warto kontynuować." },
+        { "id": 16, "dimension": "commitment", "reverse": false, "text": "Mam silne poczucie celu które nadaje sens mojemu wysiłkowi." },
+        { "id": 17, "dimension": "commitment", "reverse": false, "text": "Porażka nie zmienia mojego zaangażowania w coś — zmienia tylko moją metodę." },
+        { "id": 18, "dimension": "commitment", "reverse": false, "text": "Jestem osobą która kończy co zaczyna." },
+        { "id": 19, "dimension": "commitment", "reverse": true, "text": "Miewam okresy gdy wszystko wydaje mi się bez sensu i trudno mi się zmobilizować." },
+        { "id": 20, "dimension": "commitment", "reverse": false, "text": "Moja wytrwałość jest jedną z moich mocnych stron, którą zauważają inni." },
+
+        { "id": 21, "dimension": "challenge", "reverse": false, "text": "Nowe, trudne sytuacje traktuję jako okazję do nauki, a nie jako zagrożenie." },
+        { "id": 22, "dimension": "challenge", "reverse": true, "text": "Wolę pewność i stabilność od ryzyka i zmiany." },
+        { "id": 23, "dimension": "challenge", "reverse": false, "text": "Porażka jest dla mnie cenną informacją, a nie powodem do wstydu." },
+        { "id": 24, "dimension": "challenge", "reverse": false, "text": "Gdy coś jest zbyt łatwe, szybko tracę zainteresowanie." },
+        { "id": 25, "dimension": "challenge", "reverse": true, "text": "Zmiana planów w ostatniej chwili wytrąca mnie z równowagi." },
+        { "id": 26, "dimension": "challenge", "reverse": false, "text": "Potrafię działać sprawnie nawet gdy nie mam pełnych informacji." },
+        { "id": 27, "dimension": "challenge", "reverse": false, "text": "Kryzys pobudza mnie do działania — czuję się wtedy bardziej skoncentrowany." },
+        { "id": 28, "dimension": "challenge", "reverse": true, "text": "Krytyczna informacja zwrotna boli mnie bardziej niż powinna." },
+        { "id": 29, "dimension": "challenge", "reverse": false, "text": "Chętnie wychodzę ze strefy komfortu gdy widzę że tam jest wzrost." },
+        { "id": 30, "dimension": "challenge", "reverse": false, "text": "Adaptacja do nowych warunków przychodzi mi relatywnie łatwo." },
+
+        { "id": 31, "dimension": "confidence", "reverse": false, "text": "Ufam własnym decyzjom nawet gdy inni się z nimi nie zgadzają." },
+        { "id": 32, "dimension": "confidence", "reverse": true, "text": "Potrzebuję zewnętrznego potwierdzenia żeby poczuć się pewnie w swoim działaniu." },
+        { "id": 33, "dimension": "confidence", "reverse": false, "text": "Wiem że posiadam zdolności które pozwolą mi poradzić sobie z większością wyzwań." },
+        { "id": 34, "dimension": "confidence", "reverse": false, "text": "Gdy ktoś mnie krytykuje, potrafię ocenić czy ta krytyka jest zasadna bez emocjonalnego zawalenia." },
+        { "id": 35, "dimension": "confidence", "reverse": true, "text": "W nowym środowisku czuję się niepewnie i potrzebuję czasu zanim zacznę działać." },
+        { "id": 36, "dimension": "confidence", "reverse": false, "text": "Moje mocne strony są dla mnie jasne i wiem jak je wykorzystywać." },
+        { "id": 37, "dimension": "confidence", "reverse": false, "text": "Nie potrzebuję bycia najlepszym — wystarczy mi że jestem sobą na miarę swoich możliwości." },
+        { "id": 38, "dimension": "confidence", "reverse": true, "text": "Porównuję się do innych częściej niż chciałbym i zazwyczaj wypada to na moją niekorzyść." },
+        { "id": 39, "dimension": "confidence", "reverse": false, "text": "Podejmuję decyzje szybko gdy sytuacja tego wymaga — nie paraliżuje mnie strach przed błędem." },
+        { "id": 40, "dimension": "confidence", "reverse": false, "text": "Mam solidne poczucie własnej wartości które nie zależy od zewnętrznych osiągnięć." }
+      ],
+      "scoring": {
+        "method": "4C_profile",
+        "reverse_scoring": { "1": 5, "2": 4, "3": 3, "4": 2, "5": 1 },
+        "dimension_score": "average of questions within dimension (1-5)",
+        "total_mt_score": "average of all 4 dimension scores",
+        "interpretation": {
+          "per_dimension": {
+            "1.0-2.4": "Obszar wrażliwości — tu tracisz energię pod presją",
+            "2.5-3.4": "Rozwijający się — potencjał jest, stabilność wymaga pracy",
+            "3.5-4.2": "Solidny — możesz na sobie polegać w trudnych momentach",
+            "4.3-5.0": "Wyjątkowy — to twój zasób w momentach kryzysowych"
+          },
+          "total": {
+            "1.0-2.4": "Niska odporność psychiczna — stres i zmiana mocno cię kosztują. To obszar priorytetowy do wzmocnienia.",
+            "2.5-3.4": "Przeciętna odporność — radzisz sobie, ale nie bez strat. Pewne sytuacje cię destabilizują.",
+            "3.5-4.2": "Wysoka odporność — potrafisz działać pod presją i wychodzić z trudnych momentów silniejszy.",
+            "4.3-5.0": "Bardzo wysoka — jesteś psychiczną skałą. Inni szukają przy tobie stabilności."
+          }
+        }
+      }
+    },
+
+    {
+      "id": "meaning_spirituality",
+      "name": "Sens i Duchowość",
+      "subtitle": "PURPOSE & TRANSCENDENCE",
+      "description": "Odkryj swój stosunek do sensu życia, transcendencji i pytań egzystencjalnych które definiują jak żyjesz.",
+      "duration_min": 8,
+      "question_count": 32,
+      "scale": "1-6",
+      "scale_labels": {
+        "1": "Zupełnie nie",
+        "2": "W małym stopniu",
+        "3": "Raczej nie",
+        "4": "Raczej tak",
+        "5": "W dużym stopniu",
+        "6": "Zdecydowanie tak"
+      },
+      "dimensions": [
+        { "id": "purpose", "name": "Poczucie Sensu i Celu" },
+        { "id": "transcendence", "name": "Doświadczenie Transcendencji" },
+        { "id": "existential", "name": "Dojrzałość Egzystencjalna" },
+        { "id": "connection", "name": "Połączenie z Czymś Większym" }
+      ],
+      "questions": [
+        { "id": 1, "dimension": "purpose", "reverse": false, "text": "Mam jasne poczucie po co żyję — nie muszę tego sobie tłumaczyć." },
+        { "id": 2, "dimension": "purpose", "reverse": true, "text": "Zdarza mi się zastanawiać czy to co robię ma w ogóle znaczenie." },
+        { "id": 3, "dimension": "purpose", "reverse": false, "text": "Moja codzienność jest spójna z tym co uważam za najważniejsze w życiu." },
+        { "id": 4, "dimension": "purpose", "reverse": false, "text": "Nawet w trudnych momentach potrafię znaleźć sens w tym przez co przechodzę." },
+        { "id": 5, "dimension": "purpose", "reverse": false, "text": "Wiem czemu chcę się obudzić jutro rano." },
+        { "id": 6, "dimension": "purpose", "reverse": true, "text": "Mam wrażenie, że moje życie biegnie bez wyraźnego kierunku." },
+        { "id": 7, "dimension": "purpose", "reverse": false, "text": "Moje życie ma narrację — widzę skąd przyszedłem i dokąd zmierzam." },
+        { "id": 8, "dimension": "purpose", "reverse": false, "text": "Jestem w stanie poświęcić krótkoterminowy komfort dla czegoś, co uważam za ważne." },
+
+        { "id": 9, "dimension": "transcendence", "reverse": false, "text": "Zdarzają mi się momenty głębokiego poczucia jedności z czymś większym niż ja sam." },
+        { "id": 10, "dimension": "transcendence", "reverse": false, "text": "Doświadczam chwil w których czas zdaje się zatrzymywać i czuję coś trudnego do opisania słowami." },
+        { "id": 11, "dimension": "transcendence", "reverse": false, "text": "Kontakt z naturą, muzyką lub sztuką potrafi mnie poruszyć do głębi w sposób który wykracza poza zwykłe emocje." },
+        { "id": 12, "dimension": "transcendence", "reverse": true, "text": "Doświadczenia duchowe lub transcendentne są mi zupełnie obce — nie wiem o czym ludzie mówią." },
+        { "id": 13, "dimension": "transcendence", "reverse": false, "text": "Mam poczucie, że jest w życiu coś co przekracza materialne i racjonalne." },
+        { "id": 14, "dimension": "transcendence", "reverse": false, "text": "Modlitwa, medytacja lub głęboka refleksja jest częścią mojego życia." },
+        { "id": 15, "dimension": "transcendence", "reverse": false, "text": "Zdarzają mi się wglądy lub intuicje których nie potrafię wytłumaczyć racjonalnie, ale okazują się trafne." },
+        { "id": 16, "dimension": "transcendence", "reverse": false, "text": "Mam poczucie że moje życie jest częścią czegoś większego — historii, planu lub porządku." },
+
+        { "id": 17, "dimension": "existential", "reverse": false, "text": "Temat śmierci nie jest dla mnie tabu — myślę o niej jako o czymś, co nadaje wartość życiu." },
+        { "id": 18, "dimension": "existential", "reverse": true, "text": "Unikam myślenia o śmierci, przemijaniu i ostatecznych pytaniach." },
+        { "id": 19, "dimension": "existential", "reverse": false, "text": "Cierpienie i trudności mają dla mnie jakiś sens — nie postrzegam ich jako czystego pecha." },
+        { "id": 20, "dimension": "existential", "reverse": false, "text": "Pogódzenienie się z tym na co nie mam wpływu przychodzi mi relatywnie łatwo." },
+        { "id": 21, "dimension": "existential", "reverse": false, "text": "Pytania o sens, wolność i odpowiedzialność są dla mnie żywe — wracam do nich regularnie." },
+        { "id": 22, "dimension": "existential", "reverse": false, "text": "Akceptuję, że życie zawiera nieuchronny element niepewności i tajemnicy." },
+        { "id": 23, "dimension": "existential", "reverse": true, "text": "Egzystencjalne pytania wywołują we mnie raczej lęk niż ciekawość." },
+        { "id": 24, "dimension": "existential", "reverse": false, "text": "Mam swój własny system przekonań o świecie który daje mi oparcie nawet w kryzysie." },
+
+        { "id": 25, "dimension": "connection", "reverse": false, "text": "Czuję że jestem częścią czegoś co wykracza poza moje indywidualne życie." },
+        { "id": 26, "dimension": "connection", "reverse": false, "text": "Los innych ludzi — nieznajomych, przyszłych pokoleń — jest dla mnie ważny." },
+        { "id": 27, "dimension": "connection", "reverse": false, "text": "Czuję odpowiedzialność nie tylko za siebie, ale za coś szerszego." },
+        { "id": 28, "dimension": "connection", "reverse": true, "text": "Skupiam się głównie na sobie i najbliższym otoczeniu — szersza perspektywa rzadko mi towarzyszy." },
+        { "id": 29, "dimension": "connection", "reverse": false, "text": "Wierzę że moje działania mają znaczenie dla świata nawet jeśli nie widzę ich efektów bezpośrednio." },
+        { "id": 30, "dimension": "connection", "reverse": false, "text": "Mam poczucie solidarności z ludźmi których nigdy nie spotkałem." },
+        { "id": 31, "dimension": "connection", "reverse": false, "text": "Myśl o tym że mogę coś zostawić po sobie — wartość, dzieło, wpływ — jest dla mnie ważna." },
+        { "id": 32, "dimension": "connection", "reverse": false, "text": "Czuję się częścią czegoś trwałego — tradycji, natury, historii — co wykracza poza moje życie." }
+      ],
+      "scoring": {
+        "method": "dimension_profile",
+        "reverse_scoring": { "1": 6, "2": 5, "3": 4, "4": 3, "5": 2, "6": 1 },
+        "dimension_score": "average of questions within dimension (1-6)",
+        "total_score": "average of all 4 dimension scores",
+        "interpretation": {
+          "purpose": {
+            "4.5-6.0": "Silne poczucie sensu — wiesz po co żyjesz i to widać w twoich wyborach",
+            "2.5-4.4": "Poszukujący — masz przebłyski sensu, ale fundament jest jeszcze niepewny",
+            "1.0-2.4": "Egzystencjalna pustka — brak celu jest prawdopodobnie źródłem twojego cierpienia"
+          },
+          "transcendence": {
+            "4.5-6.0": "Wysoka otwartość transcendentna — doświadczasz wymiarów życia których inni nie dostrzegają",
+            "2.5-4.4": "Umiarkowana — sporadyczne doświadczenia transcendentne, ale nie są centralną częścią życia",
+            "1.0-2.4": "Niska — preferujesz materialne i racjonalne ramy rozumienia świata"
+          },
+          "existential": {
+            "4.5-6.0": "Dojrzałość egzystencjalna — pogodzony ze śmiercią, niepewnością i tajemnicą życia",
+            "2.5-4.4": "W procesie — konfrontujesz się z tymi pytaniami, ale jeszcze nie masz pełnego oparcia",
+            "1.0-2.4": "Unikanie egzystencjalne — trudne pytania są odpychane, co może generować ukryty lęk"
+          },
+          "connection": {
+            "4.5-6.0": "Silne połączenie — żyjesz z poczuciem że jesteś częścią czegoś większego",
+            "2.5-4.4": "Selektywne połączenie — troska o innych istnieje, ale jest ograniczona kręgiem bliskich",
+            "1.0-2.4": "Izolacja egzystencjalna — trudno ci poczuć związek z czymś szerszym niż własne życie"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "motivation_engine",
+      "name": "Silnik Motywacji",
+      "subtitle": "CORE DRIVES PROFILE",
+      "description": "Odkryj głębinowe pragnienia i nieświadome mechanizmy które naprawdę sterują twoimi decyzjami.",
+      "duration_min": 10,
+      "question_count": 40,
+      "scale": "1-5",
+      "scale_labels": {
+        "1": "Zupełnie mnie nie opisuje",
+        "2": "Rzadko mnie opisuje",
+        "3": "Czasem mnie opisuje",
+        "4": "Często mnie opisuje",
+        "5": "Doskonale mnie opisuje"
+      },
+      "dimensions": [
+        { "id": "power", "name": "Władza i Wpływ" },
+        { "id": "affiliation", "name": "Przynależność i Więź" },
+        { "id": "achievement", "name": "Osiągnięcia i Mistrzostwo" },
+        { "id": "security", "name": "Bezpieczeństwo i Stabilność" },
+        { "id": "autonomy", "name": "Autonomia i Wolność" },
+        { "id": "meaning", "name": "Sens i Misja" },
+        { "id": "recognition", "name": "Uznanie i Status" },
+        { "id": "discovery", "name": "Odkrywanie i Stymulacja" }
+      ],
+      "questions": [
+        { "id": 1, "dimension": "power", "reverse": false, "text": "Satysfakcję daje mi sytuacja gdy moje słowo ma wagę i inni biorą je pod uwagę." },
+        { "id": 2, "dimension": "power", "reverse": false, "text": "Naturalnie przejmuję inicjatywę gdy w grupie brakuje kierunku." },
+        { "id": 3, "dimension": "power", "reverse": false, "text": "Lubię mieć ostatnie słowo w ważnych decyzjach." },
+        { "id": 4, "dimension": "power", "reverse": false, "text": "Motywuje mnie możliwość kształtowania rzeczy — projektów, ludzi, organizacji." },
+        { "id": 5, "dimension": "power", "reverse": false, "text": "Denerwuje mnie sytuacja gdy nie mam wpływu na rzeczy które uważam za ważne." },
+
+        { "id": 6, "dimension": "affiliation", "reverse": false, "text": "Praca jest dla mnie satysfakcjonująca głównie gdy robię ją z ludźmi których lubię." },
+        { "id": 7, "dimension": "affiliation", "reverse": false, "text": "Głęboka więź z innymi jest jedną z najważniejszych rzeczy w moim życiu." },
+        { "id": 8, "dimension": "affiliation", "reverse": false, "text": "Wolę kompromis niż konflikt — zachowanie harmonii jest dla mnie priorytetem." },
+        { "id": 9, "dimension": "affiliation", "reverse": false, "text": "Izolacja — nawet krótkotrwała — mocno na mnie wpływa." },
+        { "id": 10, "dimension": "affiliation", "reverse": false, "text": "Motywuje mnie poczucie że jestem częścią czegoś wspólnego — drużyny, rodziny, społeczności." },
+
+        { "id": 11, "dimension": "achievement", "reverse": false, "text": "Ciągłe doskonalenie się jest dla mnie naturalną potrzebą, nie obowiązkiem." },
+        { "id": 12, "dimension": "achievement", "reverse": false, "text": "Lubię trudne cele — łatwe szybko mnie nudzą." },
+        { "id": 13, "dimension": "achievement", "reverse": false, "text": "Motywuje mnie pobicie własnego rekordu bardziej niż pokonanie kogoś innego." },
+        { "id": 14, "dimension": "achievement", "reverse": false, "text": "Poczucie że jestem dobry w tym co robię jest dla mnie ważniejsze niż zewnętrzne nagrody." },
+        { "id": 15, "dimension": "achievement", "reverse": false, "text": "Mam wewnętrzne standardy jakości które są wyższe niż wymagania innych." },
+
+        { "id": 16, "dimension": "security", "reverse": false, "text": "Stabilność finansowa i zawodowa jest dla mnie fundamentem na którym buduję resztę życia." },
+        { "id": 17, "dimension": "security", "reverse": false, "text": "Niepewność co do przyszłości mocno wpływa na moje samopoczucie." },
+        { "id": 18, "dimension": "security", "reverse": false, "text": "Przewidywalność i rutyna są dla mnie komfortem, nie więzieniem." },
+        { "id": 19, "dimension": "security", "reverse": false, "text": "Zanim podejmę ryzyko, dokładnie analizuję scenariusz gdy wszystko pójdzie źle." },
+        { "id": 20, "dimension": "security", "reverse": false, "text": "Mam potrzebę posiadania planu B na wypadek gdyby coś się nie powiodło." },
+
+        { "id": 21, "dimension": "autonomy", "reverse": false, "text": "Potrzebuję wolności w tym jak i kiedy wykonuję swoją pracę." },
+        { "id": 22, "dimension": "autonomy", "reverse": false, "text": "Micromanagement lub nadmierna kontrola są dla mnie mocno demotywujące." },
+        { "id": 23, "dimension": "autonomy", "reverse": false, "text": "Wolę działać na własnych zasadach nawet jeśli to oznacza więcej trudności." },
+        { "id": 24, "dimension": "autonomy", "reverse": false, "text": "Niezależność decyzyjna jest dla mnie ważniejsza niż wysoka pensja." },
+        { "id": 25, "dimension": "autonomy", "reverse": false, "text": "Czuję się najlepiej gdy sam decyduję co, jak i kiedy robię." },
+
+        { "id": 26, "dimension": "meaning", "reverse": false, "text": "Potrzebuję czuć że moja praca służy czemuś ważniejszemu niż tylko zarabianie pieniędzy." },
+        { "id": 27, "dimension": "meaning", "reverse": false, "text": "Angażuję się pełniej gdy wierzę że moje działanie ma realny wpływ na innych." },
+        { "id": 28, "dimension": "meaning", "reverse": false, "text": "Rezygnowałem lub rezygnowałbym z wyższych zarobków na rzecz pracy która ma sens." },
+        { "id": 29, "dimension": "meaning", "reverse": false, "text": "Mam coś w rodzaju misji — poczucie do czego jestem powołany." },
+        { "id": 30, "dimension": "meaning", "reverse": false, "text": "Gdy moje wartości są sprzeczne z tym co robię, szybko tracę energię i zaangażowanie." },
+
+        { "id": 31, "dimension": "recognition", "reverse": false, "text": "Ważne jest dla mnie żeby inni widzieli i doceniali to co robię." },
+        { "id": 32, "dimension": "recognition", "reverse": false, "text": "Status i prestiż — choć nie mówię o tym głośno — mają dla mnie znaczenie." },
+        { "id": 33, "dimension": "recognition", "reverse": false, "text": "Brak docenienia demotywuje mnie nawet jeśli wyniki są dobre." },
+        { "id": 34, "dimension": "recognition", "reverse": false, "text": "Lubię gdy moje osiągnięcia są widoczne i publicznie uznane." },
+        { "id": 35, "dimension": "recognition", "reverse": false, "text": "Reputacja i opinia innych o mnie jest czymś, o co dbam." },
+
+        { "id": 36, "dimension": "discovery", "reverse": false, "text": "Nudzę się szybko gdy nie ma nic nowego do odkrycia lub nauczenia się." },
+        { "id": 37, "dimension": "discovery", "reverse": false, "text": "Nieznane i nieprzewidywalne bardziej mnie przyciągają niż odpychają." },
+        { "id": 38, "dimension": "discovery", "reverse": false, "text": "Lubię skakać między różnymi tematami — szerokość zainteresowań jest moją siłą." },
+        { "id": 39, "dimension": "discovery", "reverse": false, "text": "Stymulacja intelektualna i nowe doświadczenia są dla mnie jak tlen." },
+        { "id": 40, "dimension": "discovery", "reverse": false, "text": "Rutyna i powtarzalność szybko mnie wyczerpują." }
+      ],
+      "scoring": {
+        "method": "top_drives",
+        "dimension_score": "average of 5 questions per dimension (1-5)",
+        "primary_drive": "dimension with highest score",
+        "secondary_drive": "dimension with second highest score",
+        "tertiary_drive": "dimension with third highest score",
+        "shadow_drive": "dimension with lowest score (what least motivates)",
+        "interpretation": {
+          "power": "Napędzają cię wpływ i sprawczość. Potrzebujesz środowisk gdzie masz realną decyzyjność.",
+          "affiliation": "Napędzają cię relacje i przynależność. Potrzebujesz poczucia wspólnoty i więzi.",
+          "achievement": "Napędza cię mistrzostwo i doskonalenie. Potrzebujesz trudnych celów i poczucia postępu.",
+          "security": "Napędza cię stabilność i pewność. Potrzebujesz przewidywalności i bezpiecznych fundamentów.",
+          "autonomy": "Napędza cię wolność i niezależność. Potrzebujesz przestrzeni do działania na własnych zasadach.",
+          "meaning": "Napędza cię sens i misja. Potrzebujesz pracy która służy czemuś większemu niż ty sam.",
+          "recognition": "Napędza cię uznanie i status. Potrzebujesz środowisk które widzą i doceniają twój wkład.",
+          "discovery": "Napędza cię nowość i stymulacja. Potrzebujesz różnorodności, zmian i przestrzeni do eksploracji."
+        }
+      }
+    },
+
+    {
+      "id": "career_dna",
+      "name": "DNA Kariery",
+      "subtitle": "WORK IDENTITY PROFILE",
+      "description": "Odkryj swój naturalny styl pracy, środowisko w którym rozkwitasz i role które pasują do twojej struktury.",
+      "duration_min": 8,
+      "question_count": 32,
+      "scale": "1-5",
+      "scale_labels": {
+        "1": "Zdecydowanie nie moje",
+        "2": "Raczej nie moje",
+        "3": "Neutralnie",
+        "4": "Raczej moje",
+        "5": "Zdecydowanie moje"
+      },
+      "dimensions": [
+        { "id": "builder", "name": "Budowniczy — tworzę od zera" },
+        { "id": "optimizer", "name": "Optymalizator — udoskonalam istniejące" },
+        { "id": "connector", "name": "Konektor — łączę ludzi i zasoby" },
+        { "id": "expert", "name": "Ekspert — idę w głąb jednej dziedziny" },
+        { "id": "strategist", "name": "Strateg — widzę szeroki obraz" },
+        { "id": "caretaker", "name": "Opiekun — służę i wspieram innych" },
+        { "id": "pioneer", "name": "Pioneer — eksploruję nowe terytoria" },
+        { "id": "executor", "name": "Wykonawca — realizuję i dostarczam" }
+      ],
+      "questions": [
+        { "id": 1, "dimension": "builder", "reverse": false, "text": "Satysfakcja którą czuję gdy coś buduję od zera jest nie do zastąpienia." },
+        { "id": 2, "dimension": "builder", "reverse": false, "text": "Lubię zaczynać projekty od pustej kartki — to mnie energetyzuje." },
+        { "id": 3, "dimension": "builder", "reverse": false, "text": "Tworzenie czegoś nowego jest dla mnie ważniejsze niż zarządzanie tym co już istnieje." },
+        { "id": 4, "dimension": "builder", "reverse": false, "text": "Najlepiej działam na wczesnych etapach — gdy wszystko jest jeszcze do zdefiniowania." },
+
+        { "id": 5, "dimension": "optimizer", "reverse": false, "text": "Naturalne jest dla mnie dostrzeganie nieefektywności i szukanie lepszych rozwiązań." },
+        { "id": 6, "dimension": "optimizer", "reverse": false, "text": "Ulepszanie istniejących procesów i systemów sprawia mi autentyczną przyjemność." },
+        { "id": 7, "dimension": "optimizer", "reverse": false, "text": "Lubię przychodzić do czegoś co już działa i zastanawiać się jak to zrobić o 20% lepiej." },
+        { "id": 8, "dimension": "optimizer", "reverse": false, "text": "Moje środowisko pracy jest zazwyczaj bardziej zorganizowane niż innych." },
+
+        { "id": 9, "dimension": "connector", "reverse": false, "text": "Naturalnie widzę kto powinien poznać kogo i potrafię tworzyć wartościowe połączenia." },
+        { "id": 10, "dimension": "connector", "reverse": false, "text": "Moja sieć relacji jest jednym z moich najważniejszych zasobów zawodowych." },
+        { "id": 11, "dimension": "connector", "reverse": false, "text": "Najlepsze pomysły rodzą mi się w rozmowach z innymi — nie w samotności." },
+        { "id": 12, "dimension": "connector", "reverse": false, "text": "Lubię środowiska gdzie kluczem jest budowanie mostów między ludźmi i organizacjami." },
+
+        { "id": 13, "dimension": "expert", "reverse": false, "text": "Wolę być najlepszy w jednej rzeczy niż dobry w wielu." },
+        { "id": 14, "dimension": "expert", "reverse": false, "text": "Głębia wiedzy jest dla mnie ważniejsza niż jej szerokość." },
+        { "id": 15, "dimension": "expert", "reverse": false, "text": "Satysfakcja z bycia ekspertem którego inni szukają po radę jest dla mnie bardzo ważna." },
+        { "id": 16, "dimension": "expert", "reverse": false, "text": "Mogę spędzać długie godziny na zgłębianiu jednego tematu bez znudzenia." },
+
+        { "id": 17, "dimension": "strategist", "reverse": false, "text": "Naturalnie myślę w perspektywie lat — nie tygodni." },
+        { "id": 18, "dimension": "strategist", "reverse": false, "text": "Widzę wzorce i połączenia których inni często nie dostrzegają." },
+        { "id": 19, "dimension": "strategist", "reverse": false, "text": "Lubię analizować złożone problemy i znajdować dźwignię — jeden ruch który zmienia wszystko." },
+        { "id": 20, "dimension": "strategist", "reverse": false, "text": "Detale i operacyjność nudzą mnie — wolę pracować na poziomie koncepcji i kierunku." },
+
+        { "id": 21, "dimension": "caretaker", "reverse": false, "text": "Satysfakcja z tego że komuś pomogłem lub ułatwiłem coś jest dla mnie bardzo realna." },
+        { "id": 22, "dimension": "caretaker", "reverse": false, "text": "Lubię role w których moją miarą sukcesu jest sukces innych." },
+        { "id": 23, "dimension": "caretaker", "reverse": false, "text": "Naturalnie dbam o dobrostan ludzi wokół mnie — w pracy i poza nią." },
+        { "id": 24, "dimension": "caretaker", "reverse": false, "text": "Praca która bezpośrednio służy ludziom daje mi więcej satysfakcji niż praca z danymi lub systemami." },
+
+        { "id": 25, "dimension": "pioneer", "reverse": false, "text": "Najbardziej ekscytują mnie miejsca gdzie nie ma jeszcze gotowych odpowiedzi." },
+        { "id": 26, "dimension": "pioneer", "reverse": false, "text": "Lubię robić rzeczy które jeszcze nie były robione — nawet jeśli wiąże się to z większym ryzykiem." },
+        { "id": 27, "dimension": "pioneer", "reverse": false, "text": "Nudzi mnie praca w dojrzałych, ustabilizowanych środowiskach." },
+        { "id": 28, "dimension": "pioneer", "reverse": false, "text": "Czuję się żywy gdy działam w obszarach na krawędzi tego co możliwe." },
+
+        { "id": 29, "dimension": "executor", "reverse": false, "text": "Satysfakcję daje mi przede wszystkim dowiezienie — dostarczenie rezultatu, zamknięcie sprawy." },
+        { "id": 30, "dimension": "executor", "reverse": false, "text": "Jestem osobą na którą można liczyć że zrobi to co obiecała i w terminie." },
+        { "id": 31, "dimension": "executor", "reverse": false, "text": "Strategie i wizje są fajne — ale dla mnie najważniejsza jest realizacja." },
+        { "id": 32, "dimension": "executor", "reverse": false, "text": "Lista zadań do odhaczenia jest dla mnie źródłem satysfakcji, nie stresu." }
+      ],
+      "scoring": {
+        "method": "work_identity",
+        "dimension_score": "average of 4 questions per dimension (1-5)",
+        "primary_identity": "dimension with highest score",
+        "secondary_identity": "dimension with second highest score",
+        "profile_label": "combine top 2: e.g. Builder-Strategist, Expert-Pioneer",
+        "interpretation": {
+          "builder": "Tworzysz od zera. Twoje środowisko: startupy, nowe projekty, role założycielskie.",
+          "optimizer": "Udoskonalasz istniejące. Twoje środowisko: scaleup, procesy, operacje, continuous improvement.",
+          "connector": "Łączysz ludzi i zasoby. Twoje środowisko: bizdev, partnerstwa, community, sprzedaż relacyjna.",
+          "expert": "Idziesz w głąb. Twoje środowisko: specjalistyczne role, doradztwo, badania, pozycja thought leadera.",
+          "strategist": "Widzisz szeroki obraz. Twoje środowisko: zarządzanie, konsulting, role C-level, planowanie.",
+          "caretaker": "Służysz i wspierasz. Twoje środowisko: edukacja, HR, coaching, zdrowie, customer success.",
+          "pioneer": "Eksplorujesz nowe terytoria. Twoje środowisko: R&D, innowacje, rynki wschodzące, role bez precedensu.",
+          "executor": "Dostarczasz i realizujesz. Twoje środowisko: project management, operacje, role z jasnym KPI."
+        }
+      }
+    }
+
+  ]
+}

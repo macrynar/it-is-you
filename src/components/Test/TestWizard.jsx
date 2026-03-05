@@ -7,6 +7,12 @@ import { STRENGTHS_TEST } from '../../data/tests/strengths.js';
 import { CAREER_TEST } from '../../data/tests/career.js';
 import { VALUES_TEST } from '../../data/tests/values.js';
 import { CAREER_DNA_TEST } from '../../data/tests/careerDna.js';
+import { EQ_TEST } from '../../data/tests/emotionalIntelligence.js';
+import { ATTACHMENT_TEST } from '../../data/tests/attachmentStyle.js';
+import { DEFENSE_TEST } from '../../data/tests/defenseMechanisms.js';
+import { MENTAL_TOUGHNESS_TEST } from '../../data/tests/mentalToughness.js';
+import { MEANING_TEST } from '../../data/tests/meaningSprituality.js';
+import { MOTIVATION_TEST } from '../../data/tests/motivationEngine.js';
 import { 
   calculateHexacoScore, 
   generateHexacoReport,
@@ -22,6 +28,18 @@ import {
   generateValuesReport,
   calculateCareerDnaScore,
   generateCareerDnaReport,
+  calculateEQScore,
+  generateEQReport,
+  calculateAttachmentScore,
+  generateAttachmentReport,
+  calculateDefenseScore,
+  generateDefenseReport,
+  calculateMentalToughnessScore,
+  generateMentalToughnessReport,
+  calculateMeaningScore,
+  generateMeaningReport,
+  calculateMotivationScore,
+  generateMotivationReport,
 } from '../../utils/scoring.js';
 import { supabase } from '../../lib/supabaseClient.js';
 
@@ -45,6 +63,12 @@ const TEST_META = {
   career: { title: 'Profil Kariery (RIASEC)', accent: '#009688' },
   values: { title: 'Kompas Wartości (PVQ)', accent: '#00B8D4' },
   career_dna: { title: 'DNA Kariery', accent: '#f97316' },
+  emotional_intelligence: { title: 'Inteligencja Emocjonalna (EQ)', accent: '#06b6d4' },
+  attachment_style: { title: 'Styl Przywiązania', accent: '#ec4899' },
+  defense_mechanisms: { title: 'Mechanizmy Obronne', accent: '#8b5cf6' },
+  mental_toughness: { title: 'Odporność Psychiczna (4C)', accent: '#f59e0b' },
+  meaning_spirituality: { title: 'Sens i Duchowość', accent: '#a78bfa' },
+  motivation_engine: { title: 'Silnik Motywacji', accent: '#10b981' },
 };
 
 export default function TestWizard({ testType = 'hexaco' }) {
@@ -69,6 +93,18 @@ export default function TestWizard({ testType = 'hexaco' }) {
             ? VALUES_TEST
             : testType === 'career_dna'
               ? CAREER_DNA_TEST
+              : testType === 'emotional_intelligence'
+              ? EQ_TEST
+              : testType === 'attachment_style'
+              ? ATTACHMENT_TEST
+              : testType === 'defense_mechanisms'
+              ? DEFENSE_TEST
+              : testType === 'mental_toughness'
+              ? MENTAL_TOUGHNESS_TEST
+              : testType === 'meaning_spirituality'
+              ? MEANING_TEST
+              : testType === 'motivation_engine'
+              ? MOTIVATION_TEST
               : HEXACO_TEST;
   const isEnneagram = TEST_DATA.scale_type === 'forced_choice';
   const isDarkTriad = testType === 'dark_triad';
@@ -76,8 +112,12 @@ export default function TestWizard({ testType = 'hexaco' }) {
   const isCareer = testType === 'career';
   const isValues = testType === 'values';
   const isCareerDna = testType === 'career_dna';
-  const isLikert6 = TEST_DATA.scale_type === 'likert_6';
-
+  const isEQ = testType === 'emotional_intelligence';
+  const isAttachment = testType === 'attachment_style';
+  const isDefense = testType === 'defense_mechanisms';
+  const isMentalToughness = testType === 'mental_toughness';
+  const isMeaning = testType === 'meaning_spirituality';
+  const isMotivation = testType === 'motivation_engine';
   const layoutMaxWidth = 'max-w-[1100px]';
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -158,6 +198,36 @@ export default function TestWizard({ testType = 'hexaco' }) {
         report = generateCareerDnaReport(scores);
         dbTestType = 'CAREER_DNA';
         redirectPath = '/test/career-dna/results';
+      } else if (isEQ) {
+        scores = calculateEQScore(responses);
+        report = generateEQReport(scores);
+        dbTestType = 'EQ';
+        redirectPath = '/test/eq/results';
+      } else if (isAttachment) {
+        scores = calculateAttachmentScore(responses);
+        report = generateAttachmentReport(scores);
+        dbTestType = 'ATTACHMENT';
+        redirectPath = '/test/attachment/results';
+      } else if (isDefense) {
+        scores = calculateDefenseScore(responses);
+        report = generateDefenseReport(scores);
+        dbTestType = 'DEFENSE';
+        redirectPath = '/test/defense/results';
+      } else if (isMentalToughness) {
+        scores = calculateMentalToughnessScore(responses);
+        report = generateMentalToughnessReport(scores);
+        dbTestType = 'MENTAL_TOUGHNESS';
+        redirectPath = '/test/mental-toughness/results';
+      } else if (isMeaning) {
+        scores = calculateMeaningScore(responses);
+        report = generateMeaningReport(scores);
+        dbTestType = 'MEANING';
+        redirectPath = '/test/meaning/results';
+      } else if (isMotivation) {
+        scores = calculateMotivationScore(responses);
+        report = generateMotivationReport(scores);
+        dbTestType = 'MOTIVATION';
+        redirectPath = '/test/motivation/results';
       } else {
         scores = calculateHexacoScore(responses);
         report = generateHexacoReport(scores);
@@ -235,6 +305,24 @@ export default function TestWizard({ testType = 'hexaco' }) {
           chart_data: scores.chart_data,
           sorted_dimensions: scores.sorted_dimensions,
         };
+        dbPayload.raw_answers = responses;
+      } else if (isEQ) {
+        dbPayload.raw_scores = { raw_scores: scores.raw_scores, percentile_scores: scores.percentile_scores, total_eq: scores.total_eq };
+        dbPayload.raw_answers = responses;
+      } else if (isAttachment) {
+        dbPayload.raw_scores = { raw_scores: scores.raw_scores, dominant_style: scores.dominant_style, sorted_styles: scores.sorted_styles };
+        dbPayload.raw_answers = responses;
+      } else if (isDefense) {
+        dbPayload.raw_scores = { raw_scores: scores.raw_scores, maturity_index: scores.maturity_index, sorted_mechanisms: scores.sorted_mechanisms };
+        dbPayload.raw_answers = responses;
+      } else if (isMentalToughness) {
+        dbPayload.raw_scores = { raw_scores: scores.raw_scores, percentile_scores: scores.percentile_scores, total_mt: scores.total_mt };
+        dbPayload.raw_answers = responses;
+      } else if (isMeaning) {
+        dbPayload.raw_scores = { raw_scores: scores.raw_scores, percentile_scores: scores.percentile_scores, total_meaning: scores.total_meaning };
+        dbPayload.raw_answers = responses;
+      } else if (isMotivation) {
+        dbPayload.raw_scores = { raw_scores: scores.raw_scores, top_drives: scores.top_drives, shadow_drive: scores.shadow_drive, sorted_drives: scores.sorted_drives };
         dbPayload.raw_answers = responses;
       } else {
         dbPayload.raw_scores = scores.raw_scores;
@@ -331,6 +419,9 @@ export default function TestWizard({ testType = 'hexaco' }) {
       };
     } else if (isCareerDna) {
       return { label: 'DNA Kariery' };
+    } else if (isEQ || isDefense || isMentalToughness || isMeaning || isMotivation || isAttachment) {
+      const dimensionInfo = TEST_DATA.dimensions.find(d => d.id === currentQuestion.dimension);
+      return { label: dimensionInfo?.name || 'Test' };
     } else {
       const dimensionInfo = TEST_DATA.dimensions.find(d => d.id === currentQuestion.dimension);
       return {
