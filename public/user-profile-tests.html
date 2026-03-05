@@ -2137,8 +2137,9 @@
             document.body.style.overflow = 'hidden';
         };
         window.confirmDisclaimer = function() {
+            var url = _pendingTestUrl;
             closeDisclaimer();
-            if (_pendingTestUrl) window.location.href = _pendingTestUrl;
+            if (url) window.location.href = url;
         };
         window.closeDisclaimer = function() {
             document.getElementById('disclaimer-overlay').classList.remove('open');
