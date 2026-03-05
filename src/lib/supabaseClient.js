@@ -182,7 +182,7 @@ export const signInWithMagicLink = async (email) => {
  */
 export const resetPasswordForEmail = async (email) => {
   try {
-    const redirectTo = `${APP_URL}/`
+    const redirectTo = `${APP_URL}/auth/callback`
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo,
     })
