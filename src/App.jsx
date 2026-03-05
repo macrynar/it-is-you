@@ -29,6 +29,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [isCallbackRoute, setIsCallbackRoute] = useState(false)
   const [currentRoute, setCurrentRoute] = useState(window.location.pathname)
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false)
 
   // Check for OAuth callback
   useEffect(() => {
@@ -36,6 +37,16 @@ function App() {
     setCurrentRoute(pathname)
     
     if (pathname === '/auth/callback' || pathname === '/auth/callback/') {
+      // Check if this is a password recovery flow (type=recovery in hash)
+      const hashParams = new URLSearchParams(window.location.hash.replace('#', ''))
+      if (hashParams.get('type') === 'recovery') {
+        // Stay on the page — Supabase SDK will fire PASSWORD_RECOVERY event
+        // which AuthModal listens for and switches to update-password tab
+        setIsPasswordRecovery(true)
+        setLoading(false)
+        return
+      }
+
       setIsCallbackRoute(true)
       // Supabase will set the session automatically
       // Just redirect after a moment
@@ -85,6 +96,13 @@ function App() {
     
     // Subscribe to auth changes
     const { data: { subscription } } = onAuthStateChange(({ event, session }) => {
+      // Never treat PASSWORD_RECOVERY as a normal sign-in — keep showing AuthModal
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsPasswordRecovery(true)
+        setLoading(false)
+        return
+      }
+
       setUser(session?.user || null)
       setLoading(false)
       
@@ -466,6 +484,19 @@ function App() {
           </div>
         </div>
       </div>
+    )
+  }
+
+  // Password recovery — always show AuthModal in update-password mode regardless of auth state
+  if (isPasswordRecovery) {
+    return (
+      <AuthModal
+        initialTab="update-password"
+        onAuthSuccess={() => {
+          setIsPasswordRecovery(false)
+          window.location.href = '/user-profile-tests.html'
+        }}
+      />
     )
   }
 

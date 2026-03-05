@@ -24,9 +24,9 @@ import {
  * - Error handling with user feedback
  * - Smooth animations and transitions
  */
-export default function AuthModal({ onAuthSuccess = () => {} }) {
+export default function AuthModal({ onAuthSuccess = () => {}, initialTab = 'login' }) {
   // ============ STATE MANAGEMENT ============
-  const [currentTab, setCurrentTab] = useState('login') // 'login', 'signup', 'magic-link', 'forgot-password', 'update-password'
+  const [currentTab, setCurrentTab] = useState(initialTab) // 'login', 'signup', 'magic-link', 'forgot-password', 'update-password'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
@@ -382,10 +382,11 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     if (error) {
       setGeneralError(authError(error))
     } else {
-      setSuccessMessage('Hasło zostało zmienione! Możesz się teraz zalogować.')
+      setSuccessMessage('Hasło zostało zmienione! Za chwilę zostaniesz przekierowany...')
       setNewPassword('')
       setConfirmPassword('')
       setTimeout(() => {
+        onAuthSuccess()
         setCurrentTab('login')
         setSuccessMessage(null)
       }, 3000)
