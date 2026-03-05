@@ -49,6 +49,32 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
 
   const signalGroupRef = useRef(null)
 
+  // ============ ERROR TRANSLATOR ============
+  const authError = (err) => {
+    const msg = (err?.message || err || '').toLowerCase()
+    if (msg.includes('rate limit') || msg.includes('too many') || msg.includes('429'))
+      return 'Zbyt wiele prób — poczekaj chwilę i spróbuj ponownie, lub zaloguj się przez Google / Apple.'
+    if (msg.includes('invalid login') || msg.includes('invalid credentials') || msg.includes('wrong password'))
+      return 'Nieprawidłowy email lub hasło.'
+    if (msg.includes('email not confirmed'))
+      return 'Email nie został potwierdzony. Sprawdź skrzynkę i kliknij link aktywacyjny.'
+    if (msg.includes('user already registered') || msg.includes('already been registered'))
+      return 'Ten adres email jest już zarejestrowany. Spróbuj się zalogować.'
+    if (msg.includes('password') && msg.includes('6'))
+      return 'Hasło musi mieć co najmniej 6 znaków.'
+    if (msg.includes('weak password'))
+      return 'Hasło jest zbyt słabe. Użyj co najmniej 6 znaków.'
+    if (msg.includes('invalid email') || msg.includes('unable to validate email'))
+      return 'Podaj prawidłowy adres email.'
+    if (msg.includes('email address') && msg.includes('not authorized'))
+      return 'Ten adres email nie jest dozwolony.'
+    if (msg.includes('network') || msg.includes('failed to fetch'))
+      return 'Błąd połączenia — sprawdź internet i spróbuj ponownie.'
+    if (msg.includes('session expired') || msg.includes('refresh token'))
+      return 'Sesja wygasła — zaloguj się ponownie.'
+    return err?.message || 'Wystąpił błąd — spróbuj ponownie.'
+  }
+
   // Load fonts
   useEffect(() => {
     const id = 'alcheme-auth-fonts'
@@ -173,7 +199,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     const { data, error } = await signInWithGoogle()
 
     if (error) {
-      setGeneralError(`Google sign-in error: ${error.message}`)
+      setGeneralError(authError(error))
       setLoading('google', false)
     } else {
       setSuccessMessage('Redirecting to Google...')
@@ -187,7 +213,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     const { data, error } = await signInWithFacebook()
 
     if (error) {
-      setGeneralError(`Facebook sign-in error: ${error.message}`)
+      setGeneralError(authError(error))
       setLoading('facebook', false)
     } else {
       setSuccessMessage('Redirecting to Facebook...')
@@ -201,7 +227,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     const { data, error } = await signInWithApple()
 
     if (error) {
-      setGeneralError(`Apple sign-in error: ${error.message}`)
+      setGeneralError(authError(error))
       setLoading('apple', false)
     } else {
       setSuccessMessage('Redirecting to Apple...')
@@ -215,17 +241,17 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
 
     // Validation
     if (!email || !password) {
-      setGeneralError('Email and password are required')
+      setGeneralError('Podaj email i hasło.')
       return
     }
 
     if (!email.includes('@')) {
-      setGeneralError('Please enter a valid email address')
+      setGeneralError('Podaj prawidłowy adres email.')
       return
     }
 
     if (password.length < 6) {
-      setGeneralError('Password must be at least 6 characters')
+      setGeneralError('Hasło musi mieć co najmniej 6 znaków.')
       return
     }
 
@@ -233,17 +259,9 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     const { data, error } = await signInWithEmail(email, password)
 
     if (error) {
-      // Better error messages
-      let errorMessage = error.message
-      if (error.message.includes('Invalid login credentials')) {
-        errorMessage = 'Nieprawidłowy email lub hasło. Jeśli dopiero się zarejestrowałeś, sprawdź czy potwierdziłeś email.'
-      } else if (error.message.includes('Email not confirmed')) {
-        errorMessage = 'Potwierdź swój email zanim się zalogujesz. Sprawdź skrzynkę pocztową.'
-      }
-      setGeneralError(errorMessage)
+      setGeneralError(authError(error))
       setLoading('email', false)
     } else if (!data.session) {
-      // No session despite successful login - email confirmation required
       setGeneralError('Potwierdź swój email przed zalogowaniem. Sprawdź skrzynkę pocztową.')
       setLoading('email', false)
     } else {
@@ -252,7 +270,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
       localStorage.setItem('user_email', data.user?.email || '')
       localStorage.setItem('user_session', JSON.stringify(data.user))
       
-      setSuccessMessage('Sign in successful! Redirecting...')
+      setSuccessMessage('Zalogowano! Przekierowuję...')
       setTimeout(() => {
         redirectAfterAuth()
       }, 1500)
@@ -266,17 +284,17 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
 
     // Validation
     if (!email || !password) {
-      setGeneralError('Email and password are required')
+      setGeneralError('Podaj email i hasło.')
       return
     }
 
     if (!email.includes('@')) {
-      setGeneralError('Please enter a valid email address')
+      setGeneralError('Podaj prawidłowy adres email.')
       return
     }
 
     if (password.length < 6) {
-      setGeneralError('Password must be at least 6 characters')
+      setGeneralError('Hasło musi mieć co najmniej 6 znaków.')
       return
     }
 
@@ -284,7 +302,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     const { data, error } = await signUpWithEmail(email, password)
 
     if (error) {
-      setGeneralError(`Sign up error: ${error.message}`)
+      setGeneralError(authError(error))
       setLoading('email', false)
     } else {
       // Check if email confirmation is required
@@ -294,7 +312,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
         localStorage.setItem('user_email', data.user?.email || '')
         localStorage.setItem('user_session', JSON.stringify(data.user))
         
-        setSuccessMessage('Sign up successful! Redirecting...')
+        setSuccessMessage('Konto utworzone! Przekierowuję...')
         setTimeout(() => {
           redirectAfterAuth()
         }, 1500)
@@ -302,11 +320,11 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
         // No session - email confirmation required
         setLoading('email', false)
         setSuccessMessage(
-          'Registration successful! Please check your email to confirm your account before logging in.'
+          'Rejestracja udana! Sprawdź skrzynkę email i kliknij link potwierdzający, aby aktywować konto.'
         )
-        // Switch to login tab after 3 seconds
+        // Switch to login tab after 5 seconds
         setTimeout(() => {
-          setActiveTab('login')
+          setCurrentTab('login')
           setSuccessMessage(null)
         }, 5000)
       }
@@ -332,7 +350,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     setLoading('resetPassword', false)
 
     if (error) {
-      setGeneralError(`Błąd: ${error.message}`)
+      setGeneralError(authError(error))
     } else {
       setSuccessMessage('Link do resetowania hasła został wysłany! Sprawdź skrzynkę pocztową i kliknij link w emailu.')
       setEmail('')
@@ -362,7 +380,7 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     setLoading('updatePassword', false)
 
     if (error) {
-      setGeneralError(`Błąd: ${error.message}`)
+      setGeneralError(authError(error))
     } else {
       setSuccessMessage('Hasło zostało zmienione! Możesz się teraz zalogować.')
       setNewPassword('')
@@ -380,12 +398,12 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     setSuccessMessage(null)
 
     if (!email) {
-      setGeneralError('Email is required')
+      setGeneralError('Podaj adres email.')
       return
     }
 
     if (!email.includes('@')) {
-      setGeneralError('Please enter a valid email address')
+      setGeneralError('Podaj prawidłowy adres email.')
       return
     }
 
@@ -393,10 +411,10 @@ export default function AuthModal({ onAuthSuccess = () => {} }) {
     const { data, error } = await signInWithMagicLink(email)
 
     if (error) {
-      setGeneralError(`Magic link error: ${error.message}`)
+      setGeneralError(authError(error))
       setLoading('magicLink', false)
     } else {
-      setSuccessMessage('Magic link sent! Check your email.')
+      setSuccessMessage('Link do logowania wysłany! Sprawdź skrzynkę email.')
       setEmail('')
     }
   }
