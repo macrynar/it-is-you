@@ -118,6 +118,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
   const isMentalToughness = testType === 'mental_toughness';
   const isMeaning = testType === 'meaning_spirituality';
   const isMotivation = testType === 'motivation_engine';
+  const isLikert6 = TEST_DATA.scale_type === 'likert_6';
   const layoutMaxWidth = 'max-w-[1100px]';
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
