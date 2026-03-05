@@ -181,7 +181,7 @@ export default function SocialShare({
           <Decor />
           <div style={{ position:'relative', zIndex:1, padding:'44px 32px 40px', height:'100%', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
             <div>
-              <div style={{ fontSize:9, letterSpacing:'0.24em', fontWeight:700, color:'rgba(0,240,255,0.65)', textTransform:'uppercase', marginBottom:6 }}>PROFIL PSYCHOMETRYCZNY</div>
+              <div style={{ fontSize:9, letterSpacing:'0.24em', fontWeight:700, color:'rgba(0,240,255,0.65)', textTransform:'uppercase', marginBottom:6 }}>PROFIL OSOBOWOŚCI</div>
               <div style={{ fontSize:10, color:'rgba(255,255,255,0.25)', letterSpacing:'0.04em' }}>{userName}</div>
             </div>
             <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'center' }}>

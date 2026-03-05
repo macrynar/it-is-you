@@ -1,7 +1,5 @@
 import React from 'react';
-import Footer from '../shared/Footer';
 import { Lock, LogOut, User, AlertCircle } from 'lucide-react';
-import Navbar from '../shared/Navbar';
 import AlchemeLogo from '../AlchemeLogo';
 
 interface NewUserDashboardProps {
@@ -18,7 +16,35 @@ export default function NewUserDashboard({
   return (
     <div className="min-h-screen">
       {/* NAVBAR */}
-      <Navbar isAuthenticated={true} activeLink="tests" />
+      <nav className="border-b border-white/5 bg-bg-surface/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          {/* Logo */}
+          <AlchemeLogo href="/" size={30} />
+
+          {/* Right Side */}
+          <div className="flex items-center gap-4">
+            {/* Account Status Badge */}
+            <span className="badge badge-pending">Konto Free</span>
+
+            {/* User Info */}
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-brand-gradient flex items-center justify-center ring-2 ring-brand-primary/30">
+                <User className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-sm font-medium text-slate-200 hidden sm:block">{username}</span>
+            </div>
+
+            {/* Logout Button */}
+            <button
+              onClick={onLogout}
+              className="btn-ghost p-2 rounded-lg"
+              title="Wyloguj się"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </nav>
 
       {/* MAIN CONTENT */}
       <main className="max-w-7xl mx-auto px-6 py-12">
@@ -39,7 +65,7 @@ export default function NewUserDashboard({
 
             {/* Subtext */}
             <p className="text-lg text-text-muted max-w-2xl mx-auto mb-8 leading-relaxed">
-              Twój profil psychometryczny jest pusty. Wykonaj test bazowy, aby wygenerować swoją unikalną Kartę Postaci i odkryć swoją psychologiczną naturę.
+              Twój profil psychometryczny jest pusty. Wykonaj test bazowy, aby wygenerować swoją unikalną Kartę Postaci i odkryć swoje unikalne cechy i talenty.
             </p>
 
             {/* CTA Button */}
@@ -116,7 +142,7 @@ export default function NewUserDashboard({
                     Zablokowany
                   </div>
                   <p className="text-[10px] text-slate-600 mt-1 leading-tight text-center">
-                    Dostępny po wykonaniu testu psychometrycznego
+                    Dostępny po wykonaniu testu
                   </p>
                 </div>
 
@@ -218,13 +244,19 @@ export default function NewUserDashboard({
         {/* Info Message */}
         <div className="text-center mt-12 p-8 glass-panel-brand rounded-2xl">
           <p className="text-slate-300 text-sm leading-relaxed max-w-2xl mx-auto">
-            Każdy element Twojej karty postaci zostanie wygenerowany na podstawie odpowiedzi w teście psychometrycznym. Test trwa około 15 minut i nie wymaga żadnej specjalnej wiedzy — odpowiadaj szczerze!
+            Każdy element Twojej karty postaci zostanie wygenerowany na podstawie odpowiedzi w teście osobowości. Test trwa około 15 minut i nie wymaga żadnej specjalnej wiedzy — odpowiadaj szczerze!
           </p>
         </div>
       </main>
 
       {/* FOOTER */}
-      <Footer />
+      <footer className="border-t border-white/5 bg-bg-surface/50 mt-20">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="text-center text-slate-600 text-xs">
+            <p>© 2026 Alcheme — Psychologiczna Analiza Osobowości | Jakość gwarantowana</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

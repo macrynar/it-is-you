@@ -173,7 +173,7 @@ export default function ProfessionalBadge({
           <li>Skopiuj powyższy kod HTML</li>
           <li><strong style={{ color:'rgba(255,255,255,0.7)' }}>Gmail:</strong> Ustawienia → Ogólne → Podpis → przycisk &lt;/&gt;</li>
           <li><strong style={{ color:'rgba(255,255,255,0.7)' }}>Outlook:</strong> Plik → Opcje → Poczta → Podpisy → Edytuj źródło</li>
-          <li>Zapisz i gotowe — Twój profil psychometryczny w stopce ✅</li>
+          <li>Zapisz i gotowe — Twój profil osobowości w stopce ✅</li>
         </ol>
       </div>
 

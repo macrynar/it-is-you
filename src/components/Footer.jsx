@@ -21,7 +21,7 @@ export default function Footer() {
               }}>Alcheme</span>
             </a>
             <p className="text-slate-500 text-sm leading-relaxed">
-              Naukowa diagnoza potencjału w formie przystępnej grywalizacji.
+              Odkryj swój potencjał — testy osobowości w formie przystępnej grywalizacji.
             </p>
             <a
               href="mailto:hello@alcheme.io"
