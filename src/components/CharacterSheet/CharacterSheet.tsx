@@ -835,7 +835,11 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
       const { data, error } = await supabase.functions.invoke('character-card-generate', {
         body: payload,
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          apikey: SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+        },
       });
       if (error) throw new Error((error as any)?.message ?? JSON.stringify(error));
       setLlmContent((data?.content ?? null) as CharacterCardContent | null);
