@@ -1078,7 +1078,7 @@
                             <p style="color:#94a3b8;font-size:13px;margin:0;">Ukończ wszystkie moduły aby odblokować pełną analizę</p>
                         </div>
                         <div style="text-align:right;flex-shrink:0;margin-left:16px;">
-                            <div id="completion-count" style="font-size:32px;font-weight:800;font-family:'Space Grotesk',sans-serif;background:linear-gradient(90deg,#38b6ff,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0/6</div>
+                            <div id="completion-count" style="font-size:32px;font-weight:800;font-family:'Space Grotesk',sans-serif;background:linear-gradient(90deg,#38b6ff,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">0/12</div>
                             <p style="font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.1em;margin:0;">Modułów</p>
                         </div>
                     </div>
@@ -1110,7 +1110,7 @@
                         </div>
                         <div>
                             <p style="font-size:12px;font-weight:700;color:#34d399;margin:0 0 2px;">🎉 Profil Ukończony!</p>
-                            <p style="font-size:13px;color:#cbd5e1;margin:0;">Gratulacje! Ukończyłeś wszystkie 6 modułów psychometrycznych.</p>
+                            <p style="font-size:13px;color:#cbd5e1;margin:0;">Gratulacje! Ukończyłeś wszystkie 12 modułów psychometrycznych.</p>
                         </div>
                     </div>
                 </div>
@@ -1127,7 +1127,7 @@
 
           <div class="iiy-modules-header">
             <span class="iiy-modules-title">Dostępne Moduły</span>
-            <span class="iiy-modules-count">(6)</span>
+            <span class="iiy-modules-count">(12)</span>
           </div>
 
           <div class="iiy-cards-grid">
@@ -1615,7 +1615,7 @@
               <div class="ch-xp-wrap" style="margin-bottom:18px;">
                 <div class="ch-xp-lbl">
                   <span style="color:rgba(255,255,255,.22)">PROFIL XP</span>
-                  <span style="color:rgba(56,182,255,.6)" id="ch-xp-label">0/7 TESTÓW</span>
+                  <span style="color:rgba(56,182,255,.6)" id="ch-xp-label">0/12 TESTÓW</span>
                 </div>
                 <div class="ch-xp-track"><div class="ch-xp-fill" id="ch-xp-fill" style="width:0%"></div></div>
               </div>
@@ -2566,8 +2566,8 @@
 
                 const user = session.user;
                 const completedCount = await getCompletedTestsCount();
-                const totalTests = 6;
-                const percentage = Math.round((completedCount / totalTests) * 100);
+                const totalTests = 12;
+                const percentage = Math.min(100, Math.round((completedCount / totalTests) * 100));
                 const nextTest = await getNextTest();
 
                 // Update user info
@@ -2717,17 +2717,17 @@
             (data || []).forEach(row => { if (!latest[row.test_type]) latest[row.test_type] = row; });
 
             const doneCount = Object.keys(latest).length;
-            const xpPct = Math.round((doneCount / 7) * 100);
+            const xpPct = Math.min(100, Math.round((doneCount / 12) * 100));
 
             // ── XP & Level ─────────────────────────────────────
             const xpFill = document.getElementById('ch-xp-fill');
             if (xpFill) xpFill.style.width = xpPct + '%';
             const xpLbl = document.getElementById('ch-xp-label');
-            if (xpLbl) xpLbl.textContent = `${doneCount}/7 TESTÓW`;
+            if (xpLbl) xpLbl.textContent = `${doneCount}/12 TESTÓW`;
             const pillEl = document.getElementById('ch-completion-pill');
-            if (pillEl) pillEl.textContent = doneCount === 7 ? 'PROFIL UKOŃCZONY · 7/7 TESTÓW' : `PROFIL W BUDOWIE · ${doneCount}/7`;
-            const levels = ['POCZĄTKUJĄCY','ODKRYWCA','BADACZ','ANALITYK','PROFILER','SPECJALISTA','EKSPERT','MISTRZ'];
-            const lvl = Math.min(doneCount, 7);
+            if (pillEl) pillEl.textContent = doneCount >= 12 ? 'PROFIL UKOŃCZONY · 12/12 TESTÓW' : `PROFIL W BUDOWIE · ${doneCount}/12`;
+            const levels = ['POCZĄTKUJĄCY','ODKRYWCA','BADACZ','ANALITYK','PROFILER','SPECJALISTA','STRATEG','EKSPERT','WIZJONER','ARCHITEKT','MISTRZ','LEGENDA','KOMPLEKSOWY'];
+            const lvl = Math.min(doneCount, 12);
             const lvlEl = document.getElementById('ch-lvl-text');
             if (lvlEl) lvlEl.textContent = `LVL ${lvl} · ${levels[lvl]}`;
 
@@ -2812,7 +2812,7 @@
                 const archEl = document.getElementById('ch-carch');
                 if (archEl) archEl.textContent = arch;
                 const codesEl = document.getElementById('ch-ccodes');
-                if (codesEl) codesEl.textContent = `HEXACO-60 · ${doneCount}/7 TESTÓW`;
+                if (codesEl) codesEl.textContent = `HEXACO-60 · ${doneCount}/12 TESTÓW`;
                 // Trait chips
                 if (con > 70) traitChips.push({label:'📋 Zdyscyplinowany', cls:'ch-ttg'});
                 if (con > 80) traitChips.push({label:'📐 Perfekcjonista',   cls:'ch-ttw'});
