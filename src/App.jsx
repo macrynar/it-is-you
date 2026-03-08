@@ -14,6 +14,7 @@ import DefenseResults from './components/Test/DefenseResults'
 import MentalToughnessResults from './components/Test/MentalToughnessResults'
 import MeaningResults from './components/Test/MeaningResults'
 import MotivationResults from './components/Test/MotivationResults'
+import ColorResults from './components/Test/ColorResults'
 import Settings from './components/Settings/Settings'
 import CharacterSheet from './components/CharacterSheet/CharacterSheet'
 import ShareCenter from './components/ShareCenter/ShareCenter'
@@ -310,6 +311,13 @@ function App() {
     if (loading) return <div className="min-h-screen bg-bg-main flex items-center justify-center"><div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin" /></div>
     if (!user) { window.location.href = '/auth'; return null; }
     return <><MotivationResults /><Footer /></>
+  }
+
+  // Handle /test/color/results
+  if (currentRoute === '/test/color/results' || currentRoute === '/test/color/results/') {
+    if (loading) return <div className="min-h-screen bg-bg-main flex items-center justify-center"><div className="w-12 h-12 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin" /></div>
+    if (!user) { window.location.href = '/auth'; return null; }
+    return <><ColorResults /><Footer /></>
   }
 
   if (currentRoute.startsWith('/share/')) {

@@ -13,6 +13,7 @@ import { DEFENSE_TEST } from '../../data/tests/defenseMechanisms.js';
 import { MENTAL_TOUGHNESS_TEST } from '../../data/tests/mentalToughness.js';
 import { MEANING_TEST } from '../../data/tests/meaningSprituality.js';
 import { MOTIVATION_TEST } from '../../data/tests/motivationEngine.js';
+import { COLOR_PERSONALITY_TEST } from '../../data/tests/colorPersonality.js';
 import { 
   calculateHexacoScore, 
   generateHexacoReport,
@@ -40,6 +41,8 @@ import {
   generateMeaningReport,
   calculateMotivationScore,
   generateMotivationReport,
+  calculateColorScore,
+  generateColorReport,
 } from '../../utils/scoring.js';
 import { supabase } from '../../lib/supabaseClient.js';
 
@@ -69,6 +72,7 @@ const TEST_META = {
   mental_toughness: { title: 'Odporność Psychiczna (4C)', accent: '#f59e0b' },
   meaning_spirituality: { title: 'Sens i Duchowość', accent: '#a78bfa' },
   motivation_engine: { title: 'Silnik Motywacji', accent: '#10b981' },
+  color_personality: { title: 'Kod Koloru', accent: '#E63946' },
 };
 
 export default function TestWizard({ testType = 'hexaco' }) {
@@ -105,6 +109,8 @@ export default function TestWizard({ testType = 'hexaco' }) {
               ? MEANING_TEST
               : testType === 'motivation_engine'
               ? MOTIVATION_TEST
+              : testType === 'color_personality'
+              ? COLOR_PERSONALITY_TEST
               : HEXACO_TEST;
   const isEnneagram = TEST_DATA.scale_type === 'forced_choice';
   const isDarkTriad = testType === 'dark_triad';
@@ -118,6 +124,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
   const isMentalToughness = testType === 'mental_toughness';
   const isMeaning = testType === 'meaning_spirituality';
   const isMotivation = testType === 'motivation_engine';
+  const isColorPersonality = testType === 'color_personality';
   const isLikert6 = TEST_DATA.scale_type === 'likert_6';
   const layoutMaxWidth = 'max-w-[1100px]';
   
@@ -229,6 +236,11 @@ export default function TestWizard({ testType = 'hexaco' }) {
         report = generateMotivationReport(scores);
         dbTestType = 'MOTIVATION';
         redirectPath = '/test/motivation/results';
+      } else if (isColorPersonality) {
+        scores = calculateColorScore(responses);
+        report = generateColorReport(scores);
+        dbTestType = 'COLOR_PERSONALITY';
+        redirectPath = '/test/color/results';
       } else {
         scores = calculateHexacoScore(responses);
         report = generateHexacoReport(scores);
@@ -325,6 +337,16 @@ export default function TestWizard({ testType = 'hexaco' }) {
       } else if (isMotivation) {
         dbPayload.raw_scores = { raw_scores: scores.raw_scores, top_drives: scores.top_drives, shadow_drive: scores.shadow_drive, sorted_drives: scores.sorted_drives };
         dbPayload.raw_answers = responses;
+      } else if (isColorPersonality) {
+        dbPayload.raw_scores = {
+          color_counts: scores.color_counts,
+          color_percentages: scores.color_percentages,
+          primary_color: scores.primary_color,
+          secondary_color: scores.secondary_color,
+          profile_key: scores.profile_key,
+          sorted_colors: scores.sorted_colors,
+        };
+        dbPayload.raw_answers = responses;
       } else {
         dbPayload.raw_scores = scores.raw_scores;
         dbPayload.percentile_scores = scores.percentile_scores;
@@ -363,16 +385,16 @@ export default function TestWizard({ testType = 'hexaco' }) {
         handleAnswer('b');
       }
       // For Career DNA: 'a'-'d' keys
-      else if (isCareerDna && ['a','b','c','d','A','B','C','D'].includes(e.key)) {
+      else if ((isCareerDna || isColorPersonality) && ['a','b','c','d','A','B','C','D'].includes(e.key)) {
         handleAnswer(e.key.toLowerCase());
       }
       // For HEXACO: number keys 1-5
-      else if (!isEnneagram && !isLikert6 && !isCareerDna && e.key >= '1' && e.key <= '5') {
+      else if (!isEnneagram && !isLikert6 && !isCareerDna && !isColorPersonality && e.key >= '1' && e.key <= '5') {
         const value = parseInt(e.key);
         handleAnswer(value);
       }
       // For Values (6-point scale): number keys 1-6
-      else if (!isEnneagram && isLikert6 && !isCareerDna && e.key >= '1' && e.key <= '6') {
+      else if (!isEnneagram && isLikert6 && !isCareerDna && !isColorPersonality && e.key >= '1' && e.key <= '6') {
         const value = parseInt(e.key);
         handleAnswer(value);
       }
@@ -390,7 +412,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [currentQuestionIndex, responses, canGoNext, canGoPrev, isEnneagram, isLikert6]);
+  }, [currentQuestionIndex, responses, canGoNext, canGoPrev, isEnneagram, isLikert6, isCareerDna, isColorPersonality]);
 
   // Get dimension/type badge info
   const getBadgeInfo = () => {
@@ -420,6 +442,8 @@ export default function TestWizard({ testType = 'hexaco' }) {
       };
     } else if (isCareerDna) {
       return { label: 'DNA Kariery' };
+    } else if (isColorPersonality) {
+      return { label: 'Kod Koloru' };
     } else if (isEQ || isDefense || isMentalToughness || isMeaning || isMotivation || isAttachment) {
       const dimensionInfo = TEST_DATA.dimensions.find(d => d.id === currentQuestion.dimension);
       return { label: dimensionInfo?.name || 'Test' };
@@ -475,7 +499,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
           </div>
 
           {/* Question UI */}
-          {isCareerDna ? (
+          {(isCareerDna || isColorPersonality) ? (
             /* ── Career DNA: 4-choice A/B/C/D ── */
             <div className="mb-3">
               <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-xl p-4 mb-3">
@@ -686,7 +710,7 @@ export default function TestWizard({ testType = 'hexaco' }) {
                   <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs">B</kbd>
                   <span>lub strzałki do nawigacji</span>
                 </>
-              ) : isCareerDna ? (
+              ) : (isCareerDna || isColorPersonality) ? (
                 <>
                   <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs">A</kbd>
                   <kbd className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-xs">B</kbd>

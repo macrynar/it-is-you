@@ -1,0 +1,389 @@
+{
+  "version": "2.0.0",
+  "language": "pl",
+  "test": {
+    "id": "color_personality",
+    "name": "Kod Koloru",
+    "subtitle": "COLOR PERSONALITY MAP",
+    "description": "Odkryj swój dominujący kolor osobowości — archetyp który definiuje jak myślisz, działasz i wchodzisz w relacje z ludźmi.",
+    "duration_min": 6,
+    "question_count": 32,
+    "format": "forced_choice_quad",
+    "instructions": "W każdym pytaniu wybierz jedno stwierdzenie które najlepiej cię opisuje. Nie ma dobrych ani złych odpowiedzi — wybieraj instynktownie, pierwszą myślą.",
+
+    "colors": [
+      {
+        "id": "red",
+        "name": "Czerwony",
+        "archetype": "Zdobywca",
+        "tagline": "Działam. Decyduję. Wygrywam.",
+        "core_need": "Kontrola i wyniki",
+        "core_fear": "Bycie słabym lub zależnym",
+        "strengths": ["Decyzyjność", "Odwaga", "Skuteczność", "Przywództwo", "Ambicja"],
+        "shadows": ["Dominacja", "Niecierpliwość", "Brak empatii", "Impulsywność"],
+        "in_relationship": "Przejmuje inicjatywę, oczekuje lojalności, może być trudny gdy traci kontrolę",
+        "at_work": "Naturalny lider, działa pod presją, potrzebuje autonomii i celów",
+        "communication": "Bezpośredni, konkretny, nie lubi owijania w bawełnę",
+        "color_hex": "#E63946"
+      },
+      {
+        "id": "yellow",
+        "name": "Żółty",
+        "archetype": "Inspirator",
+        "tagline": "Zarażam energią. Tworzę. Łączę.",
+        "core_need": "Uznanie i ekspresja",
+        "core_fear": "Bycie ignorowanym lub przeciętnym",
+        "strengths": ["Kreatywność", "Entuzjazm", "Komunikatywność", "Optymizm", "Charyzma"],
+        "shadows": ["Nieuważność na detale", "Impulsywność", "Powierzchowność", "Niestałość"],
+        "in_relationship": "Ciepły, zabawny, inspirujący — ale może zapominać o potrzebach innych",
+        "at_work": "Generuje pomysły, motywuje zespół, gubi się w detalach i rutynie",
+        "communication": "Ekspresyjny, emocjonalny, lubi opowiadać historię",
+        "color_hex": "#FFB703"
+      },
+      {
+        "id": "green",
+        "name": "Zielony",
+        "archetype": "Strażnik",
+        "tagline": "Słucham. Buduję mosty. Trzymam razem.",
+        "core_need": "Harmonia i przynależność",
+        "core_fear": "Konflikt i odrzucenie",
+        "strengths": ["Empatia", "Lojalność", "Cierpliwość", "Współpraca", "Stabilność"],
+        "shadows": ["Unikanie konfliktu", "Trudność z asertywnością", "Nadmierne poświęcanie się", "Opór przed zmianą"],
+        "in_relationship": "Głęboko oddany, ciepły, wspierający — ale może tłumić własne potrzeby",
+        "at_work": "Klej zespołu, mediator, niezawodny — potrzebuje stabilności i docenienia",
+        "communication": "Uważny słuchacz, dyplomatyczny, unika konfrontacji",
+        "color_hex": "#2D6A4F"
+      },
+      {
+        "id": "blue",
+        "name": "Niebieski",
+        "archetype": "Architekt",
+        "tagline": "Analizuję. Planuję. Doskonalę.",
+        "core_need": "Porządek i precyzja",
+        "core_fear": "Błąd i chaos",
+        "strengths": ["Analityczność", "Dokładność", "Systematyczność", "Rzetelność", "Głębia myślenia"],
+        "shadows": ["Perfekcjonizm", "Nadmierna ostrożność", "Chłód emocjonalny", "Paraliż analityczny"],
+        "in_relationship": "Wierny i rzetelny, ale może być trudny emocjonalnie — pokazuje miłość przez działanie nie słowa",
+        "at_work": "Ekspert, planista, kontroler jakości — potrzebuje jasnych zasad i czasu na analizę",
+        "communication": "Precyzyjny, oparty na faktach, unika pustych słów",
+        "color_hex": "#1D3557"
+      }
+    ],
+
+    "questions": [
+      {
+        "id": 1,
+        "options": [
+          { "color": "red", "text": "Jak już sobie coś postanowię, trudno mnie zatrzymać." },
+          { "color": "yellow", "text": "Jak już sobie coś postanowię, szukam kogo zarazić tym pomysłem." },
+          { "color": "green", "text": "Jak już sobie coś postanowię, upewniam się że wszyscy wokół są z tym okej." },
+          { "color": "blue", "text": "Jak już sobie coś postanowię, siadam i układam jak to zrealizuję krok po kroku." }
+        ]
+      },
+      {
+        "id": 2,
+        "options": [
+          { "color": "red", "text": "Kłótnia? Mówię wprost co myślę i chcę to zamknąć tu i teraz." },
+          { "color": "yellow", "text": "Kłótnia? Staram się rozładować atmosferę zanim eskaluje." },
+          { "color": "green", "text": "Kłótnia? Szukam czegoś na czym możemy się oboje zgodzić." },
+          { "color": "blue", "text": "Kłótnia? Wychodzę, ochłaniam i wracam gdy mogę myśleć spokojnie." }
+        ]
+      },
+      {
+        "id": 3,
+        "options": [
+          { "color": "red", "text": "Jak mi coś nie wychodzi, wstaję i próbuję inaczej. Tyle." },
+          { "color": "yellow", "text": "Jak mi coś nie wychodzi, szukam w tym jakiejś historii którą kiedyś opowiem." },
+          { "color": "green", "text": "Jak mi coś nie wychodzi, najbardziej boli mnie że zawiodłem kogoś kto na mnie liczył." },
+          { "color": "blue", "text": "Jak mi coś nie wychodzi, siadam i drążę co dokładnie poszło nie tak." }
+        ]
+      },
+      {
+        "id": 4,
+        "options": [
+          { "color": "red", "text": "Na spotkaniu zwykle to ja zaczynam i nadaję kierunek." },
+          { "color": "yellow", "text": "Na spotkaniu ożywiam atmosferę i wrzucam pomysły których nikt nie rozważał." },
+          { "color": "green", "text": "Na spotkaniu pilnuję żeby każdy mógł coś powiedzieć i nikt nie czuł się pominięty." },
+          { "color": "blue", "text": "Na spotkaniu pytam o fakty i sprawdzam czy to co mówimy ma sens." }
+        ]
+      },
+      {
+        "id": 5,
+        "options": [
+          { "color": "red", "text": "Szanuję ludzi którzy dowożą i nie owijają w bawełnę." },
+          { "color": "yellow", "text": "Szanuję ludzi którzy zaskakują mnie i są w pełni sobą." },
+          { "color": "green", "text": "Szanuję ludzi na których zawsze można polegać." },
+          { "color": "blue", "text": "Szanuję ludzi którzy wiedzą o czym mówią i to udowadniają." }
+        ]
+      },
+      {
+        "id": 6,
+        "options": [
+          { "color": "red", "text": "Lepsza szybka decyzja teraz niż idealna za tydzień." },
+          { "color": "yellow", "text": "Lepsza decyzja która mnie ekscytuje niż bezpieczna która mnie nudzi." },
+          { "color": "green", "text": "Lepsza decyzja którą wszyscy zaakceptują niż najlepsza którą ktoś odrzuci." },
+          { "color": "blue", "text": "Wolę zaczekać aż będę miał wystarczająco dużo informacji." }
+        ]
+      },
+      {
+        "id": 7,
+        "options": [
+          { "color": "red", "text": "Wyprowadza mnie z równowagi niekompetencja i marnowanie czasu." },
+          { "color": "yellow", "text": "Wyprowadza mnie z równowagi ciężka atmosfera gdzie nikt nie ma energii." },
+          { "color": "green", "text": "Wyprowadza mnie z równowagi gdy ktoś jest agresywny albo tworzy niepotrzebne napięcie." },
+          { "color": "blue", "text": "Wyprowadza mnie z równowagi chaos i błędy których można było łatwo uniknąć." }
+        ]
+      },
+      {
+        "id": 8,
+        "options": [
+          { "color": "red", "text": "Moje miejsce pracy jest funkcjonalne — liczy się co tu robię, nie jak wygląda." },
+          { "color": "yellow", "text": "Moje miejsce pracy ma charakter — coś tu jest ze mnie, widać że to moje." },
+          { "color": "green", "text": "Moje miejsce pracy jest ciepłe — zdjęcia, rośliny, coś co przypomina mi o ludziach których kocham." },
+          { "color": "blue", "text": "Moje miejsce pracy jest poukładane — wszystko ma swoje miejsce i tak ma zostać." }
+        ]
+      },
+      {
+        "id": 9,
+        "options": [
+          { "color": "red", "text": "Odpoczywam najlepiej gdy robię coś z czego potem jestem dumny." },
+          { "color": "yellow", "text": "Odpoczywam najlepiej gdy jest spontanicznie, nowe twarze i dobra energia." },
+          { "color": "green", "text": "Odpoczywam najlepiej przy bliskich, bez planów i bez pośpiechu." },
+          { "color": "blue", "text": "Odpoczywam najlepiej gdy mogę się zanurzyć w coś co mnie naprawdę interesuje." }
+        ]
+      },
+      {
+        "id": 10,
+        "options": [
+          { "color": "red", "text": "Powiedz mi co osiągnąć, a sam wymyślę jak." },
+          { "color": "yellow", "text": "Daj mi przestrzeń żebym wniósł do tego coś swojego." },
+          { "color": "green", "text": "Chcę wiedzieć jak to co robię pomaga reszcie zespołu." },
+          { "color": "blue", "text": "Potrzebuję jasnych kryteriów — skąd będę wiedział że zrobiłem to dobrze?" }
+        ]
+      },
+      {
+        "id": 11,
+        "options": [
+          { "color": "red", "text": "Inni widzą mnie jako kogoś kto wie czego chce i to realizuje." },
+          { "color": "yellow", "text": "Inni widzą mnie jako kogoś kto wnosi energię i sprawia że rzeczy się dzieją." },
+          { "color": "green", "text": "Inni widzą mnie jako kogoś przy kim można się zatrzymać i odetchnąć." },
+          { "color": "blue", "text": "Inni widzą mnie jako kogoś na kogo można liczyć że zrobi to dokładnie i solidnie." }
+        ]
+      },
+      {
+        "id": 12,
+        "options": [
+          { "color": "red", "text": "Gdy coś się psuje, przejmuję stery i działam." },
+          { "color": "yellow", "text": "Gdy coś się psuje, szukam rozwiązania którego nikt jeszcze nie próbował." },
+          { "color": "green", "text": "Gdy coś się psuje, najpierw sprawdzam czy wszyscy dobrze znoszą tę sytuację." },
+          { "color": "blue", "text": "Gdy coś się psuje, wracam do początku i szukam gdzie był błąd." }
+        ]
+      },
+      {
+        "id": 13,
+        "options": [
+          { "color": "red", "text": "Napisz mi krótko i na temat. Reszta to strata czasu." },
+          { "color": "yellow", "text": "Zadzwoń albo spotkajmy się — emailem tego nie załatwimy." },
+          { "color": "green", "text": "Lubię gdy jest przestrzeń żeby powiedzieć jak się z tym czuję, nie tylko co o tym myślę." },
+          { "color": "blue", "text": "Wolę pisemnie — mogę przemyśleć i odpowiedzieć precyzyjnie." }
+        ]
+      },
+      {
+        "id": 14,
+        "options": [
+          { "color": "red", "text": "Potrafię rzeczy uruchamiać i doprowadzać do końca gdy inni jeszcze deliberują." },
+          { "color": "yellow", "text": "Widzę możliwości tam gdzie inni widzą ściany." },
+          { "color": "green", "text": "Ludzie mi ufają i chcą przy mnie być — to moja największa siła." },
+          { "color": "blue", "text": "Wchodzę głębiej niż większość i rzadko się mylę gdy mam czas to przemyśleć." }
+        ]
+      },
+      {
+        "id": 15,
+        "options": [
+          { "color": "red", "text": "Nakręca mnie świadomość że jestem lepszy niż byłem wczoraj." },
+          { "color": "yellow", "text": "Nakręcają mnie nowe projekty, nowi ludzie, nowe wyzwania." },
+          { "color": "green", "text": "Nakręca mnie poczucie że to co robię komuś naprawdę pomaga." },
+          { "color": "blue", "text": "Nakręca mnie poczucie że zrobiłem coś naprawdę dobrze — nie tylko wystarczająco dobrze." }
+        ]
+      },
+      {
+        "id": 16,
+        "options": [
+          { "color": "red", "text": "Nie lubię gdy ktoś podważa moje decyzje nie mając ku temu solidnych argumentów." },
+          { "color": "yellow", "text": "Nie lubię gdy ktoś każe mi trzymać się sztywnych reguł bez wyjaśnienia po co one są." },
+          { "color": "green", "text": "Nie lubię gdy ktoś wpycha się z agresją tam gdzie można było po ludzku." },
+          { "color": "blue", "text": "Nie lubię gdy ktoś improwizuje i nie trzyma się tego co ustaliliśmy." }
+        ]
+      },
+      {
+        "id": 17,
+        "options": [
+          { "color": "red", "text": "Czas to zasób. Jego marnowanie traktuję poważnie." },
+          { "color": "yellow", "text": "Czas to przygoda — najlepsze rzeczy i tak dzieją się spontanicznie." },
+          { "color": "green", "text": "Czas spędzony z ludźmi których kocham jest zawsze dobrze spędzony." },
+          { "color": "blue", "text": "Każda godzina powinna mi coś dawać — wiedzę, postęp albo coś do przemyślenia." }
+        ]
+      },
+      {
+        "id": 18,
+        "options": [
+          { "color": "red", "text": "Mówię co myślę. Nawet jeśli nie wszystkim się to podoba." },
+          { "color": "yellow", "text": "Potrafię sprawić że inni uwierzą w coś w co ja wierzę." },
+          { "color": "green", "text": "Zawsze znajdę czas żeby wysłuchać kogoś kto tego potrzebuje." },
+          { "color": "blue", "text": "Zanim coś powiem, upewniam się że mam rację." }
+        ]
+      },
+      {
+        "id": 19,
+        "options": [
+          { "color": "red", "text": "W związku zwykle to ja decyduję dokąd idziemy — i tak mi lepiej." },
+          { "color": "yellow", "text": "W związku wnoszę zabawę i spontaniczność — z nudą sobie nie radzę." },
+          { "color": "green", "text": "W związku jestem do końca — partner jest dla mnie priorytetem." },
+          { "color": "blue", "text": "W związku pokazuję że mi zależy przez to co robię, nie przez to co mówię." }
+        ]
+      },
+      {
+        "id": 20,
+        "options": [
+          { "color": "red", "text": "Gdy nie mam co robić, zaczynam szukać następnego wyzwania." },
+          { "color": "yellow", "text": "Gdy nie mam co robić, dzwonię do kogoś albo organizuję coś spontanicznie." },
+          { "color": "green", "text": "Gdy nie mam co robić, cieszę się tym spokojem i odświeżam zaniedbane relacje." },
+          { "color": "blue", "text": "Gdy nie mam co robić, sięgam po książkę albo zaczynam porządkować to co od dawna odkładałem." }
+        ]
+      },
+      {
+        "id": 21,
+        "options": [
+          { "color": "red", "text": "Łatwiej mi prosić o przebaczenie niż o pozwolenie." },
+          { "color": "yellow", "text": "Zasady są po to żeby je twórczo interpretować gdy sytuacja tego wymaga." },
+          { "color": "green", "text": "Zasady chronią relacje — warto ich przestrzegać nawet gdy jest niewygodnie." },
+          { "color": "blue", "text": "Zasady istnieją z powodu — i zazwyczaj jest to dobry powód." }
+        ]
+      },
+      {
+        "id": 22,
+        "options": [
+          { "color": "red", "text": "Gdy ktoś mnie krytykuje, szybko oceniam czy ma rację i idę dalej." },
+          { "color": "yellow", "text": "Gdy ktoś mnie krytykuje, staram się obrócić to w coś konstruktywnego." },
+          { "color": "green", "text": "Gdy ktoś mnie krytykuje, biorę to do siebie głębiej niż pewnie powinienem." },
+          { "color": "blue", "text": "Gdy ktoś mnie krytykuje, sprawdzam czy ma merytoryczne podstawy zanim zmienię zdanie." }
+        ]
+      },
+      {
+        "id": 23,
+        "options": [
+          { "color": "red", "text": "Wolę być szefem niż mieć szefa." },
+          { "color": "yellow", "text": "Wolę miejsce gdzie mogę być sobą i nie ukrywać swojego stylu." },
+          { "color": "green", "text": "Wolę miejsce gdzie ludzie dbają o siebie nawzajem i można na kogoś liczyć." },
+          { "color": "blue", "text": "Wolę miejsce gdzie liczy się jakość i jest jasne co jest dobrą robotą." }
+        ]
+      },
+      {
+        "id": 24,
+        "options": [
+          { "color": "red", "text": "Sukces to dla mnie realny wpływ — zmienić coś co inni uważali za niemożliwe." },
+          { "color": "yellow", "text": "Sukces to dla mnie życie pełne energii, przeżyć i ludzi którzy mnie inspirują." },
+          { "color": "green", "text": "Sukces to dla mnie wiedzieć że jestem ważny dla ludzi których kocham." },
+          { "color": "blue", "text": "Sukces to dla mnie być naprawdę dobry w tym co robię — nie tylko wystarczająco dobry." }
+        ]
+      },
+      {
+        "id": 25,
+        "options": [
+          { "color": "red", "text": "Przy stole negocjacyjnym czuję się jak ryba w wodzie." },
+          { "color": "yellow", "text": "Przy prezentowaniu nowego pomysłu czuję się jak ryba w wodzie." },
+          { "color": "green", "text": "Przy budowaniu zaufania z kimś obcym czuję się jak ryba w wodzie." },
+          { "color": "blue", "text": "Przy rozkładaniu złożonego problemu na czynniki pierwsze czuję się jak ryba w wodzie." }
+        ]
+      },
+      {
+        "id": 26,
+        "options": [
+          { "color": "red", "text": "Gdy widzę szansę, działam zanim ktoś inny ją zobaczy." },
+          { "color": "yellow", "text": "Gdy widzę szansę, od razu opowiadam o niej innym żeby sprawdzić jak reagują." },
+          { "color": "green", "text": "Gdy widzę szansę, zastanawiam się jak wpłynie na ludzi wokół mnie." },
+          { "color": "blue", "text": "Gdy widzę szansę, oceniam ryzyka zanim zacznę się ekscytować." }
+        ]
+      },
+      {
+        "id": 27,
+        "options": [
+          { "color": "red", "text": "Decyduję i poprawiam w locie — analizowanie za długo to strata czasu." },
+          { "color": "yellow", "text": "Nudzę się gdy rozmowa staje się czysto techniczna i traci ludzki wymiar." },
+          { "color": "green", "text": "Ciężko mi odmówić gdy ktoś mnie potrzebuje, nawet gdy sam jestem zmęczony." },
+          { "color": "blue", "text": "Ciężko mi ruszyć naprzód gdy czuję że nie mam jeszcze wszystkich potrzebnych informacji." }
+        ]
+      },
+      {
+        "id": 28,
+        "options": [
+          { "color": "red", "text": "Z natury jestem w ofensywie — wyprzedzam zdarzenia zamiast na nie reagować." },
+          { "color": "yellow", "text": "Z natury improwizuję — najlepiej myślę gdy coś się dzieje, nie przed." },
+          { "color": "green", "text": "Z natury wspierам — najlepiej działam gdy wiem że komuś przy tym pomagam." },
+          { "color": "blue", "text": "Z natury analizuję — najpierw rozumiem sytuację, potem decyduję co zrobić." }
+        ]
+      },
+      {
+        "id": 29,
+        "options": [
+          { "color": "red", "text": "Gdy ktoś mówi że czegoś nie da się zrobić, mam ochotę udowodnić że się myli." },
+          { "color": "yellow", "text": "Gdy ktoś mówi że czegoś nie da się zrobić, zaczyna mi chodzić po głowie pięć innych dróg." },
+          { "color": "green", "text": "Gdy ktoś mówi że czegoś nie da się zrobić, szukam czy można to zrobić inaczej bez niszczenia relacji." },
+          { "color": "blue", "text": "Gdy ktoś mówi że czegoś nie da się zrobić, sprawdzam czy mają ku temu realne podstawy." }
+        ]
+      },
+      {
+        "id": 30,
+        "options": [
+          { "color": "red", "text": "Szanuję kogoś kto potrafi mi się postawić — miękkość mnie znudza." },
+          { "color": "yellow", "text": "Szanuję kogoś kto jest w pełni sobą i nie udaje kogoś innego." },
+          { "color": "green", "text": "Szanuję kogoś kto jest taki sam na zewnątrz jak w środku — bez masek." },
+          { "color": "blue", "text": "Szanuję kogoś kto wie o czym mówi i nie udaje że wie więcej niż wie." }
+        ]
+      },
+      {
+        "id": 31,
+        "options": [
+          { "color": "red", "text": "Zdarza mi się jechać po bandzie i dopiero potem zauważam że ktoś poczuł się przejechany." },
+          { "color": "yellow", "text": "Zaczynam dużo rzeczy naraz i nie zawsze je kończę — to moja pięta achillesowa." },
+          { "color": "green", "text": "Za długo znoszę sytuacje które mi szkodzą, bo nie chcę ranić innych." },
+          { "color": "blue", "text": "Potrafię analizować w kółko i odkładać decyzję tak długo, że okazja przechodzi." }
+        ]
+      },
+      {
+        "id": 32,
+        "options": [
+          { "color": "red", "text": "Za 10 lat chcę mieć realny wpływ na coś — branżę, ludzi, świat wokół mnie." },
+          { "color": "yellow", "text": "Za 10 lat chcę mieć życie pełne przeżyć i ludzi którzy mnie inspirują." },
+          { "color": "green", "text": "Za 10 lat chcę wiedzieć że byłem ważny dla kogoś kto był ważny dla mnie." },
+          { "color": "blue", "text": "Za 10 lat chcę być mistrzem w tym co robię i zostawić po sobie coś co przetrwa." }
+        ]
+      }
+    ],
+
+    "scoring": {
+      "method": "color_count",
+      "count_per_color": "liczba wyborów danego koloru (max 32)",
+      "primary_color": "kolor z najwyższą liczbą wyborów",
+      "secondary_color": "kolor z drugą najwyższą liczbą wyborów",
+      "profile_label": "połączenie primary + secondary np. Czerwony-Niebieski = Zdobywca-Architekt",
+      "percentage": "wynik każdego koloru / 32 * 100",
+      "interpretation": {
+        "dominant_primary": {
+          "red": "Jesteś Zdobywcą. Twój świat to działanie, wpływ i wyniki. Ludzie czują twoją energię gdy wchodzisz do pokoju.",
+          "yellow": "Jesteś Inspiratorem. Twój świat to pomysły, ludzie i możliwości. Zarażasz innych wizją i entuzjazmem.",
+          "green": "Jesteś Strażnikiem. Twój świat to relacje, harmonia i lojalność. Jesteś fundamentem dla tych których kochasz.",
+          "blue": "Jesteś Architektem. Twój świat to precyzja, głębia i doskonałość. Myślisz tam gdzie inni przestają."
+        },
+        "combination_profiles": {
+          "red_yellow": "Zdobywca-Inspirator: Charyzmatyczny lider który porywa innych swoją wizją i energią. Ryzyko: brak cierpliwości dla szczegółów.",
+          "red_blue": "Zdobywca-Architekt: Strategiczny wykonawca który działa szybko ale na podstawie solidnych danych. Ryzyko: zimny i trudny w relacjach.",
+          "red_green": "Zdobywca-Strażnik: Lider który naprawdę dba o swój zespół. Ryzyko: wewnętrzny konflikt między dominacją a harmonią.",
+          "yellow_green": "Inspirator-Strażnik: Ciepły, charyzmatyczny łącznik ludzi. Ryzyko: unika trudnych decyzji żeby nie ranić.",
+          "yellow_blue": "Inspirator-Architekt: Kreatywny wizjoner z analitycznym zapleczem. Ryzyko: zbyt wiele pomysłów, za mało realizacji.",
+          "green_blue": "Strażnik-Architekt: Niezawodny ekspert który buduje głębokie zaufanie. Ryzyko: unika ryzyka i zmian za wszelką cenę."
+        }
+      }
+    }
+  }
+}

@@ -447,6 +447,15 @@
         .iiy-card.orange .iiy-card-meta      { color: rgba(251,146,60,0.6); }
         .iiy-card.orange .iiy-card-methodology { color: rgba(251,146,60,0.8); }
 
+        /* spectrum — Kod Koloru */
+        .iiy-card.spectrum::after { background: linear-gradient(90deg,#E63946,#FFB703,#2D9764,#60a5fa); }
+        .iiy-card.spectrum:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 0 0 1px rgba(230,57,70,0.45), 0 0 30px -4px rgba(230,57,70,0.3), 0 0 60px -8px rgba(230,57,70,0.18), 0 16px 48px -6px rgba(0,0,0,0.7); }
+        .iiy-card.spectrum .iiy-card-icon-wrap { background: rgba(230,57,70,0.15); border-color: rgba(230,57,70,0.3); }
+        .iiy-card.spectrum .iiy-card-icon      { color: #E63946; }
+        .iiy-card.spectrum .iiy-card-tag       { color: #E63946; border-color: rgba(230,57,70,0.35); background: rgba(230,57,70,0.1); }
+        .iiy-card.spectrum .iiy-card-meta      { color: rgba(230,57,70,0.6); }
+        .iiy-card.spectrum .iiy-card-methodology { color: rgba(230,57,70,0.8); }
+
         /* GLOW LINE */
         .iiy-card-glow {
           position: absolute; bottom: 0; left: 20%; right: 20%; height: 1px;
@@ -461,6 +470,7 @@
         .emerald  .iiy-card-glow { background: #34d399;  box-shadow: 0 0 12px 3px rgba(16,185,129,0.6); }
         .teal     .iiy-card-glow { background: #2dd4bf;  box-shadow: 0 0 12px 3px rgba(20,184,166,0.6); }
         .orange   .iiy-card-glow { background: #f97316;  box-shadow: 0 0 12px 3px rgba(249,115,22,0.6); }
+        .spectrum .iiy-card-glow { background: #E63946;  box-shadow: 0 0 12px 3px rgba(230,57,70,0.6); }
 
         /* TOP ROW */
         .iiy-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
@@ -529,6 +539,8 @@
         .iiy-card-btn.primary-teal:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 1px rgba(20,184,166,0.6), 0 0 28px -2px rgba(20,184,166,0.5), 0 8px 24px -4px rgba(0,0,0,0.6); }
         .iiy-card-btn.primary-orange  { background: linear-gradient(110deg, #7c2d12 0%, #ea580c 55%, #fb923c 100%); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(249,115,22,0.25), 0 0 20px -2px rgba(249,115,22,0.3), 0 4px 16px -2px rgba(0,0,0,0.5); }
         .iiy-card-btn.primary-orange:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 1px rgba(249,115,22,0.6), 0 0 28px -2px rgba(249,115,22,0.5), 0 8px 24px -4px rgba(0,0,0,0.6); }
+        .iiy-card-btn.primary-spectrum { background: linear-gradient(110deg, #7f0012 0%, #E63946 45%, #FFB703 100%); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(230,57,70,0.3), 0 0 20px -2px rgba(230,57,70,0.3), 0 4px 16px -2px rgba(0,0,0,0.5); }
+        .iiy-card-btn.primary-spectrum:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 0 0 1px rgba(230,57,70,0.6), 0 0 28px -2px rgba(230,57,70,0.5), 0 8px 24px -4px rgba(0,0,0,0.6); }
         /* Premium lock button — purple-golden gradient */
         .iiy-card-btn.premium-lock {
           background: linear-gradient(110deg, #4f22a0 0%, #7c3aed 40%, #d97706 100%);
@@ -1497,6 +1509,35 @@
               </button>
             </div>
 
+            <!-- Kod Koloru tile -->
+            <div class="iiy-card spectrum" onclick="startColorTest()">
+              <div class="iiy-card-glow"></div>
+              <div class="iiy-card-top">
+                <div class="iiy-card-icon-wrap">
+                  <span class="iiy-card-icon">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="iiy-badge-free">FREE</span>
+                  <span id="color-status" class="iiy-card-tag">Do Wykonania</span>
+                </div>
+              </div>
+              <div class="iiy-card-title">Kod Koloru</div>
+              <div class="iiy-card-methodology">COLOR PERSONALITY MAP (R/Y/G/B)</div>
+              <div class="iiy-card-desc">Odkryj swój dominujący kolor osobowości — archetyp który definiuje jak myślisz, działasz i wchodzisz w relacje. Czerwony, Żółty, Zielony czy Niebieski?</div>
+              <div class="iiy-card-meta">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>6 min</span>
+                <span class="iiy-card-meta-dot"></span>
+                <span>32 pytania</span>
+              </div>
+              <div class="iiy-card-divider"></div>
+              <button id="color-button" class="iiy-card-btn primary-spectrum">
+                Odkryj Swój Kod Koloru <span class="iiy-card-btn-arrow">›</span>
+              </button>
+            </div>
+
           </div>
         </section>
 
@@ -2416,6 +2457,36 @@
             }
         }
 
+        // ── Kod Koloru (Color Personality) ────────────────────────────────
+        async function checkColorCompleted() {
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError || !session) return false;
+                const { data, error } = await supabase
+                    .from('user_psychometrics')
+                    .select('id')
+                    .eq('user_id', session.user.id)
+                    .eq('test_type', 'COLOR_PERSONALITY')
+                    .limit(1);
+                if (error) { console.error('Error checking Color completion:', error); return false; }
+                return data && data.length > 0;
+            } catch (err) { console.error('Error in checkColorCompleted:', err); return false; }
+        }
+        window.startColorTest = async function() {
+            const completed = await checkColorCompleted();
+            if (completed) { window.location.href = '/test/color/results'; }
+            else { launchTest('/test?type=color_personality'); }
+        }
+        async function updateColorUI() {
+            const completed = await checkColorCompleted();
+            const statusEl = document.getElementById('color-status');
+            const buttonEl = document.getElementById('color-button');
+            if (completed) {
+                if (statusEl) { statusEl.textContent = 'Ukończony'; statusEl.className = 'iiy-card-tag'; statusEl.style.color = '#38b6ff'; statusEl.style.borderColor = 'rgba(56,182,255,0.35)'; statusEl.style.background = 'rgba(56,182,255,0.1)'; }
+                if (buttonEl) { buttonEl.innerHTML = '👁 Zobacz Wynik'; buttonEl.className = 'iiy-card-btn ghost'; }
+            }
+        }
+
         // Update UI for Strengths test
         async function updateStrengthsUI() {
             const completed = await checkStrengthsCompleted();
@@ -2583,6 +2654,7 @@
             await updateMentalToughnessUI();
             await updateMeaningUI();
             await updateMotivationUI();
+            await updateColorUI();
             console.log('Dashboard initialized successfully');
         }
 

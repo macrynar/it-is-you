@@ -9,6 +9,7 @@ import { DARK_TRIAD_TEST } from '../data/tests/darkTriad.js';
 import { STRENGTHS_TEST } from '../data/tests/strengths.js';
 import { CAREER_TEST } from '../data/tests/career.js';
 import { VALUES_TEST } from '../data/tests/values.js';
+import { COLOR_PERSONALITY_TEST } from '../data/tests/colorPersonality.js';
 
 /**
  * Calculate HEXACO-60 scores from user responses
@@ -2297,5 +2298,94 @@ export function generateMotivationReport(scores) {
     top_drives: scores.top_drives,
     shadow_drive: scores.shadow_drive,
     summary: `Twoje główne siły napędowe: ${scores.top_drives.map(d => d.name).join(', ')}. Cień: ${scores.shadow_drive.name}.`,
+  };
+}
+
+// ─── Kod Koloru — Color Personality ──────────────────────────────────────────
+
+/**
+ * Calculate Color Personality scores from user responses
+ * @param {Object} responses - Object mapping question IDs (1-32) to answers ('a'|'b'|'c'|'d')
+ * @returns {Object} Color counts, percentages, primary/secondary color, profile key
+ */
+export function calculateColorScore(responses) {
+  if (Object.keys(responses).length !== 32) {
+    throw new Error(`Expected 32 responses, got ${Object.keys(responses).length}`);
+  }
+
+  // a → red, b → yellow, c → green, d → blue (consistent across all questions)
+  const colorMap = { a: 'red', b: 'yellow', c: 'green', d: 'blue' };
+  const counts = { red: 0, yellow: 0, green: 0, blue: 0 };
+
+  COLOR_PERSONALITY_TEST.questions.forEach(q => {
+    const r = responses[q.id];
+    if (r === undefined || r === null) {
+      throw new Error(`Missing response for question ${q.id}`);
+    }
+    const color = colorMap[String(r).toLowerCase()];
+    if (color) counts[color]++;
+  });
+
+  const percentages = {};
+  Object.keys(counts).forEach(c => {
+    percentages[c] = parseFloat(((counts[c] / 32) * 100).toFixed(1));
+  });
+
+  // Sort colors by count descending
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const primaryColor = sorted[0][0];
+  const secondaryColor = sorted[1][0];
+
+  // Normalise profile key — always smaller color alphabetically first
+  const colorOrder = ['blue', 'green', 'red', 'yellow'];
+  const pairSorted = [primaryColor, secondaryColor].sort((a, b) => colorOrder.indexOf(a) - colorOrder.indexOf(b));
+  const profileKey = pairSorted.join('_');
+
+  // Validate against known combination keys, fall back to raw pair
+  const validKeys = Object.keys(COLOR_PERSONALITY_TEST.combination_profiles);
+  const resolvedKey = validKeys.includes(profileKey)
+    ? profileKey
+    : `${primaryColor}_${secondaryColor}`;
+
+  return {
+    test_id: COLOR_PERSONALITY_TEST.test_id,
+    test_name: COLOR_PERSONALITY_TEST.test_name,
+    completed_at: new Date().toISOString(),
+    color_counts: counts,
+    color_percentages: percentages,
+    primary_color: primaryColor,
+    secondary_color: secondaryColor,
+    profile_key: resolvedKey,
+    sorted_colors: sorted.map(([id, count]) => ({
+      id,
+      count,
+      percentage: percentages[id],
+      ...COLOR_PERSONALITY_TEST.colors.find(c => c.id === id),
+    })),
+    raw_answers: responses,
+  };
+}
+
+/**
+ * Generate Color Personality report for persistence
+ * @param {Object} scores - Output of calculateColorScore
+ * @returns {Object} Report object to store in user_psychometrics.report
+ */
+export function generateColorReport(scores) {
+  const primaryColorData = COLOR_PERSONALITY_TEST.colors.find(c => c.id === scores.primary_color);
+  const secondaryColorData = COLOR_PERSONALITY_TEST.colors.find(c => c.id === scores.secondary_color);
+  return {
+    test_id: scores.test_id,
+    test_name: scores.test_name,
+    completed_at: scores.completed_at,
+    color_counts: scores.color_counts,
+    color_percentages: scores.color_percentages,
+    primary_color: scores.primary_color,
+    secondary_color: scores.secondary_color,
+    profile_key: scores.profile_key,
+    sorted_colors: scores.sorted_colors,
+    primary_archetype: primaryColorData?.archetype ?? null,
+    secondary_archetype: secondaryColorData?.archetype ?? null,
+    summary: `Twój dominujący kolor to ${primaryColorData?.name ?? scores.primary_color} (${primaryColorData?.archetype ?? ''}), drugi to ${secondaryColorData?.name ?? scores.secondary_color} (${secondaryColorData?.archetype ?? ''}).`,
   };
 }
