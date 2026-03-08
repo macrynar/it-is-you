@@ -1496,6 +1496,251 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
               )}
             </section>
 
+            <SectionDivider label="Cechy Charakterystyczne" />
+
+            {/* ── Silnik motywacji / Inteligencja emocjonalna / Sens i duchowość ── */}
+
+            {/* Col 1 – Silnik motywacji */}
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col">
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-[10px] tracking-[2px] font-mono text-amber-300/55 uppercase">Silnik Motywacji</div>
+                {!raw.ENNEAGRAM ? <span className="badge">Zablokowane</span> : null}
+              </div>
+              <div className="mb-4 text-[11px] text-white/25">Głęboka motywacja, lęk i wzorzec działania</div>
+              {raw.ENNEAGRAM && ennN ? (() => {
+                const meta = ENNEAGRAM_META[ennN];
+                return (
+                  <div className="flex flex-col gap-3 flex-1">
+                    {/* Type badge */}
+                    <div className="flex items-center gap-3 rounded-xl border border-amber-400/20 bg-amber-500/[0.07] px-3 py-2.5">
+                      <span className="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center text-sm font-extrabold bg-amber-500/20 border border-amber-400/35 text-amber-300 shadow-[0_0_12px_-3px_rgba(251,191,36,0.5)]">
+                        {ennN}
+                      </span>
+                      <div>
+                        <div className="text-sm font-bold text-white/85">{meta?.name}</div>
+                        <div className="text-[10px] text-amber-300/50 uppercase tracking-wider">{meta?.mottoEn}</div>
+                      </div>
+                      {ennWing && (
+                        <span className="ml-auto text-[10px] font-mono text-white/30 bg-white/5 border border-white/10 px-2 py-1 rounded-md">{ennWing}</span>
+                      )}
+                    </div>
+
+                    {/* Motivation */}
+                    <div className="rounded-xl border border-amber-400/15 bg-amber-500/[0.04] p-3 transition-all duration-200 hover:border-amber-400/28 hover:-translate-y-px">
+                      <div className="text-[9px] font-mono tracking-[2px] uppercase text-amber-300/50 mb-1.5">✦ Motywacja</div>
+                      <p className="text-sm text-white/70 leading-relaxed">{meta?.motivation}</p>
+                    </div>
+
+                    {/* Fear */}
+                    <div className="rounded-xl border border-white/8 bg-white/[0.03] p-3 transition-all duration-200 hover:border-white/15 hover:-translate-y-px">
+                      <div className="text-[9px] font-mono tracking-[2px] uppercase text-white/25 mb-1.5">◦ Głęboki lęk</div>
+                      <p className="text-sm text-white/50 leading-relaxed">{meta?.fear}</p>
+                    </div>
+
+                    {/* Stress + Growth compact row */}
+                    <div className="grid grid-cols-1 gap-2">
+                      <div className="rounded-xl border border-rose-400/12 bg-rose-500/[0.03] px-3 py-2.5">
+                        <div className="text-[9px] font-mono tracking-[2px] uppercase text-rose-300/45 mb-1">Pod presją</div>
+                        <p className="text-xs text-white/45 leading-relaxed">{meta?.stress}</p>
+                      </div>
+                      <div className="rounded-xl border border-emerald-400/12 bg-emerald-500/[0.03] px-3 py-2.5">
+                        <div className="text-[9px] font-mono tracking-[2px] uppercase text-emerald-300/45 mb-1">W rozwoju</div>
+                        <p className="text-xs text-white/45 leading-relaxed">{meta?.growth}</p>
+                      </div>
+                    </div>
+
+                    {/* AI synthesis */}
+                    <div className="mt-auto rounded-xl p-3 border border-white/10 bg-white/5 iiy-hover-panel">
+                      <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Synteza AI</div>
+                      {llmLoading ? (
+                        <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-4/5 mt-2" /></div>
+                      ) : llmContent?.enneagram_motivation_text && !llmError ? (
+                        <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.enneagram_motivation_text}</div>
+                      ) : (
+                        <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })() : (
+                <a href="/user-profile-tests.html" className="mt-2 block bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white/55 hover:border-amber-400/30 transition no-underline iiy-hover-panel">
+                  Ukończ test Enneagram, aby odblokować ten kafel →
+                </a>
+              )}
+            </section>
+
+            {/* Col 2 – Inteligencja emocjonalna */}
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col">
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-[10px] tracking-[2px] font-mono text-rose-300/55 uppercase">Inteligencja Emocjonalna</div>
+                {!raw.HEXACO ? <span className="badge">Zablokowane</span> : null}
+              </div>
+              <div className="mb-4 text-[11px] text-white/25">Empatia, stabilność i wrażliwość interpersonalna</div>
+              {raw.HEXACO ? (() => {
+                const EI_DIMS = [
+                  { id: 'emotionality',    label: 'Emocjonalność', hint:'Empatia, troska, intuicja', color:'#f43f5e' },
+                  { id: 'agreeableness',   label: 'Ugodowość',     hint:'Cierpliwość, współpraca', color:'#34d399' },
+                  { id: 'honesty_humility',label: 'Uczciwość',     hint:'Autentyczność, szczerość',  color:'#60a5fa' },
+                ] as const;
+                return (
+                  <div className="flex flex-col gap-3 flex-1">
+                    {/* Dimension bars */}
+                    <div className="space-y-3">
+                      {EI_DIMS.map(({ id, label, hint, color }) => {
+                        const p = clamp(Number(hexPct[id] ?? 0), 0, 100);
+                        const lvl = p >= 70 ? 'Wysoka' : p >= 40 ? 'Średnia' : p > 0 ? 'Niska' : '—';
+                        const lvlCls = p >= 70 ? 'text-emerald-300/70' : p >= 40 ? 'text-sky-300/70' : 'text-white/35';
+                        return (
+                          <div key={id} className="rounded-xl border bg-white/[0.03] px-3 py-3 transition-all duration-200 hover:-translate-y-px"
+                            style={{ borderColor: p > 0 ? `${color}28` : 'rgba(255,255,255,0.07)' }}>
+                            <div className="flex items-center justify-between mb-1.5">
+                              <div>
+                                <span className="text-sm font-semibold text-white/80">{label}</span>
+                                <span className="ml-2 text-[10px] text-white/25">{hint}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className={`text-[10px] font-semibold ${lvlCls}`}>{lvl}</span>
+                                <span className="text-sm font-mono font-bold" style={{ color: p > 0 ? color : 'rgba(255,255,255,0.25)' }}>{p > 0 ? `${p}` : '—'}</span>
+                              </div>
+                            </div>
+                            <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full rounded-full transition-all duration-700"
+                                style={{ width: `${p}%`, background: `linear-gradient(90deg,${color}99,${color}cc)`, boxShadow: p > 0 ? `0 0 8px 1px ${color}45` : undefined }} />
+                            </div>
+                            {/* AI facet interpretation */}
+                            {!llmLoading && llmContent?.hexaco_interpretations?.[id] && !llmError && (
+                              <p className="mt-2 text-xs text-white/40 leading-relaxed italic">{llmContent.hexaco_interpretations[id]}</p>
+                            )}
+                            {llmLoading && <div className="mt-2"><Skeleton className="h-3 w-full" /></div>}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* EI summary hint */}
+                    {(() => {
+                      const eP = clamp(Number(hexPct.emotionality ?? 0), 0, 100);
+                      const aP = clamp(Number(hexPct.agreeableness ?? 0), 0, 100);
+                      const avg = (eP + aP) / 2;
+                      const summaryLabel = avg >= 65 ? '🟢 Wysoka wrażliwość emocjonalna' : avg >= 40 ? '🟡 Zrównoważona wrażliwość' : avg > 0 ? '🔵 Analityczny dystans emocjonalny' : null;
+                      return summaryLabel ? (
+                        <div className="rounded-xl border border-white/8 bg-white/[0.04] px-3 py-2.5 mt-1">
+                          <span className="text-xs text-white/50 leading-snug">{summaryLabel}</span>
+                        </div>
+                      ) : null;
+                    })()}
+
+                    {/* Attachment note if available */}
+                    <div className="mt-auto rounded-xl p-3 border border-white/10 bg-white/5 iiy-hover-panel">
+                      <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Analiza AI · Emocjonalność</div>
+                      {llmLoading ? (
+                        <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-3/4 mt-2" /></div>
+                      ) : llmContent?.hexaco_interpretations?.emotionality && !llmError ? (
+                        <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.hexaco_interpretations.emotionality}</div>
+                      ) : (
+                        <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })() : (
+                <a href="/user-profile-tests.html" className="mt-2 block bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white/55 hover:border-rose-400/30 transition no-underline iiy-hover-panel">
+                  Ukończ test HEXACO, aby odblokować ten kafel →
+                </a>
+              )}
+            </section>
+
+            {/* Col 3 – Sens i duchowość */}
+            <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col">
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-[10px] tracking-[2px] font-mono text-violet-300/55 uppercase">Sens i Duchowość</div>
+                {!raw.VALUES ? <span className="badge">Zablokowane</span> : null}
+              </div>
+              <div className="mb-4 text-[11px] text-white/25">Wartości transcendentne i nadrzędny sens życia</div>
+              {raw.VALUES ? (() => {
+                const TRANSCENDENT_IDS = new Set(['universalism', 'benevolence', 'tradition', 'conformity', 'security', 'spirituality']);
+                const allVals: any[] = valuesRep?.all_values ?? raw.VALUES?.raw_scores?.sorted_values ?? [];
+                const topAll = Array.isArray(allVals) ? allVals.slice(0, 6) : [];
+                const transcendentVals = topAll.filter((v: any) => TRANSCENDENT_IDS.has(String(v?.id ?? '')));
+                const displayVals = transcendentVals.length >= 2 ? topAll : topAll.slice(0, 5);
+                return (
+                  <div className="flex flex-col gap-3 flex-1">
+                    {/* Top values list */}
+                    <div className="space-y-2">
+                      {displayVals.map((v: any, idx: number) => {
+                        const id = String(v?.id ?? '');
+                        const schwartzDef = SCHWARTZ_CIRCUMPLEX.find((s) => s.id === id);
+                        const score = Number(v?.centered_score ?? v?.raw_score ?? v?.score ?? 0);
+                        const maxS = 5;
+                        const barPct = score > 0 ? clamp(Math.round((score / maxS) * 100), 0, 100) : 0;
+                        const isTrans = TRANSCENDENT_IDS.has(id);
+                        return (
+                          <div key={`${id}-${idx}`}
+                            className="flex items-center gap-3 rounded-xl border bg-white/[0.03] px-3 py-2.5 transition-all duration-200 hover:-translate-y-px"
+                            style={{ borderColor: schwartzDef ? `${schwartzDef.color}35` : 'rgba(255,255,255,0.07)', background: isTrans ? `${schwartzDef?.color ?? '#7c3aed'}0a` : undefined }}>
+                            <span className="w-6 h-6 rounded-lg flex-shrink-0 flex items-center justify-center text-[11px] font-extrabold"
+                              style={{ background: `${schwartzDef?.color ?? '#7c3aed'}20`, border: `1px solid ${schwartzDef?.color ?? '#7c3aed'}40`, color: schwartzDef?.color ?? '#c4b5fd' }}>
+                              {idx + 1}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-semibold text-white/80 truncate">{v?.name ?? v?.value_name ?? id}</div>
+                              {barPct > 0 && (
+                                <div className="mt-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                                  <div className="h-full rounded-full" style={{ width:`${barPct}%`, background: schwartzDef?.color ?? '#7c3aed', opacity: 0.65 }}/>
+                                </div>
+                              )}
+                            </div>
+                            {isTrans && (
+                              <span className="shrink-0 text-[9px] text-violet-300/60 bg-violet-500/10 border border-violet-400/20 px-1.5 py-0.5 rounded-md font-mono uppercase tracking-wide">
+                                trans.
+                              </span>
+                            )}
+                            {Number.isFinite(score) && score > 0 && (
+                              <span className="shrink-0 text-[12px] font-mono font-bold" style={{ color: schwartzDef?.color ?? '#c4b5fd' }}>
+                                {score.toFixed(1)}
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Transcendence orientation badge */}
+                    {(() => {
+                      const transCount = transcendentVals.length;
+                      const badge = transCount >= 3
+                        ? { icon: '🌌', text: 'Silna orientacja transcendentna — sens, harmonia i służba innym są w centrum tożsamości.', cls: 'border-violet-400/20 bg-violet-500/[0.05]' }
+                        : transCount >= 1
+                        ? { icon: '🔮', text: 'Wątki transcendencji i sensu pojawiają się jako ważny, choć nie dominujący nurt wartości.', cls: 'border-violet-400/12 bg-violet-500/[0.03]' }
+                        : { icon: '⚡', text: 'Wartości skupiają się na autonomii i osiągnięciach — sens pochodzi z mistrzostwa i wpływu na świat.', cls: 'border-amber-400/15 bg-amber-500/[0.04]' };
+                      return (
+                        <div className={`rounded-xl border ${badge.cls} px-3 py-2.5`}>
+                          <span className="text-sm">{badge.icon}</span>
+                          <p className="mt-1.5 text-xs text-white/50 leading-relaxed">{badge.text}</p>
+                        </div>
+                      );
+                    })()}
+
+                    {/* AI synthesis */}
+                    <div className="mt-auto rounded-xl p-3 border border-white/10 bg-white/5 iiy-hover-panel">
+                      <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Synteza AI · Wartości</div>
+                      {llmLoading ? (
+                        <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-2/3 mt-2" /></div>
+                      ) : llmContent?.schwartz_values_text && !llmError ? (
+                        <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.schwartz_values_text}</div>
+                      ) : (
+                        <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })() : (
+                <a href="/user-profile-tests.html" className="mt-2 block bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white/55 hover:border-violet-400/30 transition no-underline iiy-hover-panel">
+                  Ukończ test Wartości, aby odblokować ten kafel →
+                </a>
+              )}
+            </section>
+
             <SectionDivider label="Synteza" />
 
             {/* Col 1 – Zawody dla Ciebie */}
