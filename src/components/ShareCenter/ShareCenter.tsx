@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { supabase, invokeEdgeNoAuth } from '../../lib/supabaseClient.js';
 import SocialShare from './SocialShare';
 import ProfessionalBadge from './ProfessionalBadge';
+import AlterEgoCard from './AlterEgoCard';
 import AlchemeLogo from '../AlchemeLogo';
 import { getInsight } from '../../data/characterInsights';
 
-type Tab = 'social' | 'badge';
+type Tab = 'social' | 'badge' | 'alter-ego';
 
 /* ── types ── */
 type CharacterCardContent = {
@@ -15,6 +16,7 @@ type CharacterCardContent = {
   portrait_superpowers: string;
   energy_boosters: string[];
   energy_drainers: string[];
+  popculture: Array<{ context: string; name: string; reason: string }>;
 };
 
 type RawRow = { test_type: string; raw_scores: any; percentile_scores: any; report: any };
@@ -26,6 +28,7 @@ export default function ShareCenter() {
 
   const [userName, setUserName] = useState('Użytkownik');
   const [shareToken, setShareToken] = useState<string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string>('');
   const [llmContent, setLlmContent] = useState<CharacterCardContent | null>(null);
   const [hexacoScores, setHexacoScores] = useState<Record<string, number>>({});
 
@@ -58,13 +61,15 @@ export default function ShareCenter() {
         const ccData = await invokeEdgeNoAuth('character-card-generate', { action: 'fetch', user_id: user.id });
         if (ccData?.content) setLlmContent(ccData.content as CharacterCardContent);
 
-        // fetch share token from profile
+        // fetch share token + avatar from profile
         const { data: profile } = await supabase
           .from('profiles')
-          .select('share_token')
+          .select('share_token, avatar_url')
           .eq('id', user.id)
           .single();
         if (profile?.share_token) setShareToken(profile.share_token);
+        const av = (profile as any)?.avatar_url ?? user.user_metadata?.avatar_url ?? '';
+        if (av) setAvatarUrl(av);
 
       } catch (e: any) {
         setError('Nie udało się załadować danych. Wróć do Karty Postaci i spróbuj ponownie.');
@@ -117,6 +122,7 @@ export default function ShareCenter() {
   const TABS: { id: Tab; emoji: string; label: string; desc: string }[] = [
     { id:'social', emoji:'📱', label:'Social Media Wrapped', desc:'Instagram Stories · Feed' },
     { id:'badge', emoji:'💼', label:'Professional Badge', desc:'Email · Slack · LinkedIn' },
+    { id:'alter-ego', emoji:'🎭', label:'Alter Ego', desc:'Twoja postać z popkultury' },
   ];
 
   return (
@@ -208,6 +214,15 @@ export default function ShareCenter() {
               workConstraint={insight.workConstraint}
               commsStyle={insight.commsStyle}
               deepWorkHours={insight.deepWorkHours}
+              shareUrl={shareUrl}
+            />
+          )}
+          {tab === 'alter-ego' && (
+            <AlterEgoCard
+              userName={userName}
+              avatarUrl={avatarUrl || undefined}
+              archetypeName={llmContent.archetype_name}
+              popculture={llmContent.popculture ?? []}
               shareUrl={shareUrl}
             />
           )}
