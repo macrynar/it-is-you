@@ -2,6 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase, getAccessToken, SUPABASE_ANON_KEY, invokeEdgeNoAuth } from '../../lib/supabaseClient.js';
 import { generateValuesReport } from '../../utils/scoring.js';
 import { COLOR_PERSONALITY_TEST } from '../../data/tests/colorPersonality.js';
+import { MOTIVATION_TEST } from '../../data/tests/motivationEngine.js';
+import { EQ_TEST } from '../../data/tests/emotionalIntelligence.js';
+import { MEANING_TEST } from '../../data/tests/meaningSprituality.js';
 import HexacoRadarChart from '../Test/modules/HexacoRadarChart';
 import HexacoDetailCards from '../Test/modules/HexacoDetailCards';
 import CharacterChatBubble from './CharacterChatBubble';
@@ -455,7 +458,8 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
   const [profile, setProfile] = useState<{ full_name: string | null; avatar_url: string | null; is_premium?: boolean | null } | null>(null);
   const [byType, setByType] = useState<Record<string, RawRow>>({});
   const [raw, setRaw] = useState<Record<string,RawRow|null>>({
-    HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null
+    HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null,
+    MOTIVATION:null, EQ:null, MEANING:null,
   });
 
   const [llmLoading, setLlmLoading] = useState(false);
@@ -479,7 +483,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
         setProfile(DEMO_PROFILE);
         setAuthUser(DEMO_AUTH_USER);
         const bt: Record<string, RawRow> = {};
-        const m: Record<string, RawRow|null> = { HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null };
+        const m: Record<string, RawRow|null> = { HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null, MOTIVATION:null, EQ:null, MEANING:null };
         for (const [k, v] of Object.entries(DEMO_RAW)) { bt[k] = v; m[k] = v; }
         setByType(bt);
         setRaw(m);
@@ -499,7 +503,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
           setAuthUser(null);
           setProfile(null);
           setByType({});
-          setRaw({ HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null });
+          setRaw({ HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null, MOTIVATION:null, EQ:null, MEANING:null });
           setLlmContent(null);
           setLlmGeneratedAt(null);
           setLlmError('Nie udało się załadować udostępnionej karty');
@@ -524,6 +528,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
           const bt: Record<string, RawRow> = {};
           const m: Record<string,RawRow|null> = {
             HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null,
+            MOTIVATION:null, EQ:null, MEANING:null,
           };
           for (const r of rows) {
             if (bt[r.test_type] == null) bt[r.test_type] = r;
@@ -552,7 +557,8 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
       if (rows?.length) {
         const bt: Record<string, RawRow> = {};
         const m: Record<string,RawRow|null> = {
-          HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null
+          HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null,
+          MOTIVATION:null, EQ:null, MEANING:null,
         };
         for (const r of rows) {
           if (bt[r.test_type] == null) bt[r.test_type] = r;
@@ -1500,243 +1506,229 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
             {/* ── Silnik motywacji / Inteligencja emocjonalna / Sens i duchowość ── */}
 
-            {/* Col 1 – Silnik motywacji */}
+            {/* Col 1 – Silnik motywacji (MOTIVATION test) */}
             <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col">
               <div className="flex items-center justify-between gap-3">
                 <div className="text-[10px] tracking-[2px] font-mono text-amber-300/55 uppercase">Silnik Motywacji</div>
-                {!raw.ENNEAGRAM ? <span className="badge">Zablokowane</span> : null}
+                {!raw.MOTIVATION ? <span className="badge">Zablokowane</span> : null}
               </div>
-              <div className="mb-4 text-[11px] text-white/25">Głęboka motywacja, lęk i wzorzec działania</div>
-              {raw.ENNEAGRAM && ennN ? (() => {
-                const meta = ENNEAGRAM_META[ennN];
+              <div className="mb-4 text-[11px] text-white/25">Ranking 8 motywatorów wewnętrznych</div>
+              {raw.MOTIVATION ? (() => {
+                const motRS = raw.MOTIVATION!.raw_scores || {};
+                const motDimRaw: Record<string,number> = motRS.raw_scores || {};
+                const motSorted: Array<{id:string;name:string;icon:string;description:string;score:number}> =
+                  (motRS.sorted_drives ?? MOTIVATION_TEST.dimensions.map((d:any) => ({...d, score: motDimRaw[d.id] ?? 0})))
+                    .map((d:any) => ({
+                      id: String(d.id),
+                      name: d.name ?? MOTIVATION_TEST.dimensions.find((x:any)=>x.id===d.id)?.name ?? d.id,
+                      icon: d.icon ?? MOTIVATION_TEST.dimensions.find((x:any)=>x.id===d.id)?.icon ?? '•',
+                      description: MOTIVATION_TEST.dimensions.find((x:any)=>x.id===d.id)?.description ?? '',
+                      score: Number(d.score ?? motDimRaw[d.id] ?? 0),
+                    }))
+                    .sort((a:any,b:any) => b.score - a.score);
+                const maxScore = Math.max(...motSorted.map((d:any)=>d.score), 1);
+                const RANK_COLORS = ['#f59e0b','#f59e0b','#fbbf24','#fcd34d','#94a3b8','#94a3b8','#6b7280','#4b5563'];
                 return (
-                  <div className="flex flex-col gap-3 flex-1">
-                    {/* Type badge */}
-                    <div className="flex items-center gap-3 rounded-xl border border-amber-400/20 bg-amber-500/[0.07] px-3 py-2.5">
-                      <span className="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center text-sm font-extrabold bg-amber-500/20 border border-amber-400/35 text-amber-300 shadow-[0_0_12px_-3px_rgba(251,191,36,0.5)]">
-                        {ennN}
-                      </span>
-                      <div>
-                        <div className="text-sm font-bold text-white/85">{meta?.name}</div>
-                        <div className="text-[10px] text-amber-300/50 uppercase tracking-wider">{meta?.mottoEn}</div>
-                      </div>
-                      {ennWing && (
-                        <span className="ml-auto text-[10px] font-mono text-white/30 bg-white/5 border border-white/10 px-2 py-1 rounded-md">{ennWing}</span>
-                      )}
-                    </div>
-
-                    {/* Motivation */}
-                    <div className="rounded-xl border border-amber-400/15 bg-amber-500/[0.04] p-3 transition-all duration-200 hover:border-amber-400/28 hover:-translate-y-px">
-                      <div className="text-[9px] font-mono tracking-[2px] uppercase text-amber-300/50 mb-1.5">✦ Motywacja</div>
-                      <p className="text-sm text-white/70 leading-relaxed">{meta?.motivation}</p>
-                    </div>
-
-                    {/* Fear */}
-                    <div className="rounded-xl border border-white/8 bg-white/[0.03] p-3 transition-all duration-200 hover:border-white/15 hover:-translate-y-px">
-                      <div className="text-[9px] font-mono tracking-[2px] uppercase text-white/25 mb-1.5">◦ Głęboki lęk</div>
-                      <p className="text-sm text-white/50 leading-relaxed">{meta?.fear}</p>
-                    </div>
-
-                    {/* Stress + Growth compact row */}
-                    <div className="grid grid-cols-1 gap-2">
-                      <div className="rounded-xl border border-rose-400/12 bg-rose-500/[0.03] px-3 py-2.5">
-                        <div className="text-[9px] font-mono tracking-[2px] uppercase text-rose-300/45 mb-1">Pod presją</div>
-                        <p className="text-xs text-white/45 leading-relaxed">{meta?.stress}</p>
-                      </div>
-                      <div className="rounded-xl border border-emerald-400/12 bg-emerald-500/[0.03] px-3 py-2.5">
-                        <div className="text-[9px] font-mono tracking-[2px] uppercase text-emerald-300/45 mb-1">W rozwoju</div>
-                        <p className="text-xs text-white/45 leading-relaxed">{meta?.growth}</p>
-                      </div>
-                    </div>
-
-                    {/* AI synthesis */}
-                    <div className="mt-auto rounded-xl p-3 border border-white/10 bg-white/5 iiy-hover-panel">
-                      <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Synteza AI</div>
-                      {llmLoading ? (
-                        <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-4/5 mt-2" /></div>
-                      ) : llmContent?.enneagram_motivation_text && !llmError ? (
-                        <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.enneagram_motivation_text}</div>
-                      ) : (
-                        <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
-                      )}
-                    </div>
+                  <div className="space-y-2">
+                    {motSorted.map((d:any, idx:number) => {
+                      const barPct = maxScore > 0 ? Math.round((d.score / maxScore) * 100) : 0;
+                      const rankColor = RANK_COLORS[idx] ?? '#4b5563';
+                      const isTop = idx < 3;
+                      return (
+                        <div key={d.id}
+                          className="flex items-center gap-3 rounded-xl border bg-white/[0.03] px-3 py-2.5 transition-all duration-200 hover:-translate-y-px"
+                          style={{ borderColor: isTop ? `${rankColor}35` : 'rgba(255,255,255,0.06)', background: idx === 0 ? `${rankColor}0d` : undefined }}>
+                          <span className="w-6 h-6 rounded-lg flex-shrink-0 flex items-center justify-center text-[11px] font-extrabold flex-shrink-0"
+                            style={{ background: `${rankColor}1a`, border: `1px solid ${rankColor}45`, color: rankColor, boxShadow: idx===0 ? `0 0 10px -2px ${rankColor}60` : undefined }}>
+                            {idx + 1}
+                          </span>
+                          <span className="text-base leading-none flex-shrink-0">{d.icon}</span>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <span className="text-sm font-semibold truncate" style={{ color: isTop ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.5)' }}>{d.name}</span>
+                              <span className="text-xs font-mono font-bold flex-shrink-0" style={{ color: isTop ? rankColor : 'rgba(255,255,255,0.25)' }}>{d.score.toFixed(1)}</span>
+                            </div>
+                            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full rounded-full transition-all duration-700"
+                                style={{ width:`${barPct}%`, background:`linear-gradient(90deg,${rankColor}90,${rankColor}cc)`, boxShadow: isTop ? `0 0 6px 1px ${rankColor}40` : undefined }}/>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
               })() : (
                 <a href="/user-profile-tests.html" className="mt-2 block bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white/55 hover:border-amber-400/30 transition no-underline iiy-hover-panel">
-                  Ukończ test Enneagram, aby odblokować ten kafel →
+                  Ukończ test Silnik Motywacji, aby odblokować ten kafel →
                 </a>
               )}
             </section>
 
-            {/* Col 2 – Inteligencja emocjonalna */}
+            {/* Col 2 – Inteligencja emocjonalna (EQ test) */}
             <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col">
               <div className="flex items-center justify-between gap-3">
                 <div className="text-[10px] tracking-[2px] font-mono text-rose-300/55 uppercase">Inteligencja Emocjonalna</div>
-                {!raw.HEXACO ? <span className="badge">Zablokowane</span> : null}
+                {!raw.EQ ? <span className="badge">Zablokowane</span> : null}
               </div>
-              <div className="mb-4 text-[11px] text-white/25">Empatia, stabilność i wrażliwość interpersonalna</div>
-              {raw.HEXACO ? (() => {
-                const EI_DIMS = [
-                  { id: 'emotionality',    label: 'Emocjonalność', hint:'Empatia, troska, intuicja', color:'#f43f5e' },
-                  { id: 'agreeableness',   label: 'Ugodowość',     hint:'Cierpliwość, współpraca', color:'#34d399' },
-                  { id: 'honesty_humility',label: 'Uczciwość',     hint:'Autentyczność, szczerość',  color:'#60a5fa' },
-                ] as const;
+              <div className="mb-4 text-[11px] text-white/25">Ranking 5 wymiarów EQ (Goleman)</div>
+              {raw.EQ ? (() => {
+                const eqRS   = raw.EQ!.raw_scores || {};
+                const eqDimRaw: Record<string,number>  = eqRS.raw_scores || {};
+                const eqPctDims: Record<string,number> = eqRS.percentile_scores || {};
+                const totalEQ: number = eqRS.total_eq ?? 0;
+                const totalEQPct = Math.round(Math.min(100, Math.max(0, ((totalEQ - 1) / 4) * 100)));
+                const eqLabel = totalEQ >= 4.0 ? 'Wysoki EQ' : totalEQ >= 2.5 ? 'Średni EQ' : totalEQ > 0 ? 'Rozwijający EQ' : '';
+                const eqLabelColor = totalEQ >= 4.0 ? '#34d399' : totalEQ >= 2.5 ? '#60a5fa' : '#f59e0b';
+
+                const EQ_COLOR: Record<string,string> = {
+                  self_awareness: '#a78bfa',
+                  self_regulation: '#60a5fa',
+                  empathy: '#f472b6',
+                  social_skills: '#34d399',
+                  motivation: '#fbbf24',
+                };
+                const eqDims = EQ_TEST.dimensions.map((d:any) => {
+                  const raw_ = eqDimRaw[d.id] ?? 0;
+                  const pct  = eqPctDims[d.id] != null ? Math.round(eqPctDims[d.id]) : Math.round(Math.min(100, Math.max(0, ((raw_-1)/4)*100)));
+                  return { ...d, raw: raw_, pct };
+                }).sort((a:any,b:any) => b.pct - a.pct);
+
                 return (
-                  <div className="flex flex-col gap-3 flex-1">
-                    {/* Dimension bars */}
-                    <div className="space-y-3">
-                      {EI_DIMS.map(({ id, label, hint, color }) => {
-                        const p = clamp(Number(hexPct[id] ?? 0), 0, 100);
-                        const lvl = p >= 70 ? 'Wysoka' : p >= 40 ? 'Średnia' : p > 0 ? 'Niska' : '—';
-                        const lvlCls = p >= 70 ? 'text-emerald-300/70' : p >= 40 ? 'text-sky-300/70' : 'text-white/35';
+                  <div className="flex flex-col gap-3">
+                    {/* Global EQ score badge */}
+                    {totalEQ > 0 && (
+                      <div className="flex items-center gap-3 rounded-xl border px-3 py-2.5"
+                        style={{ borderColor:`${eqLabelColor}35`, background:`${eqLabelColor}0d` }}>
+                        <div className="text-xl font-extrabold" style={{ color: eqLabelColor }}>{totalEQPct}%</div>
+                        <div>
+                          <div className="text-sm font-bold" style={{ color: eqLabelColor }}>{eqLabel}</div>
+                          <div className="text-[10px] text-white/30">Wynik: {totalEQ.toFixed(2)}/5.0</div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Ranked dimension bars */}
+                    <div className="space-y-2">
+                      {eqDims.map((d:any, idx:number) => {
+                        const color = EQ_COLOR[d.id] ?? '#94a3b8';
+                        const isTop = idx < 2;
                         return (
-                          <div key={id} className="rounded-xl border bg-white/[0.03] px-3 py-3 transition-all duration-200 hover:-translate-y-px"
-                            style={{ borderColor: p > 0 ? `${color}28` : 'rgba(255,255,255,0.07)' }}>
-                            <div className="flex items-center justify-between mb-1.5">
-                              <div>
-                                <span className="text-sm font-semibold text-white/80">{label}</span>
-                                <span className="ml-2 text-[10px] text-white/25">{hint}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className={`text-[10px] font-semibold ${lvlCls}`}>{lvl}</span>
-                                <span className="text-sm font-mono font-bold" style={{ color: p > 0 ? color : 'rgba(255,255,255,0.25)' }}>{p > 0 ? `${p}` : '—'}</span>
-                              </div>
+                          <div key={d.id}
+                            className="rounded-xl border bg-white/[0.03] px-3 py-2.5 transition-all duration-200 hover:-translate-y-px"
+                            style={{ borderColor: isTop ? `${color}30` : 'rgba(255,255,255,0.06)', background: idx===0 ? `${color}0d` : undefined }}>
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <span className="w-5 h-5 rounded-md flex-shrink-0 flex items-center justify-center text-[10px] font-extrabold"
+                                style={{ background:`${color}1a`, border:`1px solid ${color}40`, color }}>
+                                {idx + 1}
+                              </span>
+                              <span className="text-base leading-none">{d.icon}</span>
+                              <span className="flex-1 text-sm font-semibold truncate" style={{ color: isTop ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.55)' }}>{d.name}</span>
+                              <span className="text-xs font-mono font-bold flex-shrink-0" style={{ color: isTop ? color : 'rgba(255,255,255,0.3)' }}>{d.pct}%</span>
                             </div>
-                            <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
                               <div className="h-full rounded-full transition-all duration-700"
-                                style={{ width: `${p}%`, background: `linear-gradient(90deg,${color}99,${color}cc)`, boxShadow: p > 0 ? `0 0 8px 1px ${color}45` : undefined }} />
+                                style={{ width:`${d.pct}%`, background:`linear-gradient(90deg,${color}80,${color}cc)`, boxShadow: isTop ? `0 0 6px 1px ${color}40` : undefined }}/>
                             </div>
-                            {/* AI facet interpretation */}
-                            {!llmLoading && llmContent?.hexaco_interpretations?.[id] && !llmError && (
-                              <p className="mt-2 text-xs text-white/40 leading-relaxed italic">{llmContent.hexaco_interpretations[id]}</p>
-                            )}
-                            {llmLoading && <div className="mt-2"><Skeleton className="h-3 w-full" /></div>}
+                            {isTop && <p className="mt-1 text-[10px] text-white/30 leading-snug">{d.description}</p>}
                           </div>
                         );
                       })}
-                    </div>
-
-                    {/* EI summary hint */}
-                    {(() => {
-                      const eP = clamp(Number(hexPct.emotionality ?? 0), 0, 100);
-                      const aP = clamp(Number(hexPct.agreeableness ?? 0), 0, 100);
-                      const avg = (eP + aP) / 2;
-                      const summaryLabel = avg >= 65 ? '🟢 Wysoka wrażliwość emocjonalna' : avg >= 40 ? '🟡 Zrównoważona wrażliwość' : avg > 0 ? '🔵 Analityczny dystans emocjonalny' : null;
-                      return summaryLabel ? (
-                        <div className="rounded-xl border border-white/8 bg-white/[0.04] px-3 py-2.5 mt-1">
-                          <span className="text-xs text-white/50 leading-snug">{summaryLabel}</span>
-                        </div>
-                      ) : null;
-                    })()}
-
-                    {/* Attachment note if available */}
-                    <div className="mt-auto rounded-xl p-3 border border-white/10 bg-white/5 iiy-hover-panel">
-                      <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Analiza AI · Emocjonalność</div>
-                      {llmLoading ? (
-                        <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-3/4 mt-2" /></div>
-                      ) : llmContent?.hexaco_interpretations?.emotionality && !llmError ? (
-                        <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.hexaco_interpretations.emotionality}</div>
-                      ) : (
-                        <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
-                      )}
                     </div>
                   </div>
                 );
               })() : (
                 <a href="/user-profile-tests.html" className="mt-2 block bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white/55 hover:border-rose-400/30 transition no-underline iiy-hover-panel">
-                  Ukończ test HEXACO, aby odblokować ten kafel →
+                  Ukończ test EQ, aby odblokować ten kafel →
                 </a>
               )}
             </section>
 
-            {/* Col 3 – Sens i duchowość */}
+            {/* Col 3 – Sens i duchowość (MEANING test) */}
             <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6 flex flex-col">
               <div className="flex items-center justify-between gap-3">
                 <div className="text-[10px] tracking-[2px] font-mono text-violet-300/55 uppercase">Sens i Duchowość</div>
-                {!raw.VALUES ? <span className="badge">Zablokowane</span> : null}
+                {!raw.MEANING ? <span className="badge">Zablokowane</span> : null}
               </div>
-              <div className="mb-4 text-[11px] text-white/25">Wartości transcendentne i nadrzędny sens życia</div>
-              {raw.VALUES ? (() => {
-                const TRANSCENDENT_IDS = new Set(['universalism', 'benevolence', 'tradition', 'conformity', 'security', 'spirituality']);
-                const allVals: any[] = valuesRep?.all_values ?? raw.VALUES?.raw_scores?.sorted_values ?? [];
-                const topAll = Array.isArray(allVals) ? allVals.slice(0, 6) : [];
-                const transcendentVals = topAll.filter((v: any) => TRANSCENDENT_IDS.has(String(v?.id ?? '')));
-                const displayVals = transcendentVals.length >= 2 ? topAll : topAll.slice(0, 5);
+              <div className="mb-4 text-[11px] text-white/25">Cel, transcendencja, spokój egzystencjalny i łączność</div>
+              {raw.MEANING ? (() => {
+                const mRS    = raw.MEANING!.raw_scores || {};
+                const mDimRaw: Record<string,number>  = mRS.raw_scores || {};
+                const mPctDims: Record<string,number> = mRS.percentile_scores || {};
+                const totalMeaning: number = mRS.total_meaning ?? 1;
+                const totalPct = Math.round(Math.min(100, Math.max(0, ((totalMeaning - 1) / 5) * 100)));
+                const mLabel = totalPct >= 75 ? 'Wyraźny Sens' : totalPct >= 50 ? 'Rozwijający Sens' : totalPct >= 30 ? 'Poszukujący' : 'Budujący Sens';
+                const ringR = 44, ringCirc = 2 * Math.PI * ringR;
+                const ringOffset = ringCirc * (1 - totalPct / 100);
+
+                const MEANING_COLOR: Record<string,string> = {
+                  purpose:      '#a78bfa',
+                  transcendence:'#f472b6',
+                  existential:  '#60a5fa',
+                  connection:   '#34d399',
+                };
+                const mDims = MEANING_TEST.dimensions.map((d:any) => {
+                  const raw_ = mDimRaw[d.id] ?? 0;
+                  const pct  = mPctDims[d.id] != null ? Math.round(mPctDims[d.id]) : Math.round(Math.min(100, Math.max(0, ((raw_-1)/5)*100)));
+                  return { ...d, raw: raw_, pct };
+                }).sort((a:any,b:any) => b.pct - a.pct);
+
                 return (
-                  <div className="flex flex-col gap-3 flex-1">
-                    {/* Top values list */}
+                  <div className="flex flex-col gap-3">
+                    {/* Compressed ring chart */}
+                    <div className="flex items-center gap-4 rounded-xl border border-violet-400/20 bg-violet-500/[0.06] px-4 py-3">
+                      <svg width="80" height="80" viewBox="0 0 100 100" style={{ flexShrink:0 }}>
+                        <circle cx="50" cy="50" r={ringR} fill="none" stroke="rgba(139,92,246,0.15)" strokeWidth="8"/>
+                        <circle cx="50" cy="50" r={ringR} fill="none"
+                          stroke={totalPct >= 75 ? '#a78bfa' : totalPct >= 50 ? '#818cf8' : '#60a5fa'}
+                          strokeWidth="8" strokeLinecap="round"
+                          strokeDasharray={ringCirc} strokeDashoffset={ringOffset}
+                          transform="rotate(-90 50 50)"
+                          style={{ filter:`drop-shadow(0 0 6px rgba(139,92,246,0.55))` }}/>
+                        <text x="50" y="46" textAnchor="middle" fill="#fff" fontSize="18" fontWeight="800" fontFamily="Space Grotesk,sans-serif">{totalPct}%</text>
+                        <text x="50" y="60" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="7" fontWeight="600" fontFamily="Space Grotesk,sans-serif" letterSpacing="0.5">{mLabel.toUpperCase()}</text>
+                      </svg>
+                      <div>
+                        <div className="text-base font-extrabold text-white/90">{mLabel}</div>
+                        <div className="text-[11px] text-white/35 mt-0.5">Wynik: {totalMeaning.toFixed(2)}/6.0</div>
+                        <div className="mt-1.5 text-[10px] text-violet-300/60 uppercase tracking-wider font-mono">
+                          {totalPct >= 75 ? 'Spójny sens życia' : totalPct >= 50 ? 'Rozwijający się kierunek' : 'Aktywne poszukiwanie'}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 4 dimensions ranked */}
                     <div className="space-y-2">
-                      {displayVals.map((v: any, idx: number) => {
-                        const id = String(v?.id ?? '');
-                        const schwartzDef = SCHWARTZ_CIRCUMPLEX.find((s) => s.id === id);
-                        const score = Number(v?.centered_score ?? v?.raw_score ?? v?.score ?? 0);
-                        const maxS = 5;
-                        const barPct = score > 0 ? clamp(Math.round((score / maxS) * 100), 0, 100) : 0;
-                        const isTrans = TRANSCENDENT_IDS.has(id);
+                      {mDims.map((d:any, idx:number) => {
+                        const color = MEANING_COLOR[d.id] ?? '#94a3b8';
+                        const isTop = idx < 2;
                         return (
-                          <div key={`${id}-${idx}`}
-                            className="flex items-center gap-3 rounded-xl border bg-white/[0.03] px-3 py-2.5 transition-all duration-200 hover:-translate-y-px"
-                            style={{ borderColor: schwartzDef ? `${schwartzDef.color}35` : 'rgba(255,255,255,0.07)', background: isTrans ? `${schwartzDef?.color ?? '#7c3aed'}0a` : undefined }}>
-                            <span className="w-6 h-6 rounded-lg flex-shrink-0 flex items-center justify-center text-[11px] font-extrabold"
-                              style={{ background: `${schwartzDef?.color ?? '#7c3aed'}20`, border: `1px solid ${schwartzDef?.color ?? '#7c3aed'}40`, color: schwartzDef?.color ?? '#c4b5fd' }}>
-                              {idx + 1}
-                            </span>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-sm font-semibold text-white/80 truncate">{v?.name ?? v?.value_name ?? id}</div>
-                              {barPct > 0 && (
-                                <div className="mt-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                  <div className="h-full rounded-full" style={{ width:`${barPct}%`, background: schwartzDef?.color ?? '#7c3aed', opacity: 0.65 }}/>
-                                </div>
-                              )}
+                          <div key={d.id}
+                            className="rounded-xl border bg-white/[0.03] px-3 py-2.5 transition-all duration-200 hover:-translate-y-px"
+                            style={{ borderColor: isTop ? `${color}30` : 'rgba(255,255,255,0.06)', background: idx===0 ? `${color}0d` : undefined }}>
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <span className="w-5 h-5 rounded-md flex-shrink-0 flex items-center justify-center text-[10px] font-extrabold"
+                                style={{ background:`${color}1a`, border:`1px solid ${color}40`, color }}>
+                                {idx + 1}
+                              </span>
+                              <span className="text-base leading-none">{d.icon}</span>
+                              <span className="flex-1 text-sm font-semibold truncate" style={{ color: isTop ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.5)' }}>{d.name}</span>
+                              <span className="text-xs font-mono font-bold flex-shrink-0" style={{ color: isTop ? color : 'rgba(255,255,255,0.3)' }}>{d.pct}%</span>
                             </div>
-                            {isTrans && (
-                              <span className="shrink-0 text-[9px] text-violet-300/60 bg-violet-500/10 border border-violet-400/20 px-1.5 py-0.5 rounded-md font-mono uppercase tracking-wide">
-                                trans.
-                              </span>
-                            )}
-                            {Number.isFinite(score) && score > 0 && (
-                              <span className="shrink-0 text-[12px] font-mono font-bold" style={{ color: schwartzDef?.color ?? '#c4b5fd' }}>
-                                {score.toFixed(1)}
-                              </span>
-                            )}
+                            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full rounded-full transition-all duration-700"
+                                style={{ width:`${d.pct}%`, background:`linear-gradient(90deg,${color}80,${color}cc)`, boxShadow: isTop ? `0 0 6px 1px ${color}40` : undefined }}/>
+                            </div>
+                            {isTop && <p className="mt-1 text-[10px] text-white/30 leading-snug">{d.description}</p>}
                           </div>
                         );
                       })}
-                    </div>
-
-                    {/* Transcendence orientation badge */}
-                    {(() => {
-                      const transCount = transcendentVals.length;
-                      const badge = transCount >= 3
-                        ? { icon: '🌌', text: 'Silna orientacja transcendentna — sens, harmonia i służba innym są w centrum tożsamości.', cls: 'border-violet-400/20 bg-violet-500/[0.05]' }
-                        : transCount >= 1
-                        ? { icon: '🔮', text: 'Wątki transcendencji i sensu pojawiają się jako ważny, choć nie dominujący nurt wartości.', cls: 'border-violet-400/12 bg-violet-500/[0.03]' }
-                        : { icon: '⚡', text: 'Wartości skupiają się na autonomii i osiągnięciach — sens pochodzi z mistrzostwa i wpływu na świat.', cls: 'border-amber-400/15 bg-amber-500/[0.04]' };
-                      return (
-                        <div className={`rounded-xl border ${badge.cls} px-3 py-2.5`}>
-                          <span className="text-sm">{badge.icon}</span>
-                          <p className="mt-1.5 text-xs text-white/50 leading-relaxed">{badge.text}</p>
-                        </div>
-                      );
-                    })()}
-
-                    {/* AI synthesis */}
-                    <div className="mt-auto rounded-xl p-3 border border-white/10 bg-white/5 iiy-hover-panel">
-                      <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Synteza AI · Wartości</div>
-                      {llmLoading ? (
-                        <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-2/3 mt-2" /></div>
-                      ) : llmContent?.schwartz_values_text && !llmError ? (
-                        <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.schwartz_values_text}</div>
-                      ) : (
-                        <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
-                      )}
                     </div>
                   </div>
                 );
               })() : (
                 <a href="/user-profile-tests.html" className="mt-2 block bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white/55 hover:border-violet-400/30 transition no-underline iiy-hover-panel">
-                  Ukończ test Wartości, aby odblokować ten kafel →
+                  Ukończ test Sens i Duchowość, aby odblokować ten kafel →
                 </a>
               )}
             </section>
