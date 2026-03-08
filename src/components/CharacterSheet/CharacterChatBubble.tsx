@@ -2,6 +2,15 @@ import { useMemo, useRef, useState } from 'react'
 import { invokeEdgeNoAuth } from '../../lib/supabaseClient.js'
 import { useIsMobile } from '../../utils/useIsMobile'
 
+const PREDEFINED_QUESTIONS = [
+  'W jakim zajęciu odnajdę sens?',
+  'Jakie jest moje idealne środowisko pracy?',
+  'Nad jakim aspektem mojej osobowości powinienem popracować?',
+  'Jaką mam odporność na stres?',
+  'Z jakimi osobami tworzę synergię?',
+  'Jakie zawody byłyby dla mnie najlepsze?',
+]
+
 type ChatMsg = {
   role: 'user' | 'assistant'
   content: string
@@ -23,6 +32,40 @@ export default function CharacterChatBubble({ profileContext, isPremium = false 
   const scrollRef = useRef<HTMLDivElement | null>(null)
 
   const canSend = useMemo(() => !loading && input.trim().length > 0, [loading, input])
+
+  const sendPredefined = (question: string) => {
+    if (loading) return
+    setInput('')
+    setError(null)
+    const nextMessages: ChatMsg[] = [...messages, { role: 'user', content: question }]
+    setMessages(nextMessages)
+    if (!open) setOpen(true)
+    scrollToBottom()
+    setLoading(true)
+    const invokeOnce = async () => {
+      const data = await invokeEdgeNoAuth('character-chat', {
+        profile_context: profileContext,
+        messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
+      })
+      return { data, error: null }
+    }
+    invokeOnce()
+      .then(({ data }) => {
+        const reply = String(data?.reply ?? '').trim()
+        if (!reply) throw new Error('Brak odpowiedzi')
+        setMessages((prev) => [...prev, { role: 'assistant', content: reply }])
+        scrollToBottom()
+      })
+      .catch((_e: any) => {
+        const msg = String(_e?.message ?? '')
+        if (/Invalid JWT/i.test(msg)) {
+          setError('Sesja wygasła lub jest nieprawidłowa. Zaloguj się ponownie i spróbuj jeszcze raz.')
+        } else {
+          setError('Nie udało się wysłać wiadomości. Spróbuj ponownie.')
+        }
+      })
+      .finally(() => setLoading(false))
+  }
 
   const scrollToBottom = () => {
     requestAnimationFrame(() => {
@@ -237,6 +280,39 @@ export default function CharacterChatBubble({ profileContext, isPremium = false 
 
           {/* Input footer */}
           <div className="px-4 py-3 border-t border-white/10 flex-shrink-0">
+            {/* Predefined question chips */}
+            {isPremium && (
+              <div className="mb-3">
+                <div className="text-[9px] font-mono tracking-[2px] uppercase text-white/25 mb-1.5">Szybkie pytania</div>
+                <div
+                  className={[
+                    'flex gap-1.5',
+                    isMobile
+                      ? 'flex-wrap'
+                      : 'flex-nowrap overflow-x-auto pb-1',
+                  ].join(' ')}
+                  style={{ scrollbarWidth: 'none' }}
+                >
+                  {PREDEFINED_QUESTIONS.map((q) => (
+                    <button
+                      key={q}
+                      type="button"
+                      disabled={loading}
+                      onClick={() => sendPredefined(q)}
+                      className={[
+                        'flex-shrink-0 rounded-xl border px-2.5 py-1.5 text-left transition-all duration-150',
+                        'bg-white/[0.04] border-white/10 text-white/50',
+                        'hover:bg-brand-primary/[0.12] hover:border-brand-primary/35 hover:text-white/80 hover:shadow-[0_0_14px_-4px_rgba(99,102,241,0.45)]',
+                        'disabled:opacity-40 disabled:cursor-not-allowed',
+                        isMobile ? 'text-[10px] leading-snug whitespace-normal' : 'text-[11px] whitespace-nowrap',
+                      ].join(' ')}
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             {error && <div className="mb-2 text-xs text-status-danger/80">{error}</div>}
             {isPremium ? (
               <div className="flex gap-2">
