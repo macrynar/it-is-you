@@ -78,7 +78,7 @@ export default function AlterEgoCard({ userName, avatarUrl, archetypeName, popcu
       <div
         ref={cardRef}
         style={{
-          width: 380,
+          width: 420,
           maxWidth: 'calc(100vw - 48px)',
           borderRadius: 28,
           background: 'linear-gradient(145deg, #0d0f2e 0%, #120a2e 50%, #050714 100%)',
@@ -99,59 +99,59 @@ export default function AlterEgoCard({ userName, avatarUrl, archetypeName, popcu
         <div style={{ height: 4, background: 'linear-gradient(90deg, #7c3aed 0%, #a78bfa 40%, #00f0ff 100%)' }} />
 
         {/* header */}
-        <div style={{ padding: '20px 22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
+        <div style={{ padding: '18px 22px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
           <div>
-            <div style={{ fontSize: 9, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>ALCHEMY · ALTER EGO</div>
+            <div style={{ fontSize: 9, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>ALCHEME · ALTER EGO</div>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginTop: 2 }}>{archetypeName}</div>
           </div>
-          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace' }}>it-is-you.pl</div>
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', fontFamily: 'monospace' }}>alcheme.io</div>
+        </div>
+
+        {/* hero: large avatar centred */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 22px 0', position: 'relative', zIndex: 1 }}>
+          <div style={{
+            width: 108, height: 108, borderRadius: 30,
+            background: 'linear-gradient(135deg, rgba(124,58,237,0.5), rgba(0,240,255,0.25))',
+            border: '2.5px solid rgba(124,58,237,0.6)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            overflow: 'hidden', flexShrink: 0,
+            boxShadow: '0 0 40px rgba(124,58,237,0.5), 0 0 80px rgba(124,58,237,0.2)',
+          }}>
+            {avatarUrl ? (
+              <img src={avatarUrl} alt={userName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <span style={{ fontSize: 36, fontWeight: 800, color: '#c4b5fd', letterSpacing: '-0.04em' }}>{initials}</span>
+            )}
+          </div>
+          <div style={{ marginTop: 14, textAlign: 'center' }}>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.16em', marginBottom: 6 }}>Ty w popkulturze to</div>
+            <div style={{ fontSize: 28, fontWeight: 900, color: '#fff', lineHeight: 1.1, marginBottom: 8 }}>{top.name}</div>
+            <div style={{
+              display: 'inline-block', fontSize: 10, fontWeight: 700, letterSpacing: '0.14em',
+              textTransform: 'uppercase', color: '#a78bfa',
+              background: 'rgba(124,58,237,0.2)', border: '1px solid rgba(124,58,237,0.4)',
+              borderRadius: 8, padding: '4px 12px',
+            }}>
+              {top.context}
+            </div>
+          </div>
         </div>
 
         {/* main content */}
         <div style={{ padding: '20px 22px 24px', position: 'relative', zIndex: 1 }}>
 
-          {/* avatar + alter ego name row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
-            {/* user avatar */}
-            <div style={{
-              width: 72, height: 72, borderRadius: 20,
-              background: 'linear-gradient(135deg, rgba(124,58,237,0.4), rgba(0,240,255,0.2))',
-              border: '2px solid rgba(124,58,237,0.5)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              flexShrink: 0, overflow: 'hidden',
-              boxShadow: '0 0 24px rgba(124,58,237,0.4)',
-            }}>
-              {avatarUrl ? (
-                <img src={avatarUrl} alt={userName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              ) : (
-                <span style={{ fontSize: 24, fontWeight: 800, color: '#c4b5fd', letterSpacing: '-0.04em' }}>{initials}</span>
-              )}
-            </div>
-
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 4 }}>Ty w popkulturze</div>
-              <div style={{ fontSize: 20, fontWeight: 800, color: '#fff', lineHeight: 1.15, marginBottom: 4 }}>{top.name}</div>
-              <div style={{
-                display: 'inline-block', fontSize: 9, fontWeight: 700, letterSpacing: '0.12em',
-                textTransform: 'uppercase', color: '#a78bfa',
-                background: 'rgba(124,58,237,0.18)', border: '1px solid rgba(124,58,237,0.35)',
-                borderRadius: 6, padding: '3px 8px',
-              }}>
-                {top.context}
-              </div>
-            </div>
-          </div>
+          {/* reason */}
 
           {/* reason / fun description */}
           <div style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.08)',
+            background: 'rgba(124,58,237,0.07)',
+            border: '1px solid rgba(124,58,237,0.2)',
             borderRadius: 14,
-            padding: '14px 16px',
+            padding: '16px 18px',
             marginBottom: 16,
           }}>
-            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 8 }}>✦ Dlaczego?</div>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)', lineHeight: 1.6, margin: 0 }}>{top.reason}</p>
+            <div style={{ fontSize: 10, color: 'rgba(167,139,250,0.7)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 8 }}>❖ Dlaczego?</div>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.82)', lineHeight: 1.65, margin: 0 }}>{top.reason}</p>
           </div>
 
           {/* more alter egos */}
@@ -186,8 +186,8 @@ export default function AlterEgoCard({ userName, avatarUrl, archetypeName, popcu
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           position: 'relative', zIndex: 1,
         }}>
-          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', fontFamily: 'monospace' }}>PSYCHOMETRY · ALCHEMY</div>
-          <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(124,58,237,0.7)', letterSpacing: '0.08em' }}>IT-IS-YOU.PL</div>
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', fontFamily: 'monospace' }}>PSYCHOMETRY · ALCHEME</div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(124,58,237,0.7)', letterSpacing: '0.08em' }}>ALCHEME.IO</div>
         </div>
       </div>
 
@@ -222,7 +222,7 @@ export default function AlterEgoCard({ userName, avatarUrl, archetypeName, popcu
         </button>
       </div>
 
-      <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)', textAlign: 'center', maxWidth: 340, lineHeight: 1.6 }}>
+      <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)', textAlign: 'center', maxWidth: 380, lineHeight: 1.6 }}>
         Alter ego generowane na podstawie psychometrii — HEXACO, Enneagram i testów wartości.
       </p>
     </div>
