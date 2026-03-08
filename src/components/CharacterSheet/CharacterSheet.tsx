@@ -455,7 +455,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
   const [profile, setProfile] = useState<{ full_name: string | null; avatar_url: string | null; is_premium?: boolean | null } | null>(null);
   const [byType, setByType] = useState<Record<string, RawRow>>({});
   const [raw, setRaw] = useState<Record<string,RawRow|null>>({
-    HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, DARK_TRIAD:null, VALUES:null
+    HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null
   });
 
   const [llmLoading, setLlmLoading] = useState(false);
@@ -479,7 +479,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
         setProfile(DEMO_PROFILE);
         setAuthUser(DEMO_AUTH_USER);
         const bt: Record<string, RawRow> = {};
-        const m: Record<string, RawRow|null> = { HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, DARK_TRIAD:null, VALUES:null };
+        const m: Record<string, RawRow|null> = { HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null };
         for (const [k, v] of Object.entries(DEMO_RAW)) { bt[k] = v; m[k] = v; }
         setByType(bt);
         setRaw(m);
@@ -499,7 +499,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
           setAuthUser(null);
           setProfile(null);
           setByType({});
-          setRaw({ HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, DARK_TRIAD:null, VALUES:null });
+          setRaw({ HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null });
           setLlmContent(null);
           setLlmGeneratedAt(null);
           setLlmError('Nie udało się załadować udostępnionej karty');
@@ -523,7 +523,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
         if (rows?.length) {
           const bt: Record<string, RawRow> = {};
           const m: Record<string,RawRow|null> = {
-            HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, DARK_TRIAD:null, VALUES:null,
+            HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null,
           };
           for (const r of rows) {
             if (bt[r.test_type] == null) bt[r.test_type] = r;
@@ -552,7 +552,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
       if (rows?.length) {
         const bt: Record<string, RawRow> = {};
         const m: Record<string,RawRow|null> = {
-          HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, DARK_TRIAD:null, VALUES:null
+          HEXACO:null, ENNEAGRAM:null, STRENGTHS:null, CAREER:null, COLOR_PERSONALITY:null, DARK_TRIAD:null, VALUES:null
         };
         for (const r of rows) {
           if (bt[r.test_type] == null) bt[r.test_type] = r;
