@@ -127,7 +127,7 @@ export default function CharacterChatBubble({
       {/* Chat panel — expands above the dock */}
       <div
         className={[
-          'mb-2 bg-slate-900/90 backdrop-blur-xl border border-indigo-500/20 rounded-2xl overflow-hidden flex flex-col',
+          'mb-2 bg-slate-950/95 backdrop-blur-xl border border-slate-700/70 rounded-2xl overflow-hidden flex flex-col shadow-[0_4px_30px_rgba(0,0,0,0.6)]',
           'transition-all duration-300 ease-out origin-bottom',
           open ? 'opacity-100 scale-y-100 pointer-events-auto' : 'opacity-0 scale-y-95 pointer-events-none',
         ].join(' ')}
@@ -180,28 +180,24 @@ export default function CharacterChatBubble({
       </div>
 
       {/* Main dock */}
-      <div className="bg-slate-900/80 backdrop-blur-xl border border-indigo-500/20 rounded-2xl shadow-[0_0_40px_-15px_rgba(79,70,229,0.3)] p-3">
+      <div className="bg-slate-950/95 backdrop-blur-xl border border-slate-700/80 rounded-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.5),0_0_0_1px_rgba(99,102,241,0.08)] p-3">
 
         {/* Suggested prompts cloud */}
         {isPremium ? (
           <div
-            className="mb-2.5 overflow-x-auto"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}
+            className="mb-2.5 flex flex-row gap-1.5 overflow-x-auto scroll-smooth snap-x pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           >
-            <style>{`.__dc::-webkit-scrollbar{display:none}`}</style>
-            <div className="__dc flex gap-1.5 pb-px" style={{ minWidth: 'max-content' }}>
               {SUGGESTED_PROMPTS.map((q) => (
                 <button
                   key={q}
                   type="button"
                   disabled={loading}
                   onClick={() => sendMessage(q)}
-                  className="flex-shrink-0 whitespace-nowrap bg-white/[0.04] border border-white/[0.09] text-slate-400 text-xs rounded-full px-3 py-1.5 transition-all duration-200 hover:bg-indigo-500/[0.10] hover:border-indigo-400/30 hover:text-slate-200 hover:shadow-[0_0_14px_-4px_rgba(99,102,241,0.45)] disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="flex-shrink-0 whitespace-nowrap snap-start bg-slate-800 border border-slate-600 text-slate-200 text-xs rounded-full px-3 py-1.5 transition-all duration-200 hover:bg-indigo-600/30 hover:border-indigo-400/60 hover:text-white hover:shadow-[0_0_14px_-4px_rgba(99,102,241,0.55)] disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {q}
                 </button>
               ))}
-            </div>
           </div>
         ) : (
           <div className="mb-2.5">
@@ -218,10 +214,10 @@ export default function CharacterChatBubble({
         )}
 
         {/* Input row */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 bg-slate-800/50 rounded-xl px-2 py-1.5">
           {/* AI sparkle icon */}
-          <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-indigo-500/[0.12] border border-indigo-500/20 flex items-center justify-center">
-            <SparklesIcon className="w-4 h-4 text-indigo-400 animate-pulse" />
+          <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-indigo-500/[0.15] border border-indigo-500/25 flex items-center justify-center">
+            <SparklesIcon className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
           </div>
 
           {/* Text input */}
@@ -247,9 +243,9 @@ export default function CharacterChatBubble({
             onClick={handleSend}
             disabled={!isPremium || !canSend}
             aria-label="Wyślij"
-            className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 shadow-[0_0_16px_-4px_rgba(99,102,241,0.5)] transition-all duration-200 hover:scale-110 hover:shadow-[0_0_24px_-4px_rgba(99,102,241,0.7)] disabled:opacity-30 disabled:scale-100 disabled:cursor-not-allowed"
+            className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 shadow-[0_0_16px_-4px_rgba(99,102,241,0.5)] transition-all duration-200 hover:scale-110 hover:shadow-[0_0_24px_-4px_rgba(99,102,241,0.7)] disabled:opacity-30 disabled:scale-100 disabled:cursor-not-allowed"
           >
-            <SendIcon className="w-3.5 h-3.5 text-white" />
+            <SendIcon className="w-3 h-3 text-white" />
           </button>
         </div>
       </div>
