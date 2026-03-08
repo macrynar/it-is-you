@@ -1902,9 +1902,9 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                 <>
                   <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {([
-                      { key: 'narcissism', base: 'Narcyzm', reframe: 'Siła Własnego Ja' },
-                      { key: 'machiavellianism', base: 'Makiawelizm', reframe: 'Myślenie Strategiczne' },
-                      { key: 'psychopathy', base: 'Psychopatia', reframe: 'Zimna Głowa pod Presją' },
+                      { key: 'narcissism',       base: 'Narcyzm',     reframe: 'Głód Uznania' },
+                      { key: 'machiavellianism', base: 'Makiawelizm', reframe: 'Cel Uświęca Środki' },
+                      { key: 'psychopathy',      base: 'Psychopatia', reframe: 'Emocjonalny Dystans' },
                     ] as const).map((d) => {
                       const score = Number((dtDims as any)?.[d.key]?.raw_score ?? 0)
                       const pct = score > 0 ? clamp(Math.round(((score - 1) / 4) * 100), 0, 100) : 0
@@ -1917,14 +1917,24 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                             ? 'bg-amber-500/15 border-amber-400/25 text-amber-200'
                             : 'bg-emerald-500/15 border-emerald-400/25 text-emerald-200'
 
-                      const reframing =
-                        tier === 'high'
-                          ? 'Wysoka intensywność: uważaj na koszty społeczne i długofalowe.'
-                          : tier === 'mid'
-                            ? 'Średni poziom: narzędzie, które może ciąć w obie strony.'
-                            : tier === 'low'
-                              ? 'Niski poziom: rzadko przejmuje stery, zwykle wspiera stabilność.'
-                              : ''
+                      const DT_REFRAMING: Record<string, { low: string; mid: string; high: string }> = {
+                        narcissism: {
+                          low:  'Nie potrzebujesz błysku fleszy, aby czuć swoją wartość. Skupiasz się na pracy, a nie na oklaskach.',
+                          mid:  'Zdrowe poczucie własnej wartości — wiesz, kiedy stanąć w centrum, a kiedy się cofnąć.',
+                          high: 'Posiadasz naturalny magnetyzm i pewność siebie, która przyciąga innych, jednak możesz mieć tendencję do dominacji i ignorowania cudzych zasług.',
+                        },
+                        machiavellianism: {
+                          low:  'Wolisz transparentność i grę fair-play. Uważasz, że zaufanie jest ważniejsze niż zakulisowe zyski.',
+                          mid:  'Potrafisz być strategiczny, gdy sytuacja tego wymaga, zachowując przy tym podstawowe zasady etyki.',
+                          high: 'Jesteś mistrzem zakulisowych gier i potrafisz pociągać za sznurki, ale ryzykujesz utratą zaufania, jeśli Twoje metody wyjdą na jaw.',
+                        },
+                        psychopathy: {
+                          low:  'Naturalnie współodczuwasz z innymi i unikasz niepotrzebnego ryzyka. Twoje decyzje uwzględniają czynnik ludzki.',
+                          mid:  'Zrównoważone podejście do emocji i ryzyka — chłodna głowa bez utraty empatii.',
+                          high: 'Potrafisz odciąć emocje i działać bez wahania, jednak ryzykujesz ignorowaniem uczuć innych i podejmowaniem impulsywnych decyzji.',
+                        },
+                      }
+                      const reframing = tier !== 'na' ? (DT_REFRAMING[d.key]?.[tier] ?? '') : ''
 
                       return (
                         <div key={d.key} className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-5 iiy-hover-panel">

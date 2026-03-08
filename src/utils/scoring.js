@@ -638,16 +638,16 @@ export function getDarkTriadInterpretation(dimension, level) {
   const interpretations = {
     machiavellianism: {
       low: {
-        description: "Masz niski poziom makiawelizmu. Jesteś szczery i bezpośredni w relacjach, rzadko uciekasz się do manipulacji.",
+        description: "Wolisz transparentność i grę fair-play. Uważasz, że zaufanie jest ważniejsze niż zakulisowe zyski.",
         implications: [
-          "Wysoka uczciwość w relacjach",
-          "Przejrzysta komunikacja",
+          "Wysoka uczciwość i przejrzysta komunikacja",
           "Mniejsza skłonność do gier politycznych",
+          "Zaufanie jako fundament relacji",
           "Mogą wykorzystywać Cię osoby bardziej manipulacyjne"
         ]
       },
       average: {
-        description: "Twój poziom makiawelizmu jest w normie populacyjnej. Potrafisz być strategiczny, gdy sytuacja tego wymaga, ale nie jest to Twoja dominująca cecha.",
+        description: "Potrafisz być strategiczny, gdy sytuacja tego wymaga, zachowując przy tym podstawowe zasady etyki.",
         implications: [
           "Umiejętność dostosowania się do sytuacji",
           "Zrównoważone podejście do relacji",
@@ -656,27 +656,27 @@ export function getDarkTriadInterpretation(dimension, level) {
         ]
       },
       high: {
-        description: "Masz podwyższony poziom makiawelizmu. Jesteś strategiczny, cyniczny i skłonny do manipulacji dla osiągnięcia celów.",
+        description: "Jesteś mistrzem zakulisowych gier i potrafisz pociągać za sznurki, ale ryzykujesz utratą zaufania, jeśli Twoje metody wyjdą na jaw.",
         implications: [
-          "Silne myślenie strategiczne",
-          "Skłonność do manipulacji w relacjach",
-          "Cyniczne spojrzenie na ludzi",
-          "Ryzyko problemów w bliskich relacjach"
+          "Cyniczne i instrumentalne traktowanie relacji",
+          "Skłonność do manipulacji dla osiągnięcia celów",
+          "Efektywność krótkoterminowa kosztem długofalowego zaufania",
+          "Ryzyko izolacji społecznej po zdemaskowaniu metod"
         ]
       }
     },
     narcissism: {
       low: {
-        description: "Masz niski poziom narcyzmu. Jesteś skromny i nie potrzebujesz bycia w centrum uwagi.",
+        description: "Nie potrzebujesz błysku fleszy, aby czuć swoją wartość. Skupiasz się na pracy, a nie na oklaskach.",
         implications: [
-          "Naturalna skromność",
-          "Brak potrzeby podziwu",
-          "Empatia wobec innych",
-          "Ryzyko niedocenienia własnej wartości"
+          "Naturalna skromność i brak potrzeby podziwu",
+          "Empatia i uwaga skierowana na innych",
+          "Stabilna samoocena niezależna od zewnętrznych pochwał",
+          "Ryzyko niedocenienia własnych osiągnięć"
         ]
       },
       average: {
-        description: "Twój poziom narcyzmu jest w normie. Masz zdrowe poczucie własnej wartości bez przesadnej potrzeby uwagi.",
+        description: "Zdrowe poczucie własnej wartości — wiesz, kiedy stanąć w centrum, a kiedy się cofnąć.",
         implications: [
           "Zrównoważone poczucie własnej wartości",
           "Umiar w szukaniu uznania",
@@ -685,27 +685,27 @@ export function getDarkTriadInterpretation(dimension, level) {
         ]
       },
       high: {
-        description: "Masz podwyższony poziom narcyzmu. Potrzebujesz podziwu, czujesz się wyjątkowy i uprzywilejowany.",
+        description: "Posiadasz naturalny magnetyzm i pewność siebie, która przyciąga innych, jednak możesz mieć tendencję do dominacji i ignorowania cudzych zasług.",
         implications: [
-          "Silne poczucie własnej wartości",
-          "Potrzeba bycia w centrum uwagi",
-          "Trudności z empatią",
-          "Ryzyko problemów w relacjach interpersonalnych"
+          "Silna roszczeniowość i poczucie wyjątkowości",
+          "Potrzeba ciągłego podziwu i atencji",
+          "Tendencja do dominacji i przypisywania sobie sukcesów",
+          "Ryzyko poważnych problemów w bliskich relacjach"
         ]
       }
     },
     psychopathy: {
       low: {
-        description: "Masz niski poziom psychopatii. Jesteś empatyczny, kontrolujesz impulsy i unikasz ryzyka.",
+        description: "Naturalnie współodczuwasz z innymi i unikasz niepotrzebnego ryzyka. Twoje decyzje uwzględniają czynnik ludzki.",
         implications: [
-          "Wysoka empatia",
+          "Wysoka empatia i wrażliwość na potrzeby innych",
           "Dobra kontrola impulsów",
-          "Unikanie niepotrzebnego ryzyka",
-          "Silna więź emocjonalna z innymi"
+          "Unikanie zbędnego ryzyka",
+          "Silna więź emocjonalna z otoczeniem"
         ]
       },
       average: {
-        description: "Twój poziom psychopatii jest w normie. Masz zrównoważone podejście do ryzyka i kontroli emocji.",
+        description: "Zrównoważone podejście do emocji i ryzyka — chłodna głowa bez utraty empatii.",
         implications: [
           "Zrównoważona empatia",
           "Umiejętność podejmowania ryzyka, gdy trzeba",
@@ -714,12 +714,12 @@ export function getDarkTriadInterpretation(dimension, level) {
         ]
       },
       high: {
-        description: "Masz podwyższony poziom psychopatii. Jesteś impulsywny, szukasz ryzyka i masz trudności z empatią.",
+        description: "Potrafisz odciąć emocje i działać bez wahania, jednak ryzykujesz ignorowaniem uczuć innych i podejmowaniem impulsywnych decyzji.",
         implications: [
-          "Wysoka tolerancja ryzyka",
-          "Trudności z kontrolą impulsów",
-          "Ograniczona empatia",
-          "Ryzyko zachowań antyspołecznych"
+          "Deficyt empatii i bezduszność (callousness)",
+          "Impulsywność i skłonność do ryzykownych zachowań",
+          "Zdolność do działania pod presją bez emocji",
+          "Ryzyko zachowań antyspołecznych i zerwania więzi"
         ]
       }
     }
