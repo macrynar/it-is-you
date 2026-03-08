@@ -55,14 +55,11 @@ export default function ShareCenter() {
         if (hex?.percentile_scores) setHexacoScores(hex.percentile_scores);
 
         // fetch character card cache
-        const accessToken = await getAccessToken();
-        if (accessToken) {
-          const { data: ccData } = await supabase.functions.invoke('character-card-generate', {
-            body: { action: 'fetch', user_id: user.id },
-            headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
-          });
-          if (ccData?.content) setLlmContent(ccData.content as CharacterCardContent);
-        }
+        const { data: ccData } = await supabase.functions.invoke('character-card-generate', {
+          body: { action: 'fetch', user_id: user.id },
+          headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+        });
+        if (ccData?.content) setLlmContent(ccData.content as CharacterCardContent);
 
         // fetch share token from profile
         const { data: profile } = await supabase

@@ -828,15 +828,11 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
     setLlmError(null);
     setLlmLoading(true);
     try {
-      const token = await getAccessToken();
-      if (!token) throw new Error('No session');
-
       const payload = { force, input: characterCardInput, user_id: authUser?.id ?? null };
 
       const { data, error } = await supabase.functions.invoke('character-card-generate', {
         body: payload,
         headers: {
-          Authorization: `Bearer ${token}`,
           apikey: SUPABASE_ANON_KEY,
           'Content-Type': 'application/json',
         },

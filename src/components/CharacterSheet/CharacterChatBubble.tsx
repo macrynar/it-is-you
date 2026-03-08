@@ -46,15 +46,12 @@ export default function CharacterChatBubble({ profileContext, isPremium = false 
     setLoading(true)
     try {
       const invokeOnce = async () => {
-        const accessToken = await getAccessToken()
-        if (!accessToken) throw new Error('Brak sesji')
-
         return await supabase.functions.invoke('character-chat', {
           body: {
             profile_context: profileContext,
             messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
           },
-          headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
+          headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
         })
       }
 
@@ -65,7 +62,6 @@ export default function CharacterChatBubble({ profileContext, isPremium = false 
       const isInvalidJwt = errStatus === 401 && /Invalid JWT/i.test(errMsg)
 
       if (fnErr && isInvalidJwt) {
-        await supabase.auth.refreshSession()
         ;({ data, error: fnErr } = await invokeOnce())
       }
 

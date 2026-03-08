@@ -54,29 +54,6 @@ serve(async (req: Request) => {
   try {
     const { messages, profile_context } = await req.json()
 
-    const authHeader = req.headers.get('Authorization')
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'Missing authorization header' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
-    }
-
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: authHeader } } },
-    )
-
-    const { data: { user }, error: userError } = await supabaseClient.auth.getUser()
-    if (userError || !user) {
-      const reason = userError?.message ?? 'No user from auth token'
-      return new Response(JSON.stringify({ error: 'Unauthorized', reason }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
-    }
-
     const safeMessages: IncomingMessage[] = Array.isArray(messages)
       ? messages
           .filter((m: any) => m && (m.role === 'user' || m.role === 'assistant'))
