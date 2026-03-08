@@ -47,31 +47,40 @@ function extractJson(text: string): string {
   return ''
 }
 
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const part = String(token.split('.')[1] ?? '')
+    if (!part) return null
+    const normalized = part.replace(/-/g, '+').replace(/_/g, '/')
+    const padded = normalized + '='.repeat((4 - (normalized.length % 4)) % 4)
+    return JSON.parse(atob(padded)) as Record<string, unknown>
+  } catch (_e) {
+    return null
+  }
+}
+
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
-    // Decode JWT payload locally (no network call needed)
+    const body = await req.json().catch(() => ({}))
+    const force = Boolean((body as any)?.force)
+    const input = (body as any)?.input ?? null
+    const requestedUserId = String((body as any)?.user_id ?? '').trim() || null
+
     const authHeader = req.headers.get('Authorization') ?? ''
     const token = authHeader.replace('Bearer ', '')
-    let userId: string | null = null
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]))
-      userId = payload.sub ?? null
-    } catch (_) { /* invalid token */ }
+    const payload = decodeJwtPayload(token)
+    const userId = String(payload?.sub ?? requestedUserId ?? '').trim() || null
 
     if (!userId) {
-      return new Response(JSON.stringify({ error: 'Unauthorized', reason: 'Invalid or missing token' }), {
+      return new Response(JSON.stringify({ error: 'Unauthorized', reason: 'Missing user context' }), {
         status: 401,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       })
     }
-
-    const body = await req.json().catch(() => ({}))
-    const force = Boolean((body as any)?.force)
-    const input = (body as any)?.input ?? null
 
     // Use service role to bypass RLS; filter by userId manually
     const supabaseClient = createClient(

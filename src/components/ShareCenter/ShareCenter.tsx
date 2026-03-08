@@ -58,7 +58,7 @@ export default function ShareCenter() {
         const accessToken = await getAccessToken();
         if (accessToken) {
           const { data: ccData } = await supabase.functions.invoke('character-card-generate', {
-            body: { action: 'fetch' },
+            body: { action: 'fetch', user_id: user.id },
             headers: { Authorization: `Bearer ${accessToken}`, apikey: SUPABASE_ANON_KEY },
           });
           if (ccData?.content) setLlmContent(ccData.content as CharacterCardContent);
