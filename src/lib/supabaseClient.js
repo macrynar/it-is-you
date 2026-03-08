@@ -41,6 +41,7 @@ export const invokeEdgeNoAuth = async (functionName, body = {}) => {
   const res = await fetch(`${supabaseUrl}/functions/v1/${functionName}`, {
     method: 'POST',
     headers: {
+      Authorization: `Bearer ${supabaseAnonKey}`,
       apikey: supabaseAnonKey,
       'Content-Type': 'application/json',
     },
