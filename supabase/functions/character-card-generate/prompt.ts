@@ -19,6 +19,8 @@ IDEALNE ZAWODY (ideal_careers): dokladnie 5 obiektow. Kazdy to konkretna sciezka
 
 POP CULTURE / ALTER EGO (popculture): dokladnie 5 obiektow. Kazdy to FIKCYJNA lub POP-KULTUROWA postac (np. Dr House, Bilbo Baggins, Lady Gaga) podobna do uzytkownika. context - zrodlo. name - imie postaci. reason - krotkie wyjasnienie maks 2 zdania.
 
+KOD KOLORU (color_personality_text): 2-3 zdania interpretujące profil kolorów osobowości użytkownika. Odnieś się do dominującego koloru (archetype), drugiego koloru i ich kombinacji — co ta mieszanka mówi o stylu działania, relacjach i motywacji.
+
 PORTRET (portrait_*): cztery odrebne pola. Kazde 2-3 zdania spersonalizowane.
 - portrait_essence: esencja osobowosci
 - portrait_environment: idealne srodowisko pracy

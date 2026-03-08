@@ -23,7 +23,7 @@ type CharacterCardContent = {
   }
   enneagram_motivation_text: string
   strengths_top1_interpretation: string
-  riasec_environment_text: string
+  color_personality_text: string
   schwartz_values_text: string
   portrait_essence: string
   portrait_environment: string
@@ -119,7 +119,7 @@ serve(async (req: Request) => {
       },
       enneagram_motivation_text: 'string',
       strengths_top1_interpretation: 'string',
-      riasec_environment_text: 'string',
+      color_personality_text: 'string',
       schwartz_values_text: 'string',
       portrait_essence: 'string',
       portrait_environment: 'string',
