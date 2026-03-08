@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase, getAccessToken, SUPABASE_ANON_KEY } from '../../lib/supabaseClient.js';
-import { generateCareerReport, generateValuesReport } from '../../utils/scoring.js';
+import { generateValuesReport } from '../../utils/scoring.js';
+import { COLOR_PERSONALITY_TEST } from '../../data/tests/colorPersonality.js';
 import HexacoRadarChart from '../Test/modules/HexacoRadarChart';
 import HexacoDetailCards from '../Test/modules/HexacoDetailCards';
 import CharacterChatBubble from './CharacterChatBubble';
@@ -26,7 +27,7 @@ type CharacterCardContent = {
   };
   enneagram_motivation_text: string;
   strengths_top1_interpretation: string;
-  riasec_environment_text: string;
+  color_personality_text: string;
   schwartz_values_text: string;
   portrait_essence: string;
   portrait_environment: string;
@@ -40,7 +41,7 @@ type CharacterCardContent = {
   ideal_careers: Array<{ emoji: string; title: string; description: string }>;
 };
 
-const CORE_TESTS = ['HEXACO','ENNEAGRAM','STRENGTHS','CAREER','DARK_TRIAD','VALUES'] as const;
+const CORE_TESTS = ['HEXACO','ENNEAGRAM','STRENGTHS','COLOR_PERSONALITY','DARK_TRIAD','VALUES'] as const;
 
 const HEX_DIMS = [
   { id: 'honesty_humility', label: 'Uczciwość-Pokora' },
@@ -62,15 +63,6 @@ const ENNEAGRAM_META: Record<number, { name: string; mottoEn: string; stress: st
   8: { name: 'Przywódca', mottoEn: 'The Challenger', stress: 'Pod presją: kontrola, ostrość, „siła albo słabość".', growth: 'W rozwoju: ochrona bez dominacji i siła z empatią.', motivation: 'Być niezależnym i silnym — chronić siebie i bliskich, kontrolować własne życie.', fear: 'Bycia skrzywdzonym, zdradzonym lub kontrolowanym przez innych.' },
   9: { name: 'Mediator', mottoEn: 'The Peacemaker', stress: 'Pod presją: zamrożenie, prokrastynacja, znikanie z konfliktu.', growth: 'W rozwoju: priorytety, obecność i zdrowa asertywność.', motivation: 'Zachować wewnętrzny spokój i harmonię — żyć w zgodzie z sobą i otoczeniem.', fear: 'Utraty połączenia z bliskimi lub rozpadnięcia się wewnętrznej harmonii.' },
 };
-const RIASEC_META: Record<string, { name: string; namePl: string; letter: string; colorClass: string; hexColor: string }> = {
-  realistic:     { name: 'Realistic',     namePl: 'Praktyczny',    letter: 'R', colorClass: 'text-rose-300',    hexColor: '#f87171' },
-  investigative: { name: 'Investigative', namePl: 'Badawczy',      letter: 'I', colorClass: 'text-sky-300',     hexColor: '#38b6ff' },
-  artistic:      { name: 'Artistic',      namePl: 'Artystyczny',   letter: 'A', colorClass: 'text-fuchsia-300', hexColor: '#e878e0' },
-  social:        { name: 'Social',        namePl: 'Społeczny',     letter: 'S', colorClass: 'text-emerald-300', hexColor: '#10b981' },
-  enterprising:  { name: 'Enterprising',  namePl: 'Przedsięb.',    letter: 'E', colorClass: 'text-amber-300',   hexColor: '#fbbf24' },
-  conventional:  { name: 'Conventional',  namePl: 'Konwencjon.',   letter: 'C', colorClass: 'text-slate-300',   hexColor: '#94a3b8' },
-};
-
 const STRENGTHS_DOMAIN: Record<string, { label: string; className: string }> = {
   strategic_thinking: { label: 'Strategic Thinking', className: 'bg-sky-500/10 border-sky-400/20 text-sky-200/80' },
   executing: { label: 'Executing', className: 'bg-amber-500/10 border-amber-400/20 text-amber-200/80' },
@@ -424,7 +416,7 @@ const DEMO_LLM: CharacterCardContent = {
   },
   enneagram_motivation_text: 'Napędza ją potrzeba bycia wartościowym i odnoszącym sukcesy — wyróżniać się i być podziwianym za realne osiągnięcia.',
   strengths_top1_interpretation: 'Myślenie Strategiczne jako dominujący talent oznacza wyjątkową zdolność do tworzenia alternatywnych ścieżek do celu.',
-  riasec_environment_text: 'Profil IAE predysponuje do środowisk łączących głębię intelektualną z twórczością i wpływem na innych.',
+  color_personality_text: 'Profil Czerwony-Żółty — Zdobywca z domieszką Inspiratora. Działasz zdecydowanie i szybko, ale masz naturalną zdolność inspirowania innych do działania wraz z Tobą.',
   schwartz_values_text: 'Autonomia i wiedza jako wartości nadrzędne tworzą profil osoby, która musi mieć przestrzeń do własnego myślenia.',
   portrait_essence: 'Połączenie rzadkiej ciekawości intelektualnej z wyjątkową ekstrawersją tworzy osobę, która nie tylko widzi wzorce tam gdzie inni ich nie dostrzegają, ale potrafi je skutecznie komunikować.',
   portrait_environment: 'Najlepiej działa w środowiskach gdzie może łączyć głęboką analizę z wpływem na innych. Przytłaczają ją miejsca z nadmierną biurokracją i brakiem sensu.',
@@ -742,10 +734,10 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
   /* STRENGTHS */
   const top5: any[] = raw.STRENGTHS?.raw_scores?.top_5 ?? [];
 
-  /* CAREER */
-  const careerRep = raw.CAREER ? (raw.CAREER.report ?? generateCareerReport(raw.CAREER.raw_scores)) : null;
-  const holland: string = careerRep?.holland_code ?? '';
-  const topJobs: any[] = (careerRep?.top_careers ?? careerRep?.career_clusters ?? []).slice(0,6);
+  /* COLOR PERSONALITY */
+  const colorRaw = raw.COLOR_PERSONALITY?.raw_scores ?? null;
+  const primaryColor: string = colorRaw?.primary_color ?? '';
+  const secondaryColor: string = colorRaw?.secondary_color ?? '';
 
   /* VALUES */
   const valuesRep = raw.VALUES
@@ -793,34 +785,21 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
     return map;
   }, [valuesRep, raw.VALUES]);
 
-  const riasecScores = useMemo(() => {
-    // all_scores is the actual field from generateCareerReport / calculateCareerScore
-    const allScores = careerRep?.all_scores ?? careerRep?.type_scores ?? careerRep?.typeScores ?? null;
-    const m = (allScores && typeof allScores === 'object') ? allScores as Record<string, any> : {};
-
-    const getV = (key: string, alt: string): number => {
-      const entry = m[key] ?? m[alt];
-      if (entry == null) return 0;
-      if (typeof entry === 'object') return Number(entry?.raw_score ?? entry?.score ?? 0);
-      return Number(entry);
+  const colorScores = useMemo(() => {
+    type ColorItem = { id: string; name: string; archetype: string; hex: string; pct: number };
+    if (!colorRaw) return { items: [] as ColorItem[], primaryMeta: null as typeof COLOR_PERSONALITY_TEST.colors[0] | null, secondaryMeta: null as typeof COLOR_PERSONALITY_TEST.colors[0] | null };
+    const pct = (colorRaw.color_percentages ?? {}) as Record<string, number>;
+    const colorsArr = COLOR_PERSONALITY_TEST.colors;
+    const colorMap = Object.fromEntries(colorsArr.map((c) => [c.id, c]));
+    const items: ColorItem[] = colorsArr
+      .map((c) => ({ id: c.id, name: c.name, archetype: c.archetype, hex: c.hex, pct: Number(pct[c.id] ?? 0) }))
+      .sort((a, b) => b.pct - a.pct);
+    return {
+      items,
+      primaryMeta: colorMap[primaryColor] ?? null,
+      secondaryMeta: colorMap[secondaryColor] ?? null,
     };
-
-    const map: Record<string, number> = {
-      realistic:     getV('realistic',     'R'),
-      investigative: getV('investigative', 'I'),
-      artistic:      getV('artistic',      'A'),
-      social:        getV('social',        'S'),
-      enterprising:  getV('enterprising',  'E'),
-      conventional:  getV('conventional',  'C'),
-    };
-
-    const items = Object.entries(map)
-      .map(([id, v]) => ({ id, v: Number.isFinite(v) ? v : 0 }))
-      .sort((a, b) => b.v - a.v);
-
-    const max = Math.max(0, ...items.map((x) => x.v));
-    return { items, max };
-  }, [careerRep]);
+  }, [colorRaw, primaryColor, secondaryColor]);
 
   const characterCardInput = useMemo(() => {
     const strengthsNames = (top5 ?? [])
@@ -836,12 +815,13 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
       enneagram_type: ennN,
       enneagram_wing: wingNum,
       strengths_top5: strengthsNames,
-      riasec_code: holland,
-      riasec_scores: riasecScores.items,
+      color_primary: primaryColor,
+      color_secondary: secondaryColor,
+      color_scores: colorScores.items,
       schwartz_top3: schwartzTop3,
       darktriad_scores: dtRaw,
     };
-  }, [userName, done, raw.HEXACO, ennN, wingNum, top5, holland, riasecScores.items, schwartzTop3, dtRaw]);
+  }, [userName, done, raw.HEXACO, ennN, wingNum, top5, primaryColor, secondaryColor, colorScores.items, schwartzTop3, dtRaw]);
 
   const generateCharacterCard = async (force: boolean) => {
     if (isPublic) return;
@@ -1387,68 +1367,75 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
             <section className="col-span-1 card-neural iiy-hover-panel p-4 sm:p-6">
               <div className="flex items-center justify-between gap-3">
-                <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Profil Kariery RIASEC</div>
-                {!raw.CAREER ? <span className="badge">Zablokowane</span> : null}
+                <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">Kod Koloru</div>
+                {!raw.COLOR_PERSONALITY ? <span className="badge">Zablokowane</span> : null}
               </div>
 
-              {raw.CAREER ? (
+              {raw.COLOR_PERSONALITY ? (
                 <>
-                  {/* Holland code */}
-                  <div className="mt-4 flex items-center gap-1.5 flex-wrap">
-                    {String(holland || '---').slice(0, 3).split('').map((ch, idx) => {
-                      const meta = Object.values(RIASEC_META).find((m) => m.letter === ch.toUpperCase());
-                      return (
-                        <span
-                          key={`${ch}-${idx}`}
-                          className="rounded-xl border font-extrabold"
-                          style={{
-                            padding: idx === 0 ? '6px 14px' : '4px 10px',
-                            fontSize: idx === 0 ? 20 : 15,
-                            color: meta?.hexColor ?? 'rgba(255,255,255,0.7)',
-                            background: `${meta?.hexColor ?? '#fff'}18`,
-                            borderColor: `${meta?.hexColor ?? '#fff'}40`,
-                            ...(idx === 0 ? { boxShadow: `0 0 14px -2px ${meta?.hexColor ?? '#fff'}60` } : {}),
-                          }}
-                        >{ch.toUpperCase()}</span>
-                      );
-                    })}
-                    <span className="ml-1 text-[9px] font-mono text-white/25 uppercase tracking-widest">Kod Hollanda</span>
-                  </div>
-
-                  {/* Full-width bars */}
-                  <div className="mt-4 space-y-3">
-                    {riasecScores.items.map((it) => {
-                      const meta = RIASEC_META[it.id] ?? { namePl: it.id, letter: '?', hexColor: '#94a3b8', colorClass: 'text-white/60', name: it.id };
-                      const pct = riasecScores.max > 0 ? clamp(Math.round((it.v / riasecScores.max) * 100), 0, 100) : 0;
-                      const isTop = String(holland).toUpperCase().slice(0, 3).includes(meta.letter);
-                      return (
-                        <div key={it.id}>
-                          <div className="flex items-center justify-between gap-2 mb-1">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-extrabold w-5 text-center" style={{ color: isTop ? meta.hexColor : 'rgba(255,255,255,0.25)' }}>{meta.letter}</span>
-                              <span className="text-sm" style={{ color: isTop ? 'rgba(255,255,255,0.80)' : 'rgba(255,255,255,0.35)' }}>{meta.namePl}</span>
-                            </div>
-                            <span className="text-sm font-mono font-bold" style={{ color: isTop ? meta.hexColor : 'rgba(255,255,255,0.25)' }}>
-                              {it.v ? it.v.toFixed(1) : '—'}
-                            </span>
-                          </div>
-                          <div className="h-2.5 rounded-full bg-white/10 overflow-hidden">
-                            <div className="h-full rounded-full transition-all duration-500"
-                              style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${meta.hexColor}cc, ${meta.hexColor}88)`, opacity: isTop ? 1 : 0.28,
-                                ...(isTop ? { boxShadow: `0 0 8px 1px ${meta.hexColor}55` } : {}) }} />
-                          </div>
+                  {/* Primary color badge */}
+                  {colorScores.primaryMeta && (
+                    <div className="mt-4 flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-lg flex-shrink-0"
+                        style={{
+                          background: `${colorScores.primaryMeta.hex}22`,
+                          border: `2px solid ${colorScores.primaryMeta.hex}55`,
+                          boxShadow: `0 0 16px -2px ${colorScores.primaryMeta.hex}60`,
+                          color: colorScores.primaryMeta.hex,
+                        }}
+                      >
+                        {colorScores.primaryMeta.name[0]}
+                      </div>
+                      <div>
+                        <div className="text-base font-extrabold" style={{ color: colorScores.primaryMeta.hex }}>
+                          {colorScores.primaryMeta.name}
                         </div>
-                      );
-                    })}
+                        <div className="text-xs text-white/45 uppercase tracking-wider">{colorScores.primaryMeta.archetype}</div>
+                      </div>
+                      {colorScores.secondaryMeta && (
+                        <div className="ml-auto text-right">
+                          <div className="text-xs text-white/30">+ {colorScores.secondaryMeta.name}</div>
+                          <div className="text-[10px] text-white/20 uppercase tracking-wider">{colorScores.secondaryMeta.archetype}</div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Color percentage bars */}
+                  <div className="mt-4 space-y-3">
+                    {colorScores.items.map((item) => (
+                      <div key={item.id}>
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <span className="text-sm font-semibold" style={{ color: item.pct > 20 ? item.hex : 'rgba(255,255,255,0.35)' }}>
+                            {item.name}
+                          </span>
+                          <span className="text-sm font-mono font-bold" style={{ color: item.pct > 20 ? item.hex : 'rgba(255,255,255,0.25)' }}>
+                            {item.pct}%
+                          </span>
+                        </div>
+                        <div className="h-2.5 rounded-full bg-white/10 overflow-hidden">
+                          <div
+                            className="h-full rounded-full transition-all duration-500"
+                            style={{
+                              width: `${item.pct}%`,
+                              background: `linear-gradient(90deg, ${item.hex}cc, ${item.hex}88)`,
+                              opacity: item.pct > 20 ? 1 : 0.28,
+                              ...(item.pct > 20 ? { boxShadow: `0 0 8px 1px ${item.hex}55` } : {}),
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
 
-                  {/* AI */}
+                  {/* AI interpretation */}
                   <div className="mt-6 rounded-xl p-4 border border-white/10 bg-white/5 iiy-hover-panel">
-                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Analiza · Środowisko</div>
+                    <div className="text-[10px] tracking-[2px] font-mono text-white/35 uppercase">✦ Analiza · Osobowość Kolorów</div>
                     {llmLoading ? (
                       <div className="mt-2"><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-4/5 mt-2" /></div>
-                    ) : llmContent?.riasec_environment_text && !llmError ? (
-                      <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.riasec_environment_text}</div>
+                    ) : llmContent?.color_personality_text && !llmError ? (
+                      <div className="mt-2 text-sm text-white/70 leading-relaxed italic">{llmContent.color_personality_text}</div>
                     ) : (
                       <div className="mt-2 text-sm text-white/45">{noCardMsgShort}</div>
                     )}
@@ -1456,7 +1443,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
                 </>
               ) : (
                 <a href="/user-profile-tests.html" className="mt-4 block bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white/55 hover:border-emerald-400/30 transition no-underline iiy-hover-panel">
-                  Ukończ test Career, aby odblokować ten kafel →
+                  Ukończ test Kod Koloru, aby odblokować ten kafel →
                 </a>
               )}
             </section>
