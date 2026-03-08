@@ -72,10 +72,20 @@ function App() {
     }
   }, [])
 
+  // Helper: detect if current URL is a password-recovery callback
+  const isRecoveryUrl = () =>
+    window.location.hash.includes('type=recovery') ||
+    new URLSearchParams(window.location.hash.replace('#', '')).get('type') === 'recovery'
+
   // Listen to auth state changes
   useEffect(() => {
-    // Check for existing session on mount
+    // Check for existing session on mount — skip if this is a recovery callback
     const checkSession = async () => {
+      if (isRecoveryUrl()) {
+        // Let the PASSWORD_RECOVERY event (or hash-detection above) handle it
+        setLoading(false)
+        return
+      }
       const { data: { session } } = await supabase.auth.getSession()
       if (session?.user) {
         setUser(session.user)
@@ -87,8 +97,16 @@ function App() {
     
     // Subscribe to auth changes
     const { data: { subscription } } = onAuthStateChange(({ event, session }) => {
-      // Never treat PASSWORD_RECOVERY as a normal sign-in — keep showing AuthModal
+      // PASSWORD_RECOVERY event — keep showing the update-password form
       if (event === 'PASSWORD_RECOVERY') {
+        setIsPasswordRecovery(true)
+        setLoading(false)
+        return
+      }
+
+      // SIGNED_IN during a recovery flow means the token was exchanged but the
+      // user hasn't set their new password yet — don't redirect them away.
+      if (event === 'SIGNED_IN' && isRecoveryUrl()) {
         setIsPasswordRecovery(true)
         setLoading(false)
         return
@@ -394,6 +412,21 @@ function App() {
     )
   }
 
+  // Password recovery — MUST be checked before the user redirect, because
+  // Supabase creates a session as part of the recovery flow and `user` will be
+  // set while the person still needs to enter their new password.
+  if (isPasswordRecovery) {
+    return (
+      <AuthModal
+        initialTab="update-password"
+        onAuthSuccess={() => {
+          setIsPasswordRecovery(false)
+          window.location.href = '/user-profile-tests.html'
+        }}
+      />
+    )
+  }
+
   // User is logged in - redirect immediately to tests dashboard
   if (user) {
     const intendedDestination = sessionStorage.getItem('redirect_after_auth')
@@ -407,78 +440,6 @@ function App() {
           <p className="text-text-muted">Przekierowanie...</p>
         </div>
       </div>
-    )
-  }
-
-  if (false && user) {
-    return (
-      <div className="min-h-screen p-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="glass-panel p-8 rounded-2xl text-center">
-            <h1 className="text-4xl font-bold brand-font text-text-main mb-4">
-              Witaj, {user.email}! 👋
-            </h1>
-            <p className="text-slate-300 mb-6">
-              Zostałeś pomyślnie zalogowany do portalu "Alcheme"
-            </p>
-            
-            {/* User Info */}
-            <div className="bg-bg-surface/50 p-6 rounded-lg mb-6 text-left border border-white/5">
-              <h2 className="text-sm font-medium text-slate-300 mb-3">Informacje o koncie:</h2>
-              <ul className="space-y-2 text-sm text-text-muted">
-                <li><strong>Email:</strong> {user.email}</li>
-                <li><strong>Identyfikator:</strong> {user.id}</li>
-                <li><strong>Zalogowany od:</strong> {new Date(user.created_at).toLocaleDateString('pl-PL')}</li>
-              </ul>
-            </div>
-
-            {/* Navigation & Sign Out Buttons */}
-            <div className="flex gap-4 justify-center flex-wrap">
-              <a 
-                href="/user-profile-tests.html"
-                className="btn-primary"
-              >
-                Dashboard Testów
-              </a>
-              <button
-                onClick={async () => {
-                  await supabase.auth.signOut()
-                  setUser(null)
-                  window.location.href = '/index2.html'
-                }}
-                className="btn-danger"
-              >
-                Wyloguj się
-              </button>
-            </div>
-          </div>
-
-          {/* Info Box */}
-          <div className="mt-8 glass-panel p-6 rounded-2xl">
-            <h3 className="text-lg font-bold text-text-main mb-3">Następne kroki:</h3>
-            <ul className="space-y-2 text-slate-300 text-sm">
-              <li>✓ Autoryzacja Supabase wdrożona</li>
-              <li>✓ Test HEXACO-60 gotowy</li>
-              <li>✓ Dashboard z 7 testami psychometrycznymi</li>
-              <li>→ Wypełnij test HEXACO i zobacz wyniki</li>
-              <li>→ Więcej testów wkrótce...</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Password recovery — always show AuthModal in update-password mode regardless of auth state
-  if (isPasswordRecovery) {
-    return (
-      <AuthModal
-        initialTab="update-password"
-        onAuthSuccess={() => {
-          setIsPasswordRecovery(false)
-          window.location.href = '/user-profile-tests.html'
-        }}
-      />
     )
   }
 
