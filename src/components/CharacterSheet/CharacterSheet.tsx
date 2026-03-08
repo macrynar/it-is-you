@@ -855,11 +855,8 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
     if (isPublic) return;
     if (!authUser?.id) return;
     if (done < 6) return;
-    if (llmLoading) return;
-    // Force regeneration when cached content is missing color_personality_text (stale schema)
-    const isStale = llmContent != null && !llmContent.color_personality_text;
-    if (llmContent && !isStale) return;
-    void generateCharacterCard(isStale);
+    if (llmContent || llmLoading) return;
+    void generateCharacterCard(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, authUser?.id, done, isPublic]);
 
