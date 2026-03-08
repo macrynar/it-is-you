@@ -21,6 +21,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || FALLBACK_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || FALLBACK_KEY
 
 export const SUPABASE_ANON_KEY = supabaseAnonKey
+export const SUPABASE_URL = supabaseUrl
 
 // Debug log for production
 console.log('🔧 Supabase Config Check:', {
@@ -35,6 +36,34 @@ console.log('🔧 Supabase Config Check:', {
  * Initialize Supabase client
  */
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+export const invokeEdgeNoAuth = async (functionName, body = {}) => {
+  const res = await fetch(`${supabaseUrl}/functions/v1/${functionName}`, {
+    method: 'POST',
+    headers: {
+      apikey: supabaseAnonKey,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+
+  const text = await res.text()
+  let data = null
+  try {
+    data = text ? JSON.parse(text) : null
+  } catch (_e) {
+    data = text
+  }
+
+  if (!res.ok) {
+    const err = new Error((typeof data === 'object' && data?.message) ? data.message : `Function ${functionName} failed`)
+    err.status = res.status
+    err.data = data
+    throw err
+  }
+
+  return data
+}
 
 export const getAccessToken = async () => {
   const { data: { session } } = await supabase.auth.getSession()

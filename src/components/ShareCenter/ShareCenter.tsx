@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase, getAccessToken, SUPABASE_ANON_KEY } from '../../lib/supabaseClient.js';
+import { supabase, invokeEdgeNoAuth } from '../../lib/supabaseClient.js';
 import SocialShare from './SocialShare';
 import ProfessionalBadge from './ProfessionalBadge';
 import AlchemeLogo from '../AlchemeLogo';
@@ -55,10 +55,7 @@ export default function ShareCenter() {
         if (hex?.percentile_scores) setHexacoScores(hex.percentile_scores);
 
         // fetch character card cache
-        const { data: ccData } = await supabase.functions.invoke('character-card-generate', {
-          body: { action: 'fetch', user_id: user.id },
-          headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
-        });
+        const ccData = await invokeEdgeNoAuth('character-card-generate', { action: 'fetch', user_id: user.id });
         if (ccData?.content) setLlmContent(ccData.content as CharacterCardContent);
 
         // fetch share token from profile

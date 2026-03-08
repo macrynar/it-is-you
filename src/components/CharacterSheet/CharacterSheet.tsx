@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { supabase, getAccessToken, SUPABASE_ANON_KEY } from '../../lib/supabaseClient.js';
+import { supabase, getAccessToken, SUPABASE_ANON_KEY, invokeEdgeNoAuth } from '../../lib/supabaseClient.js';
 import { generateValuesReport } from '../../utils/scoring.js';
 import { COLOR_PERSONALITY_TEST } from '../../data/tests/colorPersonality.js';
 import HexacoRadarChart from '../Test/modules/HexacoRadarChart';
@@ -830,14 +830,7 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
     try {
       const payload = { force, input: characterCardInput, user_id: authUser?.id ?? null };
 
-      const { data, error } = await supabase.functions.invoke('character-card-generate', {
-        body: payload,
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          'Content-Type': 'application/json',
-        },
-      });
-      if (error) throw new Error((error as any)?.message ?? JSON.stringify(error));
+      const data = await invokeEdgeNoAuth('character-card-generate', payload);
       setLlmContent((data?.content ?? null) as CharacterCardContent | null);
       setLlmGeneratedAt(String(data?.generated_at ?? ''));
     } catch (_e: any) {

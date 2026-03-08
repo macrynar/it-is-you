@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
-import { supabase, SUPABASE_ANON_KEY, getAccessToken } from '../../lib/supabaseClient.js'
+import { invokeEdgeNoAuth } from '../../lib/supabaseClient.js'
 import { useIsMobile } from '../../utils/useIsMobile'
 
 type ChatMsg = {
@@ -46,13 +46,11 @@ export default function CharacterChatBubble({ profileContext, isPremium = false 
     setLoading(true)
     try {
       const invokeOnce = async () => {
-        return await supabase.functions.invoke('character-chat', {
-          body: {
-            profile_context: profileContext,
-            messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
-          },
-          headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+        const data = await invokeEdgeNoAuth('character-chat', {
+          profile_context: profileContext,
+          messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
         })
+        return { data, error: null }
       }
 
       let { data, error: fnErr } = await invokeOnce()
