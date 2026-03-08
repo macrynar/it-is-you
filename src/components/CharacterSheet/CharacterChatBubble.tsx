@@ -284,28 +284,15 @@ export default function CharacterChatBubble({ profileContext, isPremium = false 
             {isPremium && (
               <div className="mb-3">
                 <div className="text-[9px] font-mono tracking-[2px] uppercase text-white/25 mb-1.5">Szybkie pytania</div>
-                <div
-                  className={[
-                    'flex gap-1.5',
-                    isMobile
-                      ? 'flex-wrap'
-                      : 'flex-nowrap overflow-x-auto pb-1',
-                  ].join(' ')}
-                  style={{ scrollbarWidth: 'none' }}
-                >
+                <div className="flex flex-wrap gap-1.5">
                   {PREDEFINED_QUESTIONS.map((q) => (
                     <button
                       key={q}
                       type="button"
                       disabled={loading}
                       onClick={() => sendPredefined(q)}
-                      className={[
-                        'flex-shrink-0 rounded-xl border px-2.5 py-1.5 text-left transition-all duration-150',
-                        'bg-white/[0.04] border-white/10 text-white/50',
-                        'hover:bg-brand-primary/[0.12] hover:border-brand-primary/35 hover:text-white/80 hover:shadow-[0_0_14px_-4px_rgba(99,102,241,0.45)]',
-                        'disabled:opacity-40 disabled:cursor-not-allowed',
-                        isMobile ? 'text-[10px] leading-snug whitespace-normal' : 'text-[11px] whitespace-nowrap',
-                      ].join(' ')}
+                      className="rounded-xl border px-2.5 py-1.5 text-left text-[11px] leading-snug transition-all duration-150 bg-white/[0.04] border-white/10 text-white/50 hover:bg-brand-primary/[0.12] hover:border-brand-primary/35 hover:text-white/80 hover:shadow-[0_0_14px_-4px_rgba(99,102,241,0.45)] disabled:opacity-40 disabled:cursor-not-allowed"
+                      style={{ maxWidth: '100%' }}
                     >
                       {q}
                     </button>
