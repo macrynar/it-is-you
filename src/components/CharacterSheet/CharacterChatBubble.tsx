@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { invokeEdgeNoAuth } from '../../lib/supabaseClient.js'
 
 const SUGGESTED_PROMPTS = [
@@ -43,6 +43,22 @@ function ChevronDownIcon({ className }: { className?: string }) {
   )
 }
 
+function ChevronLeftIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+  )
+}
+
+function ChevronRightIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  )
+}
+
 function TypingDots() {
   return (
     <div className="flex items-center gap-[3px] px-1 py-0.5">
@@ -77,8 +93,34 @@ export default function CharacterChatBubble({
   const [error, setError] = useState<string | null>(null)
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const chipsRef = useRef<HTMLDivElement | null>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(true)
 
   const canSend = useMemo(() => !loading && input.trim().length > 0, [loading, input])
+
+  const syncScrollEdges = () => {
+    const el = chipsRef.current
+    if (!el) return
+    setCanScrollLeft(el.scrollLeft > 4)
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4)
+  }
+
+  useEffect(() => {
+    const el = chipsRef.current
+    if (!el) return
+    syncScrollEdges()
+    el.addEventListener('scroll', syncScrollEdges, { passive: true })
+    const ro = new ResizeObserver(syncScrollEdges)
+    ro.observe(el)
+    return () => { el.removeEventListener('scroll', syncScrollEdges); ro.disconnect() }
+  }, [])
+
+  const scrollChips = (dir: 'left' | 'right') => {
+    const el = chipsRef.current
+    if (!el) return
+    el.scrollBy({ left: dir === 'right' ? 220 : -220, behavior: 'smooth' })
+  }
 
   const sendMessage = async (text: string) => {
     if (loading || !text.trim()) return
@@ -184,20 +226,70 @@ export default function CharacterChatBubble({
 
         {/* Suggested prompts cloud */}
         {isPremium ? (
-          <div
-            className="mb-2.5 flex flex-row gap-1.5 overflow-x-auto scroll-smooth snap-x pr-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          >
-              {SUGGESTED_PROMPTS.map((q) => (
-                <button
-                  key={q}
-                  type="button"
-                  disabled={loading}
-                  onClick={() => sendMessage(q)}
-                  className="flex-shrink-0 whitespace-nowrap snap-start bg-slate-800 border border-slate-600 text-slate-200 text-xs rounded-full px-3 py-1.5 transition-all duration-200 hover:bg-indigo-600/30 hover:border-indigo-400/60 hover:text-white hover:shadow-[0_0_14px_-4px_rgba(99,102,241,0.55)] disabled:opacity-40 disabled:cursor-not-allowed"
-                >
-                  {q}
-                </button>
-              ))}
+          <div className="relative mb-2.5 flex items-center gap-1">
+            {/* Left arrow */}
+            <button
+              type="button"
+              onClick={() => scrollChips('left')}
+              aria-label="Przewiń w lewo"
+              className={[
+                'flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center border transition-all duration-200',
+                'bg-slate-800 border-slate-600 text-slate-400 hover:text-white hover:border-indigo-400/60',
+                canScrollLeft ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
+              ].join(' ')}
+            >
+              <ChevronLeftIcon className="w-3 h-3" />
+            </button>
+
+            {/* Scrollable strip with fade masks */}
+            <div className="relative flex-1 min-w-0">
+              {/* Left fade */}
+              <div
+                className="absolute left-0 top-0 bottom-0 w-6 z-10 pointer-events-none transition-opacity duration-200 rounded-l-full"
+                style={{
+                  background: 'linear-gradient(to right, rgb(3 7 18) 0%, transparent 100%)',
+                  opacity: canScrollLeft ? 1 : 0,
+                }}
+              />
+              {/* Right fade */}
+              <div
+                className="absolute right-0 top-0 bottom-0 w-8 z-10 pointer-events-none transition-opacity duration-200 rounded-r-full"
+                style={{
+                  background: 'linear-gradient(to left, rgb(3 7 18) 0%, transparent 100%)',
+                  opacity: canScrollRight ? 1 : 0,
+                }}
+              />
+              <div
+                ref={chipsRef}
+                className="flex flex-row gap-1.5 overflow-x-auto scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+              >
+                {SUGGESTED_PROMPTS.map((q) => (
+                  <button
+                    key={q}
+                    type="button"
+                    disabled={loading}
+                    onClick={() => sendMessage(q)}
+                    className="flex-shrink-0 whitespace-nowrap bg-slate-800 border border-slate-600 text-slate-200 text-xs rounded-full px-3 py-1.5 transition-all duration-200 hover:bg-indigo-600/30 hover:border-indigo-400/60 hover:text-white hover:shadow-[0_0_14px_-4px_rgba(99,102,241,0.55)] disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Right arrow */}
+            <button
+              type="button"
+              onClick={() => scrollChips('right')}
+              aria-label="Przewiń w prawo"
+              className={[
+                'flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center border transition-all duration-200',
+                'bg-slate-800 border-slate-600 text-slate-400 hover:text-white hover:border-indigo-400/60',
+                canScrollRight ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
+              ].join(' ')}
+            >
+              <ChevronRightIcon className="w-3 h-3" />
+            </button>
           </div>
         ) : (
           <div className="mb-2.5">
