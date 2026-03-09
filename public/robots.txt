@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+Allow: /baza-wiedzy/
+Allow: /methodology
+Allow: /pricing
+
+# Blokuj strony aplikacji (wymagają logowania)
+Disallow: /app.html
+Disallow: /auth/
+Disallow: /test/
+Disallow: /test
+Disallow: /settings/
+Disallow: /settings
+Disallow: /character/
+Disallow: /character
+Disallow: /share/
+Disallow: /share
+Disallow: /share-center/
+Disallow: /share-center
+Disallow: /demo-card/
+Disallow: /demo-card
+Disallow: /user-profile.html
+Disallow: /user-profile-tests.html
+Disallow: /debug-check-db.html
+
+Sitemap: https://www.alcheme.io/sitemap.xml
