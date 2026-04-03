@@ -1006,3 +1006,12 @@
 }
 .animate-neural-scan { animation: neural-scan 3s ease-in-out infinite; }
 
+@media print {
+  *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  nav, .iiy-cs-btn-no-print, .iiy-cs-s-actions, [class*="CharacterChatBubble"] { display: none !important; }
+  body { background: #030014 !important; }
+  .min-h-screen { min-height: unset; }
+  main { padding: 0 !important; }
+  @page { margin: 12mm; }
+}
+
