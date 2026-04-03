@@ -474,6 +474,37 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
   const [toast, setToast] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
+
+  const exportToPDF = async () => {
+    if (pdfLoading) return;
+    setPdfLoading(true);
+    try {
+      const { toPng } = await import('html-to-image');
+      const main = document.querySelector('main') as HTMLElement;
+      if (!main) return;
+      const dataUrl = await toPng(main, {
+        cacheBust: true,
+        backgroundColor: '#030014',
+        pixelRatio: 2,
+      });
+      const win = window.open('', '_blank');
+      if (!win) { alert('Zezwól na otwieranie wyskakujących okien, aby pobrać PDF.'); return; }
+      win.document.write(
+        '<!DOCTYPE html><html><head><title>Karta postaci — Alcheme</title>' +
+        '<style>*{margin:0;padding:0;box-sizing:border-box;}body{background:#030014;}' +
+        'img{width:100%;display:block;}@media print{@page{margin:0;}}</style></head>' +
+        '<body><img src="' + dataUrl + '"/>' +
+        '<script>window.onload=function(){window.print();setTimeout(function(){window.close();},1000);}' +
+        '<\/script></body></html>'
+      );
+      win.document.close();
+    } catch (e) {
+      console.error('PDF export error:', e);
+    } finally {
+      setPdfLoading(false);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -1136,14 +1167,15 @@ export default function CharacterSheet({ publicToken, demoMode = false }: Charac
 
                             <button
                               type="button"
-                              className="iiy-cs-btn iiy-cs-btn-ghost iiy-cs-btn-no-print"
-                              onClick={() => window.print()}
+                              className="iiy-cs-btn iiy-cs-btn-ghost"
+                              onClick={() => void exportToPDF()}
+                              disabled={pdfLoading}
                               title="Pobierz kartę jako PDF"
                             >
                               <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                               </svg>
-                              PDF
+                              {pdfLoading ? 'Generuję…' : 'PDF'}
                             </button>
                           </>
                         )}
